@@ -1,0 +1,16 @@
+server:
+  debug: true
+  port: 8888
+  pprof: true
+
+database:
+  mysql:
+
+logger:
+  filename: "./logs/ginweb.log"
+  max_size: 5
+  max_backups: 7
+  max_age: 14
+  compress: true
+  level: -1 # debug=-1, info=0, warn=1
+  json: true
