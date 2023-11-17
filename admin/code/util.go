@@ -6,7 +6,7 @@ func NewCode(code int) response.Message {
 	return response.Message{
 		MessageBase: response.MessageBase{
 			Code:    code,
-			Message: Msg[code],
+			Message: Msg(code),
 		},
 	}
 }
