@@ -105,7 +105,7 @@ func runServe() {
 		pprof.Register(e)
 	}
 
-	e.Use(middleware.Cors())
+	e.Use(middleware.Global...)
 	router.Routes(e)
 
 	port := config.AppConfig.Server.Port
