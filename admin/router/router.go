@@ -1,17 +1,17 @@
 package router
 
 import (
-	account "admin/app/account/controller"
+	demo "admin/app/demo/controller"
 	"github.com/gin-gonic/gin"
 )
 
 var (
-	accountController = account.DemoController{}
+	demoCtl = demo.DemoController{}
 )
 
 func Routes(e *gin.Engine) {
 	r := e.Group("/api")
 	{
-		r.GET("/demo", accountController.Demo)
+		r.GET("/demo", demoCtl.Demo)
 	}
 }
