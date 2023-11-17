@@ -1,7 +1,7 @@
 package config
 
 import (
-	"ginweb/pkg/logger"
+	"admin/pkg/logger"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -33,12 +33,19 @@ func InitLogger() error {
 		return err
 	}
 	AppLogger = lg
+	AppLoggerSugared = lg.Sugar()
 	return nil
 }
 
 func LoggerClose() {
 	if AppLogger != nil {
 		err := AppLogger.Sync()
+		if err != nil {
+			return
+		}
+	}
+	if AppLoggerSugared != nil {
+		err := AppLoggerSugared.Sync()
 		if err != nil {
 			return
 		}

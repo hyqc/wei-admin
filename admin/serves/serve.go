@@ -1,12 +1,13 @@
-package app
+package serves
 
 import (
+	"admin/config"
+	"admin/middleware"
+	"admin/router"
 	"context"
 	"errors"
 	"flag"
 	"fmt"
-	router2 "ginweb/application/router"
-	"ginweb/config"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -15,7 +16,7 @@ import (
 	"syscall"
 )
 
-type IApp interface {
+type Appear interface {
 	parseCmd()    // 解下cmd参数
 	parseConfig() // 解析配置
 	initConfig()  // 初始化配置
@@ -104,8 +105,8 @@ func runServe() {
 		pprof.Register(e)
 	}
 
-	e.Use(router2.Cors())
-	router2.Routes(e)
+	e.Use(middleware.Cors())
+	router.Routes(e)
 
 	port := config.AppConfig.Server.Port
 	server.Addr = fmt.Sprintf(":%s", port)

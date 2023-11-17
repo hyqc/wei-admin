@@ -1,7 +1,12 @@
-package router
+package middleware
 
 import (
+	"admin/code"
+	"admin/config"
+	"admin/pkg/response"
+	"bytes"
 	"github.com/gin-gonic/gin"
+	"io"
 	"net/http"
 )
 
@@ -20,5 +25,21 @@ func Cors() gin.HandlerFunc {
 			c.AbortWithStatus(http.StatusNoContent)
 		}
 		c.Next()
+	}
+}
+
+func Logger() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		body, err := io.ReadAll(ctx.Request.Body)
+		if err != nil {
+			msg := code.NewCode(code.ReadContextRequestBodyFailed)
+			config.AppLoggerSugared.Errorf("[middleware.global.Logger] [code:%v] [error:%v]", msg, err)
+			response.JSON(ctx, msg)
+			return
+		}
+		ctx.Request.Body = io.NopCloser(bytes.NewReader(body))
+		config.AppLoggerSugared.Debugf("[middleware.global.Logger] [request.body:%v]", string(body))
+		config.AppLoggerSugared.Debugf("[middleware.global.Logger] [request.query:%v]", ctx.Request.URL.Query().Encode())
+		ctx.Next()
 	}
 }

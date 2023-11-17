@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"ginweb/codes"
-	"ginweb/config"
-	"ginweb/pkg/core"
+	"admin/code"
+	"admin/config"
+	"admin/pkg/core"
+	"admin/pkg/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -13,10 +14,8 @@ type DemoController struct {
 }
 
 func (d DemoController) Demo(ctx *gin.Context) {
-	result := core.ResponseData{}
-	result.Code = codes.Success
-	result.Message = codes.Message[codes.Success]
+	result := code.NewCode(code.Success)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
-	d.ResponseOk(ctx, result)
+	response.JSON(ctx, result)
 	return
 }

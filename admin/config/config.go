@@ -18,9 +18,10 @@ type DB struct {
 }
 
 var (
-	AppConfig = &Config{}
-	AppLogger *zap.Logger
-	AppDB     = &DB{}
+	AppConfig        = &Config{}
+	AppLogger        *zap.Logger
+	AppLoggerSugared *zap.SugaredLogger
+	AppDB            = &DB{}
 )
 
 func ParseConfig(name string) error {
