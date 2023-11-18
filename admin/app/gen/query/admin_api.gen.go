@@ -33,8 +33,8 @@ func newAdminAPI(db *gorm.DB, opts ...gen.DOOption) adminAPI {
 	_adminAPI.Name = field.NewString(tableName, "name")
 	_adminAPI.Describe = field.NewString(tableName, "describe")
 	_adminAPI.IsEnabled = field.NewBool(tableName, "is_enabled")
-	_adminAPI.CreateTime = field.NewTime(tableName, "create_time")
-	_adminAPI.ModifyTime = field.NewTime(tableName, "modify_time")
+	_adminAPI.CreatedAt = field.NewTime(tableName, "created_at")
+	_adminAPI.UpdatedAt = field.NewTime(tableName, "updated_at")
 
 	_adminAPI.fillFieldMap()
 
@@ -44,15 +44,15 @@ func newAdminAPI(db *gorm.DB, opts ...gen.DOOption) adminAPI {
 type adminAPI struct {
 	adminAPIDo
 
-	ALL        field.Asterisk
-	ID         field.Int32  // 接口ID
-	Path       field.String // 接口路由
-	Key        field.String // 接口唯一名称
-	Name       field.String // 接口名称
-	Describe   field.String // 接口描述
-	IsEnabled  field.Bool   // 接口状态：1：正常，0：禁用
-	CreateTime field.Time
-	ModifyTime field.Time
+	ALL       field.Asterisk
+	ID        field.Int32  // 接口ID
+	Path      field.String // 接口路由
+	Key       field.String // 接口唯一名称
+	Name      field.String // 接口名称
+	Describe  field.String // 接口描述
+	IsEnabled field.Bool   // 接口状态：1：正常，0：禁用
+	CreatedAt field.Time
+	UpdatedAt field.Time
 
 	fieldMap map[string]field.Expr
 }
@@ -75,8 +75,8 @@ func (a *adminAPI) updateTableName(table string) *adminAPI {
 	a.Name = field.NewString(table, "name")
 	a.Describe = field.NewString(table, "describe")
 	a.IsEnabled = field.NewBool(table, "is_enabled")
-	a.CreateTime = field.NewTime(table, "create_time")
-	a.ModifyTime = field.NewTime(table, "modify_time")
+	a.CreatedAt = field.NewTime(table, "created_at")
+	a.UpdatedAt = field.NewTime(table, "updated_at")
 
 	a.fillFieldMap()
 
@@ -100,8 +100,8 @@ func (a *adminAPI) fillFieldMap() {
 	a.fieldMap["name"] = a.Name
 	a.fieldMap["describe"] = a.Describe
 	a.fieldMap["is_enabled"] = a.IsEnabled
-	a.fieldMap["create_time"] = a.CreateTime
-	a.fieldMap["modify_time"] = a.ModifyTime
+	a.fieldMap["created_at"] = a.CreatedAt
+	a.fieldMap["updated_at"] = a.UpdatedAt
 }
 
 func (a adminAPI) clone(db *gorm.DB) adminAPI {

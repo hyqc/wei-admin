@@ -1,8 +1,8 @@
 syntax = "proto3";
-package proto;
-option go_package = "admin/proto/account;account";
-import "menu.proto";
-import "permission.proto";
+package admin_account;
+option go_package = "admin/proto/admin_account;admin_account";
+import "proto/admin_menu/admin_menu.proto";
+
 
 message LoginReq{
   string username = 1;
@@ -23,8 +23,7 @@ message LoginDataResp{
   bool enabled = 11;
   string token = 12;
   int32 expire = 13;
-  repeated menuItem menus = 14;
+  repeated admin_menu.menuItem menus = 14;
   map<string, string> permissions = 15;
 }
-
 

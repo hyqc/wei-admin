@@ -18,8 +18,8 @@ type AdminRole struct {
 	ModifyAdminID int32     `gorm:"column:modify_admin_id;not null;comment:修改人" json:"modify_admin_id"` // 修改人
 	CreateAdminID int32     `gorm:"column:create_admin_id;not null;comment:创建人" json:"create_admin_id"` // 创建人
 	IsEnabled     bool      `gorm:"column:is_enabled;not null;comment:1：启用，0：禁用" json:"is_enabled"`     // 1：启用，0：禁用
-	CreateTime    time.Time `gorm:"column:create_time;not null;comment:创建时间" json:"create_time"`        // 创建时间
-	ModifyTime    time.Time `gorm:"column:modify_time;not null;comment:更新时间" json:"modify_time"`        // 更新时间
+	CreatedAt     time.Time `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`          // 创建时间
+	UpdatedAt     time.Time `gorm:"column:updated_at;not null;comment:更新时间" json:"updated_at"`          // 更新时间
 }
 
 // TableName AdminRole's table name

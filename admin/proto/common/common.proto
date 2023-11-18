@@ -1,0 +1,3 @@
+syntax="proto3";
+package common;
+option go_package="./common;common";

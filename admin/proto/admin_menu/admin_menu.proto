@@ -1,6 +1,6 @@
 syntax = "proto3";
-package proto;
-option go_package = "admin/proto/menu;menu";
+package admin_menu;
+option go_package = "admin/proto/admin_menu;admin_menu";
 
 message menuItem{
   string path = 1;

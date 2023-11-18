@@ -25,8 +25,8 @@ type AdminMenu struct {
 	IsHideInMenu         bool      `gorm:"column:is_hide_in_menu;not null;comment:是否隐藏：0显示，1隐藏" json:"is_hide_in_menu"`                             // 是否隐藏：0显示，1隐藏
 	IsHideChildrenInMenu bool      `gorm:"column:is_hide_children_in_menu;not null;comment:是否在children中隐藏：1隐藏，0显示" json:"is_hide_children_in_menu"` // 是否在children中隐藏：1隐藏，0显示
 	IsEnabled            bool      `gorm:"column:is_enabled;not null;comment:1：启用，0禁用" json:"is_enabled"`                                           // 1：启用，0禁用
-	CreateTime           time.Time `gorm:"column:create_time;not null;comment:创建时间" json:"create_time"`                                             // 创建时间
-	ModifyTime           time.Time `gorm:"column:modify_time;not null;comment:更新时间" json:"modify_time"`                                             // 更新时间
+	CreatedAt            time.Time `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`                                               // 创建时间
+	UpdatedAt            time.Time `gorm:"column:updated_at;not null;comment:更新时间" json:"updated_at"`                                               // 更新时间
 }
 
 // TableName AdminMenu's table name

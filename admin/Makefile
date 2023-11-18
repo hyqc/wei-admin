@@ -1,9 +1,8 @@
 GOHOSTOS:=$(shell go env GOHOSTOS)
 GOPATH:=$(shell go env GOPATH)
-VERSION=$(shell git describe --tags --always)
-
-
-PROTO_FILES=$(shell find proto/$(dir) -name *.proto)
+VERSION:=$(shell git describe --tags --always)
+PROTO_FILES:=$(shell find proto/$(dir) -name *.proto)
+PROTO_DIRS:=$(shell find proto/* -type d)
 
 
 .PHONY: init
@@ -18,12 +17,24 @@ init:
 
 .PHONY: proto
 proto:
-	cd proto && protoc \
-	       --proto_path=. \
-	       --proto_path=../ \
- 	       --go_out=paths=source_relative:. \
-	       *.proto
+	cd proto/$(dir) && protoc \
+    			   --proto_path=. \
+    			   --proto_path=../ \
+    			   --proto_path=../../ \
+    			   --go_out=paths=source_relative:. \
+    			   *.proto
 
+.PHONY: proto_all
+proto_all:
+	@for subdir in $(PROTO_DIRS);do \
+  		if [ "$$subdir" != "proto" ];then \
+  		  path=$$(echo $$subdir|sed 's/proto\///'); \
+  		  make proto dir=$$path; \
+  		fi \
+	done
+
+# path=$$(echo $$subdir|sed 's/proto\///'); \
+# --go_out=paths=source_relative:. \
 
 .PHONY: run
 run:

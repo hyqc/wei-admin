@@ -33,8 +33,8 @@ func newAdminRole(db *gorm.DB, opts ...gen.DOOption) adminRole {
 	_adminRole.ModifyAdminID = field.NewInt32(tableName, "modify_admin_id")
 	_adminRole.CreateAdminID = field.NewInt32(tableName, "create_admin_id")
 	_adminRole.IsEnabled = field.NewBool(tableName, "is_enabled")
-	_adminRole.CreateTime = field.NewTime(tableName, "create_time")
-	_adminRole.ModifyTime = field.NewTime(tableName, "modify_time")
+	_adminRole.CreatedAt = field.NewTime(tableName, "created_at")
+	_adminRole.UpdatedAt = field.NewTime(tableName, "updated_at")
 
 	_adminRole.fillFieldMap()
 
@@ -51,8 +51,8 @@ type adminRole struct {
 	ModifyAdminID field.Int32  // 修改人
 	CreateAdminID field.Int32  // 创建人
 	IsEnabled     field.Bool   // 1：启用，0：禁用
-	CreateTime    field.Time   // 创建时间
-	ModifyTime    field.Time   // 更新时间
+	CreatedAt     field.Time   // 创建时间
+	UpdatedAt     field.Time   // 更新时间
 
 	fieldMap map[string]field.Expr
 }
@@ -75,8 +75,8 @@ func (a *adminRole) updateTableName(table string) *adminRole {
 	a.ModifyAdminID = field.NewInt32(table, "modify_admin_id")
 	a.CreateAdminID = field.NewInt32(table, "create_admin_id")
 	a.IsEnabled = field.NewBool(table, "is_enabled")
-	a.CreateTime = field.NewTime(table, "create_time")
-	a.ModifyTime = field.NewTime(table, "modify_time")
+	a.CreatedAt = field.NewTime(table, "created_at")
+	a.UpdatedAt = field.NewTime(table, "updated_at")
 
 	a.fillFieldMap()
 
@@ -100,8 +100,8 @@ func (a *adminRole) fillFieldMap() {
 	a.fieldMap["modify_admin_id"] = a.ModifyAdminID
 	a.fieldMap["create_admin_id"] = a.CreateAdminID
 	a.fieldMap["is_enabled"] = a.IsEnabled
-	a.fieldMap["create_time"] = a.CreateTime
-	a.fieldMap["modify_time"] = a.ModifyTime
+	a.fieldMap["created_at"] = a.CreatedAt
+	a.fieldMap["updated_at"] = a.UpdatedAt
 }
 
 func (a adminRole) clone(db *gorm.DB) adminRole {

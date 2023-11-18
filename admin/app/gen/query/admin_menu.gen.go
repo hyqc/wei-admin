@@ -40,8 +40,8 @@ func newAdminMenu(db *gorm.DB, opts ...gen.DOOption) adminMenu {
 	_adminMenu.IsHideInMenu = field.NewBool(tableName, "is_hide_in_menu")
 	_adminMenu.IsHideChildrenInMenu = field.NewBool(tableName, "is_hide_children_in_menu")
 	_adminMenu.IsEnabled = field.NewBool(tableName, "is_enabled")
-	_adminMenu.CreateTime = field.NewTime(tableName, "create_time")
-	_adminMenu.ModifyTime = field.NewTime(tableName, "modify_time")
+	_adminMenu.CreatedAt = field.NewTime(tableName, "created_at")
+	_adminMenu.UpdatedAt = field.NewTime(tableName, "updated_at")
 
 	_adminMenu.fillFieldMap()
 
@@ -65,8 +65,8 @@ type adminMenu struct {
 	IsHideInMenu         field.Bool   // 是否隐藏：0显示，1隐藏
 	IsHideChildrenInMenu field.Bool   // 是否在children中隐藏：1隐藏，0显示
 	IsEnabled            field.Bool   // 1：启用，0禁用
-	CreateTime           field.Time   // 创建时间
-	ModifyTime           field.Time   // 更新时间
+	CreatedAt            field.Time   // 创建时间
+	UpdatedAt            field.Time   // 更新时间
 
 	fieldMap map[string]field.Expr
 }
@@ -96,8 +96,8 @@ func (a *adminMenu) updateTableName(table string) *adminMenu {
 	a.IsHideInMenu = field.NewBool(table, "is_hide_in_menu")
 	a.IsHideChildrenInMenu = field.NewBool(table, "is_hide_children_in_menu")
 	a.IsEnabled = field.NewBool(table, "is_enabled")
-	a.CreateTime = field.NewTime(table, "create_time")
-	a.ModifyTime = field.NewTime(table, "modify_time")
+	a.CreatedAt = field.NewTime(table, "created_at")
+	a.UpdatedAt = field.NewTime(table, "updated_at")
 
 	a.fillFieldMap()
 
@@ -128,8 +128,8 @@ func (a *adminMenu) fillFieldMap() {
 	a.fieldMap["is_hide_in_menu"] = a.IsHideInMenu
 	a.fieldMap["is_hide_children_in_menu"] = a.IsHideChildrenInMenu
 	a.fieldMap["is_enabled"] = a.IsEnabled
-	a.fieldMap["create_time"] = a.CreateTime
-	a.fieldMap["modify_time"] = a.ModifyTime
+	a.fieldMap["created_at"] = a.CreatedAt
+	a.fieldMap["updated_at"] = a.UpdatedAt
 }
 
 func (a adminMenu) clone(db *gorm.DB) adminMenu {

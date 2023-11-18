@@ -1,17 +1,18 @@
 package router
 
 import (
-	demo "admin/app/demo/controller"
+	demoCtl "admin/app/demo/controller"
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	demoCtl = demo.DemoController{}
-)
-
 func Routes(e *gin.Engine) {
-	r := e.Group("/api")
-	{
-		r.GET("/demo", demoCtl.Demo)
-	}
+	root := e.Group("/")
+
+	demo(root)
+}
+
+// demo demo
+func demo(g *gin.RouterGroup) {
+	api := demoCtl.DemoController{}
+	g.GET("/demo", api.Demo)
 }

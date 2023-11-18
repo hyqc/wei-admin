@@ -22,11 +22,11 @@ type AdminPermission struct {
 		edit：编辑（读写）
 		delete：删除（彻底删除）
 	*/
-	Type       string    `gorm:"column:type;not null;default:view;comment:权限的操作类型\nview：查看（只读）\nedit：编辑（读写）\ndelete：删除（彻底删除）" json:"type"`
-	Describe   string    `gorm:"column:describe;not null;comment:权限描述" json:"describe"`                       // 权限描述
-	IsEnabled  bool      `gorm:"column:is_enabled;not null;default:1;comment:是否启用：1启用，0禁用" json:"is_enabled"` // 是否启用：1启用，0禁用
-	CreateTime time.Time `gorm:"column:create_time;not null;comment:创建时间" json:"create_time"`                 // 创建时间
-	ModifyTime time.Time `gorm:"column:modify_time;not null;comment:更新时间" json:"modify_time"`                 // 更新时间
+	Type      string    `gorm:"column:type;not null;default:view;comment:权限的操作类型\nview：查看（只读）\nedit：编辑（读写）\ndelete：删除（彻底删除）" json:"type"`
+	Describe  string    `gorm:"column:describe;not null;comment:权限描述" json:"describe"`                       // 权限描述
+	IsEnabled bool      `gorm:"column:is_enabled;not null;default:1;comment:是否启用：1启用，0禁用" json:"is_enabled"` // 是否启用：1启用，0禁用
+	CreatedAt time.Time `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`                   // 创建时间
+	UpdatedAt time.Time `gorm:"column:updated_at;not null;comment:更新时间" json:"updated_at"`                   // 更新时间
 }
 
 // TableName AdminPermission's table name

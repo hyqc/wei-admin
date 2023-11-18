@@ -34,8 +34,8 @@ func newAdminPermission(db *gorm.DB, opts ...gen.DOOption) adminPermission {
 	_adminPermission.Type = field.NewString(tableName, "type")
 	_adminPermission.Describe = field.NewString(tableName, "describe")
 	_adminPermission.IsEnabled = field.NewBool(tableName, "is_enabled")
-	_adminPermission.CreateTime = field.NewTime(tableName, "create_time")
-	_adminPermission.ModifyTime = field.NewTime(tableName, "modify_time")
+	_adminPermission.CreatedAt = field.NewTime(tableName, "created_at")
+	_adminPermission.UpdatedAt = field.NewTime(tableName, "updated_at")
 
 	_adminPermission.fillFieldMap()
 
@@ -56,11 +56,11 @@ type adminPermission struct {
 		edit：编辑（读写）
 		delete：删除（彻底删除）
 	*/
-	Type       field.String
-	Describe   field.String // 权限描述
-	IsEnabled  field.Bool   // 是否启用：1启用，0禁用
-	CreateTime field.Time   // 创建时间
-	ModifyTime field.Time   // 更新时间
+	Type      field.String
+	Describe  field.String // 权限描述
+	IsEnabled field.Bool   // 是否启用：1启用，0禁用
+	CreatedAt field.Time   // 创建时间
+	UpdatedAt field.Time   // 更新时间
 
 	fieldMap map[string]field.Expr
 }
@@ -84,8 +84,8 @@ func (a *adminPermission) updateTableName(table string) *adminPermission {
 	a.Type = field.NewString(table, "type")
 	a.Describe = field.NewString(table, "describe")
 	a.IsEnabled = field.NewBool(table, "is_enabled")
-	a.CreateTime = field.NewTime(table, "create_time")
-	a.ModifyTime = field.NewTime(table, "modify_time")
+	a.CreatedAt = field.NewTime(table, "created_at")
+	a.UpdatedAt = field.NewTime(table, "updated_at")
 
 	a.fillFieldMap()
 
@@ -110,8 +110,8 @@ func (a *adminPermission) fillFieldMap() {
 	a.fieldMap["type"] = a.Type
 	a.fieldMap["describe"] = a.Describe
 	a.fieldMap["is_enabled"] = a.IsEnabled
-	a.fieldMap["create_time"] = a.CreateTime
-	a.fieldMap["modify_time"] = a.ModifyTime
+	a.fieldMap["created_at"] = a.CreatedAt
+	a.fieldMap["updated_at"] = a.UpdatedAt
 }
 
 func (a adminPermission) clone(db *gorm.DB) adminPermission {

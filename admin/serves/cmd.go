@@ -1,6 +1,7 @@
 package serves
 
 import (
+	"admin/pkg/utils"
 	"flag"
 	"fmt"
 	"net/http"
@@ -40,7 +41,7 @@ func parseCmd() {
 	flag.Parse()
 
 	if _, ok := ModeNameMap[runMode]; !ok {
-		fmt.Printf("run mode should be in : [\"\", \"dev\", \"local\", \"test\", \"prod\"]\n")
+		utils.PrintfLn("run mode should be in : [\"\", \"dev\", \"local\", \"test\", \"prod\"]")
 		os.Exit(1)
 	}
 	connector := ""
@@ -48,13 +49,13 @@ func parseCmd() {
 		connector = "-"
 	}
 	configFullPath = fmt.Sprintf("%s%s%s%s%s", configFilePath, defaultConfigPrefixName, connector, runMode, configFileSuffix)
-	fmt.Printf("config path: %s\n", configFullPath)
+	utils.PrintfLn("config path: %s", configFullPath)
 
 	if version {
-		fmt.Printf(" build version: %s\n build tag: %s\n build commit: %s\n build time: %s\n go version: %s\n",
+		utils.PrintfLn(" build version: %s\n build tag: %s\n build commit: %s\n build time: %s\n go version: %s",
 			BuildVersion, BuildTag, BuildCommit, BuildTime, GoVersion)
 		os.Exit(0)
 		return
 	}
-	fmt.Println("parse cmd success")
+	utils.PrintfLn("parse cmd success")
 }

@@ -3,6 +3,7 @@ package serves
 import (
 	"admin/config"
 	"admin/middleware"
+	"admin/pkg/utils"
 	"admin/router"
 	"context"
 	"errors"
@@ -49,22 +50,22 @@ func Run() {
 
 func parseConfig() {
 	if err := config.ParseConfig(configFullPath); err != nil {
-		fmt.Printf("parse yaml config: %s , error: %s\n", configFilePath, err.Error())
+		utils.PrintfLn("parse yaml config: %s , error: %s", configFilePath, err.Error())
 		os.Exit(1)
 		return
 	}
-	fmt.Println("parse yaml config success")
+	utils.PrintfLn("parse yaml config success")
 }
 
 func initConfig() {
 
 	if err := config.InitLogger(); err != nil {
-		fmt.Printf("init logger config error: %s\n", err.Error())
+		utils.PrintfLn("init logger config error: %s", err.Error())
 		os.Exit(1)
 		return
 	}
 
-	fmt.Println("init config success")
+	utils.PrintfLn("init config success")
 }
 
 func runServe() {
@@ -87,16 +88,16 @@ func runServe() {
 	server.Addr = fmt.Sprintf(":%s", port)
 	server.Handler = e
 	go func() {
-		fmt.Println(fmt.Sprintf("start serve port: %s", port))
+		utils.PrintfLn(fmt.Sprintf("start serve port: %s", port))
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf("start serve port: %s, error: %s\n", port, err)
+			utils.PrintfLn("start serve port: %s, error: %s", port, err)
 			return
 		}
 	}()
 }
 
 func signalListen(ctx context.Context) {
-	fmt.Println("listen os signal...")
+	utils.PrintfLn("listen os signal...")
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	run := true
 	for run {
@@ -106,14 +107,14 @@ func signalListen(ctx context.Context) {
 			shutdown(ctx, server)
 		}
 	}
-	fmt.Println("stop serve")
+	utils.PrintfLn("stop serve")
 }
 
 func shutdown(ctx context.Context, ser *http.Server) {
 	err := ser.Shutdown(ctx)
 	if err != nil {
-		fmt.Println(err)
+		utils.PrintfLn("shutdown server error: %v", err)
 		return
 	}
-	fmt.Println("serves shutdown success")
+	utils.PrintfLn("serves shutdown success")
 }

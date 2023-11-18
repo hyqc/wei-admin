@@ -22,8 +22,8 @@ type AdminUser struct {
 	LastLoginIP   string    `gorm:"column:last_login_ip;not null;comment:上次登录IP" json:"last_login_ip"`            // 上次登录IP
 	LastLoginTime time.Time `gorm:"column:last_login_time;comment:上次登录时间" json:"last_login_time"`                 // 上次登录时间
 	IsEnabled     bool      `gorm:"column:is_enabled;not null;default:1;comment:账户状态：1正常，0：禁用" json:"is_enabled"` // 账户状态：1正常，0：禁用
-	CreateTime    time.Time `gorm:"column:create_time;not null;comment:创建时间" json:"create_time"`                  // 创建时间
-	ModifyTime    time.Time `gorm:"column:modify_time;not null;comment:更新时间" json:"modify_time"`                  // 更新时间
+	CreatedAt     time.Time `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`                    // 创建时间
+	UpdatedAt     time.Time `gorm:"column:updated_at;not null;comment:更新时间" json:"updated_at"`                    // 更新时间
 }
 
 // TableName AdminUser's table name

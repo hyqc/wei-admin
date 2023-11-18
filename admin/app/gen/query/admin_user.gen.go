@@ -37,8 +37,8 @@ func newAdminUser(db *gorm.DB, opts ...gen.DOOption) adminUser {
 	_adminUser.LastLoginIP = field.NewString(tableName, "last_login_ip")
 	_adminUser.LastLoginTime = field.NewTime(tableName, "last_login_time")
 	_adminUser.IsEnabled = field.NewBool(tableName, "is_enabled")
-	_adminUser.CreateTime = field.NewTime(tableName, "create_time")
-	_adminUser.ModifyTime = field.NewTime(tableName, "modify_time")
+	_adminUser.CreatedAt = field.NewTime(tableName, "created_at")
+	_adminUser.UpdatedAt = field.NewTime(tableName, "updated_at")
 
 	_adminUser.fillFieldMap()
 
@@ -59,8 +59,8 @@ type adminUser struct {
 	LastLoginIP   field.String // 上次登录IP
 	LastLoginTime field.Time   // 上次登录时间
 	IsEnabled     field.Bool   // 账户状态：1正常，0：禁用
-	CreateTime    field.Time   // 创建时间
-	ModifyTime    field.Time   // 更新时间
+	CreatedAt     field.Time   // 创建时间
+	UpdatedAt     field.Time   // 更新时间
 
 	fieldMap map[string]field.Expr
 }
@@ -87,8 +87,8 @@ func (a *adminUser) updateTableName(table string) *adminUser {
 	a.LastLoginIP = field.NewString(table, "last_login_ip")
 	a.LastLoginTime = field.NewTime(table, "last_login_time")
 	a.IsEnabled = field.NewBool(table, "is_enabled")
-	a.CreateTime = field.NewTime(table, "create_time")
-	a.ModifyTime = field.NewTime(table, "modify_time")
+	a.CreatedAt = field.NewTime(table, "created_at")
+	a.UpdatedAt = field.NewTime(table, "updated_at")
 
 	a.fillFieldMap()
 
@@ -116,8 +116,8 @@ func (a *adminUser) fillFieldMap() {
 	a.fieldMap["last_login_ip"] = a.LastLoginIP
 	a.fieldMap["last_login_time"] = a.LastLoginTime
 	a.fieldMap["is_enabled"] = a.IsEnabled
-	a.fieldMap["create_time"] = a.CreateTime
-	a.fieldMap["modify_time"] = a.ModifyTime
+	a.fieldMap["created_at"] = a.CreatedAt
+	a.fieldMap["updated_at"] = a.UpdatedAt
 }
 
 func (a adminUser) clone(db *gorm.DB) adminUser {
