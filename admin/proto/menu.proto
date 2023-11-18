@@ -1,0 +1,19 @@
+syntax = "proto3";
+package proto;
+option go_package = "admin/proto/menu;menu";
+
+message menuItem{
+  string path = 1;
+  string name = 2;
+  string icon =3;
+  string component =4;
+  string authority = 5;
+  repeated routeItem routes = 6;
+}
+
+message routeItem {
+  string path = 1;
+  string name = 2;
+  string icon =3;
+  string component =4;
+}

@@ -6,7 +6,6 @@ import (
 	"admin/router"
 	"context"
 	"errors"
-	"flag"
 	"fmt"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
@@ -31,17 +30,7 @@ func init() {
 }
 
 var (
-	sig      = make(chan os.Signal, 1) // 接收停止信号
-	server   = &http.Server{}          // http server
-	confPath = "./env/conf.yaml"       // yaml config file path
-)
-
-var (
-	BuildVersion = ""
-	BuildTag     = ""
-	BuildCommit  = ""
-	BuildTime    = ""
-	GoVersion    = ""
+	sig = make(chan os.Signal, 1) // 接收停止信号
 )
 
 func Run() {
@@ -58,23 +47,9 @@ func Run() {
 	signalListen(ctx)
 }
 
-func parseCmd() {
-	var version bool
-	flag.BoolVar(&version, "v", false, "version")
-	flag.StringVar(&confPath, "conf", confPath, "yaml config file path")
-	flag.Parse()
-	if version {
-		fmt.Printf(" build version: %s\n build tag: %s\n build commit: %s\n build time: %s\n go version: %s\n",
-			BuildVersion, BuildTag, BuildCommit, BuildTime, GoVersion)
-		os.Exit(0)
-		return
-	}
-	fmt.Println("parse cmd success")
-}
-
 func parseConfig() {
-	if err := config.ParseConfig(confPath); err != nil {
-		fmt.Printf("parse yaml config: %s , error: %s\n", confPath, err.Error())
+	if err := config.ParseConfig(configFullPath); err != nil {
+		fmt.Printf("parse yaml config: %s , error: %s\n", configFilePath, err.Error())
 		os.Exit(1)
 		return
 	}

@@ -1,0 +1,30 @@
+syntax = "proto3";
+package proto;
+option go_package = "admin/proto/account;account";
+import "menu.proto";
+import "permission.proto";
+
+message LoginReq{
+  string username = 1;
+  string password = 2;
+}
+
+message LoginDataResp{
+  int32 adminId = 1;
+  string username = 2;
+  string nickname = 3;
+  string avatar = 4;
+  string email = 5;
+  string createTime = 6;
+  string modifyTime = 7;
+  string lastLoginTime = 8;
+  string lastLoginIp = 9;
+  int32 loginTotal = 10;
+  bool enabled = 11;
+  string token = 12;
+  int32 expire = 13;
+  repeated menuItem menus = 14;
+  map<string, string> permissions = 15;
+}
+
+
