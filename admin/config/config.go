@@ -13,15 +13,11 @@ type Config struct {
 	Logger   Logger   `yaml:"logger"`
 }
 
-type DB struct {
-	Demo *gorm.DB
-}
-
 var (
 	AppConfig        = &Config{}
 	AppLogger        *zap.Logger
 	AppLoggerSugared *zap.SugaredLogger
-	AppDB            = &DB{}
+	AppDBWei         *gorm.DB
 )
 
 func ParseConfig(name string) error {

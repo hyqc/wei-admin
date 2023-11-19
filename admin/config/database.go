@@ -54,6 +54,6 @@ func InitMySQLDB(conf MySQLConfig) error {
 	sqlDB.SetMaxOpenConns(conf.MaxOpenCons)
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
 	sqlDB.SetConnMaxLifetime(time.Duration(conf.ConnMaxLifetimeMinutes) * time.Minute)
-	AppDB.Demo = db
+	AppDBWei = db
 	return nil
 }

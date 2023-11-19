@@ -29,6 +29,8 @@ const (
 	RequestBodyInvalid   = 300001 // 请求参数无效
 	RequestQueryInvalid  = 300002 // 请求参数无效
 	RequestParamsInvalid = 300003 // 请求参数无效
+
+	AdminAccountPasswordInvalid = 400001 // 密码错误
 )
 
 var zhMsg = map[int]string{
@@ -43,6 +45,8 @@ var zhMsg = map[int]string{
 	RequestBodyInvalid:   "请求体参数无效",
 	RequestQueryInvalid:  "查询参数无效",
 	RequestParamsInvalid: "请求参数无效",
+
+	AdminAccountPasswordInvalid: "密码错误",
 }
 
 var enMsg = map[int]string{
@@ -57,6 +61,8 @@ var enMsg = map[int]string{
 	RequestBodyInvalid:   "request body invalid",
 	RequestQueryInvalid:  "request query invalid",
 	RequestParamsInvalid: "request params invalid",
+
+	AdminAccountPasswordInvalid: "password invalid",
 }
 
 func SetLanguage(c Language) {
