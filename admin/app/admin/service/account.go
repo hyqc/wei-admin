@@ -3,10 +3,13 @@ package service
 import (
 	"admin/app/admin/model"
 	"admin/code"
+	"admin/config"
 	"admin/pkg/utils"
 	"admin/proto/admin_account"
 	"context"
+	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
+	"time"
 )
 
 type AccountService struct {
@@ -19,7 +22,7 @@ func NewAccountService(db *gorm.DB) *AccountService {
 	}
 }
 
-func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginReq) (*admin_account.LoginDataResp, error) {
+func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginReq, clientIp string) (*admin_account.LoginDataResp, error) {
 	data, err := a.dao.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err
@@ -27,6 +30,37 @@ func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginR
 	if !(utils.PasswordUtil{}).Matches(params.Password, data.Password) {
 		return nil, code.NewCodeError(code.AdminAccountPasswordInvalid)
 	}
-	// TODO
-	return nil, err
+
+	// 更新登录
+	data.LastLoginTime = time.Now()
+	data.LoginTotal += 1
+	data.LastLoginIP = model.HandleAdminUserLastLoginIp(clientIp, data.LastLoginIP)
+	if err := a.dao.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
+		return nil, err
+	}
+
+	data.Password = ""
+
+	// 生成token
+	jti, err := config.AppSnoyflake.NextID()
+	if err != nil {
+		return nil, err
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
+		"iss": data.ID,
+		"exp": time.Now().Add(time.Hour * 24 * 7),
+		"iat": time.Now().Unix(),
+		"jti": jti,
+	})
+
+	resp := &admin_account.LoginDataResp{}
+	if err := utils.BeanCopy(data, resp); err != nil {
+		return nil, err
+	}
+	resp.Token = token.Raw
+
+	// 菜单
+	// 权限
+
+	return resp, err
 }

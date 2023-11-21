@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/sony/sonyflake"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 	"gorm.io/gorm"
@@ -18,6 +19,7 @@ var (
 	AppLogger        *zap.Logger
 	AppLoggerSugared *zap.SugaredLogger
 	AppDBWei         *gorm.DB
+	AppSnoyflake     *sonyflake.Sonyflake
 )
 
 func ParseConfig(name string) error {

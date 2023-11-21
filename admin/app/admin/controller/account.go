@@ -40,7 +40,7 @@ func (AccountController) Login(ctx *gin.Context) {
 		response.JSON(ctx, result)
 		return
 	}
-	data, err := accountService.Login(context.Background(), params)
+	data, err := accountService.Login(context.Background(), params, ctx.ClientIP())
 	if err != nil {
 		res := code.GetCodeMsg(err)
 		if res == nil {
