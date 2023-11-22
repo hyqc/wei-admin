@@ -72,6 +72,12 @@ func (c *Config) Init() error {
 	if err != nil {
 		return err
 	}
+	defer func(watch config.Watcher) {
+		err := watch.Stop()
+		if err != nil {
+			logger.Errorf("stop config watch failed, error:%v", err)
+		}
+	}(watch)
 
 	go func() {
 		for {
