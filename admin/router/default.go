@@ -6,19 +6,20 @@ import (
 )
 
 var (
-	Engine = gin.New()
-	root   = Engine.Group("/")
-
-	groups = []func(){
+	root   *gin.RouterGroup // 根路由
+	groups = []func(){      // 注册路由
 		check,
 		admin,
 	}
 )
 
-func init() {
+func Init() *gin.Engine {
+	Engine := gin.New()
+	root = Engine.Group("/")
 	for _, f := range groups {
 		f()
 	}
+	return Engine
 }
 
 func check() {

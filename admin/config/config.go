@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/go-micro/plugins/v4/config/encoder/yaml"
 	"go-micro.dev/v4/config"
 	"go-micro.dev/v4/config/reader"
@@ -74,7 +75,9 @@ func (c *Config) Init() error {
 
 	go func() {
 		for {
+			fmt.Println("--------------------")
 			next, err := watch.Next()
+			fmt.Println("====================")
 			if err != nil {
 				logger.Errorf("watch config file:%s failed, error: %v", fp, err)
 				continue
@@ -89,9 +92,11 @@ func (c *Config) Init() error {
 }
 
 func reload(read reader.Value, conf Config) error {
+	logger.Infof("reload before scan config.yaml: ", conf)
 	data := conf.Original()
 	if err := read.Scan(data); err != nil {
 		return err
 	}
+	logger.Infof("reload after config.yaml: ", data)
 	return conf.Handle()
 }

@@ -4,24 +4,35 @@ import (
 	"admin/config"
 	"admin/router"
 	"context"
-	"fmt"
 	"github.com/go-micro/plugins/v4/client/grpc"
 	"github.com/go-micro/plugins/v4/server/http"
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/client"
 	"go-micro.dev/v4/logger"
+	"go-micro.dev/v4/registry"
+	"go-micro.dev/v4/server"
 	"os"
 	"time"
 )
 
 func Run() {
+
 	ser := manualStart()
 
-	ser = micro.NewService(
-		micro.Name(config.AppConfig.Server.Name),
-		micro.Address(config.AppConfig.Server.Port),
+	srv := http.NewServer(
+		server.Name(config.AppConfig.Server.Name),
+		server.Address(config.AppConfig.Server.Port),
+	)
+
+	if err := srv.Handle(srv.NewHandler(router.Init())); err != nil {
+		logger.Errorf("register http handler failed, error: %v", err)
+		return
+	}
+
+	ser.Init(
+		micro.Server(srv),
+		micro.Registry(registry.NewRegistry()),
 		micro.Version(config.AppVersion),
-		micro.Server(http.NewServer()),
 		micro.RegisterTTL(30*time.Second),
 		micro.RegisterInterval(15*time.Second),
 		micro.HandleSignal(true),
@@ -33,23 +44,6 @@ func Run() {
 			client.PoolSize(1000),
 		)),
 	)
-
-	ser.Init(
-
-		micro.BeforeStart(func() error {
-			fmt.Println("=================", ser.Options().Server.Options().Address)
-			return nil
-		}),
-		micro.AfterStart(func() error {
-			fmt.Println("---------------", ser.Options().Transport.Options().Addrs, ser.Options().Server.Options().Address)
-			return nil
-		}),
-	)
-
-	if err := micro.RegisterHandler(ser.Server(), router.Engine); err != nil {
-		logger.Errorf("register http handler failed, error: %v", err)
-		return
-	}
 
 	if err := ser.Run(); err != nil {
 		logger.Errorf("start micro service failed, error: %v", err)
