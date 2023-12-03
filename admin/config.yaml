@@ -4,7 +4,18 @@ server:
   pprof: true
 
 database:
-  mysql:
+  wei:
+    user: root
+    pwd: root
+    host: localhost
+    port: 3306
+    dbname: wei
+    charset: utf8mb4
+    parse_time: True
+    location: Local
+    max_idle_cons: 2
+    max_open_cons: 20
+    conn_max_lifetime_minutes: 200
 
 logger:
   filename: "./logs/admin.log"

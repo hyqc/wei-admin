@@ -1,6 +1,7 @@
 package config
 
 import (
+	"admin/app/gen/query"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -8,7 +9,7 @@ import (
 )
 
 type Database struct {
-	DBDemo MySQLConfig `yaml:"mysql"`
+	Wei MySQLConfig `yaml:"wei"`
 }
 
 type MySQLConfig struct {
@@ -25,7 +26,8 @@ type MySQLConfig struct {
 	ConnMaxLifetimeMinutes int    `yaml:"conn_max_lifetime_minutes"`
 }
 
-func InitMySQLDB(conf MySQLConfig) error {
+func InitMySQLDB() error {
+	conf := AppConfig.Database.Wei
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=%s&loc=%s",
 		conf.User, conf.Password, conf.Host, conf.Port, conf.Dbname, conf.Charset, conf.ParseTime, conf.Location)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -54,6 +56,8 @@ func InitMySQLDB(conf MySQLConfig) error {
 	sqlDB.SetMaxOpenConns(conf.MaxOpenCons)
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
 	sqlDB.SetConnMaxLifetime(time.Duration(conf.ConnMaxLifetimeMinutes) * time.Minute)
-	AppDBWei = db
+
+	query.SetDefault(db)
+
 	return nil
 }

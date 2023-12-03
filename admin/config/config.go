@@ -4,7 +4,6 @@ import (
 	"github.com/sony/sonyflake"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
-	"gorm.io/gorm"
 	"os"
 )
 
@@ -18,7 +17,6 @@ var (
 	AppConfig        = &Config{}
 	AppLogger        *zap.Logger
 	AppLoggerSugared *zap.SugaredLogger
-	AppDBWei         *gorm.DB
 	AppSnoyflake     *sonyflake.Sonyflake
 )
 

@@ -8,7 +8,6 @@ import (
 	"admin/proto/admin_account"
 	"context"
 	"github.com/golang-jwt/jwt/v5"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -16,7 +15,7 @@ type AccountService struct {
 	dao *model.AdminAccount
 }
 
-func NewAccountService(db *gorm.DB) *AccountService {
+func NewAccountService() *AccountService {
 	return &AccountService{
 		dao: model.NewAdminAccount(),
 	}

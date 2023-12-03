@@ -15,19 +15,17 @@ type IAdminAccount interface {
 type AdminAccount struct {
 }
 
-var (
-	adminUser = query.AdminUser.Table(query.AdminUser.TableName())
-)
-
 func NewAdminAccount() *AdminAccount {
 	return &AdminAccount{}
 }
 
 func (a *AdminAccount) FindAdminUserByUsername(ctx context.Context, username string) (*model.AdminUser, error) {
+	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
 	return adminUser.WithContext(ctx).Where(adminUser.Username.Eq(username)).First()
 }
 
 func (a *AdminAccount) UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error {
+	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
 	_, err := adminUser.WithContext(ctx).Where(adminUser.ID.Eq(adminId)).
 		Select(adminUser.LoginTotal, adminUser.LastLoginIP, adminUser.LastLoginTime).
 		Updates(data)

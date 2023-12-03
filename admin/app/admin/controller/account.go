@@ -19,7 +19,7 @@ type AccountController struct {
 }
 
 var (
-	accountService = service.NewAccountService(config.AppDBWei)
+	accountService = service.NewAccountService()
 )
 
 // Login 登录
