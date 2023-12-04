@@ -11,17 +11,17 @@ import (
 	"time"
 )
 
-type AccountService struct {
-	dao *model.AdminAccount
+type AdminUserService struct {
+	dao *model.AdminUser
 }
 
-func NewAccountService() *AccountService {
-	return &AccountService{
-		dao: model.NewAdminAccount(),
+func NewAdminUserService() *AdminUserService {
+	return &AdminUserService{
+		dao: model.NewAdminUser(),
 	}
 }
 
-func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginReq, clientIp string) (*admin_account.LoginDataResp, error) {
+func (a *AdminUserService) Login(ctx context.Context, params *admin_account.LoginReq, clientIp string) (*admin_account.LoginDataResp, error) {
 	data, err := a.dao.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err

@@ -19,7 +19,7 @@ type AccountController struct {
 }
 
 var (
-	accountService = service.NewAccountService()
+	accountService = service.NewAdminUserService()
 )
 
 // Login 登录
