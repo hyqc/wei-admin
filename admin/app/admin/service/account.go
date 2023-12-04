@@ -29,15 +29,6 @@ func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginR
 	if !(utils.PasswordUtil{}).Matches(params.Password, data.Password) {
 		return nil, code.NewCodeError(code.AdminAccountPasswordInvalid)
 	}
-
-	// 更新登录
-	data.LastLoginTime = time.Now()
-	data.LoginTotal += 1
-	data.LastLoginIP = model.HandleAdminUserLastLoginIp(clientIp, data.LastLoginIP)
-	if err := a.dao.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
-		return nil, err
-	}
-
 	data.Password = ""
 
 	// 生成token
@@ -60,6 +51,15 @@ func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginR
 
 	// 菜单
 	// 权限
+
+	// 更新登录
+	data.LastLoginTime = time.Now()
+	data.LoginTotal += 1
+	ip, err := model.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
+	data.LastLoginIP = ip
+	if err := a.dao.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
+		return nil, err
+	}
 
 	return resp, err
 }
