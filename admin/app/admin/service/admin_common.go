@@ -1,9 +1,9 @@
 package service
 
-import "admin/app/admin/model"
+import "admin/app/admin/dao"
 
 var (
-	adminUserDao       = model.NewAdminUser()
-	adminMenuDao       = model.NewAdminMenu()
-	adminPermissionDao = model.NewAdminPermission()
+	adminUserDao       = dao.NewAdminUser()
+	adminMenuDao       = dao.NewAdminMenu()
+	adminPermissionDao = dao.NewAdminPermission()
 )

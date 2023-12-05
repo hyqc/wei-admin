@@ -2,7 +2,7 @@ package controller
 
 import (
 	"admin/app/admin/service"
-	"admin/app/admin/validater"
+	"admin/app/admin/validator"
 	"admin/code"
 	"admin/config"
 	"admin/pkg/core"
@@ -34,7 +34,7 @@ var (
 // @Router /admin/login [post]
 func (AccountController) Login(ctx *gin.Context) {
 	params := &admin_account.LoginReq{}
-	if err := validate.Validate(ctx, params, validater.AccountValidatorHandler{}.Login); err != nil {
+	if err := validate.Validate(ctx, params, validator.AccountValidatorHandler{}.Login); err != nil {
 		result := code.NewCode(code.RequestParamsInvalid)
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
 		response.JSON(ctx, result)

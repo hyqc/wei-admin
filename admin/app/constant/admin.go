@@ -1,10 +1,10 @@
 package constant
 
 const (
-	AdministratorId = 1
+	AdministratorId int32 = 1
 )
 
 // IsAdministrator 是否是超管
-func IsAdministrator(adminId int) bool {
+func IsAdministrator(adminId int32) bool {
 	return AdministratorId == adminId
 }

@@ -1,13 +1,13 @@
 package service
 
 import (
-	"admin/app/admin/model"
-	"admin/app/constant"
+	"admin/app/admin/dao"
 	"admin/proto/admin_menu"
+	"context"
 )
 
 type AdminMenuService struct {
-	dao *model.AdminMenu
+	dao *dao.AdminMenu
 }
 
 func NewAdminMenuService() *AdminMenuService {
@@ -16,11 +16,9 @@ func NewAdminMenuService() *AdminMenuService {
 	}
 }
 
-func (m *AdminMenuService) getMyMenus(adminId int) ([]*admin_menu.MenuItem, error) {
-	if constant.IsAdministrator(adminId) {
-		// 超管
-		return nil, nil
-	}
+func (m *AdminMenuService) getMyMenus(ctx context.Context, menuIds []int32) ([]*admin_menu.MenuItem, error) {
+	// 获取全部的菜单
+
 	// 非超管
 	return nil, nil
 }

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"admin/app/admin/model"
+	"admin/app/admin/dao"
 	"admin/code"
 	"admin/config"
 	"admin/pkg/utils"
@@ -12,12 +12,12 @@ import (
 )
 
 type AdminUserService struct {
-	dao *model.AdminUser
+	dao *dao.AdminUser
 }
 
 func NewAdminUserService() *AdminUserService {
 	return &AdminUserService{
-		dao: model.NewAdminUser(),
+		dao: dao.NewAdminUser(),
 	}
 }
 
@@ -55,7 +55,7 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 	// 更新登录
 	data.LastLoginTime = time.Now()
 	data.LoginTotal += 1
-	ip, err := model.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
+	ip, err := dao.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
 	data.LastLoginIP = ip
 	if err := a.dao.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
 		return nil, err
