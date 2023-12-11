@@ -3,6 +3,7 @@ module admin
 go 1.19
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.1
 	github.com/gin-contrib/pprof v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.1.0
