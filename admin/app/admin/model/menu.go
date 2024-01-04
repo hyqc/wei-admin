@@ -2,11 +2,14 @@ package model
 
 import (
 	"admin/app/gen/model"
+	"admin/app/gen/query"
 	"context"
 )
 
 type IAdminMenu interface {
-	FindMyMenusByAdminId(ctx context.Context, username string) (*model.AdminUser, error) // 根据管理员名称查询详情
+	FindMyMenusByAdminId(ctx context.Context, adminId, menuId int) (*model.AdminUser, error) // 根据管理员名称查询详情
+	FindAdministerMenus(ctx context.Context) (*model.AdminUser, error)                       // 获取超管可以访问的菜单
+	FindMyMenus(ctx context.Context, adminId, menuId int) (*model.AdminUser, error)          // 获取超管可以访问的菜单
 }
 
 type AdminMenu struct {
@@ -16,7 +19,7 @@ func NewIAdminMenu() *AdminMenu {
 	return &AdminMenu{}
 }
 
-// FindMyMenusByAdminId 获取我的可以访问的菜单列表
-func (a *AdminMenu) FindMyMenusByAdminId(adminId int) {
-
+// FindAdministerMenus 获取超管的全部菜单
+func (a *AdminMenu) FindAdministerMenus(ctx context.Context) (*model.AdminUser, error) {
+	adminMenu := query.AdminMenu.Table(query.AdminMenu.TableName())
 }

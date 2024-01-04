@@ -11,19 +11,19 @@ type IAdminAccount interface {
 	UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error // 更新管理员的登录信息
 }
 
-type AdminAccount struct {
+type AdminUser struct {
 }
 
-func NewAdminAccount() *AdminAccount {
-	return &AdminAccount{}
+func NewAdminUser() *AdminUser {
+	return &AdminUser{}
 }
 
-func (a *AdminAccount) FindAdminUserByUsername(ctx context.Context, username string) (*model.AdminUser, error) {
+func (a *AdminUser) FindAdminUserByUsername(ctx context.Context, username string) (*model.AdminUser, error) {
 	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
 	return adminUser.WithContext(ctx).Where(adminUser.Username.Eq(username)).First()
 }
 
-func (a *AdminAccount) UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error {
+func (a *AdminUser) UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error {
 	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
 	_, err := adminUser.WithContext(ctx).Where(adminUser.ID.Eq(adminId)).
 		Select(adminUser.LoginTotal, adminUser.LastLoginIP, adminUser.LastLoginTime).

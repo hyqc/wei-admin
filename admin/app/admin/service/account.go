@@ -12,12 +12,12 @@ import (
 )
 
 type AccountService struct {
-	dao *model.AdminAccount
+	dao *model.AdminUser
 }
 
 func NewAccountService() *AccountService {
 	return &AccountService{
-		dao: model.NewAdminAccount(),
+		dao: model.NewAdminUser(),
 	}
 }
 
@@ -50,6 +50,7 @@ func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginR
 	resp.Token = token.Raw
 
 	// 菜单
+
 	// 权限
 
 	// 更新登录
