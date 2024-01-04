@@ -27,7 +27,7 @@ func mockDB(t *testing.T) {
 
 func TestMain(m *testing.M) {
 	// 在这里设置数据库连接
-	utils.TestMainSetup(func(db *gorm.DB) {
+	utils.TestMainSetupDB(func(db *gorm.DB) {
 		query.SetDefault(db)
 	})
 	// 运行测试
@@ -42,7 +42,8 @@ func teardown() {
 }
 
 func TestFindAll(t *testing.T) {
-	data, err := FindAll(context.Background())
+	dao := NewAdminMenu()
+	data, err := dao.FindAll(context.Background())
 	assert.Nil(t, err, err)
 	for _, item := range data {
 		fmt.Println(item)

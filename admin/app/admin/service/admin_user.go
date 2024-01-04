@@ -49,10 +49,20 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 	}
 	resp.Token = token.Raw
 
-	// 菜单
-
 	// 权限
-
+	ps := PermissionService{}
+	permissions, err := ps.FindMyPermission(ctx, data.ID)
+	if err != nil {
+		return nil, err
+	}
+	pageIds, permis := ps.Permissions2MenuIds(permissions)
+	// 菜单
+	menus, err := AdminMenuSrv.getMyMenusMap(ctx, pageIds)
+	if err != nil {
+		return nil, err
+	}
+	resp.Menus = menus
+	resp.Permissions = permis
 	// 更新登录
 	data.LastLoginTime = time.Now()
 	data.LoginTotal += 1

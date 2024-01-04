@@ -46,7 +46,8 @@ func BeanCopy(src, dst interface{}) error {
 	return nil
 }
 
-func TestMainSetup(call func(db *gorm.DB)) {
+// TestMainSetupDB 测试Main Setup 毁掉
+func TestMainSetupDB(call func(db *gorm.DB)) {
 	// 初始化操作，例如设置数据库连接、初始化配置等
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=%s&loc=%s", "root", "root", "localhost", "3306", "wei", "utf8mb4", "True", "Local")
 	fmt.Println("dsn: ", dsn)
@@ -55,4 +56,15 @@ func TestMainSetup(call func(db *gorm.DB)) {
 		log.Fatalf("Error opening database: %v", err)
 	}
 	call(db)
+}
+
+func Array2Set[T comparable](data []T) (result []T) {
+	m := make(map[T]struct{})
+	for _, val := range data {
+		if _, ok := m[val]; !ok {
+			m[val] = struct{}{}
+			result = append(result, val)
+		}
+	}
+	return result
 }

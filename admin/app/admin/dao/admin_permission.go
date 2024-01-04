@@ -7,7 +7,8 @@ import (
 )
 
 type IAdminPermission interface {
-	GetAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) // 根据管理员名称查询详情
+	FindAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) // 根据管理员名称查询详情
+	FindAdminPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error)
 }
 
 type AdminPermission struct {
@@ -17,8 +18,8 @@ func NewAdminPermission() *AdminPermission {
 	return &AdminPermission{}
 }
 
-// GetAdministerPermissions 获取超管对应的权限
-func (p *AdminPermission) GetAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) {
+// FindAdministerPermissions 获取超管对应的权限
+func (p *AdminPermission) FindAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) {
 	permission := query.AdminPermission.Table(query.AdminPermission.TableName())
 	menu := query.AdminMenu.Table(query.AdminMenu.TableName())
 	return permission.WithContext(ctx).
@@ -26,8 +27,8 @@ func (p *AdminPermission) GetAdministerPermissions(ctx context.Context) ([]*mode
 		Where(permission.IsEnabled.Is(true)).Find()
 }
 
-// GetMyPermissions 获取非超管对于的权限
-func (p *AdminPermission) GetMyPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error) {
+// FindAdminPermissions 获取非超管对于的权限
+func (p *AdminPermission) FindAdminPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error) {
 	permission := query.AdminPermission.Table(query.AdminPermission.TableName())
 	menu := query.AdminMenu.Table(query.AdminMenu.TableName())
 	role := query.AdminRole.Table(query.AdminRole.TableName())
