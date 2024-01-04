@@ -31,8 +31,9 @@ func NewCodeError(code int) Err {
 }
 
 func GetCodeMsg(err error) *response.Message {
-	switch err.(type) {
-	case Err:
+	var e Err
+	switch {
+	case errors.As(err, &e):
 		data := &response.Message{}
 		if e := json.Unmarshal([]byte(err.Error()), data); e != nil {
 			return nil

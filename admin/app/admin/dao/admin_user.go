@@ -1,4 +1,4 @@
-package model
+package dao
 
 import (
 	"admin/app/gen/model"
@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-type IAdminAccount interface {
+type IAdminUser interface {
 	FindAdminUserByUsername(ctx context.Context, username string) (*model.AdminUser, error)   // 根据管理员名称查询详情
 	UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error // 更新管理员的登录信息
 }

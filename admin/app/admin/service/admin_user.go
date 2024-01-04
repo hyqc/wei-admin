@@ -1,7 +1,7 @@
 package service
 
 import (
-	"admin/app/admin/model"
+	"admin/app/admin/dao"
 	"admin/code"
 	"admin/config"
 	"admin/pkg/utils"
@@ -11,17 +11,17 @@ import (
 	"time"
 )
 
-type AccountService struct {
-	dao *model.AdminUser
+type AdminUserService struct {
+	dao *dao.AdminUser
 }
 
-func NewAccountService() *AccountService {
-	return &AccountService{
-		dao: model.NewAdminUser(),
+func NewAdminUserService() *AdminUserService {
+	return &AdminUserService{
+		dao: dao.NewAdminUser(),
 	}
 }
 
-func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginReq, clientIp string) (*admin_account.LoginDataResp, error) {
+func (a *AdminUserService) Login(ctx context.Context, params *admin_account.LoginReq, clientIp string) (*admin_account.LoginDataResp, error) {
 	data, err := a.dao.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func (a *AccountService) Login(ctx context.Context, params *admin_account.LoginR
 	// 更新登录
 	data.LastLoginTime = time.Now()
 	data.LoginTotal += 1
-	ip, err := model.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
+	ip, err := dao.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
 	data.LastLoginIP = ip
 	if err := a.dao.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
 		return nil, err

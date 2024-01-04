@@ -46,7 +46,7 @@ func demo() {
 	g.UseDB(db)
 	g.GenerateModelAs("hc_chat_channel", "ChatChannel")
 	g.GenerateModelAs("hc_chat_config", "ChatConfig")
-	//g.ApplyInterface(func(method model.Method) {}, g.GenerateModelAs("hc_chat_channel", "ChatChannel"))
-	//g.ApplyInterface(func(method model.Method) {}, g.GenerateModelAs("hc_chat_config", "ChatConfig"))
+	//g.ApplyInterface(func(method logic.Method) {}, g.GenerateModelAs("hc_chat_channel", "ChatChannel"))
+	//g.ApplyInterface(func(method logic.Method) {}, g.GenerateModelAs("hc_chat_config", "ChatConfig"))
 	g.Execute()
 }

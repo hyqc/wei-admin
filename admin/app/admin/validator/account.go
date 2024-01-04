@@ -1,4 +1,4 @@
-package validater
+package validator
 
 import (
 	"admin/pkg/validate"
@@ -6,10 +6,10 @@ import (
 	"net/url"
 )
 
-type AccountValidatorHandler struct {
+type AccountValidator struct {
 }
 
-func (AccountValidatorHandler) Login(data interface{}) url.Values {
+func (AccountValidator) Login(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validate.GetValidateJSONTag("username"): []string{"required", "between:1,32"},
 		validate.GetValidateJSONTag("password"): []string{"required", "between:6,64"},
