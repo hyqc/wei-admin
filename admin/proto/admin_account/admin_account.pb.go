@@ -27,7 +27,7 @@ type LoginReq struct {
 	unknownFields protoimpl.UnknownFields
 
 	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
-	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Password string `protobuf:"bytes,2,opt,name=pwd,proto3" json:"pwd,omitempty"`
 }
 
 func (x *LoginReq) Reset() {

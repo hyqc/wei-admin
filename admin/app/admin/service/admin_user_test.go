@@ -1,9 +1,12 @@
-package dao
+package service
 
 import (
 	"admin/app/gen/query"
 	"admin/pkg/utils"
+	"admin/pkg/utils/files"
+	"admin/proto/admin_account"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
@@ -43,11 +46,15 @@ func teardown() {
 	fmt.Println("执行清理...")
 }
 
-func TestFindAll(t *testing.T) {
-	dao := NewAdminMenu()
-	data, err := dao.FindAll(context.Background())
+func TestAdminUserService_Login(t *testing.T) {
+	srv := NewAdminUserService()
+	resp, err := srv.Login(context.Background(), &admin_account.LoginReq{
+		Username: "admin",
+		Password: "123456",
+	}, "127.0.0.1")
 	assert.Nil(t, err, err)
-	for _, item := range data {
-		fmt.Println(item)
-	}
+	body, err := json.Marshal(resp)
+	assert.Nil(t, err, err)
+	err = files.Override("login.resp.json", body)
+	assert.Nil(t, err, err)
 }

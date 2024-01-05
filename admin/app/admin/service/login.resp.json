@@ -1,0 +1,73 @@
+{
+  "username": "admin",
+  "nickname": "超管",
+  "email": "ddd@q1.com",
+  "loginTotal": 28,
+  "menus": [
+    {
+      "path": "/admin/user",
+      "name": "账号管理"
+    },
+    {
+      "path": "/admin",
+      "name": "系统设置"
+    },
+    {
+      "path": "/admin/role",
+      "name": "角色管理"
+    },
+    {
+      "path": "/admin",
+      "name": "系统设置"
+    },
+    {
+      "path": "/admin/menu",
+      "name": "菜单管理"
+    },
+    {
+      "path": "/admin",
+      "name": "系统设置"
+    },
+    {
+      "path": "/admin/permission",
+      "name": "权限管理"
+    },
+    {
+      "path": "/admin",
+      "name": "系统设置"
+    },
+    {
+      "path": "/admin/api",
+      "name": "接口管理"
+    },
+    {
+      "path": "/admin",
+      "name": "系统设置"
+    },
+    {
+      "path": "/admin/menu/add",
+      "name": "添加菜单"
+    },
+    {
+      "path": "/admin/menu/edit",
+      "name": "编辑菜单"
+    }
+  ],
+  "permissions": {
+    "AdminApiDelete": "接口删除",
+    "AdminApiEdit": "接口编辑",
+    "AdminApiView": "接口查看",
+    "AdminMenuDelete": "菜单删除",
+    "AdminMenuEdit": "菜单编辑",
+    "AdminMenuView": "菜单查看",
+    "AdminPermissionDelete": "权限删除",
+    "AdminPermissionEdit": "权限编辑",
+    "AdminPermissionView": "权限查看",
+    "AdminRoleDelete": "角色删除",
+    "AdminRoleEdit": "角色编辑",
+    "AdminRoleView": "角色查看",
+    "AdminUserDelete": "账号删除",
+    "AdminUserEdit": "账号编辑",
+    "AdminUserView": "账号查看"
+  }
+}

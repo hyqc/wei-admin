@@ -71,12 +71,6 @@ func initConfig() {
 		return
 	}
 
-	if err := config.InitSnoyflake(); err != nil {
-		utils.PrintfLn("init snoyflake config error: %s", err.Error())
-		os.Exit(3)
-		return
-	}
-
 	utils.PrintfLn("init config success")
 }
 

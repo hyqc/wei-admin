@@ -3,8 +3,9 @@ package service
 import (
 	"admin/app/admin/dao"
 	"admin/code"
-	"admin/config"
 	"admin/pkg/utils"
+	"admin/pkg/utils/pwd"
+	"admin/pkg/uuid"
 	"admin/proto/admin_account"
 	"context"
 	"github.com/golang-jwt/jwt/v5"
@@ -26,13 +27,13 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 	if err != nil {
 		return nil, err
 	}
-	if !(utils.PasswordUtil{}).Matches(params.Password, data.Password) {
+	if !pwd.Matches(params.Password, data.Password) {
 		return nil, code.NewCodeError(code.AdminAccountPasswordInvalid)
 	}
 	data.Password = ""
 
 	// 生成token
-	jti, err := config.AppSnoyflake.NextID()
+	jti, err := uuid.Sonyflake.NextID()
 	if err != nil {
 		return nil, err
 	}
@@ -55,14 +56,14 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 	if err != nil {
 		return nil, err
 	}
-	pageIds, permis := ps.Permissions2MenuIds(permissions)
+	pageIds, perms := ps.Permissions2MenuIds(permissions)
 	// 菜单
 	menus, err := AdminMenuSrv.getMyMenusMap(ctx, pageIds)
 	if err != nil {
 		return nil, err
 	}
 	resp.Menus = menus
-	resp.Permissions = permis
+	resp.Permissions = perms
 	// 更新登录
 	data.LastLoginTime = time.Now()
 	data.LoginTotal += 1

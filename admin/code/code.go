@@ -62,7 +62,7 @@ var enMsg = map[int]string{
 	RequestQueryInvalid:  "request query invalid",
 	RequestParamsInvalid: "request params invalid",
 
-	AdminAccountPasswordInvalid: "password invalid",
+	AdminAccountPasswordInvalid: "pwd invalid",
 }
 
 func SetLanguage(c Language) {
