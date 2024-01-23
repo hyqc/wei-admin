@@ -76,7 +76,7 @@ func initConfig() {
 
 func runServe() {
 
-	if config.AppConfig.Server.Debug {
+	if !config.AppConfig.Server.Debug {
 		gin.SetMode(gin.ReleaseMode)
 		gin.DisableConsoleColor()
 	}
