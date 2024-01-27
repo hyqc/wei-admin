@@ -57,6 +57,7 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 		return nil, err
 	}
 	pageIds, perms := ps.Permissions2MenuIds(permissions)
+
 	// 菜单
 	menus, err := AdminMenuSrv.getMyMenusMap(ctx, pageIds)
 	if err != nil {
@@ -64,6 +65,7 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 	}
 	resp.Menus = menus
 	resp.Permissions = perms
+
 	// 更新登录
 	data.LastLoginTime = time.Now()
 	data.LoginTotal += 1
