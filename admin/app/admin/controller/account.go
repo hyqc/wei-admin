@@ -69,7 +69,8 @@ func (AccountController) Register(ctx *gin.Context) {
 }
 
 func (AccountController) Detail(ctx *gin.Context) {
-	data, err := accountService.Detail(ctx, params, ctx.ClientIP())
+	refreshToken := ctx.GetBool("refreshToken")
+	data, err := accountService.Detail(ctx, int32(ctx.GetInt("admin_id")), refreshToken)
 	if err != nil {
 		res := code.GetCodeMsg(err)
 		if res == nil {
@@ -85,6 +86,7 @@ func (AccountController) Detail(ctx *gin.Context) {
 	}
 
 	result := code.NewCode(code.Success)
+	result.Data = data
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
 	response.JSON(ctx, result)
 	return
