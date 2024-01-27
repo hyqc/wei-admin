@@ -24,4 +24,4 @@ logger:
   max_age: 14
   compress: true
   level: -1 # debug=-1, info=0, warn=1
-  json: false
+  json: true

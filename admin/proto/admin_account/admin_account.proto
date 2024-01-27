@@ -9,7 +9,7 @@ message LoginReq{
   string password = 2;
 }
 
-message LoginDataResp{
+message LoginResp{
   int32 adminId = 1;
   string username = 2;
   string nickname = 3;
@@ -26,4 +26,8 @@ message LoginDataResp{
   repeated admin_menu.menuItem menus = 14;
   map<string, string> permissions = 15;
 }
+
+message AccountDetailReq{}
+
+message AccountDetailResp{}
 

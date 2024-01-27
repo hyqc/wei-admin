@@ -3,17 +3,19 @@ package admin_menu;
 option go_package = "admin/proto/admin_menu;admin_menu";
 
 message menuItem{
-  string path = 1;
-  string name = 2;
-  string icon =3;
-  string component =4;
-  string authority = 5;
-  repeated routeItem routes = 6;
+  string key = 1; // 菜单唯一键
+  string path = 2; // 菜单路由
+  string name = 3; // 菜单名称
+  string icon = 4; // 菜单图标
+  string component = 5;
+  string authority = 6;
+  repeated routeItem routes = 7;
 }
 
 message routeItem {
-  string path = 1;
-  string name = 2;
-  string icon =3;
-  string component =4;
+  string key = 1;
+  string path = 2;
+  string name = 3;
+  string icon = 4;
+  string component = 5;
 }

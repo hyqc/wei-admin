@@ -9,7 +9,6 @@ import (
 	"admin/pkg/response"
 	"admin/pkg/validate"
 	"admin/proto/admin_account"
-	"context"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -34,13 +33,13 @@ var (
 // @Router /admin/login [post]
 func (AccountController) Login(ctx *gin.Context) {
 	params := &admin_account.LoginReq{}
-	if err := validate.Validate(ctx, params, validator.AccountValidator{}.Login); err != nil {
+	if err := validate.Validate(ctx, params, validator.ValidateAccount.Login); err != nil {
 		result := code.NewCode(code.RequestParamsInvalid)
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
 		response.JSON(ctx, result)
 		return
 	}
-	data, err := accountService.Login(context.Background(), params, ctx.ClientIP())
+	data, err := accountService.Login(ctx, params, ctx.ClientIP())
 	if err != nil {
 		res := code.GetCodeMsg(err)
 		if res == nil {
@@ -70,6 +69,21 @@ func (AccountController) Register(ctx *gin.Context) {
 }
 
 func (AccountController) Detail(ctx *gin.Context) {
+	data, err := accountService.Detail(ctx, params, ctx.ClientIP())
+	if err != nil {
+		res := code.GetCodeMsg(err)
+		if res == nil {
+			result := code.NewCode(code.RequestParamsInvalid)
+			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
+			response.JSON(ctx, result)
+			return
+		}
+
+		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
+		response.JSON(ctx, *res)
+		return
+	}
+
 	result := code.NewCode(code.Success)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
 	response.JSON(ctx, result)
