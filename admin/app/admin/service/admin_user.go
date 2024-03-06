@@ -4,13 +4,12 @@ import (
 	"admin/app/admin/dao"
 	"admin/app/gen/model"
 	"admin/code"
+	"admin/config"
 	"admin/pkg/core"
 	"admin/pkg/utils"
 	"admin/pkg/utils/pwd"
-	"admin/pkg/uuid"
 	"admin/proto/admin_account"
 	"context"
-	"github.com/golang-jwt/jwt/v5"
 	"time"
 )
 
@@ -65,11 +64,11 @@ func (a *AdminUserService) getMyInfo(ctx context.Context, data *model.AdminUser,
 		return nil, err
 	}
 	if refreshToken {
-		token, err := a.createToken(data.ID, data.Username, 7)
+		token, err := a.createToken(data.ID, data.Username, 3600)
 		if err != nil {
 			return nil, err
 		}
-		resp.Token = token.Raw
+		resp.Token = token
 	}
 
 	// 权限
@@ -91,13 +90,18 @@ func (a *AdminUserService) getMyInfo(ctx context.Context, data *model.AdminUser,
 	return resp, err
 }
 
-func (a *AdminUserService) createToken(adminId int32, username string, days int64) (*jwt.Token, error) {
+func (a *AdminUserService) createToken(adminId int32, username string, seconds time.Duration) (string, error) {
 	// 生成token
-	jti, err := uuid.Sonyflake.NextID()
+	jti, err := core.Sonyflake.NextID()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-
-	token := core.TokenCreate(adminId, username, jti, days)
+	token, err := core.JWTCreate(core.CustomClaimsOption{
+		AccountId:     adminId,
+		AccountName:   username,
+		ExpireSeconds: seconds,
+		UUID:          jti,
+		Secret:        config.AppConfig.Server.JWT.Secret,
+	})
 	return token, err
 }

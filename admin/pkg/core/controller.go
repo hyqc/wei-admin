@@ -29,6 +29,14 @@ func handleResponseResult(data ResponseData) map[string]interface{} {
 	return result
 }
 
+func ResponseOk(ctx *gin.Context, data ResponseData) {
+	ctx.AbortWithStatusJSON(http.StatusOK, handleResponseResult(data))
+}
+
+func ResponseStatus(ctx *gin.Context, status int, data ResponseData) {
+	ctx.AbortWithStatusJSON(status, handleResponseResult(data))
+}
+
 func (b Controller) ResponseOk(ctx *gin.Context, data ResponseData) {
 	ctx.AbortWithStatusJSON(http.StatusOK, handleResponseResult(data))
 }

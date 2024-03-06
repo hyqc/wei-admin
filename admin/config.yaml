@@ -2,6 +2,9 @@ server:
   debug: true
   port: 3000
   pprof: true
+  jwt:
+    secret: MHcCAQEEIEiE+ONCLujTc4ibxd9qtfVRGlrSX2A0qXYVzrw4hUREoAoGCCqGSM49AwEHoUQDQgAEisyae3uURSutgrUTw8r14dC1Wtjflq9l3D75jk+9JQprkXQB7TFB
+  wRCdco3/h+oAQrozhqvgKG+nulGIoOSpaQ==
 
 database:
   wei:

@@ -3,7 +3,6 @@ package admin_account;
 option go_package = "admin/proto/admin_account;admin_account";
 import "proto/admin_menu/admin_menu.proto";
 
-
 message LoginReq{
   string username = 1;
   string password = 2;
