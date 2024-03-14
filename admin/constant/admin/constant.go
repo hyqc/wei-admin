@@ -1,4 +1,4 @@
-package constant
+package admin
 
 const (
 	AdministerId int32 = 1 // 超管ID

@@ -1,3 +1,43 @@
 syntax = "proto3";
 package admin_permission;
 option go_package = "./admin_permission;admin_permission";
+
+// 权限列表
+message PermissionListReq{}
+
+message PermissionListResp{}
+
+// 创建权限
+message PermissionAddReq{}
+
+message PermissionAddResp{}
+
+//权限详情
+message PermissionDetailReq{}
+
+message PermissionDetailResp{}
+
+// 编辑权限
+message PermissionEditReq{}
+
+message PermissionEditResp{}
+
+// 启用禁用权限
+message PermissionEnabledReq{}
+
+message PermissionEnabledResp{}
+
+// 删除权限
+message PermissionDeleteReq{}
+
+message PermissionDeleteResp{}
+
+// 权限绑定接口
+message PermissionApisBindReq{}
+
+message PermissionApisBindResp{}
+
+//指定菜单创建查看编辑删除权限
+message PermissionBindMenuReq{}
+
+message PermissionBindMenuResp{}

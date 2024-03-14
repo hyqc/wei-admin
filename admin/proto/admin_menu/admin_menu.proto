@@ -13,9 +13,100 @@ message menuItem{
 }
 
 message routeItem {
-  string key = 1;
-  string path = 2;
-  string name = 3;
-  string icon = 4;
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  string icon = 4;//
   string component = 5;
 }
+
+// 菜单列表
+message MenuListReq{
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  int32 parentId = 4; // 父级菜单
+}
+
+message MenuListResp{}
+
+// 有效菜单树
+message MenuTreeReq{}
+
+message MenuTreeResp{}
+
+// 创建菜单
+message MenuAddReq{
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  int32 parentId = 4; // 父级菜单
+  string describe = 5;//菜单描述
+  string redirect = 6;//菜单重定向路由
+  string icon = 7;//菜单图标
+  bool hideChildrenInMenu = 8;//是否隐藏子菜单
+  bool hideInMenu = 9;//是否隐藏菜单
+  bool enabled = 10;//是否启用菜单
+  int32 sort = 11;//菜单排序值
+}
+
+message MenuAddResp{}
+
+// 菜单想去
+message MenuDetailReq{
+  int32 menuId = 1;//菜单ID
+}
+
+message MenuDetailResp{}
+
+// 便捷菜单
+message MenuEditReq{
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  int32 parentId = 4; // 父级菜单
+  string describe = 5;//菜单描述
+  string redirect = 6;//菜单重定向路由
+  string icon = 7;//菜单图标
+  bool hideChildrenInMenu = 8;//是否隐藏子菜单
+  bool hideInMenu = 9;//是否隐藏菜单
+  bool enabled = 10;//是否启用菜单
+  int32 sort = 11;//菜单排序值
+  int32 menuId = 12;//菜单ID
+}
+
+message MenuEditResp{}
+
+// 启用禁用菜单
+message MenuEnableReq{
+  int32 menuId = 1;//菜单ID
+  bool enabled = 2;//是否启用菜单
+}
+
+message MenuEnableResp{}
+
+// 删除菜单
+message MenuDeleteReq{
+  int32 menuId = 1;//菜单ID
+}
+
+message MenuDeleteResp{}
+
+// 菜单权限列表
+message MenuPermissionsReq{
+  int32 menuId = 1;//菜单ID
+}
+
+message MenuPermissionsResp{}
+
+// 页面菜单列表
+message MenuPagesReq{
+  bool all = 1;//是否顶部插入全部
+}
+
+message MenuPagesResp{}
+
+// 页面模块权限列表
+message MenuModeReq{}
+
+message MenuModeResp{}

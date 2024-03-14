@@ -1,0 +1,66 @@
+syntax = "proto3";
+package admin_permission;
+option go_package = "./admin_user;admin_user";
+
+// 账号列表
+message UserListParamsReq{
+  string username = 1;//账号
+  string nickname = 2;//昵称
+  repeated int32 roleIds = 3;// 角色
+}
+
+message UserListParamsResp{}
+
+// 账号详情
+message UserDetailParamsReq{
+  int32 adminId = 1;//管理员ID
+}
+
+message UserDetailParamsResp{}
+
+// 添加账号
+message UserAddParamsReq{
+  string username = 1;//账号
+  string nickname = 2;//昵称
+  string password = 3;//密码
+  string confirmPassword = 4;//确认密码
+  bool enabled = 5;//账号启用状态
+  string email = 6;//邮箱
+  string avatar = 7;//头像地址
+}
+
+message UserAddParamsResp{}
+
+// 账号编辑
+message UserEditParamsReq{
+  string username = 1;//账号
+  string nickname = 2;//昵称
+  string password = 3;//密码
+  string confirmPassword = 4;//确认密码
+  bool enabled = 5;//账号启用状态
+  string email = 6;//邮箱
+  string avatar = 7;//头像地址
+  int32 adminId = 8;//管理员ID
+}
+
+message UserEditParamsResp{}
+
+// 账号状态更改
+message UserUpdateEnabledParamsReq{
+  int32 adminId = 1;//管理员ID
+  bool enabled = 2;//账号启用状态
+}
+message UserUpdateEnabledParamsResp{}
+
+// 删除账号
+message UserDeleteParamsReq{
+  int32 adminId = 1;//管理员ID
+}
+message UserDeleteParamsResp{}
+
+// 账号绑定角色
+message UserBindRolesParamsReq{
+  int32 adminId = 1;//管理员ID
+  repeated int32 roleIds = 2;//角色ID列表
+}
+message UserBindRolesParamsResp{}

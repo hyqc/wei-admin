@@ -1,0 +1,63 @@
+syntax = "proto3";
+package admin_account;
+option go_package = "admin/proto/admin_api;admin_api";
+
+// 接口列表
+message ApiListReq{
+  int32 permissionId=1;//权限ID
+  string key=2;//接口键名
+  string name=3;//接口名称
+  string path=4;//接口路由
+}
+
+message ApiListResp{}
+
+// 全部接口列表
+message ApiAllReq{}
+
+message ApiAllResp{}
+
+// 创建接口
+message ApiAddReq{
+  string path=1;//接口路由
+  string key=2;//接口键名
+  string name=3;//接口名称
+  string describe=4;//接口描述
+  bool enabled=5;//启用状态
+}
+
+message ApiAddResp{}
+
+// 接口详情
+message ApiDetailReq{
+  int32 id=1;//接口ID
+}
+
+message ApiDetailResp{}
+
+// 接口编辑
+message ApiEditReq{
+  int32 id=1;//接口ID
+  string path=2;//接口路由
+  string key=3;//接口键名
+  string name=4;//接口名称
+  string describe=5;//接口描述
+  bool enabled=6;//接口状态
+}
+
+message ApiEditResp{}
+
+// 接口禁用启用
+message ApiEnableReq{
+  int32 id=1;//接口ID
+  bool enabled=2;//接口状态
+}
+
+message ApiEnableResp{}
+
+// 删除接口
+message ApiDeleteReq{
+  int32 id=1;//接口ID
+}
+
+message ApiDeleteResp{}

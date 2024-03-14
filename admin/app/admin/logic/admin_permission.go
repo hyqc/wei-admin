@@ -1,9 +1,9 @@
-package service
+package logic
 
 import (
-	"admin/app/admin/constant"
 	"admin/app/admin/dao"
 	"admin/app/gen/model"
+	"admin/constant/admin"
 	"context"
 )
 
@@ -18,7 +18,7 @@ func NewAdminPermissionService() *PermissionService {
 }
 
 func (PermissionService) FindMyPermission(ctx context.Context, adminId int32) ([]*model.AdminPermission, error) {
-	if constant.IsAdministrator(adminId) {
+	if admin.IsAdministrator(adminId) {
 		// 超管
 		return adminPermissionDao.FindAdministerPermissions(ctx)
 	}

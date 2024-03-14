@@ -1,4 +1,4 @@
-package service
+package logic
 
 import (
 	"admin/app/admin/dao"
@@ -57,6 +57,9 @@ func (a *AdminUserService) Detail(ctx context.Context, adminId int32, refreshTok
 	return a.getMyInfo(ctx, data, refreshToken)
 }
 
+func (a *AdminUserService) Edit() {
+
+}
 func (a *AdminUserService) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool) (*admin_account.LoginDataResp, error) {
 	data.Password = ""
 	resp := &admin_account.LoginDataResp{}

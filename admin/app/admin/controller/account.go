@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"admin/app/admin/service"
+	"admin/app/admin/logic"
 	"admin/app/admin/validator"
 	"admin/code"
 	"admin/config"
@@ -18,7 +18,7 @@ type AccountController struct {
 }
 
 var (
-	accountService = service.NewAdminUserService()
+	accountService = logic.NewAdminUserService()
 )
 
 // Login 登录

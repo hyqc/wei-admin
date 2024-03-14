@@ -3,11 +3,20 @@ package middleware
 import (
 	"admin/code"
 	"admin/config"
-	"admin/constant"
 	"admin/pkg/core"
 	"github.com/gin-gonic/gin"
 	"strings"
 )
+
+const (
+	Authorization = "authorization"
+	ContextClaims = "ctx_jwt_claims"
+)
+
+func getAuthorization(ctx *gin.Context) string {
+	tokenStr := ctx.GetHeader(Authorization)
+	return strings.Trim(tokenStr, "Bearer ")
+}
 
 func auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -21,12 +30,7 @@ func auth() gin.HandlerFunc {
 			})
 			return
 		}
-		ctx.Set(constant.ContextClaims, cla)
+		ctx.Set(ContextClaims, cla)
 		ctx.Next()
 	}
-}
-
-func getAuthorization(ctx *gin.Context) string {
-	tokenStr := ctx.GetHeader(constant.Authorization)
-	return strings.Trim(tokenStr, "Bearer ")
 }
