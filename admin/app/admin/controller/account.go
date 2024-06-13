@@ -2,13 +2,14 @@ package controller
 
 import (
 	"admin/app/admin/logic"
-	"admin/app/admin/validator"
+	"admin/app/admin/validate"
 	"admin/code"
 	"admin/config"
+	"admin/constant/admin"
 	"admin/pkg/core"
 	"admin/pkg/response"
-	"admin/pkg/validate"
-	"admin/proto/admin_account"
+	"admin/pkg/validator"
+	adminproto "admin/proto"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -18,48 +19,8 @@ type AccountController struct {
 }
 
 var (
-	accountService = logic.NewAdminUserService()
+	accountLogic = logic.NewAdminUserLogic()
 )
-
-// Login 登录
-// @Summary 登录后台
-// @Description 登录后台
-// @Tags 账号相关接口
-// @Accept application/json
-// @Produce application/json
-// @Param object query models.ParamPostList true "请求参数"
-// @Security ApiKeyAuth
-// @Success 200 {object} _ResponsePostList
-// @Router /admin/login [post]
-func (AccountController) Login(ctx *gin.Context) {
-	params := &admin_account.LoginReq{}
-	if err := validate.Validate(ctx, params, validator.ValidateAccount.Login); err != nil {
-		result := code.NewCode(code.RequestParamsInvalid)
-		config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
-		response.JSON(ctx, result)
-		return
-	}
-	data, err := accountService.Login(ctx, params, ctx.ClientIP())
-	if err != nil {
-		res := code.GetCodeMsg(err)
-		if res == nil {
-			result := code.NewCode(code.RequestParamsInvalid)
-			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
-			response.JSON(ctx, result)
-			return
-		}
-
-		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
-		response.JSON(ctx, *res)
-		return
-	}
-	result := code.NewCode(code.Success)
-	result.Data = data
-
-	config.AppLoggerSugared.Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
-	return
-}
 
 func (AccountController) Register(ctx *gin.Context) {
 	result := code.NewCode(code.Success)
@@ -68,33 +29,95 @@ func (AccountController) Register(ctx *gin.Context) {
 	return
 }
 
-func (AccountController) Detail(ctx *gin.Context) {
-	refreshToken := ctx.GetBool("refreshToken")
-	data, err := accountService.Detail(ctx, int32(ctx.GetInt("admin_id")), refreshToken)
+// Login 登录
+// @Summary 登录后台
+// @Description 登录后台
+// @Tags 账号相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param object query admin_proto.LoginReq true "请求参数"
+// @Success 200 {object}
+// @Router /admin/login [post]
+func (AccountController) Login(ctx *gin.Context) {
+	params := &adminproto.LoginReq{}
+	result := code.NewCode(code.Success)
+	if err := validator.Validate(ctx, params, validate.ValidateAccount.LoginReq); err != nil {
+		result.SetCode(code.RequestParamsInvalid)
+		config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
+		response.JSON(ctx, result)
+		return
+	}
+	data, err := accountLogic.Login(ctx, params, ctx.ClientIP())
 	if err != nil {
 		res := code.GetCodeMsg(err)
 		if res == nil {
-			result := code.NewCode(code.RequestParamsInvalid)
+			result.SetCode(code.RequestParamsInvalid)
 			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
 			response.JSON(ctx, result)
 			return
 		}
 
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
-		response.JSON(ctx, *res)
+		response.JSON(ctx, res)
+		return
+	}
+	result.SetData(data)
+
+	config.AppLoggerSugared.Debugw("info", zap.Any("msg", result))
+	response.JSON(ctx, result)
+	return
+}
+
+// Detail 管理员账号详情
+func (AccountController) Detail(ctx *gin.Context) {
+	refreshToken := ctx.GetBool("refreshToken")
+	result := code.NewCode(code.Success)
+	data, err := accountLogic.Detail(ctx, admin.TokenParseAdminId(ctx), refreshToken, 3600)
+	if err != nil {
+		res := code.GetCodeMsg(err)
+		if res == nil {
+			result.SetCode(code.RequestParamsInvalid)
+			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
+			response.JSON(ctx, result)
+			return
+		}
+
+		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
+		response.JSON(ctx, res)
 		return
 	}
 
-	result := code.NewCode(code.Success)
-	result.Data = data
+	result.SetData(data)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
 	response.JSON(ctx, result)
 	return
 }
 
+// Edit 编辑账号
 func (AccountController) Edit(ctx *gin.Context) {
+	params := &adminproto.AccountEditReq{}
 	result := code.NewCode(code.Success)
-	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
+	if err := validator.Validate(ctx, params, validate.ValidateAccount.AccountEditReq); err != nil {
+		result.SetCode(code.RequestParamsInvalid)
+		config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
+		response.JSON(ctx, result)
+		return
+	}
+	err := accountLogic.Edit(ctx, params)
+	if err != nil {
+		res := code.GetCodeMsg(err)
+		if res == nil {
+			result.SetCode(code.RequestParamsInvalid)
+			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
+			response.JSON(ctx, result)
+			return
+		}
+
+		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
+		response.JSON(ctx, res)
+		return
+	}
+	config.AppLoggerSugared.Debugw("info", zap.Any("msg", result))
 	response.JSON(ctx, result)
 	return
 }

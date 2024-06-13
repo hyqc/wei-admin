@@ -1,6 +1,6 @@
 syntax = "proto3";
-package admin_permission;
-option go_package = "./admin_role;admin_role";
+package admin_proto;
+option go_package = "./admin_proto;admin_proto";
 
 //角色列表
 message RoleListReq{

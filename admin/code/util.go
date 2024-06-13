@@ -8,13 +8,13 @@ import (
 
 type Err error
 
-func NewCode(code int) response.Message {
-	return response.Message{
-		MessageBase: NewCodeBase(code),
+func NewCode(code int) response.IMessage {
+	return &response.Message{
+		MessageBase: newCodeBase(code),
 	}
 }
 
-func NewCodeBase(code int) response.MessageBase {
+func newCodeBase(code int) response.MessageBase {
 	return response.MessageBase{
 		Code:    code,
 		Message: Msg(code),
@@ -22,7 +22,7 @@ func NewCodeBase(code int) response.MessageBase {
 }
 
 func NewCodeError(code int) Err {
-	msg := NewCodeBase(code)
+	msg := newCodeBase(code)
 	body, err := json.Marshal(msg)
 	if err != nil {
 		return err
@@ -30,7 +30,7 @@ func NewCodeError(code int) Err {
 	return errors.New(string(body))
 }
 
-func GetCodeMsg(err error) *response.Message {
+func GetCodeMsg(err error) response.IMessage {
 	var e Err
 	switch {
 	case errors.As(err, &e):
@@ -43,8 +43,8 @@ func GetCodeMsg(err error) *response.Message {
 	return nil
 }
 
-func NewCodeMsg(code int, msg string) response.Message {
-	return response.Message{
+func NewCodeMsg(code int, msg string) response.IMessage {
+	return &response.Message{
 		MessageBase: response.MessageBase{
 			Code:    code,
 			Message: msg,
@@ -52,8 +52,8 @@ func NewCodeMsg(code int, msg string) response.Message {
 	}
 }
 
-func NewCodeMsgData(code int, msg string, data interface{}) response.Message {
-	return response.Message{
+func NewCodeMsgData(code int, msg string, data interface{}) response.IMessage {
+	return &response.Message{
 		MessageBase: response.MessageBase{
 			Code:    code,
 			Message: msg,

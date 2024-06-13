@@ -1,6 +1,6 @@
 syntax = "proto3";
-package admin_permission;
-option go_package = "./admin_user;admin_user";
+package admin_proto;
+option go_package = "./admin_proto;admin_proto";
 
 // 账号列表
 message UserListParamsReq{

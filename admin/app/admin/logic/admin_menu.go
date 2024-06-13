@@ -3,21 +3,21 @@ package logic
 import (
 	"admin/app/admin/dao"
 	"admin/app/gen/model"
-	"admin/proto/admin_menu"
+	adminproto "admin/proto"
 	"context"
 )
 
-type AdminMenuService struct {
+type AdminMenuLogic struct {
 	dao *dao.AdminMenu
 }
 
-func NewAdminMenuService() *AdminMenuService {
-	return &AdminMenuService{
+func NewAdminMenuLogic() *AdminMenuLogic {
+	return &AdminMenuLogic{
 		dao: adminMenuDao,
 	}
 }
 
-func (a *AdminMenuService) getMyMenusMap(ctx context.Context, pageIds []int32) ([]*admin_menu.MenuItem, error) {
+func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]*adminproto.MenuItem, error) {
 	allMenus, err := a.dao.FindAll(ctx)
 	if err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func (a *AdminMenuService) getMyMenusMap(ctx context.Context, pageIds []int32) (
 	arr1 := getAllRelatedMenusByPageIds(allMenusMap, pageIds)
 	arr2 := getAllChildrenPagesByPageIds(allMenusMap, pageIds)
 	arr := append(arr1, arr2...)
-	menus := make([]*admin_menu.MenuItem, 0, len(arr))
+	menus := make([]*adminproto.MenuItem, 0, len(arr))
 	m := make(map[string]struct{}, len(arr))
 	for _, item := range arr {
 		if _, ok := m[item.Key]; !ok {
@@ -40,7 +40,7 @@ func (a *AdminMenuService) getMyMenusMap(ctx context.Context, pageIds []int32) (
 	return menus, nil
 }
 
-func getAllRelatedMenusByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*admin_menu.MenuItem) {
+func getAllRelatedMenusByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*adminproto.MenuItem) {
 	for _, pageId := range pageIds {
 		arr := getAllFatherMenuByChildrenId(menusMap, pageId)
 		if len(arr) > 0 {
@@ -50,7 +50,7 @@ func getAllRelatedMenusByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []
 	return data
 }
 
-func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*admin_menu.MenuItem) {
+func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*adminproto.MenuItem) {
 	for _, pageId := range pageIds {
 		arr := getAllChildrenMenuByChildrenId(menusMap, pageId)
 		if len(arr) > 0 {
@@ -60,9 +60,9 @@ func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds [
 	return data
 }
 
-func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*admin_menu.MenuItem) {
+func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*adminproto.MenuItem) {
 	if menu, ok := menusMap[parentId]; ok {
-		data = append(data, &admin_menu.MenuItem{
+		data = append(data, &adminproto.MenuItem{
 			Key:       menu.Key,
 			Path:      menu.Path,
 			Name:      menu.Name,
@@ -77,10 +77,10 @@ func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId 
 	return data
 }
 
-func getAllChildrenMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*admin_menu.MenuItem) {
+func getAllChildrenMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*adminproto.MenuItem) {
 	for menuId, menu := range menusMap {
 		if menu.ParentID == parentId {
-			data = append(data, &admin_menu.MenuItem{
+			data = append(data, &adminproto.MenuItem{
 				Key:       menu.Key,
 				Path:      menu.Path,
 				Name:      menu.Name,

@@ -1,6 +1,6 @@
 syntax = "proto3";
-package admin_permission;
-option go_package = "./admin_permission;admin_permission";
+package admin_proto;
+option go_package = "./admin_proto;admin_proto";
 
 // 权限列表
 message PermissionListReq{}

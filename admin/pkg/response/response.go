@@ -15,17 +15,50 @@ type Message struct {
 	Data interface{} `json:"data"`
 }
 
-func JSON(ctx *gin.Context, data Message) {
+type IMessage interface {
+	SetCode(code int)
+	GetCode() int
+	SetMessage(msg string)
+	GetMessage() string
+	SetData(data interface{})
+	GetData() interface{}
+}
+
+func (m *Message) SetCode(code int) {
+	m.Code = code
+}
+
+func (m *Message) GetCode() int {
+	return m.Code
+}
+
+func (m *Message) SetMessage(message string) {
+	m.Message = message
+}
+
+func (m *Message) GetMessage() string {
+	return m.Message
+}
+
+func (m *Message) SetData(data interface{}) {
+	m.Data = data
+}
+
+func (m *Message) GetData() interface{} {
+	return m.Data
+}
+
+func JSON(ctx *gin.Context, data IMessage) {
 	base := MessageBase{
-		Code:    data.Code,
-		Message: data.Message,
+		Code:    data.GetCode(),
+		Message: data.GetMessage(),
 	}
-	if data.Data == nil {
+	if data.GetData() == nil {
 		ctx.AbortWithStatusJSON(http.StatusOK, base)
 		return
 	}
 	ctx.AbortWithStatusJSON(http.StatusOK, Message{
-		base, data.Data,
+		base, data.GetData(),
 	})
 	return
 }

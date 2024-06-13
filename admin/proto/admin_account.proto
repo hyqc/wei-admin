@@ -1,15 +1,10 @@
 syntax = "proto3";
-package admin_account;
-option go_package = "admin/proto/admin_account;admin_account";
-import "proto/admin_menu/admin_menu.proto";
+package admin_proto;
+option go_package = "./admin_proto;admin_proto";
+import "admin_menu.proto";
 
-// 登录
-message LoginReq{
-  string username = 1; // 用户名
-  string password = 2; // 密码
-}
-
-message LoginResp{
+// 管理员账号详情
+message AdminInfo{
   int32 adminId = 1;
   string username = 2;
   string nickname = 3;
@@ -23,8 +18,14 @@ message LoginResp{
   bool enabled = 11;
   string token = 12;
   int32 expire = 13;
-  repeated admin_menu.menuItem menus = 14;
+  repeated menuItem menus = 14;
   map<string, string> permissions = 15;
+}
+
+// 登录
+message LoginReq{
+  string username = 1; // 用户名
+  string password = 2; // 密码
 }
 
 //账号详情
@@ -32,13 +33,11 @@ message AccountDetailReq{
   bool refreshToken=1;//刷新token
 }
 
-message AccountDetailResp{}
-
 // 账号编辑
 message AccountEditReq{
   string nickname=1;//名称
   string avatar=2;//头像
-  string email=4;//邮箱
+  string email=3;//邮箱
 }
 
 message AccountEditResp{}

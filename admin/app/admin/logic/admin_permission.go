@@ -7,17 +7,17 @@ import (
 	"context"
 )
 
-type PermissionService struct {
+type PermissionLogic struct {
 	dao *dao.AdminPermission
 }
 
-func NewAdminPermissionService() *PermissionService {
-	return &PermissionService{
+func NewAdminPermissionLogic() *PermissionLogic {
+	return &PermissionLogic{
 		dao: adminPermissionDao,
 	}
 }
 
-func (PermissionService) FindMyPermission(ctx context.Context, adminId int32) ([]*model.AdminPermission, error) {
+func (p *PermissionLogic) FindMyPermission(ctx context.Context, adminId int32) ([]*model.AdminPermission, error) {
 	if admin.IsAdministrator(adminId) {
 		// 超管
 		return adminPermissionDao.FindAdministerPermissions(ctx)
@@ -26,7 +26,7 @@ func (PermissionService) FindMyPermission(ctx context.Context, adminId int32) ([
 	return adminPermissionDao.FindAdminPermissions(ctx, adminId, 0)
 }
 
-func (PermissionService) Permissions2MenuIds(permissions []*model.AdminPermission) (pageIds []int32, permissionKeys map[string]string) {
+func (p *PermissionLogic) Permissions2MenuIds(permissions []*model.AdminPermission) (pageIds []int32, permissionKeys map[string]string) {
 	// 管理员可以访问的菜单
 	menuIdsM := make(map[int32]struct{})
 	permissionKeys = make(map[string]string)

@@ -7,7 +7,7 @@ var (
 	adminMenuDao       = dao.NewAdminMenu()
 	adminPermissionDao = dao.NewAdminPermission()
 
-	AdminUserSrv       = NewAdminUserService()
-	AdminMenuSrv       = NewAdminMenuService()
-	AdminPermissionSrv = NewAdminPermissionService()
+	AdminUserSrv       = NewAdminUserLogic()
+	AdminMenuSrv       = NewAdminMenuLogic()
+	AdminPermissionSrv = NewAdminPermissionLogic()
 )

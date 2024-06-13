@@ -8,22 +8,22 @@ import (
 	"admin/pkg/core"
 	"admin/pkg/utils"
 	"admin/pkg/utils/pwd"
-	"admin/proto/admin_account"
+	admin "admin/proto"
 	"context"
 	"time"
 )
 
-type AdminUserService struct {
+type AdminUserLogic struct {
 	dao *dao.AdminUser
 }
 
-func NewAdminUserService() *AdminUserService {
-	return &AdminUserService{
+func NewAdminUserLogic() *AdminUserLogic {
+	return &AdminUserLogic{
 		dao: dao.NewAdminUser(),
 	}
 }
 
-func (a *AdminUserService) Login(ctx context.Context, params *admin_account.LoginReq, clientIp string) (*admin_account.LoginDataResp, error) {
+func (a *AdminUserLogic) Login(ctx context.Context, params *admin.LoginReq, clientIp string) (*admin.AdminInfo, error) {
 	data, err := a.dao.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 		return nil, code.NewCodeError(code.AdminAccountPasswordInvalid)
 	}
 
-	result, err := a.getMyInfo(ctx, data, true)
+	result, err := a.getMyInfo(ctx, data, true, 3600)
 	if err != nil {
 		return nil, err
 	}
@@ -48,26 +48,28 @@ func (a *AdminUserService) Login(ctx context.Context, params *admin_account.Logi
 	return result, nil
 }
 
-func (a *AdminUserService) Detail(ctx context.Context, adminId int32, refreshToken bool) (*admin_account.LoginDataResp, error) {
+func (a *AdminUserLogic) Detail(ctx context.Context, adminId int32, refreshToken bool, seconds time.Duration) (*admin.AdminInfo, error) {
 	data, err := a.dao.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return nil, err
 	}
 
-	return a.getMyInfo(ctx, data, refreshToken)
+	return a.getMyInfo(ctx, data, refreshToken, seconds)
 }
 
-func (a *AdminUserService) Edit() {
-
+func (a *AdminUserLogic) Edit(ctx context.Context, params *admin.AccountEditReq) error {
+	// TODO
+	return nil
 }
-func (a *AdminUserService) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool) (*admin_account.LoginDataResp, error) {
+
+func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds time.Duration) (*admin.AdminInfo, error) {
 	data.Password = ""
-	resp := &admin_account.LoginDataResp{}
+	resp := &admin.AdminInfo{}
 	if err := utils.BeanCopy(data, resp); err != nil {
 		return nil, err
 	}
 	if refreshToken {
-		token, err := a.createToken(data.ID, data.Username, 3600)
+		token, err := a.createToken(data.ID, data.Username, seconds)
 		if err != nil {
 			return nil, err
 		}
@@ -75,12 +77,11 @@ func (a *AdminUserService) getMyInfo(ctx context.Context, data *model.AdminUser,
 	}
 
 	// 权限
-	ps := PermissionService{}
-	permissions, err := ps.FindMyPermission(ctx, data.ID)
+	permissions, err := AdminPermissionSrv.FindMyPermission(ctx, data.ID)
 	if err != nil {
 		return nil, err
 	}
-	pageIds, perms := ps.Permissions2MenuIds(permissions)
+	pageIds, perms := AdminPermissionSrv.Permissions2MenuIds(permissions)
 
 	// 菜单
 	menus, err := AdminMenuSrv.getMyMenusMap(ctx, pageIds)
@@ -93,7 +94,7 @@ func (a *AdminUserService) getMyInfo(ctx context.Context, data *model.AdminUser,
 	return resp, err
 }
 
-func (a *AdminUserService) createToken(adminId int32, username string, seconds time.Duration) (string, error) {
+func (a *AdminUserLogic) createToken(adminId int32, username string, seconds time.Duration) (string, error) {
 	// 生成token
 	jti, err := core.Sonyflake.NextID()
 	if err != nil {
