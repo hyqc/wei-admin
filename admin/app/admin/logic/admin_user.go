@@ -32,7 +32,7 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin.LoginReq, clie
 		return nil, code.NewCodeError(code.AdminAccountPasswordInvalid)
 	}
 
-	result, err := a.getMyInfo(ctx, data, true, 3600)
+	result, err := a.getMyInfo(ctx, data, true, config.AppConfig.Server.JWT.UsefulLife)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin.LoginReq, clie
 	return result, nil
 }
 
-func (a *AdminUserLogic) Detail(ctx context.Context, adminId int32, refreshToken bool, seconds time.Duration) (*admin.AdminInfo, error) {
+func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin.AdminInfo, error) {
 	data, err := a.dao.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (a *AdminUserLogic) Edit(ctx context.Context, params *admin.AccountEditReq)
 	return nil
 }
 
-func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds time.Duration) (*admin.AdminInfo, error) {
+func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*admin.AdminInfo, error) {
 	data.Password = ""
 	resp := &admin.AdminInfo{}
 	if err := utils.BeanCopy(data, resp); err != nil {
@@ -94,7 +94,7 @@ func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, r
 	return resp, err
 }
 
-func (a *AdminUserLogic) createToken(adminId int32, username string, seconds time.Duration) (string, error) {
+func (a *AdminUserLogic) createToken(adminId int32, username string, seconds int64) (string, error) {
 	// 生成token
 	jti, err := core.Sonyflake.NextID()
 	if err != nil {
@@ -103,7 +103,7 @@ func (a *AdminUserLogic) createToken(adminId int32, username string, seconds tim
 	token, err := core.JWTCreate(core.CustomClaimsOption{
 		AccountId:     adminId,
 		AccountName:   username,
-		ExpireSeconds: seconds,
+		ExpireSeconds: time.Duration(seconds),
 		UUID:          jti,
 		Secret:        config.AppConfig.Server.JWT.Secret,
 	})

@@ -26,5 +26,8 @@ func ParseConfig(name string) error {
 	if err := yaml.Unmarshal(body, AppConfig); err != nil {
 		return err
 	}
+	if AppConfig.Server.JWT.UsefulLife == 0 {
+		AppConfig.Server.JWT.UsefulLife = 3600 * 24
+	}
 	return nil
 }

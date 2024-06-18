@@ -3,7 +3,6 @@ package middleware
 import (
 	"admin/code"
 	"admin/config"
-	"admin/pkg/response"
 	"bytes"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -21,6 +20,7 @@ var Global = []gin.HandlerFunc{
 	logger(),
 	cors(),
 	recovery(),
+	auth(),
 }
 
 func cors() gin.HandlerFunc {
@@ -48,7 +48,7 @@ func logger() gin.HandlerFunc {
 		if err != nil {
 			msg := code.NewCode(code.ReadContextRequestBodyFailed)
 			config.AppLoggerSugared.Errorw("read context request body error", msg, err)
-			response.JSON(ctx, msg)
+			code.JSON(ctx, msg)
 			return
 		}
 		ctx.Request.Body = io.NopCloser(bytes.NewReader(body))

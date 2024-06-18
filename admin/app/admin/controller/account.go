@@ -5,9 +5,8 @@ import (
 	"admin/app/admin/validate"
 	"admin/code"
 	"admin/config"
-	"admin/constant/admin"
+	"admin/constant"
 	"admin/pkg/core"
-	"admin/pkg/response"
 	"admin/pkg/validator"
 	adminproto "admin/proto"
 	"github.com/gin-gonic/gin"
@@ -25,7 +24,7 @@ var (
 func (AccountController) Register(ctx *gin.Context) {
 	result := code.NewCode(code.Success)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
+	code.JSON(ctx, result)
 	return
 }
 
@@ -42,54 +41,54 @@ func (AccountController) Login(ctx *gin.Context) {
 	params := &adminproto.LoginReq{}
 	result := code.NewCode(code.Success)
 	if err := validator.Validate(ctx, params, validate.ValidateAccount.LoginReq); err != nil {
-		result.SetCode(code.RequestParamsInvalid)
+		result.SetCodeError(code.RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
-		response.JSON(ctx, result)
+		code.JSON(ctx, result)
 		return
 	}
 	data, err := accountLogic.Login(ctx, params, ctx.ClientIP())
 	if err != nil {
 		res := code.GetCodeMsg(err)
 		if res == nil {
-			result.SetCode(code.RequestParamsInvalid)
+			result.SetCodeError(code.RequestParamsInvalid, err)
 			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
-			response.JSON(ctx, result)
+			code.JSON(ctx, result)
 			return
 		}
 
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
-		response.JSON(ctx, res)
+		code.JSON(ctx, res)
 		return
 	}
 	result.SetData(data)
 
 	config.AppLoggerSugared.Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
+	code.JSON(ctx, result)
 	return
 }
 
-// Detail 管理员账号详情
-func (AccountController) Detail(ctx *gin.Context) {
+// Info 管理员账号详情
+func (AccountController) Info(ctx *gin.Context) {
 	refreshToken := ctx.GetBool("refreshToken")
 	result := code.NewCode(code.Success)
-	data, err := accountLogic.Detail(ctx, admin.TokenParseAdminId(ctx), refreshToken, 3600)
+	data, err := accountLogic.Info(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, 3600)
 	if err != nil {
 		res := code.GetCodeMsg(err)
 		if res == nil {
-			result.SetCode(code.RequestParamsInvalid)
+			result.SetCodeError(code.RequestParamsInvalid, err)
 			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
-			response.JSON(ctx, result)
+			code.JSON(ctx, result)
 			return
 		}
 
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
-		response.JSON(ctx, res)
+		code.JSON(ctx, res)
 		return
 	}
 
 	result.SetData(data)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
+	code.JSON(ctx, result)
 	return
 }
 
@@ -100,7 +99,7 @@ func (AccountController) Edit(ctx *gin.Context) {
 	if err := validator.Validate(ctx, params, validate.ValidateAccount.AccountEditReq); err != nil {
 		result.SetCode(code.RequestParamsInvalid)
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
-		response.JSON(ctx, result)
+		code.JSON(ctx, result)
 		return
 	}
 	err := accountLogic.Edit(ctx, params)
@@ -109,36 +108,36 @@ func (AccountController) Edit(ctx *gin.Context) {
 		if res == nil {
 			result.SetCode(code.RequestParamsInvalid)
 			config.AppLoggerSugared.Debugw("info", zap.Any("msg", result), zap.Any("error", err))
-			response.JSON(ctx, result)
+			code.JSON(ctx, result)
 			return
 		}
 
 		config.AppLoggerSugared.Debugw("info", zap.Any("msg", res), zap.Any("error", err))
-		response.JSON(ctx, res)
+		code.JSON(ctx, res)
 		return
 	}
 	config.AppLoggerSugared.Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
+	code.JSON(ctx, result)
 	return
 }
 
 func (AccountController) Password(ctx *gin.Context) {
 	result := code.NewCode(code.Success)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
+	code.JSON(ctx, result)
 	return
 }
 
 func (AccountController) Menu(ctx *gin.Context) {
 	result := code.NewCode(code.Success)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
+	code.JSON(ctx, result)
 	return
 }
 
 func (AccountController) Permission(ctx *gin.Context) {
 	result := code.NewCode(code.Success)
 	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
-	response.JSON(ctx, result)
+	code.JSON(ctx, result)
 	return
 }

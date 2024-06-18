@@ -16,6 +16,7 @@ type Controller struct {
 type ResponseData struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
+	Error   string      `json:"error"`
 	Data    interface{} `json:"data"`
 }
 
@@ -23,6 +24,7 @@ func handleResponseResult(data ResponseData) map[string]interface{} {
 	result := make(map[string]interface{})
 	result["code"] = data.Code
 	result["message"] = data.Message
+	result["error"] = data.Error
 	if data.Data != nil {
 		result["data"] = data.Data
 	}

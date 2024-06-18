@@ -24,7 +24,7 @@ func (p *AdminPermission) FindAdministerPermissions(ctx context.Context) ([]*mod
 	menu := query.AdminMenu.Table(query.AdminMenu.TableName())
 	return permission.WithContext(ctx).
 		Join(menu, menu.ID.EqCol(permission.MenuID), menu.IsEnabled.Is(true)).
-		Where(permission.IsEnabled.Is(true)).Find()
+		Where(permission.IsEnabled.Is(true)).Order(permission.MenuID).Find()
 }
 
 // FindAdminPermissions 获取非超管对于的权限
@@ -44,5 +44,5 @@ func (p *AdminPermission) FindAdminPermissions(ctx context.Context, adminId, men
 	if menuId > 0 {
 		db.Where(permission.MenuID.Eq(menuId))
 	}
-	return db.Find()
+	return db.Order(permission.MenuID).Find()
 }

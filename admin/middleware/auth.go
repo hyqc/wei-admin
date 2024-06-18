@@ -3,34 +3,31 @@ package middleware
 import (
 	"admin/code"
 	"admin/config"
+	"admin/constant"
 	"admin/pkg/core"
 	"github.com/gin-gonic/gin"
+	"github.com/thoas/go-funk"
 	"strings"
 )
 
-const (
-	Authorization = "authorization"
-	ContextClaims = "ctx_jwt_claims"
-)
-
 func getAuthorization(ctx *gin.Context) string {
-	tokenStr := ctx.GetHeader(Authorization)
-	return strings.Trim(tokenStr, "Bearer ")
+	tokenStr := ctx.GetHeader(constant.Authorization)
+	return strings.Trim(strings.Replace(tokenStr, "Bearer", "", -1), " ")
 }
 
 func auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		token := getAuthorization(ctx)
-		cla, err := core.JWTCheck(token, config.AppConfig.Server.JWT.Secret)
-		if err != nil {
-			// TODO 返回
-			core.ResponseOk(ctx, core.ResponseData{
-				Code:    code.AuthTokenFailed,
-				Message: code.Msg(code.AuthTokenFailed),
-			})
-			return
+		if !funk.ContainsString(config.AppConfig.Server.JWT.IgnoreUrls, ctx.Request.URL.Path) {
+			token := getAuthorization(ctx)
+			cla, err := core.JWTCheck(token, config.AppConfig.Server.JWT.Secret)
+			if err != nil {
+				// TODO 返回
+				core.ResponseOk(ctx, code.ResponseData(code.AuthTokenFailed, nil))
+				return
+			}
+			ctx.Set(constant.ContextClaims, cla)
 		}
-		ctx.Set(ContextClaims, cla)
+
 		ctx.Next()
 	}
 }

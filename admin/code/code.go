@@ -7,68 +7,53 @@ const (
 	EN
 )
 
+type ErrCode int
+
 var (
-	language = ZH
-	msg      = map[Language]map[int]string{
+	language      = ZH
+	debug         = true
+	defaultErrMsg = "失败"
+	msg           = map[Language]map[ErrCode]string{
 		ZH: zhMsg,
 		EN: enMsg,
 	}
 )
 
 const (
-	Success = 0
-	Error   = 1
+	Success ErrCode = 0
+	Error   ErrCode = 1
 
-	ReadContextRequestBodyFailed = 100001
+	ReadContextRequestBodyFailed ErrCode = 100001
 
-	AuthTokenFailed         = 200001 // 鉴权
-	AuthTokenInvalid        = 200002 // BearerToken无效
-	AuthTokenInspectInvalid = 200003 // BearerToken无效
-	AuthTokenInfoInvalid    = 200004 // Token信息无效
+	AuthTokenFailed         ErrCode = 200001 // 鉴权
+	AuthTokenInvalid        ErrCode = 200002 // BearerToken无效
+	AuthTokenInspectInvalid ErrCode = 200003 // BearerToken无效
+	AuthTokenInfoInvalid    ErrCode = 200004 // Token信息无效
 
-	RequestBodyInvalid   = 300001 // 请求参数无效
-	RequestQueryInvalid  = 300002 // 请求参数无效
-	RequestParamsInvalid = 300003 // 请求参数无效
+	RequestBodyInvalid   ErrCode = 300001 // 请求参数无效
+	RequestQueryInvalid  ErrCode = 300002 // 请求参数无效
+	RequestParamsInvalid ErrCode = 300003 // 请求参数无效
 
-	AdminAccountPasswordInvalid = 400001 // 密码错误
+	AdminAccountPasswordInvalid ErrCode = 400001 // 密码错误
 )
-
-var zhMsg = map[int]string{
-	Success:                      "成功",
-	Error:                        "请求失败",
-	ReadContextRequestBodyFailed: "读取请求体数据失败",
-	AuthTokenFailed:              "未登录或登录令牌已过期",
-	AuthTokenInvalid:             "登录令牌无效",
-	AuthTokenInspectInvalid:      "登录令牌检查失败",
-	AuthTokenInfoInvalid:         "登录令牌信息无效",
-
-	RequestBodyInvalid:   "请求体参数无效",
-	RequestQueryInvalid:  "查询参数无效",
-	RequestParamsInvalid: "请求参数无效",
-
-	AdminAccountPasswordInvalid: "密码错误",
-}
-
-var enMsg = map[int]string{
-	Success:                      "success",
-	Error:                        "error",
-	ReadContextRequestBodyFailed: "read context request body failed",
-	AuthTokenFailed:              "token expired or not login",
-	AuthTokenInvalid:             "token invalid",
-	AuthTokenInspectInvalid:      "token inspect invalid",
-	AuthTokenInfoInvalid:         "token info invalid",
-
-	RequestBodyInvalid:   "request body invalid",
-	RequestQueryInvalid:  "request query invalid",
-	RequestParamsInvalid: "request params invalid",
-
-	AdminAccountPasswordInvalid: "pwd invalid",
-}
 
 func SetLanguage(c Language) {
 	language = c
 }
 
-func Msg(code int) string {
-	return msg[language][code]
+func SetDebug(d bool) {
+	debug = d
+}
+
+func SetDefaultErrMsg(msg string) {
+	defaultErrMsg = msg
+}
+
+func GetMsgByCode(code ErrCode) string {
+	if val, ok := msg[language]; ok {
+		if v, ok := val[code]; ok {
+			return v
+		}
+	}
+	return defaultErrMsg
 }
