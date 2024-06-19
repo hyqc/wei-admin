@@ -12,5 +12,9 @@ func admins(g *gin.RouterGroup) {
 		accountApi := adminCtl.AccountController{}
 		account.POST("/login", accountApi.Login)
 		account.GET("/info", accountApi.Info)
+		account.POST("/edit", accountApi.Edit)
+		account.POST("/password", accountApi.Password)
+		account.POST("/menu", accountApi.Menu)
+		account.POST("/permission", accountApi.Permission)
 	}
 }

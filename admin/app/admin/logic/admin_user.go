@@ -8,23 +8,24 @@ import (
 	"admin/pkg/core"
 	"admin/pkg/utils"
 	"admin/pkg/utils/pwd"
-	admin "admin/proto"
+	adminproto "admin/proto"
 	"context"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
 type AdminUserLogic struct {
-	dao *dao.AdminUser
+	*dao.AdminUser
 }
 
 func NewAdminUserLogic() *AdminUserLogic {
 	return &AdminUserLogic{
-		dao: dao.NewAdminUser(),
+		dao.NewAdminUser(),
 	}
 }
 
-func (a *AdminUserLogic) Login(ctx context.Context, params *admin.LoginReq, clientIp string) (*admin.AdminInfo, error) {
-	data, err := a.dao.FindAdminUserByUsername(ctx, params.Username)
+func (a *AdminUserLogic) Login(ctx context.Context, params *adminproto.LoginReq, clientIp string) (*adminproto.AdminInfo, error) {
+	data, err := a.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err
 	}
@@ -41,15 +42,15 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin.LoginReq, clie
 	data.LoginTotal += 1
 	ip, err := dao.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
 	data.LastLoginIP = ip
-	if err := a.dao.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
+	if err := a.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
 		return nil, err
 	}
 
 	return result, nil
 }
 
-func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin.AdminInfo, error) {
-	data, err := a.dao.FindAdminUserByAdminId(ctx, adminId)
+func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*adminproto.AdminInfo, error) {
+	data, err := a.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return nil, err
 	}
@@ -57,14 +58,50 @@ func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken b
 	return a.getMyInfo(ctx, data, refreshToken, seconds)
 }
 
-func (a *AdminUserLogic) Edit(ctx context.Context, params *admin.AccountEditReq) error {
-	// TODO
-	return nil
+func (a *AdminUserLogic) Edit(ctx context.Context, adminId int32, params *adminproto.AccountEditReq) error {
+	data, err := a.FindAdminUserByAdminId(ctx, adminId)
+	if err != nil {
+		return err
+	}
+	data.Nickname = params.Nickname
+	data.Avatar = params.Avatar
+	data.Email = params.Email
+	return a.UpdateAdminUser(ctx, data)
 }
 
-func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*admin.AdminInfo, error) {
+func (a *AdminUserLogic) EditPassword(ctx *gin.Context, adminId int32, params *adminproto.AccountPasswordEditReq) error {
+	data, err := a.FindAdminUserByAdminId(ctx, adminId)
+	if err != nil {
+		return err
+	}
+	if !pwd.Matches(params.OldPassword, data.Password) {
+		return code.NewCodeError(code.AdminAccountPasswordInvalid)
+	}
+	data.Password, err = pwd.Encode(params.Password)
+	if err != nil {
+		return err
+	}
+	return a.UpdateAdminUser(ctx, data)
+}
+
+func (a *AdminUserLogic) MyMenus(ctx *gin.Context, adminId int32) (menus []*adminproto.MenuItem, err error) {
+	menus, _, err = getMyMenusAndPermissions(ctx, adminId)
+	return menus, err
+}
+
+func (a *AdminUserLogic) MyPermission(ctx *gin.Context, adminId int32) (permissionKeys map[string]string, err error) {
+	// 权限
+	permissions, err := AdminPermissionSrv.FindMyPermission(ctx, adminId)
+	if err != nil {
+		return nil, err
+	}
+	_, permissionKeys = AdminPermissionSrv.Permissions2MenuIds(permissions)
+	return permissionKeys, nil
+}
+
+func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*adminproto.AdminInfo, error) {
 	data.Password = ""
-	resp := &admin.AdminInfo{}
+	resp := &adminproto.AdminInfo{}
 	if err := utils.BeanCopy(data, resp); err != nil {
 		return nil, err
 	}
@@ -76,15 +113,8 @@ func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, r
 		resp.Token = token
 	}
 
-	// 权限
-	permissions, err := AdminPermissionSrv.FindMyPermission(ctx, data.ID)
-	if err != nil {
-		return nil, err
-	}
-	pageIds, perms := AdminPermissionSrv.Permissions2MenuIds(permissions)
-
 	// 菜单
-	menus, err := AdminMenuSrv.getMyMenusMap(ctx, pageIds)
+	menus, perms, err := getMyMenusAndPermissions(ctx, data.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -108,4 +138,17 @@ func (a *AdminUserLogic) createToken(adminId int32, username string, seconds int
 		Secret:        config.AppConfig.Server.JWT.Secret,
 	})
 	return token, err
+}
+
+func getMyMenusAndPermissions(ctx context.Context, adminId int32) (menus []*adminproto.MenuItem, permissionKeys map[string]string, err error) {
+	// 权限
+	permissions, err := AdminPermissionSrv.FindMyPermission(ctx, adminId)
+	if err != nil {
+		return nil, nil, err
+	}
+	pageIds, permissionKeys := AdminPermissionSrv.Permissions2MenuIds(permissions)
+
+	// 菜单
+	menus, err = AdminMenuSrv.getMyMenusMap(ctx, pageIds)
+	return menus, permissionKeys, err
 }

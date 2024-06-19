@@ -2,17 +2,18 @@ package validate
 
 import (
 	"admin/pkg/validator"
+	adminproto "admin/proto"
 	"github.com/thedevsaddam/govalidator"
 	"net/url"
 )
 
-var ValidateAccount = AccountValidator{}
+var Account = &AccountValidator{}
 
 type AccountValidator struct {
 }
 
 // LoginReq 登录参数验证
-func (AccountValidator) LoginReq(data interface{}) url.Values {
+func (a *AccountValidator) LoginReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("username"): []string{"required", "between:1,32"},
 		validator.GetValidateJsonOmitemptyTag("password"): []string{"required", "between:6,64"},
@@ -29,7 +30,7 @@ func (AccountValidator) LoginReq(data interface{}) url.Values {
 	return govalidator.New(opts).ValidateStruct()
 }
 
-func (v AccountValidator) AccountEditReq(data interface{}) url.Values {
+func (a *AccountValidator) AccountEditReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("nickname"): []string{"required", "between:1,32"},
 		validator.GetValidateJsonOmitemptyTag("avatar"):   []string{"url"},
@@ -44,4 +45,35 @@ func (v AccountValidator) AccountEditReq(data interface{}) url.Values {
 		Messages: messages,
 	}
 	return govalidator.New(opts).ValidateStruct()
+}
+
+func (a *AccountValidator) AccountEditPasswordReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", "between:6,32"},
+		validator.GetValidateJsonOmitemptyTag("oldPassword"):     []string{"required", "between:6,32"},
+		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required", "between:6,32"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required:新密码不能为空", "between:密码长度为6-32个字符"},
+		validator.GetValidateJsonOmitemptyTag("oldPassword"):     []string{"required:旧密码不能为空", "between:密码长度为6-32个字符"},
+		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required:确认密码不能为空", "between:密码长度为6-32个字符"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	res := govalidator.New(opts).ValidateStruct()
+	errs := map[string][]string(res)
+	if len(errs) > 0 {
+		return res
+	}
+	tmp := data.(*adminproto.AccountPasswordEditReq)
+	if tmp.Password != tmp.ConfirmPassword {
+		res["confirmPassword"] = []string{"两次输入的密码不一致"}
+	}
+	if tmp.Password == tmp.OldPassword {
+		res["confirmPassword"] = []string{"新旧密码不能一致"}
+	}
+	return res
 }

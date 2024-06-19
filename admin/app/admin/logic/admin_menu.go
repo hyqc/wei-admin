@@ -8,17 +8,17 @@ import (
 )
 
 type AdminMenuLogic struct {
-	dao *dao.AdminMenu
+	*dao.AdminMenu
 }
 
 func NewAdminMenuLogic() *AdminMenuLogic {
 	return &AdminMenuLogic{
-		dao: adminMenuDao,
+		adminMenuDao,
 	}
 }
 
 func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]*adminproto.MenuItem, error) {
-	allMenus, err := a.dao.FindAll(ctx)
+	allMenus, err := a.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
