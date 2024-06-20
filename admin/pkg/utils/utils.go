@@ -23,7 +23,8 @@ func GetOutBoundIP() (ip string, err error) {
 }
 
 // BeanCopy 结构体深拷贝
-func BeanCopy(src, dst interface{}) error {
+func BeanCopy(dst, src interface{}) error {
+
 	if reflect.TypeOf(src).Kind() != reflect.Pointer {
 		return errors.New("src must be pointer")
 	}
@@ -31,7 +32,14 @@ func BeanCopy(src, dst interface{}) error {
 		return errors.New("dst must be pointer")
 	}
 	sv := reflect.ValueOf(src).Elem()
+	if !sv.IsValid() {
+		panic("BeanCopy src is nil")
+	}
+
 	dv := reflect.ValueOf(dst).Elem()
+	if !dv.IsValid() {
+		panic("BeanCopy dst is nil")
+	}
 	for i := 0; i < sv.NumField(); i++ {
 		val := sv.Field(i)
 		name := sv.Type().Field(i).Name

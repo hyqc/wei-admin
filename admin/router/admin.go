@@ -14,7 +14,18 @@ func admins(g *gin.RouterGroup) {
 		account.GET("/info", accountApi.Info)
 		account.POST("/edit", accountApi.Edit)
 		account.POST("/password", accountApi.Password)
-		account.POST("/menu", accountApi.Menu)
-		account.POST("/permission", accountApi.Permission)
+		account.GET("/menu", accountApi.Menu)
+		account.GET("/permission", accountApi.Permission)
+	}
+
+	api := admin.Group("/api")
+	{
+		apiAPI := adminCtl.APIController{}
+		api.GET("/list", apiAPI.List)
+		api.POST("/add", apiAPI.Add)
+		api.GET("/info", apiAPI.Info)
+		api.POST("/edit", apiAPI.Edit)
+		api.POST("/enable", apiAPI.Enable)
+		api.POST("/delete", apiAPI.Delete)
 	}
 }

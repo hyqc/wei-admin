@@ -102,7 +102,7 @@ func (a *AdminUserLogic) MyPermission(ctx *gin.Context, adminId int32) (permissi
 func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*adminproto.AdminInfo, error) {
 	data.Password = ""
 	resp := &adminproto.AdminInfo{}
-	if err := utils.BeanCopy(data, resp); err != nil {
+	if err := utils.BeanCopy(resp, data); err != nil {
 		return nil, err
 	}
 	if refreshToken {

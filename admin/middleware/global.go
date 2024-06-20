@@ -3,6 +3,7 @@ package middleware
 import (
 	"admin/code"
 	"admin/config"
+	"admin/pkg/utils"
 	"bytes"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -73,6 +74,9 @@ func recovery() gin.HandlerFunc {
 		logger := config.AppLoggerSugared
 		defer func() {
 			if err := recover(); err != nil {
+				errInfo := string(debug.Stack())
+				utils.PrintfLn("panic", err)
+				utils.PrintfLn("panic", errInfo)
 				// Check for a broken connection, as it is not really a
 				// condition that warrants a panic stack trace.
 				var brokenPipe bool
@@ -101,7 +105,7 @@ func recovery() gin.HandlerFunc {
 						zap.String("path", ctx.Request.URL.Path),
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
-						zap.String("stack", string(debug.Stack())),
+						zap.String("stack", errInfo),
 					)
 				} else {
 					logger.Error("[Recovery from panic]",
@@ -110,6 +114,7 @@ func recovery() gin.HandlerFunc {
 						zap.String("request", string(httpRequest)),
 					)
 				}
+
 				ctx.AbortWithStatus(http.StatusInternalServerError)
 			}
 		}()

@@ -1,16 +1,33 @@
 syntax = "proto3";
 package admin_proto;
 option go_package = "./admin_proto;admin_proto";
+import "common.proto";
 
-// 接口列表
+// 接口列表请求参数
 message ApiListReq{
-  int32 permissionId=1;//权限ID
-  string key=2;//接口键名
-  string name=3;//接口名称
-  string path=4;//接口路由
+  ListBaseReq base=1;
+  string key = 2;//接口键名
+  string name = 3;//接口名称
+  string path = 4;//接口路由
 }
 
-message ApiListResp{}
+// 接口列表返回结构
+message ApiListItem{
+  int32  id = 1;
+  string path = 2;
+  string key = 3;
+  string name = 4;
+  bool enabled = 5;
+  int32 permissionId = 6;
+  int64 createdAt = 7;
+  int64 updatedAt = 8;
+}
+
+// 接口列表返回数据
+message ApiListResp{
+  int64 total = 1;
+  repeated ApiListItem rows = 2;
+}
 
 // 全部接口列表
 message ApiAllReq{}
@@ -19,45 +36,45 @@ message ApiAllResp{}
 
 // 创建接口
 message ApiAddReq{
-  string path=1;//接口路由
-  string key=2;//接口键名
-  string name=3;//接口名称
-  string describe=4;//接口描述
-  bool enabled=5;//启用状态
+  string path = 1;//接口路由
+  string key = 2;//接口键名
+  string name = 3;//接口名称
+  string describe = 4;//接口描述
+  bool enabled = 5;//启用状态
 }
 
 message ApiAddResp{}
 
 // 接口详情
 message ApiDetailReq{
-  int32 id=1;//接口ID
+  int32 id = 1;//接口ID
 }
 
 message ApiDetailResp{}
 
 // 接口编辑
 message ApiEditReq{
-  int32 id=1;//接口ID
-  string path=2;//接口路由
-  string key=3;//接口键名
-  string name=4;//接口名称
-  string describe=5;//接口描述
-  bool enabled=6;//接口状态
+  int32 id = 1;//接口ID
+  string path = 2;//接口路由
+  string key = 3;//接口键名
+  string name = 4;//接口名称
+  string describe = 5;//接口描述
+  bool enabled = 6;//接口状态
 }
 
 message ApiEditResp{}
 
 // 接口禁用启用
 message ApiEnableReq{
-  int32 id=1;//接口ID
-  bool enabled=2;//接口状态
+  int32 id = 1;//接口ID
+  bool enabled = 2;//接口状态
 }
 
 message ApiEnableResp{}
 
 // 删除接口
 message ApiDeleteReq{
-  int32 id=1;//接口ID
+  int32 id = 1;//接口ID
 }
 
 message ApiDeleteResp{}

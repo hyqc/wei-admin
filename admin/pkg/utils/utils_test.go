@@ -23,7 +23,7 @@ func TestBeanCopy(t *testing.T) {
 		Val:  map[string]string{"a": "a", "b": "b"},
 	}
 	bv := b{}
-	err := BeanCopy(&av, &bv)
+	err := BeanCopy(&bv, &av)
 	assert.Nil(t, err, err)
 	assert.Equal(t, b{
 		Id:   0,
