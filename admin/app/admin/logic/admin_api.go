@@ -19,13 +19,13 @@ func NewAdminAPILogic() *AdminAPILogic {
 }
 
 func (a *AdminAPILogic) List(ctx *gin.Context, params *adminproto.ApiListReq) (data *adminproto.ApiListResp, err error) {
-	total, list, err := a.FindList(ctx, params)
+	total, rows, err := a.FindList(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 	data = &adminproto.ApiListResp{}
 	data.Total = total
-	data.Rows, err = a.ListHandle(list)
+	data.Rows, err = a.ListHandle(rows)
 	return data, err
 }
 
@@ -50,4 +50,13 @@ func (a *AdminAPILogic) ListItemHandle(item *model.AdminAPI) (data *adminproto.A
 	data.CreatedAt = item.CreatedAt.Unix()
 	data.UpdatedAt = item.UpdatedAt.Unix()
 	return data, nil
+}
+
+func (a *AdminAPILogic) AllValid(ctx *gin.Context) (list []*adminproto.ApiListItem, err error) {
+	data, err := a.FindAllValid(ctx)
+	if err != nil {
+		return nil, err
+	}
+	list, err = a.ListHandle(data)
+	return list, err
 }

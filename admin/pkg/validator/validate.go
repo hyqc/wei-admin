@@ -13,7 +13,7 @@ type Func func(interface{}) url.Values
 
 func Validate(c *gin.Context, params interface{}, handlers ...Func) (err error) {
 	// 1. 解析请求，支持 JSON 数据、表单请求和 URL Query
-	if err := c.ShouldBind(params); err != nil {
+	if err := c.ShouldBindJSON(params); err != nil {
 		// 请求解析失败
 		return err
 	}

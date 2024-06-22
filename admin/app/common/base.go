@@ -12,6 +12,10 @@ var (
 	EnabledInvalidQueryValue int32 = 2
 )
 
+func NewListBaseReq() *adminproto.ListBaseReq {
+	return &adminproto.ListBaseReq{}
+}
+
 func ListBaseReqHandle(params *adminproto.ApiListReq) (offset, limit int) {
 	if params.Base == nil {
 		params.Base = &adminproto.ListBaseReq{}

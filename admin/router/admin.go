@@ -22,8 +22,9 @@ func admins(g *gin.RouterGroup) {
 	{
 		apiAPI := adminCtl.APIController{}
 		api.GET("/list", apiAPI.List)
-		api.POST("/add", apiAPI.Add)
+		api.GET("/all", apiAPI.All)
 		api.GET("/info", apiAPI.Info)
+		api.POST("/add", apiAPI.Add)
 		api.POST("/edit", apiAPI.Edit)
 		api.POST("/enable", apiAPI.Enable)
 		api.POST("/delete", apiAPI.Delete)
