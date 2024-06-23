@@ -12,10 +12,12 @@ import (
 )
 
 type IAdminAPI interface {
+	Create(ctx *gin.Context, data *model.AdminAPI) error
+	Update(ctx *gin.Context, data *model.AdminAPI) error
+	Enable(ctx *gin.Context, id int32, enabled bool) error
 	FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
 	FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error)
-	Create(ctx *gin.Context, data *model.AdminAPI) error
 }
 
 type AdminAPI struct {
@@ -23,6 +25,20 @@ type AdminAPI struct {
 
 func NewAdminAPI() *AdminAPI {
 	return &AdminAPI{}
+}
+
+func (a *AdminAPI) Create(ctx *gin.Context, data *model.AdminAPI) error {
+	return query.AdminAPI.WithContext(ctx).Create(data)
+}
+
+func (a *AdminAPI) Update(ctx *gin.Context, data *model.AdminAPI) error {
+	return query.AdminAPI.WithContext(ctx).Where(query.AdminAPI.ID.Eq(data.ID)).Save(data)
+}
+
+func (a *AdminAPI) Enable(ctx *gin.Context, id int32, enabled bool) error {
+	apiDB := query.AdminAPI
+	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).UpdateColumn(apiDB.IsEnabled, enabled)
+	return err
 }
 
 func (a *AdminAPI) FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error) {
@@ -39,10 +55,6 @@ func (a *AdminAPI) FindList(ctx context.Context, params *admin_proto.ApiListReq)
 func (a *AdminAPI) FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) {
 	apiDB := query.AdminAPI
 	return apiDB.WithContext(ctx).Where(apiDB.IsEnabled.Is(true)).Find()
-}
-
-func (a *AdminAPI) Create(ctx *gin.Context, data *model.AdminAPI) error {
-	return query.AdminAPI.WithContext(ctx).Create(data)
 }
 
 func (a *AdminAPI) FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error) {

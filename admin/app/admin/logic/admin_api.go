@@ -100,3 +100,23 @@ func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (
 	}
 	return a.HandleItemData(data)
 }
+
+func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) error {
+	info, err := a.db.FindById(ctx, params.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	info.Key = params.Key
+	info.Path = params.Path
+	info.Name = params.Name
+	info.Describe = params.Describe
+	info.IsEnabled = params.Enabled
+	return a.db.Update(ctx, info)
+}
+
+func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableReq) error {
+	return a.db.Enable(ctx, params.Id, params.Enabled)
+}
