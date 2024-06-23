@@ -4,7 +4,7 @@ import (
 	"admin/app/gen/query"
 	"admin/pkg/utils"
 	"admin/pkg/utils/files"
-	adminproto "admin/proto"
+	"admin/proto/admin_proto"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -48,8 +48,8 @@ func teardown() {
 
 func TestAdminUserService_Login(t *testing.T) {
 	srv := NewAdminUserLogic()
-	resp, err := srv.Login(context.Background(), &adminproto.LoginReq{
-		Username: "admin",
+	resp, err := srv.Login(context.Background(), &admin_proto.LoginReq{
+		Username: "admin_proto",
 		Password: "123456",
 	}, "127.0.0.1")
 	assert.Nil(t, err, err)

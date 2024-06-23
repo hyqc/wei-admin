@@ -3,7 +3,7 @@ package logic
 import (
 	"admin/app/admin/dao"
 	"admin/app/gen/model"
-	adminproto "admin/proto"
+	"admin/proto/admin_proto"
 	"context"
 )
 
@@ -17,7 +17,7 @@ func NewAdminMenuLogic() *AdminMenuLogic {
 	}
 }
 
-func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]*adminproto.MenuItem, error) {
+func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]*admin_proto.MenuItem, error) {
 	allMenus, err := a.FindAll(ctx)
 	if err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]
 	arr1 := getAllRelatedMenusByPageIds(allMenusMap, pageIds)
 	arr2 := getAllChildrenPagesByPageIds(allMenusMap, pageIds)
 	arr := append(arr1, arr2...)
-	menus := make([]*adminproto.MenuItem, 0, len(arr))
+	menus := make([]*admin_proto.MenuItem, 0, len(arr))
 	m := make(map[string]struct{}, len(arr))
 	for _, item := range arr {
 		if _, ok := m[item.Key]; !ok {
@@ -40,7 +40,7 @@ func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]
 	return menus, nil
 }
 
-func getAllRelatedMenusByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*adminproto.MenuItem) {
+func getAllRelatedMenusByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*admin_proto.MenuItem) {
 	for _, pageId := range pageIds {
 		arr := getAllFatherMenuByChildrenId(menusMap, pageId)
 		if len(arr) > 0 {
@@ -50,7 +50,7 @@ func getAllRelatedMenusByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []
 	return data
 }
 
-func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*adminproto.MenuItem) {
+func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*admin_proto.MenuItem) {
 	for _, pageId := range pageIds {
 		arr := getAllChildrenMenuByChildrenId(menusMap, pageId)
 		if len(arr) > 0 {
@@ -60,9 +60,9 @@ func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds [
 	return data
 }
 
-func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*adminproto.MenuItem) {
+func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*admin_proto.MenuItem) {
 	if menu, ok := menusMap[parentId]; ok {
-		data = append(data, &adminproto.MenuItem{
+		data = append(data, &admin_proto.MenuItem{
 			Key:       menu.Key,
 			Path:      menu.Path,
 			Name:      menu.Name,
@@ -77,10 +77,10 @@ func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId 
 	return data
 }
 
-func getAllChildrenMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*adminproto.MenuItem) {
+func getAllChildrenMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*admin_proto.MenuItem) {
 	for menuId, menu := range menusMap {
 		if menu.ParentID == parentId {
-			data = append(data, &adminproto.MenuItem{
+			data = append(data, &admin_proto.MenuItem{
 				Key:       menu.Key,
 				Path:      menu.Path,
 				Name:      menu.Name,

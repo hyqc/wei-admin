@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 80012
+ Source Server Version : 80400
  Source Host           : 127.0.0.1:3306
  Source Schema         : wei
 
  Target Server Type    : MySQL
- Target Server Version : 80012
+ Target Server Version : 80400
  File Encoding         : 65001
 
- Date: 13/06/2024 18:52:15
+ Date: 23/06/2024 10:24:21
 */
 
 SET NAMES utf8mb4;
@@ -22,19 +22,19 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_api`;
 CREATE TABLE `admin_api`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '接口ID',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '接口ID',
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接口路由',
   `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接口唯一名称',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接口名称',
   `describe` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接口描述',
-  `is_enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '接口状态：1：正常，0：禁用',
+  `is_enabled` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '接口状态：1：正常，0：禁用',
   `created_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE,
   UNIQUE INDEX `uk_key`(`key` ASC) USING BTREE,
   UNIQUE INDEX `uk_path`(`path` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '接口权限关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '接口权限关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_api
@@ -86,26 +86,26 @@ INSERT INTO `admin_api` VALUES (41, '/admin/menu/mode', 'adminMenu::mode', '菜�
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_menu`;
 CREATE TABLE `admin_menu`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `parent_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父ID',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `parent_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '父ID',
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '路径',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限中文名称',
   `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '菜单的唯一键名',
   `describe` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '描述',
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '路径图标',
-  `sort` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序值',
+  `sort` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序值',
   `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '重定向路径',
   `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '组件名称',
-  `is_hide_in_menu` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否隐藏：0显示，1隐藏',
-  `is_hide_children_in_menu` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否在children中隐藏：1隐藏，0显示',
-  `is_enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '1：启用，0禁用',
+  `is_hide_in_menu` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否隐藏：0显示，1隐藏',
+  `is_hide_children_in_menu` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否在children中隐藏：1隐藏，0显示',
+  `is_enabled` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '1：启用，0禁用',
   `created_at` timestamp NOT NULL COMMENT '创建时间',
   `updated_at` timestamp NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE,
   UNIQUE INDEX `uk_key`(`key` ASC) USING BTREE,
   UNIQUE INDEX `uk_path`(`path` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '权限菜单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '权限菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_menu
@@ -124,19 +124,19 @@ INSERT INTO `admin_menu` VALUES (8, 4, '/admin/menu/edit', '编辑菜单', 'Admi
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_permission`;
 CREATE TABLE `admin_permission`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `menu_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '所属菜单ID',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `menu_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '所属菜单ID',
   `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限唯一标识名称',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限显示名称',
-  `type` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'view' COMMENT '权限的操作类型\r\nview：查看（只读）\r\nedit：编辑（读写）\r\ndelete：删除（彻底删除）',
+  `type` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'view' COMMENT '权限的操作类型\r\nview：查看（只读）\r\nedit：编辑（读写）\r\ndelete：删除（彻底删除）',
   `describe` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限描述',
-  `is_enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否启用：1启用，0禁用',
+  `is_enabled` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否启用：1启用，0禁用',
   `created_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_key`(`key` ASC) USING BTREE,
   UNIQUE INDEX `uk_permission`(`menu_id` ASC, `type` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '权限表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_permission
@@ -162,10 +162,10 @@ INSERT INTO `admin_permission` VALUES (15, 6, 'AdminApiDelete', '接口删除', 
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_permission_api`;
 CREATE TABLE `admin_permission_api`  (
-  `permission_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '权限ID',
-  `api_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '接口ID',
+  `permission_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '权限ID',
+  `api_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '接口ID',
   UNIQUE INDEX `uk_permission_api`(`permission_id` ASC, `api_id` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '接口权限关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '接口权限关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_permission_api
@@ -219,17 +219,17 @@ INSERT INTO `admin_permission_api` VALUES (15, 38);
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_role`;
 CREATE TABLE `admin_role`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '角色名称',
-  `describe` varchar(1024) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '角色描述',
-  `modify_admin_id` int(10) UNSIGNED NOT NULL COMMENT '修改人',
-  `create_admin_id` int(10) UNSIGNED NOT NULL COMMENT '创建人',
-  `is_enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '1：启用，0：禁用',
+  `describe` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '' COMMENT '角色描述',
+  `modify_admin_id` int UNSIGNED NOT NULL COMMENT '修改人',
+  `create_admin_id` int UNSIGNED NOT NULL COMMENT '创建人',
+  `is_enabled` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '1：启用，0：禁用',
   `created_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '管理员角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '管理员角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_role
@@ -241,10 +241,10 @@ INSERT INTO `admin_role` VALUES (1, '管理员', '拥有全部权限', 9, 1, 1, 
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_role_permission`;
 CREATE TABLE `admin_role_permission`  (
-  `role_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色ID',
-  `permission_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '权限ID',
+  `role_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色ID',
+  `permission_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '权限ID',
   UNIQUE INDEX `uk_role_permission`(`role_id` ASC, `permission_id` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '角色权限关系表（包含菜单和权限）' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '角色权限关系表（包含菜单和权限）' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_role_permission
@@ -263,26 +263,26 @@ INSERT INTO `admin_role_permission` VALUES (1, 8);
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_user`;
 CREATE TABLE `admin_user`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '管理员账号',
   `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '管理昵称姓名',
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮箱地址',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '登录密码',
   `avatar` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '用户头像',
-  `login_total` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '登录次数',
+  `login_total` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '登录次数',
   `last_login_ip` json NOT NULL COMMENT '上次登录IP',
   `last_login_time` timestamp NULL DEFAULT NULL COMMENT '上次登录时间',
-  `is_enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '账户状态：1正常，0：禁用',
+  `is_enabled` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '账户状态：1正常，0：禁用',
   `created_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_username`(`username` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '管理员表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '管理员表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_user
 -- ----------------------------
-INSERT INTO `admin_user` VALUES (1, 'admin', '超管', 'ddd@q1.com', '$2a$10$uH8D8y9yGq4w9ByQtvh3dudv.kPcEM/..9SwDRX88N2OZOvmvb1N2', '', 20, '[\"::1\", \"::1\"]', '2024-01-23 16:53:25', 1, '2024-01-23 16:53:25', '2024-01-23 16:53:25');
+INSERT INTO `admin_user` VALUES (1, 'admin', '骑着八戒游天河', 'ddd@q1.com', '$2a$10$8DN3n4k4C7H3vrYoQ5AUA.5KrOJQYcUCaq5X7J94JmHRH.XeiEm.m', '', 36, '[\"127.0.0.1\", \"127.0.0.1\"]', '2024-06-20 23:43:21', 1, '2024-06-20 15:43:21', '2024-06-20 23:43:21');
 INSERT INTO `admin_user` VALUES (5, 'test00001', '测试00001', '', '$2a$10$xEnugTiRvgBY1n21Mg7g7uCnzBP7aA9G0vzUv.jAnTgF2tM3JBSsC', '', 0, '[]', NULL, 1, '2023-12-04 19:31:25', '2023-12-04 19:31:25');
 INSERT INTO `admin_user` VALUES (7, 'test00002', '测试00002', '', '$2a$10$MHuAUxjZAG.8bITT12hEZu6qFb9C8izBM7NSe/FPB4Q3Jth29NnBW', '', 0, '[]', NULL, 1, '2023-12-04 19:31:26', '2023-12-04 19:31:26');
 INSERT INTO `admin_user` VALUES (8, 'test00003', '测试00003', '', '$2a$10$l2YYmOBMX0WX3a27NGFYyeGwHAbi6Jozu0k.P/YDjnkYKs94Bi75u', '', 0, '[]', NULL, 1, '2023-12-04 19:31:27', '2023-12-04 19:31:27');
@@ -293,10 +293,10 @@ INSERT INTO `admin_user` VALUES (9, 'test00004', '测试00004', 'test0004@qq.com
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_user_role`;
 CREATE TABLE `admin_user_role`  (
-  `admin_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '管理员ID',
-  `role_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色ID',
+  `admin_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '管理员ID',
+  `role_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色ID',
   UNIQUE INDEX `uk_admin_id_role_id`(`admin_id` ASC, `role_id` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '管理员-游戏-角色关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '管理员-游戏-角色关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_user_role
@@ -308,12 +308,12 @@ INSERT INTO `admin_user_role` VALUES (9, 1);
 -- ----------------------------
 DROP TABLE IF EXISTS `hc_user`;
 CREATE TABLE `hc_user`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '玩家ID',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '玩家ID',
   `nickname` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '玩家昵称',
-  `vip` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'VIP等级',
+  `vip` int UNSIGNED NOT NULL DEFAULT 0 COMMENT 'VIP等级',
   `id_card` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '身份证号码',
   `real_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '真实姓名',
-  `gender` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '性别，0未知，1男，2女',
+  `gender` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '性别，0未知，1男，2女',
   `mobile` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '手机号',
   `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '邮箱',
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '密码MD5加密',
@@ -323,14 +323,14 @@ CREATE TABLE `hc_user`  (
   `avatar_frame` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '头像框',
   `signature` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '签名',
   `birth` date NOT NULL COMMENT '生日',
-  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户状态，0正常，1封禁',
+  `status` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户状态，0正常，1封禁',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id_card`(`id_card`) USING BTREE,
   UNIQUE INDEX `mobile`(`mobile`) USING BTREE,
   UNIQUE INDEX `email`(`mobile`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hc_user
@@ -341,9 +341,9 @@ CREATE TABLE `hc_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `hc_user_oauth`;
 CREATE TABLE `hc_user_oauth`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL COMMENT '玩家ID，hc_user表自增id',
-  `platform` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '平台，1官方SDK，2TapTapSDK，3微信，4QQ，5抖音',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` int NOT NULL COMMENT '玩家ID，hc_user表自增id',
+  `platform` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '平台，1官方SDK，2TapTapSDK，3微信，4QQ，5抖音',
   `openid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '平台开放ID',
   `unionid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '平台唯一ID',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
@@ -351,7 +351,7 @@ CREATE TABLE `hc_user_oauth`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `openid`(`platform` ASC, `openid` ASC) USING BTREE,
   UNIQUE INDEX `unionid`(`platform` ASC, `unionid` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '第三方登录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '第三方登录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of hc_user_oauth

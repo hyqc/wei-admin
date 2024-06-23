@@ -1,14 +1,16 @@
 package code
 
 import (
+	"admin/proto/code_proto"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type MessageBase struct {
-	Code    ErrCode `json:"code"`    // 错误码
-	Message string  `json:"message"` // 错误码描述
-	Error   string  `json:"error"`   // 错误具体信息
+	Code code_proto.ErrorCode `json:"code"` // 错误码
+	Msg  string               `json:"msg"`  // 错误码描述
+	Err  string               `json:"err"`  // 错误具体信息
 }
 
 type Message struct {
@@ -17,49 +19,60 @@ type Message struct {
 }
 
 type IMessage interface {
-	SetCode(code ErrCode)
-	GetCode() ErrCode
-	SetMessage(msg string)
-	GetMessage() string
+	SetCode(code code_proto.ErrorCode)
+	GetCode() code_proto.ErrorCode
+	SetMsg(msg string)
+	GetMsg() string
 	GetError() string
-	SetCodeMessage(code ErrCode, msg string)
-	SetCodeError(code ErrCode, err error)
+	SetCodeMsg(code code_proto.ErrorCode, msg string)
+	SetCodeError(code code_proto.ErrorCode, err error)
 	SetData(data interface{})
 	GetData() interface{}
+	Error() string
+	SetError(err error)
+	SetMessage(err IMessage)
+	String() string
 }
 
-func (m *Message) SetCode(code ErrCode) {
+func NewMessage() IMessage {
+	return &Message{
+		MessageBase: MessageBase{},
+		Data:        nil,
+	}
+}
+
+func (m *Message) SetCode(code code_proto.ErrorCode) {
 	m.Code = code
-	m.Message = GetMsgByCode(code)
-	m.Error = m.Message
+	m.Msg = GetMsgByCode(code)
+	m.Err = m.Msg
 }
 
-func (m *Message) GetCode() ErrCode {
+func (m *Message) GetCode() code_proto.ErrorCode {
 	return m.Code
 }
 
-func (m *Message) SetMessage(message string) {
-	m.Message = message
-	m.Error = m.Message
+func (m *Message) SetMsg(message string) {
+	m.Msg = message
+	m.Err = m.Msg
 }
 
-func (m *Message) GetMessage() string {
-	return m.Message
+func (m *Message) GetMsg() string {
+	return m.Msg
 }
 
 func (m *Message) GetError() string {
-	return m.Error
+	return m.Err
 }
 
-func (m *Message) SetCodeMessage(code ErrCode, message string) {
+func (m *Message) SetCodeMsg(code code_proto.ErrorCode, message string) {
 	m.Code = code
-	m.Message = message
-	m.Error = m.Message
+	m.Msg = message
+	m.Err = m.Msg
 }
-func (m *Message) SetCodeError(code ErrCode, err error) {
+func (m *Message) SetCodeError(code code_proto.ErrorCode, err error) {
 	m.Code = code
-	m.Message = GetMsgByCode(code)
-	m.Error = err.Error()
+	m.Msg = GetMsgByCode(code)
+	m.Err = err.Error()
 }
 
 func (m *Message) SetData(data interface{}) {
@@ -70,13 +83,36 @@ func (m *Message) GetData() interface{} {
 	return m.Data
 }
 
+func (m *Message) Error() string {
+	if m.Err != "" {
+		return m.Err
+	}
+	return m.Msg
+}
+
+func (m *Message) SetError(err error) {
+	m.Err = err.Error()
+}
+
+func (m *Message) SetMessage(err IMessage) {
+	m.Code = err.GetCode()
+	m.Msg = err.GetMsg()
+	m.Err = err.GetError()
+	m.Data = err.GetData()
+}
+
+func (m *Message) String() string {
+	body, _ := json.Marshal(m)
+	return string(body)
+}
+
 func JSON(ctx *gin.Context, data IMessage) {
 	base := MessageBase{
-		Code:    data.GetCode(),
-		Message: data.GetMessage(),
+		Code: data.GetCode(),
+		Msg:  data.GetMsg(),
 	}
 	if debug {
-		base.Error = data.GetError()
+		base.Err = data.GetError()
 	}
 	if data.GetData() == nil {
 		ctx.AbortWithStatusJSON(http.StatusOK, base)

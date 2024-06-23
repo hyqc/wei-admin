@@ -1,18 +1,18 @@
 syntax = "proto3";
-package admin_proto;
+package admin;
 option go_package = "./admin_proto;admin_proto";
 
-message menuItem{
+message MenuItem{
   string key = 1; // 菜单唯一键
   string path = 2; // 菜单路由
   string name = 3; // 菜单名称
   string icon = 4; // 菜单图标
   string component = 5;
   string authority = 6;
-  repeated routeItem routes = 7;
+  repeated RouteItem routes = 7;
 }
 
-message routeItem {
+message RouteItem {
   string key = 1;// 菜单键名
   string path = 2;//菜单路由
   string name = 3;//菜单名称

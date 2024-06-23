@@ -5,6 +5,7 @@ import (
 	"admin/config"
 	"admin/constant"
 	"admin/pkg/core"
+	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
 	"github.com/thoas/go-funk"
 	"strings"
@@ -22,7 +23,7 @@ func auth() gin.HandlerFunc {
 			cla, err := core.JWTCheck(token, config.AppConfig.Server.JWT.Secret)
 			if err != nil {
 				// TODO 返回
-				core.ResponseOk(ctx, code.ResponseData(code.AuthTokenFailed, nil))
+				core.ResponseOk(ctx, code.ResponseData(code_proto.ErrorCode_AuthTokenFailed, nil, err))
 				return
 			}
 			ctx.Set(constant.ContextClaims, cla)

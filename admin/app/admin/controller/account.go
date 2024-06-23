@@ -3,12 +3,14 @@ package controller
 import (
 	"admin/app/admin/logic"
 	"admin/app/admin/validate"
+	"admin/app/common"
 	"admin/code"
 	"admin/config"
 	"admin/constant"
 	"admin/pkg/core"
 	"admin/pkg/validator"
-	adminproto "admin/proto"
+	"admin/proto/admin_proto"
+	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -22,8 +24,9 @@ var (
 )
 
 func (AccountController) Register(ctx *gin.Context) {
-	result := code.NewCode(code.Success)
-	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
+	msg := "AccountController.Register"
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	config.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -36,161 +39,113 @@ func (AccountController) Register(ctx *gin.Context) {
 // @Produce application/json
 // @Param object query admin_proto.LoginReq true "请求参数"
 // @Success 200 {object}
-// @Router /admin/login [post]
+// @Router /admin_proto/login [post]
 func (AccountController) Login(ctx *gin.Context) {
-	params := &adminproto.LoginReq{}
-	result := code.NewCode(code.Success)
+	msg := "AccountController.Login"
+	params := &admin_proto.LoginReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AccountReq.LoginReq); err != nil {
-		result.SetCodeError(code.RequestParamsInvalid, err)
-		config.AppLoggerSugared.Debugw("Login", zap.Any("msg", result), zap.Any("error", err))
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
 	data, err := accountLogic.Login(ctx, params, ctx.ClientIP())
 	if err != nil {
-		res := code.GetCodeMsg(err)
-		if res == nil {
-			result.SetCodeError(code.RequestParamsInvalid, err)
-			config.AppLoggerSugared.Debugw("Login", zap.Any("msg", result), zap.Any("error", err))
-			code.JSON(ctx, result)
-			return
-		}
-
-		config.AppLoggerSugared.Debugw("Login", zap.Any("msg", res), zap.Any("error", err))
-		code.JSON(ctx, res)
+		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
 	result.SetData(data)
 
-	config.AppLoggerSugared.Debugw("Login", zap.Any("msg", result))
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
 
 // Info 管理员账号详情
 func (AccountController) Info(ctx *gin.Context) {
+	msg := "AccountController.Info"
 	refreshToken := ctx.GetBool("refreshToken")
-	result := code.NewCode(code.Success)
+	result := code.NewCode(code_proto.ErrorCode_Success)
 	data, err := accountLogic.Info(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, 3600)
 	if err != nil {
-		res := code.GetCodeMsg(err)
-		if res == nil {
-			result.SetCodeError(code.RequestParamsInvalid, err)
-			config.AppLoggerSugared.Debugw("Info", zap.Any("msg", result), zap.Any("error", err))
-			code.JSON(ctx, result)
-			return
-		}
-
-		config.AppLoggerSugared.Debugw("Info", zap.Any("msg", res), zap.Any("error", err))
-		code.JSON(ctx, res)
+		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
 
 	result.SetData(data)
-	config.AppLogger.Sugar().Debugw("Info", zap.Any("msg", result))
+	config.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
 
 // Edit 编辑账号
 func (AccountController) Edit(ctx *gin.Context) {
-	params := &adminproto.AccountEditReq{}
-	result := code.NewCode(code.Success)
+	msg := "AccountController.Edit"
+	params := &admin_proto.AccountEditReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AccountReq.AccountEditReq); err != nil {
-		result.SetCodeError(code.RequestParamsInvalid, err)
-		config.AppLoggerSugared.Debugw("Edit", zap.Any("msg", result), zap.Any("error", err))
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
 	err := accountLogic.Edit(ctx, constant.GetCustomClaims(ctx).AdminID, params)
 	if err != nil {
-		res := code.GetCodeMsg(err)
-		if res == nil {
-			result.SetCodeError(code.RequestParamsInvalid, err)
-			config.AppLoggerSugared.Debugw("Edit", zap.Any("msg", result), zap.Any("error", err))
-			code.JSON(ctx, result)
-			return
-		}
-
-		config.AppLoggerSugared.Debugw("Edit", zap.Any("msg", res), zap.Any("error", err))
-		code.JSON(ctx, res)
+		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	config.AppLoggerSugared.Debugw("Edit", zap.Any("msg", result))
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
 
 // Password 修改密码
 func (AccountController) Password(ctx *gin.Context) {
-	params := &adminproto.AccountPasswordEditReq{}
-	result := code.NewCode(code.Success)
+	msg := "AccountController.Password"
+	params := &admin_proto.AccountPasswordEditReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AccountReq.AccountEditPasswordReq); err != nil {
-		result.SetCodeError(code.RequestParamsInvalid, err)
-		config.AppLoggerSugared.Debugw("Password", zap.Any("msg", result), zap.Any("error", err))
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
 	err := accountLogic.EditPassword(ctx, constant.GetCustomClaims(ctx).AdminID, params)
 	if err != nil {
-		res := code.GetCodeMsg(err)
-		if res == nil {
-			result.SetCodeError(code.RequestParamsInvalid, err)
-			config.AppLoggerSugared.Debugw("Password", zap.Any("msg", result), zap.Any("error", err))
-			code.JSON(ctx, result)
-			return
-		}
-
-		config.AppLoggerSugared.Debugw("Password", zap.Any("msg", res), zap.Any("error", err))
-		code.JSON(ctx, res)
+		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	config.AppLoggerSugared.Debugw("Password", zap.Any("msg", result))
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
 
 // Menu 登录用户可访问的菜单
 func (AccountController) Menu(ctx *gin.Context) {
-	result := code.NewCode(code.Success)
+	msg := "AccountController.Menu"
+	result := code.NewCode(code_proto.ErrorCode_Success)
 	data, err := accountLogic.MyMenus(ctx, constant.GetCustomClaims(ctx).AdminID)
 	if err != nil {
-		res := code.GetCodeMsg(err)
-		if res == nil {
-			result.SetCodeError(code.RequestParamsInvalid, err)
-			config.AppLoggerSugared.Debugw("Menu", zap.Any("msg", result), zap.Any("error", err))
-			code.JSON(ctx, result)
-			return
-		}
-
-		config.AppLoggerSugared.Debugw("Menu", zap.Any("msg", res), zap.Any("error", err))
-		code.JSON(ctx, res)
+		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
 	result.SetData(data)
-	config.AppLoggerSugared.Debugw("Menu", zap.Any("msg", result))
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
 
 func (AccountController) Permission(ctx *gin.Context) {
-	result := code.NewCode(code.Success)
+	msg := "AccountController.Permission"
+	result := code.NewCode(code_proto.ErrorCode_Success)
 	data, err := accountLogic.MyPermission(ctx, constant.GetCustomClaims(ctx).AdminID)
 	if err != nil {
-		res := code.GetCodeMsg(err)
-		if res == nil {
-			result.SetCodeError(code.RequestParamsInvalid, err)
-			config.AppLoggerSugared.Debugw("Permission", zap.Any("msg", result), zap.Any("error", err))
-			code.JSON(ctx, result)
-			return
-		}
-
-		config.AppLoggerSugared.Debugw("Permission", zap.Any("msg", res), zap.Any("error", err))
-		code.JSON(ctx, res)
+		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
 	result.SetData(data)
-	config.AppLoggerSugared.Debugw("Permission", zap.Any("msg", result))
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }

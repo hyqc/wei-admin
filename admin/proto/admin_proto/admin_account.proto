@@ -1,5 +1,5 @@
 syntax = "proto3";
-package admin_proto;
+package admin;
 option go_package = "./admin_proto;admin_proto";
 import "admin_menu.proto";
 
@@ -18,7 +18,7 @@ message AdminInfo{
   bool enabled = 11;
   string token = 12;
   int32 expire = 13;
-  repeated menuItem menus = 14;
+  repeated MenuItem menus = 14;
   map<string, string> permissions = 15;
 }
 

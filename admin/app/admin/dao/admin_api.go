@@ -4,14 +4,15 @@ import (
 	"admin/app/common"
 	"admin/app/gen/model"
 	"admin/app/gen/query"
-	adminproto "admin/proto"
+	"admin/proto/admin_proto"
 	"context"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
 	"time"
 )
 
 type IAdminAPI interface {
-	FindList(ctx context.Context, params *adminproto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
+	FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
 }
 
@@ -22,8 +23,8 @@ func NewAdminAPI() *AdminAPI {
 	return &AdminAPI{}
 }
 
-func (a *AdminAPI) FindList(ctx context.Context, params *adminproto.ApiListReq) (total int64, list []*model.AdminAPI, err error) {
-	offset, limit := common.ListBaseReqHandle(params)
+func (a *AdminAPI) FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error) {
+	offset, limit := common.HandleListBaseReq(params)
 	q := a.handleListReq(ctx, params)
 	total, err = q.Count()
 	if err != nil {
@@ -59,7 +60,7 @@ func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr
 	return res
 }
 
-func (a *AdminAPI) handleListReq(ctx context.Context, params *adminproto.ApiListReq) (q query.IAdminAPIDo) {
+func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ApiListReq) (q query.IAdminAPIDo) {
 	apiDB := query.AdminAPI
 	q = apiDB.WithContext(ctx)
 	if params.Path != "" {
@@ -88,4 +89,8 @@ func (a *AdminAPI) handleListReq(ctx context.Context, params *adminproto.ApiList
 	}
 
 	return q
+}
+
+func (a *AdminAPI) Create(ctx *gin.Context, data *model.AdminAPI) error {
+	return query.AdminAPI.WithContext(ctx).Create(data)
 }

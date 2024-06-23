@@ -1,4 +1,4 @@
-package admin
+package validate
 
 // 正则规则表达式
 const (
@@ -14,9 +14,9 @@ const (
 	PatternTrimBlankStringRule = "[\\s\\S]?|^[\\S][\\s\\S]*[\\S]$"
 	PatternTrimBlankStringMsg  = "不是有效字符串"
 
-	PatternApiPathRule = "^/[a-zA-z]+(/\\w{0,}){0,}"
-	PatternApiPathMsg  = "不是有效路由"
+	PatternAdminApiPathRule = "^/[a-zA-z]+(/\\w{0,}){0,}"
+	PatternAdminApiPathMsg  = "不是有效路由"
 
-	PatternApiKeyRule = "^\\w+::\\w+"
-	PatternApiKeyMsg  = "不是有效路由键名"
+	PatternAdminApiKeyRule = "^\\w+::\\w+"
+	PatternAdminApiKeyMsg  = "不是有效路由键名"
 )

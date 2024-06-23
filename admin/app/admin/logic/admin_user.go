@@ -8,7 +8,8 @@ import (
 	"admin/pkg/core"
 	"admin/pkg/utils"
 	"admin/pkg/utils/pwd"
-	adminproto "admin/proto"
+	"admin/proto/admin_proto"
+	"admin/proto/code_proto"
 	"context"
 	"github.com/gin-gonic/gin"
 	"time"
@@ -24,13 +25,13 @@ func NewAdminUserLogic() *AdminUserLogic {
 	}
 }
 
-func (a *AdminUserLogic) Login(ctx context.Context, params *adminproto.LoginReq, clientIp string) (*adminproto.AdminInfo, error) {
+func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error) {
 	data, err := a.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err
 	}
 	if !pwd.Matches(params.Password, data.Password) {
-		return nil, code.NewCodeError(code.AdminAccountPasswordInvalid)
+		return nil, code.NewCodeError(code_proto.ErrorCode_AdminAccountPasswordInvalid, nil)
 	}
 
 	result, err := a.getMyInfo(ctx, data, true, config.AppConfig.Server.JWT.UsefulLife)
@@ -49,7 +50,7 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *adminproto.LoginReq,
 	return result, nil
 }
 
-func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*adminproto.AdminInfo, error) {
+func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
 	data, err := a.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return nil, err
@@ -58,7 +59,7 @@ func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken b
 	return a.getMyInfo(ctx, data, refreshToken, seconds)
 }
 
-func (a *AdminUserLogic) Edit(ctx context.Context, adminId int32, params *adminproto.AccountEditReq) error {
+func (a *AdminUserLogic) Edit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error {
 	data, err := a.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
@@ -69,13 +70,13 @@ func (a *AdminUserLogic) Edit(ctx context.Context, adminId int32, params *adminp
 	return a.UpdateAdminUser(ctx, data)
 }
 
-func (a *AdminUserLogic) EditPassword(ctx *gin.Context, adminId int32, params *adminproto.AccountPasswordEditReq) error {
+func (a *AdminUserLogic) EditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error {
 	data, err := a.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
 	}
 	if !pwd.Matches(params.OldPassword, data.Password) {
-		return code.NewCodeError(code.AdminAccountPasswordInvalid)
+		return code.NewCodeError(code_proto.ErrorCode_AdminAccountPasswordInvalid, nil)
 	}
 	data.Password, err = pwd.Encode(params.Password)
 	if err != nil {
@@ -84,7 +85,7 @@ func (a *AdminUserLogic) EditPassword(ctx *gin.Context, adminId int32, params *a
 	return a.UpdateAdminUser(ctx, data)
 }
 
-func (a *AdminUserLogic) MyMenus(ctx *gin.Context, adminId int32) (menus []*adminproto.MenuItem, err error) {
+func (a *AdminUserLogic) MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error) {
 	menus, _, err = getMyMenusAndPermissions(ctx, adminId)
 	return menus, err
 }
@@ -99,9 +100,9 @@ func (a *AdminUserLogic) MyPermission(ctx *gin.Context, adminId int32) (permissi
 	return permissionKeys, nil
 }
 
-func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*adminproto.AdminInfo, error) {
+func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
 	data.Password = ""
-	resp := &adminproto.AdminInfo{}
+	resp := &admin_proto.AdminInfo{}
 	if err := utils.BeanCopy(resp, data); err != nil {
 		return nil, err
 	}
@@ -140,7 +141,7 @@ func (a *AdminUserLogic) createToken(adminId int32, username string, seconds int
 	return token, err
 }
 
-func getMyMenusAndPermissions(ctx context.Context, adminId int32) (menus []*adminproto.MenuItem, permissionKeys map[string]string, err error) {
+func getMyMenusAndPermissions(ctx context.Context, adminId int32) (menus []*admin_proto.MenuItem, permissionKeys map[string]string, err error) {
 	// 权限
 	permissions, err := AdminPermissionSrv.FindMyPermission(ctx, adminId)
 	if err != nil {

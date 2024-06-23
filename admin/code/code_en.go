@@ -1,17 +1,23 @@
 package code
 
-var enMsg = map[ErrCode]string{
-	Success:                      "success",
-	Error:                        "error",
-	ReadContextRequestBodyFailed: "read context request body failed",
-	AuthTokenFailed:              "token expired or not login",
-	AuthTokenInvalid:             "token invalid",
-	AuthTokenInspectInvalid:      "token inspect invalid",
-	AuthTokenInfoInvalid:         "token info invalid",
+import "admin/proto/code_proto"
 
-	RequestBodyInvalid:   "request body invalid",
-	RequestQueryInvalid:  "request query invalid",
-	RequestParamsInvalid: "request params invalid",
+var enMsg = map[code_proto.ErrorCode]string{
+	code_proto.ErrorCode_Success:                      "success",
+	code_proto.ErrorCode_Error:                        "error",
+	code_proto.ErrorCode_ReadContextRequestBodyFailed: "read context request body failed",
+	code_proto.ErrorCode_AuthTokenFailed:              "token expired or not login",
+	code_proto.ErrorCode_AuthTokenInvalid:             "token invalid",
+	code_proto.ErrorCode_AuthTokenInspectInvalid:      "token inspect invalid",
+	code_proto.ErrorCode_AuthTokenInfoInvalid:         "token info invalid",
 
-	AdminAccountPasswordInvalid: "pwd invalid",
+	code_proto.ErrorCode_RequestBodyInvalid:   "request body invalid",
+	code_proto.ErrorCode_RequestQueryInvalid:  "request query invalid",
+	code_proto.ErrorCode_RequestParamsInvalid: "request params invalid",
+
+	code_proto.ErrorCode_AdminAccountPasswordInvalid: "account or pwd invalid",
+
+	code_proto.ErrorCode_AdminApiNameExist: "api name exist",
+	code_proto.ErrorCode_AdminApiPathExist: "api path exist",
+	code_proto.ErrorCode_AdminApiKeyExist:  "api key exist",
 }

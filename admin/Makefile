@@ -17,7 +17,7 @@ init:
 
 .PHONY: proto
 proto:
-	cd proto && protoc \
+	cd proto/$(dir) && protoc \
     			   --proto_path=. \
     			   --go_out=paths=source_relative:. \
     			   *.proto

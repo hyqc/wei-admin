@@ -14,7 +14,7 @@ func TestMainSetupDB(call func(db *gorm.DB)) {
 	fmt.Println("dsn: ", dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Error opening database: %v", err)
+		log.Fatalf("Err opening database: %v", err)
 	}
 	call(db)
 }

@@ -1,5 +1,5 @@
 syntax = "proto3";
-package admin_proto;
+package admin;
 option go_package = "./admin_proto;admin_proto";
 
 message ListBaseReq{

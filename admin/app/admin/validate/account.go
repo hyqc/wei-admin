@@ -2,7 +2,8 @@ package validate
 
 import (
 	"admin/pkg/validator"
-	adminproto "admin/proto"
+	"admin/proto/admin_proto"
+	"fmt"
 	"github.com/thedevsaddam/govalidator"
 	"net/url"
 )
@@ -15,12 +16,12 @@ type AccountReqValidator struct {
 // LoginReq 登录参数验证
 func (a *AccountReqValidator) LoginReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("username"): []string{"required", "between:1,32"},
-		validator.GetValidateJsonOmitemptyTag("password"): []string{"required", "between:6,64"},
+		validator.GetValidateJsonOmitemptyTag("username"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminUsernameRule)},
+		validator.GetValidateJsonOmitemptyTag("password"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("username"): []string{"required:管理员名称不能为空", "between:管理员名称长度为1-32个字符"},
-		validator.GetValidateJsonOmitemptyTag("password"): []string{"required:密码不能为空", "between:密码长度6-64个字符"},
+		validator.GetValidateJsonOmitemptyTag("username"): []string{"required:管理员名称不能为空", PatternAdminUsernameMsg},
+		validator.GetValidateJsonOmitemptyTag("password"): []string{"required:密码不能为空", PatternAdminPasswordMsg},
 	}
 	opts := govalidator.Options{
 		Data:     data,
@@ -68,7 +69,7 @@ func (a *AccountReqValidator) AccountEditPasswordReq(data interface{}) url.Value
 	if len(errs) > 0 {
 		return res
 	}
-	tmp := data.(*adminproto.AccountPasswordEditReq)
+	tmp := data.(*admin_proto.AccountPasswordEditReq)
 	if tmp.Password != tmp.ConfirmPassword {
 		res["confirmPassword"] = []string{"两次输入的密码不一致"}
 	}

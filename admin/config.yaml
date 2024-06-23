@@ -26,7 +26,7 @@ database:
     conn_max_lifetime_minutes: 200
 
 logger:
-  filename: "./logs/admin.log"
+  filename: "./logs/admin_proto.log"
   max_size: 5
   max_backups: 7
   max_age: 14

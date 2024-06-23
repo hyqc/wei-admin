@@ -2,74 +2,42 @@ package code
 
 import (
 	"admin/pkg/core"
-	"encoding/json"
+	"admin/proto/code_proto"
 	"errors"
 )
 
-type Err error
+func newCodeBase(code code_proto.ErrorCode) MessageBase {
+	return MessageBase{
+		Code: code,
+		Msg:  GetMsgByCode(code),
+	}
+}
 
-func NewCode(code ErrCode) IMessage {
+func NewCode(code code_proto.ErrorCode) IMessage {
 	return &Message{
 		MessageBase: newCodeBase(code),
 	}
 }
 
-func newCodeBase(code ErrCode) MessageBase {
-	s := GetMsgByCode(code)
-	return MessageBase{
-		Code:    code,
-		Message: s,
-		Error:   s,
-	}
-}
-
-func NewCodeError(code ErrCode) Err {
-	msg := newCodeBase(code)
-	body, err := json.Marshal(msg)
+func NewCodeError(code code_proto.ErrorCode, err error) IMessage {
+	msg := NewCode(code)
 	if err != nil {
-		return err
+		msg.SetError(err)
+	} else {
+		msg.SetError(errors.New(msg.GetMsg()))
 	}
-	return errors.New(string(body))
+	return msg
 }
 
-func GetCodeMsg(err error) IMessage {
-	var e Err
-	switch {
-	case errors.As(err, &e):
-		data := &Message{}
-		if e := json.Unmarshal([]byte(err.Error()), data); e != nil {
-			return nil
-		}
-		return data
-	}
-	return nil
-}
-
-func NewCodeMsg(code ErrCode, msg string) IMessage {
-	return &Message{
-		MessageBase: MessageBase{
-			Code:    code,
-			Message: msg,
-		},
-	}
-}
-
-func NewCodeMsgData(code ErrCode, msg string, data interface{}) IMessage {
-	return &Message{
-		MessageBase: MessageBase{
-			Code:    code,
-			Message: msg,
-		},
-		Data: data,
-	}
-}
-
-func ResponseData(code ErrCode, data interface{}) core.ResponseData {
-	msg := GetMsgByCode(code)
-	return core.ResponseData{
+func ResponseData(code code_proto.ErrorCode, data interface{}, err error) core.ResponseData {
+	msg := core.ResponseData{
 		Code:    int(code),
-		Message: msg,
-		Error:   msg,
+		Message: GetMsgByCode(code),
+		Error:   err.Error(),
 		Data:    data,
 	}
+	if err != nil {
+		msg.Error = err.Error()
+	}
+	return msg
 }

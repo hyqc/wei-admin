@@ -4,6 +4,7 @@ import (
 	"admin/code"
 	"admin/config"
 	"admin/pkg/utils"
+	"admin/proto/code_proto"
 	"bytes"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -47,7 +48,7 @@ func logger() gin.HandlerFunc {
 		start := time.Now()
 		body, err := io.ReadAll(ctx.Request.Body)
 		if err != nil {
-			msg := code.NewCode(code.ReadContextRequestBodyFailed)
+			msg := code.NewCodeError(code_proto.ErrorCode_ReadContextRequestBodyFailed, err)
 			config.AppLoggerSugared.Errorw("read context request body error", msg, err)
 			code.JSON(ctx, msg)
 			return
