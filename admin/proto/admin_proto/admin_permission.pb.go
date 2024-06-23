@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	// Verify that this generated code_proto is sufficiently up-to-date.
+	// Verify that this generated code is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
@@ -664,8 +664,9 @@ var file_admin_permission_proto_rawDesc = []byte{
 	0x22, 0x17, 0x0a, 0x15, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x69,
 	0x6e, 0x64, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x65, 0x71, 0x22, 0x18, 0x0a, 0x16, 0x50, 0x65, 0x72,
 	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x69, 0x6e, 0x64, 0x4d, 0x65, 0x6e, 0x75, 0x52,
-	0x65, 0x73, 0x70, 0x42, 0x0f, 0x5a, 0x0d, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x3b, 0x61,
-	0x64, 0x6d, 0x69, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x73, 0x70, 0x42, 0x1b, 0x5a, 0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -682,22 +683,22 @@ func file_admin_permission_proto_rawDescGZIP() []byte {
 
 var file_admin_permission_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_admin_permission_proto_goTypes = []interface{}{
-	(*PermissionListReq)(nil),      // 0: admin_proto.PermissionListReq
-	(*PermissionListResp)(nil),     // 1: admin_proto.PermissionListResp
-	(*PermissionAddReq)(nil),       // 2: admin_proto.PermissionAddReq
-	(*PermissionAddResp)(nil),      // 3: admin_proto.PermissionAddResp
-	(*PermissionDetailReq)(nil),    // 4: admin_proto.PermissionDetailReq
-	(*PermissionDetailResp)(nil),   // 5: admin_proto.PermissionDetailResp
-	(*PermissionEditReq)(nil),      // 6: admin_proto.PermissionEditReq
-	(*PermissionEditResp)(nil),     // 7: admin_proto.PermissionEditResp
-	(*PermissionEnabledReq)(nil),   // 8: admin_proto.PermissionEnabledReq
-	(*PermissionEnabledResp)(nil),  // 9: admin_proto.PermissionEnabledResp
-	(*PermissionDeleteReq)(nil),    // 10: admin_proto.PermissionDeleteReq
-	(*PermissionDeleteResp)(nil),   // 11: admin_proto.PermissionDeleteResp
-	(*PermissionApisBindReq)(nil),  // 12: admin_proto.PermissionApisBindReq
-	(*PermissionApisBindResp)(nil), // 13: admin_proto.PermissionApisBindResp
-	(*PermissionBindMenuReq)(nil),  // 14: admin_proto.PermissionBindMenuReq
-	(*PermissionBindMenuResp)(nil), // 15: admin_proto.PermissionBindMenuResp
+	(*PermissionListReq)(nil),      // 0: admin.PermissionListReq
+	(*PermissionListResp)(nil),     // 1: admin.PermissionListResp
+	(*PermissionAddReq)(nil),       // 2: admin.PermissionAddReq
+	(*PermissionAddResp)(nil),      // 3: admin.PermissionAddResp
+	(*PermissionDetailReq)(nil),    // 4: admin.PermissionDetailReq
+	(*PermissionDetailResp)(nil),   // 5: admin.PermissionDetailResp
+	(*PermissionEditReq)(nil),      // 6: admin.PermissionEditReq
+	(*PermissionEditResp)(nil),     // 7: admin.PermissionEditResp
+	(*PermissionEnabledReq)(nil),   // 8: admin.PermissionEnabledReq
+	(*PermissionEnabledResp)(nil),  // 9: admin.PermissionEnabledResp
+	(*PermissionDeleteReq)(nil),    // 10: admin.PermissionDeleteReq
+	(*PermissionDeleteResp)(nil),   // 11: admin.PermissionDeleteResp
+	(*PermissionApisBindReq)(nil),  // 12: admin.PermissionApisBindReq
+	(*PermissionApisBindResp)(nil), // 13: admin.PermissionApisBindResp
+	(*PermissionBindMenuReq)(nil),  // 14: admin.PermissionBindMenuReq
+	(*PermissionBindMenuResp)(nil), // 15: admin.PermissionBindMenuResp
 }
 var file_admin_permission_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

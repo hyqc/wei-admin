@@ -2,34 +2,37 @@ package main
 
 import (
 	"admin/pkg/gormgen"
+	"gorm.io/gen"
 )
 
 func main() {
+	isEnabledFieldType := []gen.ModelOpt{gen.FieldType("is_enabled", "bool")}
+
 	tables := []gormgen.GenType{
 		{
-			Table: "admin_user", Type: "AdminUser",
+			Table: "admin_user", Type: "AdminUser", Fields: isEnabledFieldType,
 		},
 		{
 			Table: "admin_user_role", Type: "AdminUserRole",
 		},
 		{
-			Table: "admin_role", Type: "AdminRole",
+			Table: "admin_role", Type: "AdminRole", Fields: isEnabledFieldType,
 		},
 		{
 			Table: "admin_role_permission", Type: "AdminRolePermission",
 		},
 		{
-			Table: "admin_permission", Type: "AdminPermission",
+			Table: "admin_permission", Type: "AdminPermission", Fields: isEnabledFieldType,
 		},
 		{
 			Table: "admin_permission_api", Type: "AdminPermissionAPI",
 		},
 		{
-			Table: "admin_api", Type: "AdminAPI",
+			Table: "admin_api", Type: "AdminAPI", Fields: isEnabledFieldType,
 		},
 		{
-			Table: "admin_menu", Type: "AdminMenu",
+			Table: "admin_menu", Type: "AdminMenu", Fields: isEnabledFieldType,
 		},
 	}
-	gormgen.Init("root", "root", "127.0.0.1:3306", "wei", gormgen.Utf8mb4, tables)
+	gormgen.Init("root", "123456", "127.0.0.1:3306", "wei", gormgen.Utf8mb4, tables)
 }

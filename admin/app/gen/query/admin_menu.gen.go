@@ -37,8 +37,8 @@ func newAdminMenu(db *gorm.DB, opts ...gen.DOOption) adminMenu {
 	_adminMenu.Sort = field.NewInt32(tableName, "sort")
 	_adminMenu.Redirect = field.NewString(tableName, "redirect")
 	_adminMenu.Component = field.NewString(tableName, "component")
-	_adminMenu.IsHideInMenu = field.NewBool(tableName, "is_hide_in_menu")
-	_adminMenu.IsHideChildrenInMenu = field.NewBool(tableName, "is_hide_children_in_menu")
+	_adminMenu.IsHideInMenu = field.NewInt32(tableName, "is_hide_in_menu")
+	_adminMenu.IsHideChildrenInMenu = field.NewInt32(tableName, "is_hide_children_in_menu")
 	_adminMenu.IsEnabled = field.NewBool(tableName, "is_enabled")
 	_adminMenu.CreatedAt = field.NewTime(tableName, "created_at")
 	_adminMenu.UpdatedAt = field.NewTime(tableName, "updated_at")
@@ -62,8 +62,8 @@ type adminMenu struct {
 	Sort                 field.Int32  // 排序值
 	Redirect             field.String // 重定向路径
 	Component            field.String // 组件名称
-	IsHideInMenu         field.Bool   // 是否隐藏：0显示，1隐藏
-	IsHideChildrenInMenu field.Bool   // 是否在children中隐藏：1隐藏，0显示
+	IsHideInMenu         field.Int32  // 是否隐藏：0显示，1隐藏
+	IsHideChildrenInMenu field.Int32  // 是否在children中隐藏：1隐藏，0显示
 	IsEnabled            field.Bool   // 1：启用，0禁用
 	CreatedAt            field.Time   // 创建时间
 	UpdatedAt            field.Time   // 更新时间
@@ -93,8 +93,8 @@ func (a *adminMenu) updateTableName(table string) *adminMenu {
 	a.Sort = field.NewInt32(table, "sort")
 	a.Redirect = field.NewString(table, "redirect")
 	a.Component = field.NewString(table, "component")
-	a.IsHideInMenu = field.NewBool(table, "is_hide_in_menu")
-	a.IsHideChildrenInMenu = field.NewBool(table, "is_hide_children_in_menu")
+	a.IsHideInMenu = field.NewInt32(table, "is_hide_in_menu")
+	a.IsHideChildrenInMenu = field.NewInt32(table, "is_hide_children_in_menu")
 	a.IsEnabled = field.NewBool(table, "is_enabled")
 	a.CreatedAt = field.NewTime(table, "created_at")
 	a.UpdatedAt = field.NewTime(table, "updated_at")

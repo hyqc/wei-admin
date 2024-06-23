@@ -37,3 +37,18 @@ func (a *APIReqValidator) AddReq(data interface{}) url.Values {
 	}
 	return govalidator.New(opts).ValidateStruct()
 }
+
+func (a *APIReqValidator) InfoReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:接口ID不能为空", "min:接口ID不能小于1"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}

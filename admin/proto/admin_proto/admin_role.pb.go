@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	// Verify that this generated code_proto is sufficiently up-to-date.
+	// Verify that this generated code is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
@@ -934,9 +934,10 @@ var file_admin_role_proto_rawDesc = []byte{
 	0x70, 0x22, 0x24, 0x0a, 0x12, 0x52, 0x6f, 0x6c, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
 	0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x22, 0x15, 0x0a, 0x13, 0x52, 0x6f, 0x6c, 0x65, 0x50,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x42, 0x0f,
-	0x5a, 0x0d, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x42, 0x1b,
+	0x5a, 0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b,
+	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -953,24 +954,24 @@ func file_admin_role_proto_rawDescGZIP() []byte {
 
 var file_admin_role_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_admin_role_proto_goTypes = []interface{}{
-	(*RoleListReq)(nil),             // 0: admin_proto.RoleListReq
-	(*RoleListResp)(nil),            // 1: admin_proto.RoleListResp
-	(*RoleAllReq)(nil),              // 2: admin_proto.RoleAllReq
-	(*RoleAllResp)(nil),             // 3: admin_proto.RoleAllResp
-	(*RoleAddReq)(nil),              // 4: admin_proto.RoleAddReq
-	(*RoleAddResp)(nil),             // 5: admin_proto.RoleAddResp
-	(*RoleDetailReq)(nil),           // 6: admin_proto.RoleDetailReq
-	(*RoleDetailResp)(nil),          // 7: admin_proto.RoleDetailResp
-	(*RoleEditReq)(nil),             // 8: admin_proto.RoleEditReq
-	(*RoleEditResp)(nil),            // 9: admin_proto.RoleEditResp
-	(*RoleUpdateIsEnabledReq)(nil),  // 10: admin_proto.RoleUpdateIsEnabledReq
-	(*RoleUpdateIsEnabledResp)(nil), // 11: admin_proto.RoleUpdateIsEnabledResp
-	(*RoleDeleteReq)(nil),           // 12: admin_proto.RoleDeleteReq
-	(*RoleDeleteResp)(nil),          // 13: admin_proto.RoleDeleteResp
-	(*RoleBindPermissionsReq)(nil),  // 14: admin_proto.RoleBindPermissionsReq
-	(*RoleBindPermissionsResp)(nil), // 15: admin_proto.RoleBindPermissionsResp
-	(*RolePermissionsReq)(nil),      // 16: admin_proto.RolePermissionsReq
-	(*RolePermissionsResp)(nil),     // 17: admin_proto.RolePermissionsResp
+	(*RoleListReq)(nil),             // 0: admin.RoleListReq
+	(*RoleListResp)(nil),            // 1: admin.RoleListResp
+	(*RoleAllReq)(nil),              // 2: admin.RoleAllReq
+	(*RoleAllResp)(nil),             // 3: admin.RoleAllResp
+	(*RoleAddReq)(nil),              // 4: admin.RoleAddReq
+	(*RoleAddResp)(nil),             // 5: admin.RoleAddResp
+	(*RoleDetailReq)(nil),           // 6: admin.RoleDetailReq
+	(*RoleDetailResp)(nil),          // 7: admin.RoleDetailResp
+	(*RoleEditReq)(nil),             // 8: admin.RoleEditReq
+	(*RoleEditResp)(nil),            // 9: admin.RoleEditResp
+	(*RoleUpdateIsEnabledReq)(nil),  // 10: admin.RoleUpdateIsEnabledReq
+	(*RoleUpdateIsEnabledResp)(nil), // 11: admin.RoleUpdateIsEnabledResp
+	(*RoleDeleteReq)(nil),           // 12: admin.RoleDeleteReq
+	(*RoleDeleteResp)(nil),          // 13: admin.RoleDeleteResp
+	(*RoleBindPermissionsReq)(nil),  // 14: admin.RoleBindPermissionsReq
+	(*RoleBindPermissionsResp)(nil), // 15: admin.RoleBindPermissionsResp
+	(*RolePermissionsReq)(nil),      // 16: admin.RolePermissionsReq
+	(*RolePermissionsResp)(nil),     // 17: admin.RolePermissionsResp
 }
 var file_admin_role_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

@@ -39,7 +39,8 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq
 		return nil, err
 	}
 	// 更新登录
-	data.LastLoginTime = time.Now()
+	now := time.Now()
+	data.LastLoginTime = &now
 	data.LoginTotal += 1
 	ip, err := dao.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
 	data.LastLoginIP = ip

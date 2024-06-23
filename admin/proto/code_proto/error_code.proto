@@ -5,7 +5,9 @@ option go_package = "./code_proto;code_proto";
 enum ErrorCode{
   Success = 0; // 成功
   Error = 1; // 失败
-  ReadContextRequestBodyFailed = 100001;
+  ReadContextRequestBodyFailed = 100001; // 获取请求体内容失败
+  RecordNotExist = 100002; // 记录不存在
+
   AuthTokenFailed = 200001; // 鉴权失败
   AuthTokenInvalid = 200002; // BearerToken无效
   AuthTokenInspectInvalid = 200003; // BearerToken无效

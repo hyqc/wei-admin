@@ -8,10 +8,12 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_Success:                      "成功",
 	code_proto.ErrorCode_Error:                        "请求失败",
 	code_proto.ErrorCode_ReadContextRequestBodyFailed: "读取请求体数据失败",
-	code_proto.ErrorCode_AuthTokenFailed:              "未登录或登录令牌已过期",
-	code_proto.ErrorCode_AuthTokenInvalid:             "登录令牌无效",
-	code_proto.ErrorCode_AuthTokenInspectInvalid:      "登录令牌检查失败",
-	code_proto.ErrorCode_AuthTokenInfoInvalid:         "登录令牌信息无效",
+	code_proto.ErrorCode_RecordNotExist:               "记录不存在",
+
+	code_proto.ErrorCode_AuthTokenFailed:         "未登录或登录令牌已过期",
+	code_proto.ErrorCode_AuthTokenInvalid:        "登录令牌无效",
+	code_proto.ErrorCode_AuthTokenInspectInvalid: "登录令牌检查失败",
+	code_proto.ErrorCode_AuthTokenInfoInvalid:    "登录令牌信息无效",
 
 	code_proto.ErrorCode_RequestBodyInvalid:   "请求体参数无效",
 	code_proto.ErrorCode_RequestQueryInvalid:  "查询参数无效",

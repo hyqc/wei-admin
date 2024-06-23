@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	// Verify that this generated code_proto is sufficiently up-to-date.
+	// Verify that this generated code is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
@@ -1333,8 +1333,9 @@ var file_admin_menu_proto_rawDesc = []byte{
 	0x0f, 0x0a, 0x0d, 0x4d, 0x65, 0x6e, 0x75, 0x50, 0x61, 0x67, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70,
 	0x22, 0x0d, 0x0a, 0x0b, 0x4d, 0x65, 0x6e, 0x75, 0x4d, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x22,
 	0x0e, 0x0a, 0x0c, 0x4d, 0x65, 0x6e, 0x75, 0x4d, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x42,
-	0x0f, 0x5a, 0x0d, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x1b, 0x5a, 0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1351,31 +1352,31 @@ func file_admin_menu_proto_rawDescGZIP() []byte {
 
 var file_admin_menu_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_admin_menu_proto_goTypes = []interface{}{
-	(*MenuItem)(nil),            // 0: admin_proto.MenuItem
-	(*RouteItem)(nil),           // 1: admin_proto.RouteItem
-	(*MenuListReq)(nil),         // 2: admin_proto.MenuListReq
-	(*MenuListResp)(nil),        // 3: admin_proto.MenuListResp
-	(*MenuTreeReq)(nil),         // 4: admin_proto.MenuTreeReq
-	(*MenuTreeResp)(nil),        // 5: admin_proto.MenuTreeResp
-	(*MenuAddReq)(nil),          // 6: admin_proto.MenuAddReq
-	(*MenuAddResp)(nil),         // 7: admin_proto.MenuAddResp
-	(*MenuDetailReq)(nil),       // 8: admin_proto.MenuDetailReq
-	(*MenuDetailResp)(nil),      // 9: admin_proto.MenuDetailResp
-	(*MenuEditReq)(nil),         // 10: admin_proto.MenuEditReq
-	(*MenuEditResp)(nil),        // 11: admin_proto.MenuEditResp
-	(*MenuEnableReq)(nil),       // 12: admin_proto.MenuEnableReq
-	(*MenuEnableResp)(nil),      // 13: admin_proto.MenuEnableResp
-	(*MenuDeleteReq)(nil),       // 14: admin_proto.MenuDeleteReq
-	(*MenuDeleteResp)(nil),      // 15: admin_proto.MenuDeleteResp
-	(*MenuPermissionsReq)(nil),  // 16: admin_proto.MenuPermissionsReq
-	(*MenuPermissionsResp)(nil), // 17: admin_proto.MenuPermissionsResp
-	(*MenuPagesReq)(nil),        // 18: admin_proto.MenuPagesReq
-	(*MenuPagesResp)(nil),       // 19: admin_proto.MenuPagesResp
-	(*MenuModeReq)(nil),         // 20: admin_proto.MenuModeReq
-	(*MenuModeResp)(nil),        // 21: admin_proto.MenuModeResp
+	(*MenuItem)(nil),            // 0: admin.MenuItem
+	(*RouteItem)(nil),           // 1: admin.RouteItem
+	(*MenuListReq)(nil),         // 2: admin.MenuListReq
+	(*MenuListResp)(nil),        // 3: admin.MenuListResp
+	(*MenuTreeReq)(nil),         // 4: admin.MenuTreeReq
+	(*MenuTreeResp)(nil),        // 5: admin.MenuTreeResp
+	(*MenuAddReq)(nil),          // 6: admin.MenuAddReq
+	(*MenuAddResp)(nil),         // 7: admin.MenuAddResp
+	(*MenuDetailReq)(nil),       // 8: admin.MenuDetailReq
+	(*MenuDetailResp)(nil),      // 9: admin.MenuDetailResp
+	(*MenuEditReq)(nil),         // 10: admin.MenuEditReq
+	(*MenuEditResp)(nil),        // 11: admin.MenuEditResp
+	(*MenuEnableReq)(nil),       // 12: admin.MenuEnableReq
+	(*MenuEnableResp)(nil),      // 13: admin.MenuEnableResp
+	(*MenuDeleteReq)(nil),       // 14: admin.MenuDeleteReq
+	(*MenuDeleteResp)(nil),      // 15: admin.MenuDeleteResp
+	(*MenuPermissionsReq)(nil),  // 16: admin.MenuPermissionsReq
+	(*MenuPermissionsResp)(nil), // 17: admin.MenuPermissionsResp
+	(*MenuPagesReq)(nil),        // 18: admin.MenuPagesReq
+	(*MenuPagesResp)(nil),       // 19: admin.MenuPagesResp
+	(*MenuModeReq)(nil),         // 20: admin.MenuModeReq
+	(*MenuModeResp)(nil),        // 21: admin.MenuModeResp
 }
 var file_admin_menu_proto_depIdxs = []int32{
-	1, // 0: admin_proto.MenuItem.routes:type_name -> admin_proto.RouteItem
+	1, // 0: admin.MenuItem.routes:type_name -> admin.RouteItem
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

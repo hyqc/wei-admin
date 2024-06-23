@@ -78,7 +78,24 @@ func (APIController) Add(ctx *gin.Context) {
 }
 
 func (APIController) Info(ctx *gin.Context) {
-
+	msg := "APIController.Add"
+	params := &admin_proto.ApiInfoReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.APIReq.InfoReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	info, err := apiLogic.Info(ctx, params)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	result.SetData(info)
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }
 
 func (APIController) Edit(ctx *gin.Context) {

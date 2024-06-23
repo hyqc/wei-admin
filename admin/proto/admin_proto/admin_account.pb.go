@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	// Verify that this generated code_proto is sufficiently up-to-date.
+	// Verify that this generated code is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
@@ -643,9 +643,9 @@ var file_admin_account_proto_rawDesc = []byte{
 	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x6e,
 	0x75, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49,
 	0x64, 0x22, 0x17, 0x0a, 0x15, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x50, 0x65, 0x72, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x42, 0x0f, 0x5a, 0x0d, 0x2e, 0x2f,
-	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x42, 0x1b, 0x5a, 0x19, 0x2e, 0x2f,
+	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x61, 0x64, 0x6d, 0x69,
+	0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -662,21 +662,21 @@ func file_admin_account_proto_rawDescGZIP() []byte {
 
 var file_admin_account_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_admin_account_proto_goTypes = []interface{}{
-	(*AdminInfo)(nil),               // 0: admin_proto.AdminInfo
-	(*LoginReq)(nil),                // 1: admin_proto.LoginReq
-	(*AccountDetailReq)(nil),        // 2: admin_proto.AccountDetailReq
-	(*AccountEditReq)(nil),          // 3: admin_proto.AccountEditReq
-	(*AccountEditResp)(nil),         // 4: admin_proto.AccountEditResp
-	(*AccountPasswordEditReq)(nil),  // 5: admin_proto.AccountPasswordEditReq
-	(*AccountPasswordEditResp)(nil), // 6: admin_proto.AccountPasswordEditResp
-	(*AccountPermissionReq)(nil),    // 7: admin_proto.AccountPermissionReq
-	(*AccountPermissionResp)(nil),   // 8: admin_proto.AccountPermissionResp
-	nil,                             // 9: admin_proto.AdminInfo.PermissionsEntry
-	(*MenuItem)(nil),                // 10: admin_proto.MenuItem
+	(*AdminInfo)(nil),               // 0: admin.AdminInfo
+	(*LoginReq)(nil),                // 1: admin.LoginReq
+	(*AccountDetailReq)(nil),        // 2: admin.AccountDetailReq
+	(*AccountEditReq)(nil),          // 3: admin.AccountEditReq
+	(*AccountEditResp)(nil),         // 4: admin.AccountEditResp
+	(*AccountPasswordEditReq)(nil),  // 5: admin.AccountPasswordEditReq
+	(*AccountPasswordEditResp)(nil), // 6: admin.AccountPasswordEditResp
+	(*AccountPermissionReq)(nil),    // 7: admin.AccountPermissionReq
+	(*AccountPermissionResp)(nil),   // 8: admin.AccountPermissionResp
+	nil,                             // 9: admin.AdminInfo.PermissionsEntry
+	(*MenuItem)(nil),                // 10: admin.MenuItem
 }
 var file_admin_account_proto_depIdxs = []int32{
-	10, // 0: admin_proto.AdminInfo.menus:type_name -> admin_proto.MenuItem
-	9,  // 1: admin_proto.AdminInfo.permissions:type_name -> admin_proto.AdminInfo.PermissionsEntry
+	10, // 0: admin.AdminInfo.menus:type_name -> admin.MenuItem
+	9,  // 1: admin.AdminInfo.permissions:type_name -> admin.AdminInfo.PermissionsEntry
 	2,  // [2:2] is the sub-list for method output_type
 	2,  // [2:2] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name

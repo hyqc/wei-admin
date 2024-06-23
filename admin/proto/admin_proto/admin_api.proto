@@ -12,7 +12,7 @@ message ApiListReq{
 }
 
 // 接口列表返回结构
-message ApiListItem{
+message ApiItem{
   int32  id = 1;
   string path = 2;
   string key = 3;
@@ -26,13 +26,11 @@ message ApiListItem{
 // 接口列表返回数据
 message ApiListResp{
   int64 total = 1;
-  repeated ApiListItem rows = 2;
+  repeated ApiItem rows = 2;
 }
 
 // 全部接口列表
 message ApiAllReq{}
-
-message ApiAllResp{}
 
 // 创建接口
 message ApiAddReq{
@@ -43,14 +41,10 @@ message ApiAddReq{
   bool enabled = 5;//启用状态
 }
 
-message ApiAddResp{}
-
 // 接口详情
-message ApiDetailReq{
+message ApiInfoReq{
   int32 id = 1;//接口ID
 }
-
-message ApiDetailResp{}
 
 // 接口编辑
 message ApiEditReq{
@@ -62,19 +56,13 @@ message ApiEditReq{
   bool enabled = 6;//接口状态
 }
 
-message ApiEditResp{}
-
 // 接口禁用启用
 message ApiEnableReq{
   int32 id = 1;//接口ID
   bool enabled = 2;//接口状态
 }
 
-message ApiEnableResp{}
-
 // 删除接口
 message ApiDeleteReq{
   int32 id = 1;//接口ID
 }
-
-message ApiDeleteResp{}
