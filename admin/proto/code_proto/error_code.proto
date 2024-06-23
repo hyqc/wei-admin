@@ -7,6 +7,7 @@ enum ErrorCode{
   Error = 1; // 失败
   ReadContextRequestBodyFailed = 100001; // 获取请求体内容失败
   RecordNotExist = 100002; // 记录不存在
+  RecordNValidCanNotDeleted = 100003; // 生效中的记录不能删除
 
   AuthTokenFailed = 200001; // 鉴权失败
   AuthTokenInvalid = 200002; // BearerToken无效

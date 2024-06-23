@@ -3,22 +3,55 @@ package logic
 import (
 	"admin/app/admin/dao"
 	"admin/app/gen/model"
+	"admin/pkg/utils"
 	"admin/proto/admin_proto"
 	"context"
+	"github.com/gin-gonic/gin"
 )
 
 type AdminMenuLogic struct {
-	*dao.AdminMenu
+	db *dao.AdminMenu
 }
 
 func NewAdminMenuLogic() *AdminMenuLogic {
 	return &AdminMenuLogic{
-		adminMenuDao,
+		db: adminMenuDao,
 	}
 }
 
+func (a *AdminMenuLogic) List(ctx *gin.Context, params *admin_proto.MenuListReq) (data *admin_proto.MenuListResp, err error) {
+	total, rows, err := a.db.FindList(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	data = &admin_proto.MenuListResp{}
+	data.Total = total
+	data.Rows, err = a.HandleListData(rows)
+	return data, err
+}
+
+func (a *AdminMenuLogic) HandleListData(list []*model.AdminMenu) (rows []*admin_proto.MenuItem, err error) {
+	for _, item := range list {
+		data, err := a.HandleItemData(item)
+		if err != nil {
+			return nil, err
+		}
+		rows = append(rows, data)
+	}
+	return rows, nil
+}
+
+func (a *AdminMenuLogic) HandleItemData(item *model.AdminMenu) (data *admin_proto.MenuItem, err error) {
+	data = &admin_proto.MenuItem{}
+	err = utils.BeanCopy(data, item)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]*admin_proto.MenuItem, error) {
-	allMenus, err := a.FindAll(ctx)
+	allMenus, err := a.db.FindAllValid(ctx)
 	if err != nil {
 		return nil, err
 	}

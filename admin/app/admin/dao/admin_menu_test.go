@@ -45,7 +45,7 @@ func teardown() {
 
 func TestFindAll(t *testing.T) {
 	dao := NewAdminMenu()
-	data, err := dao.FindAll(context.Background())
+	data, err := dao.FindAllValid(context.Background())
 	assert.Nil(t, err, err)
 	for _, item := range data {
 		fmt.Println(item)

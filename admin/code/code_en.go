@@ -7,6 +7,7 @@ var enMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_Error:                        "error",
 	code_proto.ErrorCode_ReadContextRequestBodyFailed: "read context request body failed",
 	code_proto.ErrorCode_RecordNotExist:               "record not exist",
+	code_proto.ErrorCode_RecordNValidCanNotDeleted:    "record valid, can not be deleted",
 
 	code_proto.ErrorCode_AuthTokenFailed:         "token expired or not login",
 	code_proto.ErrorCode_AuthTokenInvalid:        "token invalid",

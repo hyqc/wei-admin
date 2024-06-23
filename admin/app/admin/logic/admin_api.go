@@ -118,5 +118,29 @@ func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) e
 }
 
 func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableReq) error {
+	info, err := a.db.FindById(ctx, params.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	if info.IsEnabled == params.Enabled {
+		return nil
+	}
 	return a.db.Enable(ctx, params.Id, params.Enabled)
+}
+
+func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ApiDeleteReq) error {
+	info, err := a.db.FindById(ctx, params.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	if info.IsEnabled {
+		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
+	}
+	return a.db.Delete(ctx, params.Id)
 }

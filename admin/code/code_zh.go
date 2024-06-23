@@ -9,6 +9,7 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_Error:                        "请求失败",
 	code_proto.ErrorCode_ReadContextRequestBodyFailed: "读取请求体数据失败",
 	code_proto.ErrorCode_RecordNotExist:               "记录不存在",
+	code_proto.ErrorCode_RecordNValidCanNotDeleted:    "生效中的记录不能删除",
 
 	code_proto.ErrorCode_AuthTokenFailed:         "未登录或登录令牌已过期",
 	code_proto.ErrorCode_AuthTokenInvalid:        "登录令牌无效",

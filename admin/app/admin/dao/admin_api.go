@@ -15,6 +15,7 @@ type IAdminAPI interface {
 	Create(ctx *gin.Context, data *model.AdminAPI) error
 	Update(ctx *gin.Context, data *model.AdminAPI) error
 	Enable(ctx *gin.Context, id int32, enabled bool) error
+	Delete(ctx *gin.Context, id int32) error
 	FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
 	FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error)
@@ -41,8 +42,15 @@ func (a *AdminAPI) Enable(ctx *gin.Context, id int32, enabled bool) error {
 	return err
 }
 
+func (a *AdminAPI) Delete(ctx *gin.Context, id int32) error {
+	apiDB := query.AdminAPI
+	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).Delete()
+	return err
+}
+
 func (a *AdminAPI) FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error) {
-	offset, limit := common.HandleListBaseReq(params)
+	offset, limit, base := common.HandleListBaseReq(params.Base)
+	params.Base = base
 	q := a.handleListReq(ctx, params)
 	total, err = q.Count()
 	if err != nil {
@@ -62,7 +70,7 @@ func (a *AdminAPI) FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error)
 }
 
 func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr {
-	api := query.AdminAPI.Table(query.AdminAPI.TableName())
+	api := query.AdminAPI
 	var res field.OrderExpr
 	switch sortField {
 	case api.CreatedAt.ColumnName().String():

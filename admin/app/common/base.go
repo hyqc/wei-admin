@@ -24,18 +24,19 @@ func NewListBaseReq() *admin_proto.ListBaseReq {
 }
 
 // HandleListBaseReq 处理通用列表查询参数
-func HandleListBaseReq(params *admin_proto.ApiListReq) (offset, limit int) {
-	if params.Base == nil {
-		params.Base = &admin_proto.ListBaseReq{}
+func HandleListBaseReq(params *admin_proto.ListBaseReq) (offset, limit int, data *admin_proto.ListBaseReq) {
+	if params == nil {
+		params = &admin_proto.ListBaseReq{}
 	}
-	if params.Base.PageSize == 0 {
-		params.Base.PageSize = 10
+	if params.PageSize == 0 {
+		params.PageSize = 10
 	}
-	if params.Base.PageNum == 0 {
-		params.Base.PageNum = 1
+	if params.PageNum == 0 {
+		params.PageNum = 1
 	}
-	offset = int((params.Base.PageNum - 1) * params.Base.PageSize)
-	limit = int(params.Base.PageSize)
+	offset = int((params.PageNum - 1) * params.PageSize)
+	limit = int(params.PageSize)
+	data = params
 	return
 }
 
