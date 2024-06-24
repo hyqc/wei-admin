@@ -12,8 +12,15 @@ import (
 )
 
 type IAdminMenu interface {
+	Create(ctx *gin.Context, data *model.AdminMenu) error
+	Update(ctx *gin.Context, data *model.AdminMenu) error
+	Enable(ctx *gin.Context, id int32, enabled bool) error
+	Delete(ctx *gin.Context, id int32) error
 	FindMyMenus(ctx context.Context, adminId, menuId int) ([]*model.AdminMenu, error) // 根据管理员名称查询详情
-	FindAllValid(ctx context.Context) ([]*model.AdminMenu, error)                     // 获取全部有效菜单
+	FindList(ctx *gin.Context, params *admin_proto.MenuListReq) (total int64, list []*model.AdminMenu, err error)
+	FindAll(ctx *gin.Context) ([]*model.AdminMenu, error)         // 全部的菜单，包括禁用的
+	FindAllValid(ctx context.Context) ([]*model.AdminMenu, error) // 获取全部有效菜单
+	FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error)
 }
 
 type AdminMenu struct {
@@ -23,6 +30,26 @@ func NewAdminMenu() *AdminMenu {
 	return &AdminMenu{}
 }
 
+func (a *AdminMenu) Create(ctx *gin.Context, data *model.AdminMenu) error {
+	return query.AdminMenu.WithContext(ctx).Create(data)
+}
+
+func (a *AdminMenu) Update(ctx *gin.Context, data *model.AdminMenu) error {
+	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.Eq(data.ID)).Save(data)
+}
+
+func (a *AdminMenu) Enable(ctx *gin.Context, id int32, enabled bool) error {
+	apiDB := query.AdminMenu
+	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).UpdateColumn(apiDB.IsEnabled, enabled)
+	return err
+}
+
+func (a *AdminMenu) Delete(ctx *gin.Context, id int32) error {
+	apiDB := query.AdminMenu
+	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).Delete()
+	return err
+}
+
 // FindMyMenus 获取我的可以访问的菜单列表
 func (a *AdminMenu) FindMyMenus(ctx context.Context, adminId, menuId int) ([]*model.AdminMenu, error) {
 	return nil, nil
@@ -30,8 +57,13 @@ func (a *AdminMenu) FindMyMenus(ctx context.Context, adminId, menuId int) ([]*mo
 
 // FindAllValid 获取全部有效菜单
 func (a *AdminMenu) FindAllValid(ctx context.Context) ([]*model.AdminMenu, error) {
-	menu := query.AdminMenu.Table(query.AdminMenu.TableName())
+	menu := query.AdminMenu
 	return menu.WithContext(ctx).Where(menu.IsEnabled.Is(true)).Order(menu.Sort, menu.ParentID, menu.ID).Find()
+}
+
+func (a *AdminMenu) FindAll(ctx *gin.Context) ([]*model.AdminMenu, error) {
+	menu := query.AdminMenu
+	return menu.WithContext(ctx).Order(menu.Sort, menu.ParentID, menu.ID).Find()
 }
 
 func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.MenuListReq) (total int64, list []*model.AdminMenu, err error) {
@@ -45,6 +77,10 @@ func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.MenuListReq) 
 	}
 	list, err = q.Order(DB.ParentID, DB.Sort.Desc(), DB.ID).Limit(limit).Offset(offset).Find()
 	return total, list, nil
+}
+
+func (a *AdminMenu) FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error) {
+	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.Eq(id)).First()
 }
 
 func (a *AdminMenu) handleListReqSortField(sortField, sortType string) field.Expr {

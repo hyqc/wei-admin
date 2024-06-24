@@ -29,4 +29,16 @@ func admins(g *gin.RouterGroup) {
 		api.POST("/enable", apiAPI.Enable)
 		api.POST("/delete", apiAPI.Delete)
 	}
+
+	menu := admin.Group("/menu")
+	{
+		menuAPI := adminCtl.MenuController{}
+		menu.GET("/list", menuAPI.List)
+		menu.GET("/tree", menuAPI.Tree)
+		menu.GET("/info", menuAPI.Info)
+		menu.POST("/add", menuAPI.Add)
+		menu.POST("/edit", menuAPI.Edit)
+		menu.POST("/enable", menuAPI.Enable)
+		menu.POST("/delete", menuAPI.Delete)
+	}
 }

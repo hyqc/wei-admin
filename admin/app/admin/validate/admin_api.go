@@ -7,17 +7,17 @@ import (
 	"net/url"
 )
 
-var APIReq = &APIReqValidator{}
+var AdminApiReq = &AdminApiReqValidator{}
 
-type APIReqValidator struct {
+type AdminApiReqValidator struct {
 }
 
 // ListReq 接口列表参数验证
-func (a *APIReqValidator) ListReq(data interface{}) url.Values {
+func (a *AdminApiReqValidator) ListReq(data interface{}) url.Values {
 	return url.Values{}
 }
 
-func (a *APIReqValidator) AddReq(data interface{}) url.Values {
+func (a *AdminApiReqValidator) AddReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiPathRule)},
 		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiKeyRule)},
@@ -38,7 +38,7 @@ func (a *APIReqValidator) AddReq(data interface{}) url.Values {
 	return govalidator.New(opts).ValidateStruct()
 }
 
-func (a *APIReqValidator) InfoReq(data interface{}) url.Values {
+func (a *AdminApiReqValidator) InfoReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
 	}
@@ -53,7 +53,7 @@ func (a *APIReqValidator) InfoReq(data interface{}) url.Values {
 	return govalidator.New(opts).ValidateStruct()
 }
 
-func (a *APIReqValidator) EditReq(data interface{}) url.Values {
+func (a *AdminApiReqValidator) EditReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required", "min:1"},
 		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiPathRule)},
@@ -76,7 +76,7 @@ func (a *APIReqValidator) EditReq(data interface{}) url.Values {
 	return govalidator.New(opts).ValidateStruct()
 }
 
-func (a *APIReqValidator) EnableReq(data interface{}) url.Values {
+func (a *AdminApiReqValidator) EnableReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("id"):      []string{"required", "min:1"},
 		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool"},
@@ -93,7 +93,7 @@ func (a *APIReqValidator) EnableReq(data interface{}) url.Values {
 	return govalidator.New(opts).ValidateStruct()
 }
 
-func (a *APIReqValidator) DeleteReq(data interface{}) url.Values {
+func (a *AdminApiReqValidator) DeleteReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
 	}

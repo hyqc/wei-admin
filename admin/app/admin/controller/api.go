@@ -62,7 +62,7 @@ func (APIController) Add(ctx *gin.Context) {
 	msg := "APIController.Add"
 	params := &admin_proto.ApiAddReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.APIReq.AddReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminApiReq.AddReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -81,7 +81,7 @@ func (APIController) Info(ctx *gin.Context) {
 	msg := "APIController.Info"
 	params := &admin_proto.ApiInfoReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.APIReq.InfoReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminApiReq.InfoReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -102,7 +102,7 @@ func (APIController) Edit(ctx *gin.Context) {
 	msg := "APIController.Edit"
 	params := &admin_proto.ApiEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.APIReq.EditReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminApiReq.EditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -121,7 +121,7 @@ func (APIController) Enable(ctx *gin.Context) {
 	msg := "APIController.Enable"
 	params := &admin_proto.ApiEnableReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.APIReq.EnableReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminApiReq.EnableReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -140,7 +140,7 @@ func (APIController) Delete(ctx *gin.Context) {
 	msg := "APIController.Delete"
 	params := &admin_proto.ApiDeleteReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.APIReq.DeleteReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminApiReq.DeleteReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)

@@ -44,7 +44,7 @@ func (AccountController) Login(ctx *gin.Context) {
 	msg := "AccountController.Login"
 	params := &admin_proto.LoginReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AccountReq.LoginReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminAccountReq.LoginReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -84,7 +84,7 @@ func (AccountController) Edit(ctx *gin.Context) {
 	msg := "AccountController.Edit"
 	params := &admin_proto.AccountEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AccountReq.AccountEditReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -105,7 +105,7 @@ func (AccountController) Password(ctx *gin.Context) {
 	msg := "AccountController.Password"
 	params := &admin_proto.AccountPasswordEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AccountReq.AccountEditPasswordReq); err != nil {
+	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditPasswordReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
 		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)

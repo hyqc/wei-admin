@@ -8,13 +8,13 @@ import (
 	"net/url"
 )
 
-var AccountReq = &AccountReqValidator{}
+var AdminAccountReq = &AdminAccountReqValidator{}
 
-type AccountReqValidator struct {
+type AdminAccountReqValidator struct {
 }
 
 // LoginReq 登录参数验证
-func (a *AccountReqValidator) LoginReq(data interface{}) url.Values {
+func (a *AdminAccountReqValidator) LoginReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("username"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminUsernameRule)},
 		validator.GetValidateJsonOmitemptyTag("password"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
@@ -31,7 +31,7 @@ func (a *AccountReqValidator) LoginReq(data interface{}) url.Values {
 	return govalidator.New(opts).ValidateStruct()
 }
 
-func (a *AccountReqValidator) AccountEditReq(data interface{}) url.Values {
+func (a *AdminAccountReqValidator) AccountEditReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("nickname"): []string{"required", "between:1,32"},
 		validator.GetValidateJsonOmitemptyTag("avatar"):   []string{"url"},
@@ -48,7 +48,7 @@ func (a *AccountReqValidator) AccountEditReq(data interface{}) url.Values {
 	return govalidator.New(opts).ValidateStruct()
 }
 
-func (a *AccountReqValidator) AccountEditPasswordReq(data interface{}) url.Values {
+func (a *AdminAccountReqValidator) AccountEditPasswordReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", "between:6,32"},
 		validator.GetValidateJsonOmitemptyTag("oldPassword"):     []string{"required", "between:6,32"},

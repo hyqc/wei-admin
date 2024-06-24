@@ -22,8 +22,8 @@ type AdminMenu struct {
 	Sort                 int32     `gorm:"column:sort;not null;comment:排序值" json:"sort"`                                                            // 排序值
 	Redirect             string    `gorm:"column:redirect;not null;comment:重定向路径" json:"redirect"`                                                  // 重定向路径
 	Component            string    `gorm:"column:component;not null;comment:组件名称" json:"component"`                                                 // 组件名称
-	IsHideInMenu         int32     `gorm:"column:is_hide_in_menu;not null;comment:是否隐藏：0显示，1隐藏" json:"is_hide_in_menu"`                             // 是否隐藏：0显示，1隐藏
-	IsHideChildrenInMenu int32     `gorm:"column:is_hide_children_in_menu;not null;comment:是否在children中隐藏：1隐藏，0显示" json:"is_hide_children_in_menu"` // 是否在children中隐藏：1隐藏，0显示
+	IsHideInMenu         bool      `gorm:"column:is_hide_in_menu;not null;comment:是否隐藏：0显示，1隐藏" json:"is_hide_in_menu"`                             // 是否隐藏：0显示，1隐藏
+	IsHideChildrenInMenu bool      `gorm:"column:is_hide_children_in_menu;not null;comment:是否在children中隐藏：1隐藏，0显示" json:"is_hide_children_in_menu"` // 是否在children中隐藏：1隐藏，0显示
 	IsEnabled            bool      `gorm:"column:is_enabled;not null;comment:1：启用，0禁用" json:"is_enabled"`                                           // 1：启用，0禁用
 	CreatedAt            time.Time `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`                                               // 创建时间
 	UpdatedAt            time.Time `gorm:"column:updated_at;not null;comment:更新时间" json:"updated_at"`                                               // 更新时间
