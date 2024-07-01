@@ -111,3 +111,18 @@ func (a *AdminMenuReqValidator) DeleteReq(data interface{}) url.Values {
 	}
 	return govalidator.New(opts).ValidateStruct()
 }
+
+func (a *AdminMenuReqValidator) PermissionsReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required:菜单ID不能为空", "min:菜单ID不能小于1"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}

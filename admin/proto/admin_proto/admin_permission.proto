@@ -1,6 +1,7 @@
 syntax = "proto3";
 package admin;
 option go_package = "./admin_proto;admin_proto";
+import "admin_api.proto";
 
 // 权限列表
 message PermissionListReq{}
@@ -41,3 +42,15 @@ message PermissionApisBindResp{}
 message PermissionBindMenuReq{}
 
 message PermissionBindMenuResp{}
+
+message PermissionApiItem{
+  int32 id=1;//权限ID
+  int32 menuId=2;//菜单ID
+  string key=3;//权限键名
+  string type=4;//权限类型
+  string typeText=5;//权限类型
+  string name=6;//权限名称
+  repeated ApiItem apis=7;//接口列表
+  bool enabled=8;//是否启用
+  string describe=9;//权限描述
+}

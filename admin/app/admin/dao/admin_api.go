@@ -19,6 +19,7 @@ type IAdminAPI interface {
 	FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
 	FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error)
+	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error)
 }
 
 type AdminAPI struct {
@@ -67,6 +68,13 @@ func (a *AdminAPI) FindAllValid(ctx context.Context) (list []*model.AdminAPI, er
 
 func (a *AdminAPI) FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error) {
 	return query.AdminAPI.WithContext(ctx).Where(query.AdminAPI.ID.Eq(id)).First()
+}
+
+func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error) {
+	api := query.AdminAPI
+	per := query.AdminPermissionAPI
+	per.WithContext(ctx).Join(api, api.ID.EqCol(per.APIID)).Where(per.PermissionID.In(ids...)).Scan(&data).Error()
+	return data, err
 }
 
 func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr {

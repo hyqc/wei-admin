@@ -9,6 +9,7 @@ import (
 type IAdminPermission interface {
 	FindAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) // 根据管理员名称查询详情
 	FindAdminPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error)
+	FindPermissionsByMenuId(ctx context.Context, menuId int32) ([]*model.AdminPermission, error)
 }
 
 type AdminPermission struct {
@@ -19,21 +20,21 @@ func NewAdminPermission() *AdminPermission {
 }
 
 // FindAdministerPermissions 获取超管对应的权限
-func (p *AdminPermission) FindAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) {
-	permission := query.AdminPermission.Table(query.AdminPermission.TableName())
-	menu := query.AdminMenu.Table(query.AdminMenu.TableName())
+func (a *AdminPermission) FindAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) {
+	permission := query.AdminPermission
+	menu := query.AdminMenu
 	return permission.WithContext(ctx).
 		Join(menu, menu.ID.EqCol(permission.MenuID), menu.IsEnabled.Is(true)).
 		Where(permission.IsEnabled.Is(true)).Order(permission.MenuID).Find()
 }
 
 // FindAdminPermissions 获取非超管对于的权限
-func (p *AdminPermission) FindAdminPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error) {
-	permission := query.AdminPermission.Table(query.AdminPermission.TableName())
-	menu := query.AdminMenu.Table(query.AdminMenu.TableName())
-	role := query.AdminRole.Table(query.AdminRole.TableName())
-	rolePermission := query.AdminRolePermission.Table(query.AdminRolePermission.TableName())
-	userRole := query.AdminUserRole.Table(query.AdminUserRole.TableName())
+func (a *AdminPermission) FindAdminPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error) {
+	permission := query.AdminPermission
+	menu := query.AdminMenu
+	role := query.AdminRole
+	rolePermission := query.AdminRolePermission
+	userRole := query.AdminUserRole
 
 	db := permission.WithContext(ctx).
 		Join(menu, menu.ID.EqCol(permission.MenuID), menu.IsEnabled.Is(true)).
@@ -45,4 +46,9 @@ func (p *AdminPermission) FindAdminPermissions(ctx context.Context, adminId, men
 		db.Where(permission.MenuID.Eq(menuId))
 	}
 	return db.Order(permission.MenuID).Find()
+}
+
+func (a *AdminPermission) FindPermissionsByMenuId(ctx context.Context, menuId int32) ([]*model.AdminPermission, error) {
+	permission := query.AdminPermission
+	return permission.WithContext(ctx).Where(permission.MenuID.Eq(menuId)).Find()
 }

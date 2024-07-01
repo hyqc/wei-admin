@@ -56,3 +56,17 @@ func GetConfigEnv(env string) string {
 	viper.AutomaticEnv()
 	return viper.GetString(env)
 }
+
+func Deduplicate[T comparable](slice []T) []T {
+	seen := make(map[T]struct{})
+	var result []T
+
+	for _, value := range slice {
+		if _, ok := seen[value]; !ok {
+			seen[value] = struct{}{}
+			result = append(result, value)
+		}
+	}
+
+	return result
+}

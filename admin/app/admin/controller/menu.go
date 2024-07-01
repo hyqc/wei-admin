@@ -164,7 +164,24 @@ func (MenuController) Delete(ctx *gin.Context) {
 
 // Permissions 菜单权限列表
 func (MenuController) Permissions(ctx *gin.Context) {
-
+	msg := "MenuController.Permissions"
+	params := &admin_proto.MenuPermissionsReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminMenuReq.PermissionsReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	data, err := menuLogic.Permissions(ctx, params)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	result.SetData(data)
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }
 
 // Pages 页面菜单列表

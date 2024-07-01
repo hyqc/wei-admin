@@ -2,6 +2,7 @@ syntax = "proto3";
 package admin;
 option go_package = "./admin_proto;admin_proto";
 import "common.proto";
+import "admin_permission.proto";
 
 message MenuItem{
   string key = 1; // 菜单唯一键
@@ -133,7 +134,10 @@ message MenuPermissionsReq{
   int32 menuId = 1;//菜单ID
 }
 
-message MenuPermissionsRespData{}
+message MenuPermissions{
+  MenuTreeItem menu=1;
+  repeated PermissionApiItem permissions=2;
+}
 
 // 页面菜单列表
 message MenuPagesReq{

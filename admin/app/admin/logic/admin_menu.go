@@ -140,6 +140,56 @@ func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.MenuDelete
 	return a.db.Delete(ctx, params.MenuId)
 }
 
+func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.MenuPermissionsReq) (*admin_proto.MenuPermissions, error) {
+	info, err := a.db.FindById(ctx, params.MenuId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return nil, err
+	}
+	data := &admin_proto.MenuPermissions{
+		Menu:        &admin_proto.MenuTreeItem{},
+		Permissions: make([]*admin_proto.PermissionApiItem, 0),
+	}
+	_ = utils.BeanCopy(data.Menu, info)
+	permissions, err := adminPermissionDao.FindPermissionsByMenuId(ctx, info.ID)
+	if err != nil {
+		return nil, err
+	}
+	if len(permissions) == 0 {
+		data.Permissions = common.AdminPermissionEnumList(info.ID, info.Key)
+		return data, nil
+	}
+	// TODO
+	permissionIdsMap := make(map[int32]struct{})
+	permissionIds := make([]int32, 0, len(permissions))
+	for _, item := range permissions {
+		if _, ok := permissionIdsMap[item.ID]; !ok {
+			permissionIdsMap[item.ID] = struct{}{}
+			permissionIds = append(permissionIds, item.ID)
+		}
+
+	}
+	apiList, err := adminAPIDao.FindByPermissionIds(ctx, permissionIds)
+	if err != nil {
+		return nil, err
+	}
+	apiMap := make(map[int32][]*admin_proto.ApiItem)
+	for _, item := range apiList {
+		if _, ok := apiMap[item.PermissionId]; !ok {
+			apiMap[item.PermissionId] = make([]*admin_proto.ApiItem, 0, len(apiList))
+		}
+		apiMap[item.PermissionId] = append(apiMap[item.PermissionId], item)
+	}
+	for _, item := range data.Permissions {
+		if val, ok := apiMap[item.Id]; ok {
+			item.Apis = val
+		}
+	}
+	return data, nil
+}
+
 func (a *AdminMenuLogic) HandleListData(list []*model.AdminMenu) (rows []*admin_proto.MenuItem, err error) {
 	for _, item := range list {
 		data, err := a.HandleItemData(item)
