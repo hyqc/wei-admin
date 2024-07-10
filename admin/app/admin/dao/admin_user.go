@@ -16,7 +16,7 @@ type IAdminUser interface {
 type AdminUser struct {
 }
 
-func NewAdminUser() *AdminUser {
+func newAdminUser() *AdminUser {
 	return &AdminUser{}
 }
 

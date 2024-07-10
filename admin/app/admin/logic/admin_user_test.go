@@ -47,7 +47,7 @@ func teardown() {
 }
 
 func TestAdminUserService_Login(t *testing.T) {
-	srv := NewAdminUserLogic()
+	srv := newAdminUserLogic()
 	resp, err := srv.Login(context.Background(), &admin_proto.LoginReq{
 		Username: "admin_proto",
 		Password: "123456",

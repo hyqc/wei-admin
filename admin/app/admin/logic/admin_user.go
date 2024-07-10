@@ -2,11 +2,8 @@ package logic
 
 import (
 	"admin/app/admin/dao"
-	"admin/app/gen/model"
 	"admin/code"
 	"admin/config"
-	"admin/pkg/core"
-	"admin/pkg/utils"
 	"admin/pkg/utils/pwd"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
@@ -16,17 +13,23 @@ import (
 )
 
 type AdminUserLogic struct {
-	*dao.AdminUser
 }
 
-func NewAdminUserLogic() *AdminUserLogic {
-	return &AdminUserLogic{
-		dao.NewAdminUser(),
-	}
+type IAdminUserLogic interface {
+	Login(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error)
+	Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error)
+	Edit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error
+	EditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error
+	MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error)
+	MyPermission(ctx *gin.Context, adminId int32) (permissionKeys map[string]string, err error)
+}
+
+func newAdminUserLogic() IAdminUserLogic {
+	return &AdminUserLogic{}
 }
 
 func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error) {
-	data, err := a.FindAdminUserByUsername(ctx, params.Username)
+	data, err := dao.H.AdminUser.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +37,7 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq
 		return nil, code.NewCodeError(code_proto.ErrorCode_AdminAccountPasswordInvalid, nil)
 	}
 
-	result, err := a.getMyInfo(ctx, data, true, config.AppConfig.Server.JWT.UsefulLife)
+	result, err := getAccountInfo(ctx, data, true, config.AppConfig.Server.JWT.UsefulLife)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +47,7 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq
 	data.LoginTotal += 1
 	ip, err := dao.SetAdminUserLastLoginIp(clientIp, data.LastLoginIP)
 	data.LastLoginIP = ip
-	if err := a.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
+	if err := dao.H.AdminUser.UpdateAdminUserLoginData(ctx, data.ID, data); err != nil {
 		return nil, err
 	}
 
@@ -52,27 +55,27 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq
 }
 
 func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
-	data, err := a.FindAdminUserByAdminId(ctx, adminId)
+	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return nil, err
 	}
 
-	return a.getMyInfo(ctx, data, refreshToken, seconds)
+	return getAccountInfo(ctx, data, refreshToken, seconds)
 }
 
 func (a *AdminUserLogic) Edit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error {
-	data, err := a.FindAdminUserByAdminId(ctx, adminId)
+	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
 	}
 	data.Nickname = params.Nickname
 	data.Avatar = params.Avatar
 	data.Email = params.Email
-	return a.UpdateAdminUser(ctx, data)
+	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
 
 func (a *AdminUserLogic) EditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error {
-	data, err := a.FindAdminUserByAdminId(ctx, adminId)
+	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
 	}
@@ -83,7 +86,7 @@ func (a *AdminUserLogic) EditPassword(ctx *gin.Context, adminId int32, params *a
 	if err != nil {
 		return err
 	}
-	return a.UpdateAdminUser(ctx, data)
+	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
 
 func (a *AdminUserLogic) MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error) {
@@ -93,64 +96,10 @@ func (a *AdminUserLogic) MyMenus(ctx *gin.Context, adminId int32) (menus []*admi
 
 func (a *AdminUserLogic) MyPermission(ctx *gin.Context, adminId int32) (permissionKeys map[string]string, err error) {
 	// 权限
-	permissions, err := AdminPermissionSrv.FindMyPermission(ctx, adminId)
+	permissions, err := getMyAdminPermissions(ctx, adminId)
 	if err != nil {
 		return nil, err
 	}
-	_, permissionKeys = AdminPermissionSrv.Permissions2MenuIds(permissions)
+	_, permissionKeys = getMenuIdsFromAdminPermissions(permissions)
 	return permissionKeys, nil
-}
-
-func (a *AdminUserLogic) getMyInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
-	data.Password = ""
-	resp := &admin_proto.AdminInfo{}
-	if err := utils.BeanCopy(resp, data); err != nil {
-		return nil, err
-	}
-	if refreshToken {
-		token, err := a.createToken(data.ID, data.Username, seconds)
-		if err != nil {
-			return nil, err
-		}
-		resp.Token = token
-	}
-
-	// 菜单
-	menus, perms, err := getMyMenusAndPermissions(ctx, data.ID)
-	if err != nil {
-		return nil, err
-	}
-	resp.Menus = menus
-	resp.Permissions = perms
-
-	return resp, err
-}
-
-func (a *AdminUserLogic) createToken(adminId int32, username string, seconds int64) (string, error) {
-	// 生成token
-	jti, err := core.Sonyflake.NextID()
-	if err != nil {
-		return "", err
-	}
-	token, err := core.JWTCreate(core.CustomClaimsOption{
-		AccountId:     adminId,
-		AccountName:   username,
-		ExpireSeconds: time.Duration(seconds),
-		UUID:          jti,
-		Secret:        config.AppConfig.Server.JWT.Secret,
-	})
-	return token, err
-}
-
-func getMyMenusAndPermissions(ctx context.Context, adminId int32) (menus []*admin_proto.MenuItem, permissionKeys map[string]string, err error) {
-	// 权限
-	permissions, err := AdminPermissionSrv.FindMyPermission(ctx, adminId)
-	if err != nil {
-		return nil, nil, err
-	}
-	pageIds, permissionKeys := AdminPermissionSrv.Permissions2MenuIds(permissions)
-
-	// 菜单
-	menus, err = AdminMenuSrv.getMyMenusMap(ctx, pageIds)
-	return menus, permissionKeys, err
 }

@@ -25,7 +25,7 @@ type IAdminAPI interface {
 type AdminAPI struct {
 }
 
-func NewAdminAPI() *AdminAPI {
+func newAdminAPI() *AdminAPI {
 	return &AdminAPI{}
 }
 

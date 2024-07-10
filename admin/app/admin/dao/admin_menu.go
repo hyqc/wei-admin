@@ -21,12 +21,13 @@ type IAdminMenu interface {
 	FindAll(ctx *gin.Context) ([]*model.AdminMenu, error)         // 全部的菜单，包括禁用的
 	FindAllValid(ctx context.Context) ([]*model.AdminMenu, error) // 获取全部有效菜单
 	FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error)
+	FindPages(ctx *gin.Context) ([]*model.AdminMenu, error) // 查找与权限直接关联的菜单
 }
 
 type AdminMenu struct {
 }
 
-func NewAdminMenu() *AdminMenu {
+func newAdminMenu() *AdminMenu {
 	return &AdminMenu{}
 }
 
@@ -81,6 +82,15 @@ func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.MenuListReq) 
 
 func (a *AdminMenu) FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error) {
 	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.Eq(id)).First()
+}
+
+func (a *AdminMenu) FindPages(ctx *gin.Context) ([]*model.AdminMenu, error) {
+	DB := query.AdminMenu
+	perDB := query.AdminPermission
+	return DB.WithContext(ctx).Distinct(DB.ID).
+		Join(perDB, DB.ID.EqCol(perDB.MenuID)).
+		Where(DB.IsEnabled.Is(true), DB.IsHideInMenu.Is(true)).
+		Find()
 }
 
 func (a *AdminMenu) handleListReqSortField(sortField, sortType string) field.Expr {

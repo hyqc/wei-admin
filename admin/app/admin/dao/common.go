@@ -5,6 +5,24 @@ import (
 	"strings"
 )
 
+type AdminDao struct {
+	AdminUser       IAdminUser
+	AdminPermission IAdminPermission
+	AdminMenu       IAdminMenu
+	AdminAPI        IAdminAPI
+}
+
+var H = newAdminDao()
+
+func newAdminDao() *AdminDao {
+	return &AdminDao{
+		AdminUser:       newAdminUser(),
+		AdminPermission: newAdminPermission(),
+		AdminMenu:       newAdminMenu(),
+		AdminAPI:        newAdminAPI(),
+	}
+}
+
 // HandleAdminUserLastLoginIp 处理AdminUser.LastLoginIp，最多保存上一次登录的IP和本次登录的IP
 func HandleAdminUserLastLoginIp(ips string) ([]string, error) {
 	arr := make([]string, 0, 3)

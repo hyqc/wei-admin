@@ -19,10 +19,6 @@ type AccountController struct {
 	core.Controller
 }
 
-var (
-	accountLogic = logic.NewAdminUserLogic()
-)
-
 func (AccountController) Register(ctx *gin.Context) {
 	msg := "AccountController.Register"
 	result := code.NewCode(code_proto.ErrorCode_Success)
@@ -50,7 +46,7 @@ func (AccountController) Login(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	data, err := accountLogic.Login(ctx, params, ctx.ClientIP())
+	data, err := logic.H.AdminUser.Login(ctx, params, ctx.ClientIP())
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -67,7 +63,7 @@ func (AccountController) Info(ctx *gin.Context) {
 	msg := "AccountController.Info"
 	refreshToken := ctx.GetBool("refreshToken")
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := accountLogic.Info(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, 3600)
+	data, err := logic.H.AdminUser.Info(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, 3600)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -90,7 +86,7 @@ func (AccountController) Edit(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	err := accountLogic.Edit(ctx, constant.GetCustomClaims(ctx).AdminID, params)
+	err := logic.H.AdminUser.Edit(ctx, constant.GetCustomClaims(ctx).AdminID, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -111,7 +107,7 @@ func (AccountController) Password(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	err := accountLogic.EditPassword(ctx, constant.GetCustomClaims(ctx).AdminID, params)
+	err := logic.H.AdminUser.EditPassword(ctx, constant.GetCustomClaims(ctx).AdminID, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -125,7 +121,7 @@ func (AccountController) Password(ctx *gin.Context) {
 func (AccountController) Menu(ctx *gin.Context) {
 	msg := "AccountController.Menu"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := accountLogic.MyMenus(ctx, constant.GetCustomClaims(ctx).AdminID)
+	data, err := logic.H.AdminUser.MyMenus(ctx, constant.GetCustomClaims(ctx).AdminID)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -139,7 +135,7 @@ func (AccountController) Menu(ctx *gin.Context) {
 func (AccountController) Permission(ctx *gin.Context) {
 	msg := "AccountController.Permission"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := accountLogic.MyPermission(ctx, constant.GetCustomClaims(ctx).AdminID)
+	data, err := logic.H.AdminUser.MyPermission(ctx, constant.GetCustomClaims(ctx).AdminID)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return

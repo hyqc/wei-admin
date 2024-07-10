@@ -126,3 +126,7 @@ func (a *AdminMenuReqValidator) PermissionsReq(data interface{}) url.Values {
 	}
 	return govalidator.New(opts).ValidateStruct()
 }
+
+func (a *AdminMenuReqValidator) PagesReq(data interface{}) url.Values {
+	return url.Values{}
+}

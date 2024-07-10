@@ -14,17 +14,24 @@ import (
 )
 
 type AdminAPILogic struct {
-	db *dao.AdminAPI
 }
 
-func NewAdminAPILogic() *AdminAPILogic {
-	return &AdminAPILogic{
-		db: adminAPIDao,
-	}
+type IAdminAPILogic interface {
+	List(ctx *gin.Context, params *admin_proto.ApiListReq) (data *admin_proto.ApiListResp, err error)
+	AllValid(ctx *gin.Context) (list []*admin_proto.ApiItem, err error)
+	Add(ctx *gin.Context, params *admin_proto.ApiAddReq) (err error)
+	Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (*admin_proto.ApiItem, error)
+	Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) error
+	Enable(ctx *gin.Context, params *admin_proto.ApiEnableReq) error
+	Delete(ctx *gin.Context, params *admin_proto.ApiDeleteReq) error
+}
+
+func newAdminAPILogic() IAdminAPILogic {
+	return &AdminAPILogic{}
 }
 
 func (a *AdminAPILogic) List(ctx *gin.Context, params *admin_proto.ApiListReq) (data *admin_proto.ApiListResp, err error) {
-	total, rows, err := a.db.FindList(ctx, params)
+	total, rows, err := dao.H.AdminAPI.FindList(ctx, params)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +65,7 @@ func (a *AdminAPILogic) HandleItemData(item *model.AdminAPI) (data *admin_proto.
 }
 
 func (a *AdminAPILogic) AllValid(ctx *gin.Context) (list []*admin_proto.ApiItem, err error) {
-	data, err := a.db.FindAllValid(ctx)
+	data, err := dao.H.AdminAPI.FindAllValid(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +81,7 @@ func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ApiAddReq) (er
 		Describe:  params.Describe,
 		IsEnabled: params.Enabled,
 	}
-	if err := a.db.Create(ctx, data); err != nil {
+	if err := dao.H.AdminAPI.Create(ctx, data); err != nil {
 		msg := err.Error()
 		if strings.Contains(msg, "uk_name") {
 			return code.NewCodeError(code_proto.ErrorCode_AdminApiNameExist, err)
@@ -91,7 +98,7 @@ func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ApiAddReq) (er
 }
 
 func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (*admin_proto.ApiItem, error) {
-	data, err := a.db.FindById(ctx, params.Id)
+	data, err := dao.H.AdminAPI.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -102,7 +109,7 @@ func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (
 }
 
 func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) error {
-	info, err := a.db.FindById(ctx, params.Id)
+	info, err := dao.H.AdminAPI.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -114,11 +121,11 @@ func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) e
 	info.Name = params.Name
 	info.Describe = params.Describe
 	info.IsEnabled = params.Enabled
-	return a.db.Update(ctx, info)
+	return dao.H.AdminAPI.Update(ctx, info)
 }
 
 func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableReq) error {
-	info, err := a.db.FindById(ctx, params.Id)
+	info, err := dao.H.AdminAPI.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -128,11 +135,11 @@ func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableRe
 	if info.IsEnabled == params.Enabled {
 		return nil
 	}
-	return a.db.Enable(ctx, params.Id, params.Enabled)
+	return dao.H.AdminAPI.Enable(ctx, params.Id, params.Enabled)
 }
 
 func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ApiDeleteReq) error {
-	info, err := a.db.FindById(ctx, params.Id)
+	info, err := dao.H.AdminAPI.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -142,5 +149,5 @@ func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ApiDeleteRe
 	if info.IsEnabled {
 		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
 	}
-	return a.db.Delete(ctx, params.Id)
+	return dao.H.AdminAPI.Delete(ctx, params.Id)
 }

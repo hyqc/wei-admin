@@ -19,10 +19,6 @@ type APIController struct {
 	core.Controller
 }
 
-var (
-	apiLogic = logic.NewAdminAPILogic()
-)
-
 func (APIController) List(ctx *gin.Context) {
 	msg := "APIController.List"
 	params := &admin_proto.ApiListReq{Base: common.NewListBaseReq()}
@@ -33,7 +29,7 @@ func (APIController) List(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	data, err := apiLogic.List(ctx, params)
+	data, err := logic.H.AdminAPI.List(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -47,7 +43,7 @@ func (APIController) List(ctx *gin.Context) {
 func (APIController) All(ctx *gin.Context) {
 	msg := "APIController.All"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := apiLogic.AllValid(ctx)
+	data, err := logic.H.AdminAPI.AllValid(ctx)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -68,7 +64,7 @@ func (APIController) Add(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := apiLogic.Add(ctx, params); err != nil {
+	if err := logic.H.AdminAPI.Add(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
@@ -87,7 +83,7 @@ func (APIController) Info(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	info, err := apiLogic.Info(ctx, params)
+	info, err := logic.H.AdminAPI.Info(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -108,7 +104,7 @@ func (APIController) Edit(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := apiLogic.Edit(ctx, params); err != nil {
+	if err := logic.H.AdminAPI.Edit(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
@@ -127,7 +123,7 @@ func (APIController) Enable(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := apiLogic.Enable(ctx, params); err != nil {
+	if err := logic.H.AdminAPI.Enable(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
@@ -146,7 +142,7 @@ func (APIController) Delete(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := apiLogic.Delete(ctx, params); err != nil {
+	if err := logic.H.AdminAPI.Delete(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}

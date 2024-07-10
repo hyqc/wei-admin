@@ -19,10 +19,6 @@ type MenuController struct {
 	core.Controller
 }
 
-var (
-	menuLogic = logic.NewAdminMenuLogic()
-)
-
 // List 菜单列表
 func (MenuController) List(ctx *gin.Context) {
 	msg := "MenuController.List"
@@ -34,7 +30,7 @@ func (MenuController) List(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	data, err := menuLogic.List(ctx, params)
+	data, err := logic.H.AdminMenu.List(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -49,7 +45,7 @@ func (MenuController) List(ctx *gin.Context) {
 func (MenuController) Tree(ctx *gin.Context) {
 	msg := "MenuController.Tree"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := menuLogic.Tree(ctx)
+	data, err := logic.H.AdminMenu.Tree(ctx)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -71,7 +67,7 @@ func (MenuController) Add(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := menuLogic.Add(ctx, params); err != nil {
+	if err := logic.H.AdminMenu.Add(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
@@ -91,7 +87,7 @@ func (MenuController) Info(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	info, err := menuLogic.Info(ctx, params)
+	info, err := logic.H.AdminMenu.Info(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -113,7 +109,7 @@ func (MenuController) Edit(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := menuLogic.Edit(ctx, params); err != nil {
+	if err := logic.H.AdminMenu.Edit(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
@@ -133,7 +129,7 @@ func (MenuController) Enable(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := menuLogic.Enable(ctx, params); err != nil {
+	if err := logic.H.AdminMenu.Enable(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
@@ -153,7 +149,7 @@ func (MenuController) Delete(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	if err := menuLogic.Delete(ctx, params); err != nil {
+	if err := logic.H.AdminMenu.Delete(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
@@ -173,7 +169,7 @@ func (MenuController) Permissions(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	data, err := menuLogic.Permissions(ctx, params)
+	data, err := logic.H.AdminMenu.Permissions(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -186,7 +182,24 @@ func (MenuController) Permissions(ctx *gin.Context) {
 
 // Pages 页面菜单列表
 func (MenuController) Pages(ctx *gin.Context) {
-
+	msg := "MenuController.Permissions"
+	params := &admin_proto.MenuPagesReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminMenuReq.PagesReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	data, err := logic.H.AdminMenu.Pages(ctx, params)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	result.SetData(data)
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }
 
 // Mode 页面模块权限列表

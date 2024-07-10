@@ -1,15 +1,35 @@
 syntax = "proto3";
 package admin;
 option go_package = "./admin_proto;admin_proto";
+import "common.proto";
 
-// 账号列表
-message UserListParamsReq{
-  string username = 1;//账号
-  string nickname = 2;//昵称
-  repeated int32 roleIds = 3;// 角色
+// 账号列表请求参数
+message AdminUserListParamsReq{
+  ListBaseReq base = 1;
+  string username = 2;//账号
+  string nickname = 3;//昵称
+  string email = 4; //邮箱
+  repeated int32 roleIds = 5;// 角色ID
 }
 
-message UserListParamsResp{}
+message AdminUserListItem{
+  int32 adminId=1;//账号ID
+  string username=2;//管理员名称
+  string email=3;//邮箱
+  string avatar=4;//头像地址
+  bool enabled=5;//启用状态
+  string enabledText=6;//启用状态
+  string createdAt=7;//创建时间
+  string updatedAt=8;//更新时间
+  int64 loginTotal=9;//登录次数
+  string lastLoginIp=10;//最后登录IP
+  string lastLoginTime=11;//最后登录时间
+}
+
+message AdminUserListParamsResp{
+  int64 total = 1;
+  repeated AdminUserListItem rows = 2;
+}
 
 // 账号详情
 message UserDetailParamsReq{

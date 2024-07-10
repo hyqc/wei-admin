@@ -8,35 +8,43 @@ import (
 	"admin/pkg/utils"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
-	"context"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type AdminMenuLogic struct {
-	db *dao.AdminMenu
 }
 
-func NewAdminMenuLogic() *AdminMenuLogic {
-	return &AdminMenuLogic{
-		db: adminMenuDao,
-	}
+type IAdminMenuLogic interface {
+	List(ctx *gin.Context, params *admin_proto.MenuListReq) (data *admin_proto.MenuListRespData, err error)
+	Tree(ctx *gin.Context) ([]*admin_proto.MenuTreeItem, error)
+	Add(ctx *gin.Context, params *admin_proto.MenuAddReq) error
+	Info(ctx *gin.Context, params *admin_proto.MenuInfoReq) (*admin_proto.MenuItem, error)
+	Edit(ctx *gin.Context, params *admin_proto.MenuEditReq) error
+	Enable(ctx *gin.Context, params *admin_proto.MenuEnableReq) error
+	Delete(ctx *gin.Context, params *admin_proto.MenuDeleteReq) error
+	Permissions(ctx *gin.Context, params *admin_proto.MenuPermissionsReq) (*admin_proto.MenuPermissions, error)
+	Pages(ctx *gin.Context, params *admin_proto.MenuPagesReq) (list []*admin_proto.MenuTreeItem, err error)
+}
+
+func newAdminMenuLogic() IAdminMenuLogic {
+	return &AdminMenuLogic{}
 }
 
 func (a *AdminMenuLogic) List(ctx *gin.Context, params *admin_proto.MenuListReq) (data *admin_proto.MenuListRespData, err error) {
-	total, rows, err := a.db.FindList(ctx, params)
+	total, rows, err := dao.H.AdminMenu.FindList(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 	data = &admin_proto.MenuListRespData{}
 	data.Total = total
-	data.Rows, err = a.HandleListData(rows)
+	data.Rows, err = a.handleListData(rows)
 	return data, err
 }
 
 func (a *AdminMenuLogic) Tree(ctx *gin.Context) ([]*admin_proto.MenuTreeItem, error) {
-	allMenus, err := a.db.FindAll(ctx)
+	allMenus, err := dao.H.AdminMenu.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -76,22 +84,22 @@ func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.MenuAddReq) e
 		IsHideChildrenInMenu: params.HideChildrenInMenu,
 		IsEnabled:            params.Enabled,
 	}
-	return a.db.Create(ctx, data)
+	return dao.H.AdminMenu.Create(ctx, data)
 }
 
 func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.MenuInfoReq) (*admin_proto.MenuItem, error) {
-	data, err := a.db.FindById(ctx, params.MenuId)
+	data, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
 		}
 		return nil, err
 	}
-	return a.HandleItemData(data)
+	return a.handleItemData(data)
 }
 
 func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.MenuEditReq) error {
-	info, err := a.db.FindById(ctx, params.MenuId)
+	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -109,11 +117,11 @@ func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.MenuEditReq)
 	info.IsHideInMenu = params.HideInMenu
 	info.IsHideChildrenInMenu = params.HideChildrenInMenu
 	info.IsEnabled = params.Enabled
-	return a.db.Update(ctx, info)
+	return dao.H.AdminMenu.Update(ctx, info)
 }
 
 func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.MenuEnableReq) error {
-	info, err := a.db.FindById(ctx, params.MenuId)
+	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -123,11 +131,11 @@ func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.MenuEnable
 	if info.IsEnabled == params.Enabled {
 		return nil
 	}
-	return a.db.Enable(ctx, params.MenuId, params.Enabled)
+	return dao.H.AdminMenu.Enable(ctx, params.MenuId, params.Enabled)
 }
 
 func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.MenuDeleteReq) error {
-	info, err := a.db.FindById(ctx, params.MenuId)
+	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -137,11 +145,11 @@ func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.MenuDelete
 	if info.IsEnabled {
 		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
 	}
-	return a.db.Delete(ctx, params.MenuId)
+	return dao.H.AdminMenu.Delete(ctx, params.MenuId)
 }
 
 func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.MenuPermissionsReq) (*admin_proto.MenuPermissions, error) {
-	info, err := a.db.FindById(ctx, params.MenuId)
+	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -153,7 +161,7 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.MenuP
 		Permissions: make([]*admin_proto.PermissionApiItem, 0),
 	}
 	_ = utils.BeanCopy(data.Menu, info)
-	permissions, err := adminPermissionDao.FindPermissionsByMenuId(ctx, info.ID)
+	permissions, err := dao.H.AdminPermission.FindPermissionsByMenuId(ctx, info.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +179,7 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.MenuP
 		}
 
 	}
-	apiList, err := adminAPIDao.FindByPermissionIds(ctx, permissionIds)
+	apiList, err := dao.H.AdminAPI.FindByPermissionIds(ctx, permissionIds)
 	if err != nil {
 		return nil, err
 	}
@@ -190,9 +198,25 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.MenuP
 	return data, nil
 }
 
-func (a *AdminMenuLogic) HandleListData(list []*model.AdminMenu) (rows []*admin_proto.MenuItem, err error) {
+func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.MenuPagesReq) (list []*admin_proto.MenuTreeItem, err error) {
+	//data, err := dao.H.AdminMenu.FindPages(ctx)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//if params.All {
+	//	list = append(list, &admin_proto.MenuTreeItem{
+	//		Level: 0,
+	//		Id:    0,
+	//		Key:   "All",
+	//		Name:  "全部",
+	//	})
+	//}
+	return
+}
+
+func (a *AdminMenuLogic) handleListData(list []*model.AdminMenu) (rows []*admin_proto.MenuItem, err error) {
 	for _, item := range list {
-		data, err := a.HandleItemData(item)
+		data, err := a.handleItemData(item)
 		if err != nil {
 			return nil, err
 		}
@@ -201,97 +225,11 @@ func (a *AdminMenuLogic) HandleListData(list []*model.AdminMenu) (rows []*admin_
 	return rows, nil
 }
 
-func (a *AdminMenuLogic) HandleItemData(item *model.AdminMenu) (data *admin_proto.MenuItem, err error) {
+func (a *AdminMenuLogic) handleItemData(item *model.AdminMenu) (data *admin_proto.MenuItem, err error) {
 	data = &admin_proto.MenuItem{}
 	err = utils.BeanCopy(data, item)
 	if err != nil {
 		return nil, err
 	}
 	return data, nil
-}
-
-func (a *AdminMenuLogic) getMyMenusMap(ctx context.Context, pageIds []int32) ([]*admin_proto.MenuItem, error) {
-	allMenus, err := a.db.FindAllValid(ctx)
-	if err != nil {
-		return nil, err
-	}
-	allMenusMap := make(map[int32]*model.AdminMenu)
-	for _, item := range allMenus {
-		allMenusMap[item.ID] = item
-	}
-	arr1 := getAllRelatedMenusByPageIds(allMenusMap, pageIds)
-	arr2 := getAllChildrenPagesByPageIds(allMenusMap, pageIds)
-	arr := append(arr1, arr2...)
-	menus := make([]*admin_proto.MenuItem, 0, len(arr))
-	m := make(map[string]struct{}, len(arr))
-	for _, item := range arr {
-		if _, ok := m[item.Key]; !ok {
-			m[item.Key] = struct{}{}
-			menus = append(menus, item)
-		}
-	}
-	return menus, nil
-}
-
-func getAllRelatedMenusByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*admin_proto.MenuItem) {
-	for _, pageId := range pageIds {
-		arr := getAllFatherMenuByChildrenId(menusMap, pageId)
-		if len(arr) > 0 {
-			data = append(data, arr...)
-		}
-	}
-	return data
-}
-
-func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds []int32) (data []*admin_proto.MenuItem) {
-	for _, pageId := range pageIds {
-		arr := getAllChildrenMenuByChildrenId(menusMap, pageId)
-		if len(arr) > 0 {
-			data = append(data, arr...)
-		}
-	}
-	return data
-}
-
-func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*admin_proto.MenuItem) {
-	if menu, ok := menusMap[parentId]; ok {
-		data = append(data, &admin_proto.MenuItem{
-			Key:       menu.Key,
-			Path:      menu.Path,
-			Name:      menu.Name,
-			Icon:      menu.Icon,
-			Component: menu.Component,
-		})
-		arr := getAllFatherMenuByChildrenId(menusMap, menu.ParentID)
-		if len(arr) > 0 {
-			data = append(data, arr...)
-		}
-	}
-	return data
-}
-
-func getAllChildrenMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*admin_proto.MenuItem) {
-	for menuId, menu := range menusMap {
-		if menu.ParentID == parentId {
-			data = append(data, &admin_proto.MenuItem{
-				Key:       menu.Key,
-				Path:      menu.Path,
-				Name:      menu.Name,
-				Icon:      menu.Icon,
-				Component: menu.Component,
-			})
-
-			tmpIds := make(map[int32]*model.AdminMenu)
-			for _, item := range menusMap {
-				if item.ParentID != parentId {
-					tmpIds[item.ID] = item
-				}
-			}
-			arr := getAllChildrenMenuByChildrenId(menusMap, menuId)
-			if len(arr) > 0 {
-				data = append(data, arr...)
-			}
-		}
-	}
-	return data
 }

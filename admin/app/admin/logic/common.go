@@ -1,14 +1,21 @@
 package logic
 
-import "admin/app/admin/dao"
+type AdminLogic struct {
+	AdminUser       IAdminUserLogic
+	AdminAPI        IAdminAPILogic
+	AdminMenu       IAdminMenuLogic
+	AdminPermission IAdminPermissionLogic
+	AdminRole       IAdminRoleLogic
+}
 
-var (
-	adminUserDao       = dao.NewAdminUser()
-	adminMenuDao       = dao.NewAdminMenu()
-	adminPermissionDao = dao.NewAdminPermission()
-	adminAPIDao        = dao.NewAdminAPI()
+func newAdminLogic() *AdminLogic {
+	return &AdminLogic{
+		AdminUser:       newAdminUserLogic(),
+		AdminAPI:        newAdminAPILogic(),
+		AdminMenu:       newAdminMenuLogic(),
+		AdminPermission: newAdminPermissionLogic(),
+		AdminRole:       newAdminRoleLogic(),
+	}
+}
 
-	AdminUserSrv       = NewAdminUserLogic()
-	AdminMenuSrv       = NewAdminMenuLogic()
-	AdminPermissionSrv = NewAdminPermissionLogic()
-)
+var H = newAdminLogic()

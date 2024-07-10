@@ -1,12 +1,35 @@
 syntax = "proto3";
 package admin;
 option go_package = "./admin_proto;admin_proto";
+import "common.proto";
 import "admin_api.proto";
 
-// 权限列表
-message PermissionListReq{}
+message PermissionInfo{
+  int32 id=1;//权限ID
+  int32 menuId=2;//权限对应的菜单ID
+  string menuName=3;//菜单名称
+  string menuPath=4;//菜单路由
+  repeated ApiItem apis=5; //接口列表
+  string key=6;//权限唯一标识符
+  string name=7;//权限名称
+  string describe=8;//权限描述
+  string type=9;//权限类型
+  string typeText=10;//权限类型
+  string redirect=11;//重定向地址
+  bool enabled=12;//是否启用
+  string createdAt=13;
+  string updatedAt=14;
+}
 
-message PermissionListResp{}
+// 权限列表
+message PermissionListReq{
+  ListBaseReq base=1;
+}
+
+message PermissionListRespData{
+  int64 total = 1;
+  repeated PermissionInfo rows = 2;
+}
 
 // 创建权限
 message PermissionAddReq{}
