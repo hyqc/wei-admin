@@ -21,7 +21,8 @@ type IAdminMenu interface {
 	FindAll(ctx *gin.Context) ([]*model.AdminMenu, error)         // 全部的菜单，包括禁用的
 	FindAllValid(ctx context.Context) ([]*model.AdminMenu, error) // 获取全部有效菜单
 	FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error)
-	FindPages(ctx *gin.Context) ([]*model.AdminMenu, error) // 查找与权限直接关联的菜单
+	FindPages(ctx *gin.Context) ([]*model.AdminMenu, error)
+	FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminMenu, error) // 查找与权限直接关联的菜单
 }
 
 type AdminMenu struct {

@@ -39,3 +39,18 @@ func (a *AdminPermissionReqValidator) AddReq(data interface{}) url.Values {
 	}
 	return govalidator.New(opts).ValidateStruct()
 }
+
+func (a *AdminPermissionReqValidator) InfoReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:权限ID不能为空", "min:权限ID无效"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}
