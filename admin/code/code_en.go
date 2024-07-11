@@ -23,4 +23,7 @@ var enMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminApiNameExist: "api name exist",
 	code_proto.ErrorCode_AdminApiPathExist: "api path exist",
 	code_proto.ErrorCode_AdminApiKeyExist:  "api key exist",
+
+	code_proto.ErrorCode_AdminPermissionKeyExist: "permission key exist",
+	code_proto.ErrorCode_AdminPermissionExist:    "permission exist",
 }

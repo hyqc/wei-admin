@@ -50,14 +50,14 @@ func (a *AdminAccountReqValidator) AccountEditReq(data interface{}) url.Values {
 
 func (a *AdminAccountReqValidator) AccountEditPasswordReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", "between:6,32"},
-		validator.GetValidateJsonOmitemptyTag("oldPassword"):     []string{"required", "between:6,32"},
-		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required", "between:6,32"},
+		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
+		validator.GetValidateJsonOmitemptyTag("oldPassword"):     []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
+		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required:新密码不能为空", "between:密码长度为6-32个字符"},
-		validator.GetValidateJsonOmitemptyTag("oldPassword"):     []string{"required:旧密码不能为空", "between:密码长度为6-32个字符"},
-		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required:确认密码不能为空", "between:密码长度为6-32个字符"},
+		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required:密码不能为空", PatternAdminPasswordMsg},
+		validator.GetValidateJsonOmitemptyTag("oldPassword"):     []string{"required:密码不能为空", PatternAdminPasswordMsg},
+		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required:密码不能为空", PatternAdminPasswordMsg},
 	}
 	opts := govalidator.Options{
 		Data:     data,

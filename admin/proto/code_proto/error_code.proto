@@ -23,4 +23,7 @@ enum ErrorCode{
   AdminApiNameExist = 500001; // 接口名称已存在
   AdminApiPathExist = 500002; // 接口路径已存在
   AdminApiKeyExist = 500003; // 接口键名已存在
+
+  AdminPermissionKeyExist = 600001; // 权限键名已存在
+  AdminPermissionExist = 600002; // 该菜单下权限已存在
 }

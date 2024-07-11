@@ -15,6 +15,7 @@ type IAdminPermission interface {
 	FindAdminPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error)
 	FindPermissionsByMenuId(ctx context.Context, menuId int32) ([]*model.AdminPermission, error)
 	FindList(ctx *gin.Context, params *admin_proto.PermissionListReq) (total int64, list []*model.AdminPermission, err error)
+	Create(ctx *gin.Context, data *model.AdminPermission) error
 }
 
 type AdminPermission struct {
@@ -59,7 +60,7 @@ func (a *AdminPermission) FindPermissionsByMenuId(ctx context.Context, menuId in
 }
 
 func (a *AdminPermission) FindList(ctx *gin.Context, params *admin_proto.PermissionListReq) (total int64, list []*model.AdminPermission, err error) {
-	DB := query.AdminMenu
+	DB := query.AdminPermission
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)
@@ -67,7 +68,7 @@ func (a *AdminPermission) FindList(ctx *gin.Context, params *admin_proto.Permiss
 	if err != nil {
 		return total, list, err
 	}
-	list, err = q.Order(DB.ParentID, DB.Sort.Desc(), DB.ID).Limit(limit).Offset(offset).Find()
+	list, err = q.Order(DB.MenuID, DB.ID).Limit(limit).Offset(offset).Find()
 	return total, list, err
 }
 
@@ -91,4 +92,8 @@ func (a *AdminPermission) handleListReq(ctx context.Context, params *admin_proto
 	}
 
 	return q
+}
+
+func (a *AdminPermission) Create(ctx *gin.Context, data *model.AdminPermission) error {
+	return query.AdminPermission.WithContext(ctx).Create(data)
 }
