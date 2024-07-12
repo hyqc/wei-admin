@@ -304,7 +304,6 @@ type PermissionAddReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`            //权限ID
 	MenuId   int32  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty"`    //权限对应的菜单ID
 	Key      string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`           //权限唯一标识符
 	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`         //权限名称
@@ -344,13 +343,6 @@ func (x *PermissionAddReq) ProtoReflect() protoreflect.Message {
 // Deprecated: Use PermissionAddReq.ProtoReflect.Descriptor instead.
 func (*PermissionAddReq) Descriptor() ([]byte, []int) {
 	return file_admin_permission_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *PermissionAddReq) GetId() int32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
 }
 
 func (x *PermissionAddReq) GetMenuId() int32 {
@@ -644,6 +636,15 @@ type PermissionEditReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Id       int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`            //权限ID
+	MenuId   int32  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty"`    //权限对应的菜单ID
+	Key      string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`           //权限唯一标识符
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`         //权限名称
+	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty"` //权限描述
+	Type     string `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`         //权限类型
+	Redirect string `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty"` //重定向地址
+	Enabled  bool   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty"`  //是否启用
 }
 
 func (x *PermissionEditReq) Reset() {
@@ -678,14 +679,74 @@ func (*PermissionEditReq) Descriptor() ([]byte, []int) {
 	return file_admin_permission_proto_rawDescGZIP(), []int{7}
 }
 
-type PermissionEditResp struct {
+func (x *PermissionEditReq) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *PermissionEditReq) GetMenuId() int32 {
+	if x != nil {
+		return x.MenuId
+	}
+	return 0
+}
+
+func (x *PermissionEditReq) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *PermissionEditReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *PermissionEditReq) GetDescribe() string {
+	if x != nil {
+		return x.Describe
+	}
+	return ""
+}
+
+func (x *PermissionEditReq) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *PermissionEditReq) GetRedirect() string {
+	if x != nil {
+		return x.Redirect
+	}
+	return ""
+}
+
+func (x *PermissionEditReq) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+// 启用禁用权限
+type PermissionEnableReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Id      int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`           //权限ID
+	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"` //状态
 }
 
-func (x *PermissionEditResp) Reset() {
-	*x = PermissionEditResp{}
+func (x *PermissionEnableReq) Reset() {
+	*x = PermissionEnableReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_permission_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -693,13 +754,13 @@ func (x *PermissionEditResp) Reset() {
 	}
 }
 
-func (x *PermissionEditResp) String() string {
+func (x *PermissionEnableReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PermissionEditResp) ProtoMessage() {}
+func (*PermissionEnableReq) ProtoMessage() {}
 
-func (x *PermissionEditResp) ProtoReflect() protoreflect.Message {
+func (x *PermissionEnableReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_permission_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -711,86 +772,23 @@ func (x *PermissionEditResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PermissionEditResp.ProtoReflect.Descriptor instead.
-func (*PermissionEditResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use PermissionEnableReq.ProtoReflect.Descriptor instead.
+func (*PermissionEnableReq) Descriptor() ([]byte, []int) {
 	return file_admin_permission_proto_rawDescGZIP(), []int{8}
 }
 
-// 启用禁用权限
-type PermissionEnabledReq struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *PermissionEnabledReq) Reset() {
-	*x = PermissionEnabledReq{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[9]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
+func (x *PermissionEnableReq) GetId() int32 {
+	if x != nil {
+		return x.Id
 	}
+	return 0
 }
 
-func (x *PermissionEnabledReq) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PermissionEnabledReq) ProtoMessage() {}
-
-func (x *PermissionEnabledReq) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[9]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
+func (x *PermissionEnableReq) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
 	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PermissionEnabledReq.ProtoReflect.Descriptor instead.
-func (*PermissionEnabledReq) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{9}
-}
-
-type PermissionEnabledResp struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *PermissionEnabledResp) Reset() {
-	*x = PermissionEnabledResp{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[10]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *PermissionEnabledResp) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PermissionEnabledResp) ProtoMessage() {}
-
-func (x *PermissionEnabledResp) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[10]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PermissionEnabledResp.ProtoReflect.Descriptor instead.
-func (*PermissionEnabledResp) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{10}
+	return false
 }
 
 // 删除权限
@@ -798,12 +796,14 @@ type PermissionDeleteReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //权限ID
 }
 
 func (x *PermissionDeleteReq) Reset() {
 	*x = PermissionDeleteReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[11]
+		mi := &file_admin_permission_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -816,7 +816,7 @@ func (x *PermissionDeleteReq) String() string {
 func (*PermissionDeleteReq) ProtoMessage() {}
 
 func (x *PermissionDeleteReq) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[11]
+	mi := &file_admin_permission_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -829,45 +829,14 @@ func (x *PermissionDeleteReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PermissionDeleteReq.ProtoReflect.Descriptor instead.
 func (*PermissionDeleteReq) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{11}
+	return file_admin_permission_proto_rawDescGZIP(), []int{9}
 }
 
-type PermissionDeleteResp struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *PermissionDeleteResp) Reset() {
-	*x = PermissionDeleteResp{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[12]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
+func (x *PermissionDeleteReq) GetId() int32 {
+	if x != nil {
+		return x.Id
 	}
-}
-
-func (x *PermissionDeleteResp) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PermissionDeleteResp) ProtoMessage() {}
-
-func (x *PermissionDeleteResp) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[12]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PermissionDeleteResp.ProtoReflect.Descriptor instead.
-func (*PermissionDeleteResp) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{12}
+	return 0
 }
 
 // 权限绑定接口
@@ -880,7 +849,7 @@ type PermissionApisBindReq struct {
 func (x *PermissionApisBindReq) Reset() {
 	*x = PermissionApisBindReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[13]
+		mi := &file_admin_permission_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -893,7 +862,7 @@ func (x *PermissionApisBindReq) String() string {
 func (*PermissionApisBindReq) ProtoMessage() {}
 
 func (x *PermissionApisBindReq) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[13]
+	mi := &file_admin_permission_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -906,7 +875,7 @@ func (x *PermissionApisBindReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PermissionApisBindReq.ProtoReflect.Descriptor instead.
 func (*PermissionApisBindReq) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{13}
+	return file_admin_permission_proto_rawDescGZIP(), []int{10}
 }
 
 type PermissionApisBindResp struct {
@@ -918,7 +887,7 @@ type PermissionApisBindResp struct {
 func (x *PermissionApisBindResp) Reset() {
 	*x = PermissionApisBindResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[14]
+		mi := &file_admin_permission_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -931,7 +900,7 @@ func (x *PermissionApisBindResp) String() string {
 func (*PermissionApisBindResp) ProtoMessage() {}
 
 func (x *PermissionApisBindResp) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[14]
+	mi := &file_admin_permission_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -944,7 +913,7 @@ func (x *PermissionApisBindResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PermissionApisBindResp.ProtoReflect.Descriptor instead.
 func (*PermissionApisBindResp) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{14}
+	return file_admin_permission_proto_rawDescGZIP(), []int{11}
 }
 
 // 指定菜单创建查看编辑删除权限
@@ -957,7 +926,7 @@ type PermissionBindMenuReq struct {
 func (x *PermissionBindMenuReq) Reset() {
 	*x = PermissionBindMenuReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[15]
+		mi := &file_admin_permission_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -970,7 +939,7 @@ func (x *PermissionBindMenuReq) String() string {
 func (*PermissionBindMenuReq) ProtoMessage() {}
 
 func (x *PermissionBindMenuReq) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[15]
+	mi := &file_admin_permission_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -983,7 +952,7 @@ func (x *PermissionBindMenuReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PermissionBindMenuReq.ProtoReflect.Descriptor instead.
 func (*PermissionBindMenuReq) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{15}
+	return file_admin_permission_proto_rawDescGZIP(), []int{12}
 }
 
 type PermissionBindMenuResp struct {
@@ -995,7 +964,7 @@ type PermissionBindMenuResp struct {
 func (x *PermissionBindMenuResp) Reset() {
 	*x = PermissionBindMenuResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[16]
+		mi := &file_admin_permission_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1008,7 +977,7 @@ func (x *PermissionBindMenuResp) String() string {
 func (*PermissionBindMenuResp) ProtoMessage() {}
 
 func (x *PermissionBindMenuResp) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[16]
+	mi := &file_admin_permission_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1021,7 +990,7 @@ func (x *PermissionBindMenuResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PermissionBindMenuResp.ProtoReflect.Descriptor instead.
 func (*PermissionBindMenuResp) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{16}
+	return file_admin_permission_proto_rawDescGZIP(), []int{13}
 }
 
 type PermissionApiItem struct {
@@ -1043,7 +1012,7 @@ type PermissionApiItem struct {
 func (x *PermissionApiItem) Reset() {
 	*x = PermissionApiItem{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_admin_permission_proto_msgTypes[17]
+		mi := &file_admin_permission_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1056,7 +1025,7 @@ func (x *PermissionApiItem) String() string {
 func (*PermissionApiItem) ProtoMessage() {}
 
 func (x *PermissionApiItem) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_permission_proto_msgTypes[17]
+	mi := &file_admin_permission_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1069,7 +1038,7 @@ func (x *PermissionApiItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PermissionApiItem.ProtoReflect.Descriptor instead.
 func (*PermissionApiItem) Descriptor() ([]byte, []int) {
-	return file_admin_permission_proto_rawDescGZIP(), []int{17}
+	return file_admin_permission_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *PermissionApiItem) GetId() int32 {
@@ -1179,9 +1148,8 @@ var file_admin_permission_proto_rawDesc = []byte{
 	0x6c, 0x12, 0x2d, 0x0a, 0x04, 0x72, 0x6f, 0x77, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32,
 	0x19, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
 	0x6f, 0x6e, 0x4c, 0x69, 0x73, 0x74, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x72, 0x6f, 0x77, 0x73,
-	0x22, 0xc6, 0x01, 0x0a, 0x10, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x41,
-	0x64, 0x64, 0x52, 0x65, 0x71, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x18,
+	0x22, 0xb6, 0x01, 0x0a, 0x10, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x41,
+	0x64, 0x64, 0x52, 0x65, 0x71, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x12, 0x10, 0x0a,
 	0x03, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12,
 	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
@@ -1218,40 +1186,50 @@ var file_admin_permission_proto_rawDesc = []byte{
 	0x65, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x18,
 	0x0d, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74,
 	0x12, 0x1c, 0x0a, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x18, 0x0e, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x22, 0x13,
-	0x0a, 0x11, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x45, 0x64, 0x69, 0x74,
-	0x52, 0x65, 0x71, 0x22, 0x14, 0x0a, 0x12, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x45, 0x64, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x16, 0x0a, 0x14, 0x50, 0x65, 0x72,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x52, 0x65,
-	0x71, 0x22, 0x17, 0x0a, 0x15, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x45,
-	0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x52, 0x65, 0x73, 0x70, 0x22, 0x15, 0x0a, 0x13, 0x50, 0x65,
-	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65,
-	0x71, 0x22, 0x16, 0x0a, 0x14, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44,
-	0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x22, 0x17, 0x0a, 0x15, 0x50, 0x65, 0x72,
+	0x01, 0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x22, 0xc7,
+	0x01, 0x0a, 0x11, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x45, 0x64, 0x69,
+	0x74, 0x52, 0x65, 0x71, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05,
+	0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x12, 0x10, 0x0a, 0x03,
+	0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x12, 0x12,
+	0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x18, 0x07,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x12, 0x18,
+	0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x08, 0x52,
+	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x3f, 0x0a, 0x13, 0x50, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x12,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x25, 0x0a, 0x13, 0x50, 0x65, 0x72,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x71,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64,
+	0x22, 0x17, 0x0a, 0x15, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x41, 0x70,
+	0x69, 0x73, 0x42, 0x69, 0x6e, 0x64, 0x52, 0x65, 0x71, 0x22, 0x18, 0x0a, 0x16, 0x50, 0x65, 0x72,
 	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x41, 0x70, 0x69, 0x73, 0x42, 0x69, 0x6e, 0x64, 0x52,
-	0x65, 0x71, 0x22, 0x18, 0x0a, 0x16, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x41, 0x70, 0x69, 0x73, 0x42, 0x69, 0x6e, 0x64, 0x52, 0x65, 0x73, 0x70, 0x22, 0x17, 0x0a, 0x15,
+	0x65, 0x73, 0x70, 0x22, 0x17, 0x0a, 0x15, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x42, 0x69, 0x6e, 0x64, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x65, 0x71, 0x22, 0x18, 0x0a, 0x16,
 	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x69, 0x6e, 0x64, 0x4d, 0x65,
-	0x6e, 0x75, 0x52, 0x65, 0x71, 0x22, 0x18, 0x0a, 0x16, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x42, 0x69, 0x6e, 0x64, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x65, 0x73, 0x70, 0x22,
-	0xeb, 0x01, 0x0a, 0x11, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x41, 0x70,
-	0x69, 0x49, 0x74, 0x65, 0x6d, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x12, 0x10, 0x0a,
-	0x03, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12,
-	0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74,
-	0x79, 0x70, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x74, 0x79, 0x70, 0x65, 0x54, 0x65, 0x78, 0x74, 0x18,
-	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x79, 0x70, 0x65, 0x54, 0x65, 0x78, 0x74, 0x12,
-	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
-	0x61, 0x6d, 0x65, 0x12, 0x22, 0x0a, 0x04, 0x61, 0x70, 0x69, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x0e, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65,
-	0x6d, 0x52, 0x04, 0x61, 0x70, 0x69, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
-	0x65, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
-	0x64, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x18, 0x09, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x42, 0x1b, 0x5a,
-	0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x61,
-	0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x6e, 0x75, 0x52, 0x65, 0x73, 0x70, 0x22, 0xeb, 0x01, 0x0a, 0x11, 0x50, 0x65, 0x72, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65, 0x6d, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06,
+	0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x65,
+	0x6e, 0x75, 0x49, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x74, 0x79,
+	0x70, 0x65, 0x54, 0x65, 0x78, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x79,
+	0x70, 0x65, 0x54, 0x65, 0x78, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x06,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x22, 0x0a, 0x04, 0x61, 0x70,
+	0x69, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e,
+	0x2e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x61, 0x70, 0x69, 0x73, 0x12, 0x18,
+	0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x08, 0x52,
+	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x73, 0x63,
+	0x72, 0x69, 0x62, 0x65, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63,
+	0x72, 0x69, 0x62, 0x65, 0x42, 0x1b, 0x5a, 0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1266,7 +1244,7 @@ func file_admin_permission_proto_rawDescGZIP() []byte {
 	return file_admin_permission_proto_rawDescData
 }
 
-var file_admin_permission_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_admin_permission_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_admin_permission_proto_goTypes = []interface{}{
 	(*PermissionListItem)(nil),     // 0: admin.PermissionListItem
 	(*PermissionListReq)(nil),      // 1: admin.PermissionListReq
@@ -1276,25 +1254,22 @@ var file_admin_permission_proto_goTypes = []interface{}{
 	(*PermissionInfoReq)(nil),      // 5: admin.PermissionInfoReq
 	(*PermissionInfo)(nil),         // 6: admin.PermissionInfo
 	(*PermissionEditReq)(nil),      // 7: admin.PermissionEditReq
-	(*PermissionEditResp)(nil),     // 8: admin.PermissionEditResp
-	(*PermissionEnabledReq)(nil),   // 9: admin.PermissionEnabledReq
-	(*PermissionEnabledResp)(nil),  // 10: admin.PermissionEnabledResp
-	(*PermissionDeleteReq)(nil),    // 11: admin.PermissionDeleteReq
-	(*PermissionDeleteResp)(nil),   // 12: admin.PermissionDeleteResp
-	(*PermissionApisBindReq)(nil),  // 13: admin.PermissionApisBindReq
-	(*PermissionApisBindResp)(nil), // 14: admin.PermissionApisBindResp
-	(*PermissionBindMenuReq)(nil),  // 15: admin.PermissionBindMenuReq
-	(*PermissionBindMenuResp)(nil), // 16: admin.PermissionBindMenuResp
-	(*PermissionApiItem)(nil),      // 17: admin.PermissionApiItem
-	(*ApiItem)(nil),                // 18: admin.ApiItem
-	(*ListBaseReq)(nil),            // 19: admin.ListBaseReq
+	(*PermissionEnableReq)(nil),    // 8: admin.PermissionEnableReq
+	(*PermissionDeleteReq)(nil),    // 9: admin.PermissionDeleteReq
+	(*PermissionApisBindReq)(nil),  // 10: admin.PermissionApisBindReq
+	(*PermissionApisBindResp)(nil), // 11: admin.PermissionApisBindResp
+	(*PermissionBindMenuReq)(nil),  // 12: admin.PermissionBindMenuReq
+	(*PermissionBindMenuResp)(nil), // 13: admin.PermissionBindMenuResp
+	(*PermissionApiItem)(nil),      // 14: admin.PermissionApiItem
+	(*ApiItem)(nil),                // 15: admin.ApiItem
+	(*ListBaseReq)(nil),            // 16: admin.ListBaseReq
 }
 var file_admin_permission_proto_depIdxs = []int32{
-	18, // 0: admin.PermissionListItem.apis:type_name -> admin.ApiItem
-	19, // 1: admin.PermissionListReq.base:type_name -> admin.ListBaseReq
+	15, // 0: admin.PermissionListItem.apis:type_name -> admin.ApiItem
+	16, // 1: admin.PermissionListReq.base:type_name -> admin.ListBaseReq
 	0,  // 2: admin.PermissionListRespData.rows:type_name -> admin.PermissionListItem
-	18, // 3: admin.PermissionInfo.apis:type_name -> admin.ApiItem
-	18, // 4: admin.PermissionApiItem.apis:type_name -> admin.ApiItem
+	15, // 3: admin.PermissionInfo.apis:type_name -> admin.ApiItem
+	15, // 4: admin.PermissionApiItem.apis:type_name -> admin.ApiItem
 	5,  // [5:5] is the sub-list for method output_type
 	5,  // [5:5] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
@@ -1407,7 +1382,7 @@ func file_admin_permission_proto_init() {
 			}
 		}
 		file_admin_permission_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PermissionEditResp); i {
+			switch v := v.(*PermissionEnableReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1419,30 +1394,6 @@ func file_admin_permission_proto_init() {
 			}
 		}
 		file_admin_permission_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PermissionEnabledReq); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_admin_permission_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PermissionEnabledResp); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_admin_permission_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PermissionDeleteReq); i {
 			case 0:
 				return &v.state
@@ -1454,19 +1405,7 @@ func file_admin_permission_proto_init() {
 				return nil
 			}
 		}
-		file_admin_permission_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PermissionDeleteResp); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_admin_permission_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+		file_admin_permission_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PermissionApisBindReq); i {
 			case 0:
 				return &v.state
@@ -1478,7 +1417,7 @@ func file_admin_permission_proto_init() {
 				return nil
 			}
 		}
-		file_admin_permission_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_admin_permission_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PermissionApisBindResp); i {
 			case 0:
 				return &v.state
@@ -1490,7 +1429,7 @@ func file_admin_permission_proto_init() {
 				return nil
 			}
 		}
-		file_admin_permission_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+		file_admin_permission_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PermissionBindMenuReq); i {
 			case 0:
 				return &v.state
@@ -1502,7 +1441,7 @@ func file_admin_permission_proto_init() {
 				return nil
 			}
 		}
-		file_admin_permission_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+		file_admin_permission_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PermissionBindMenuResp); i {
 			case 0:
 				return &v.state
@@ -1514,7 +1453,7 @@ func file_admin_permission_proto_init() {
 				return nil
 			}
 		}
-		file_admin_permission_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+		file_admin_permission_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PermissionApiItem); i {
 			case 0:
 				return &v.state
@@ -1533,7 +1472,7 @@ func file_admin_permission_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_admin_permission_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

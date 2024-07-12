@@ -36,7 +36,6 @@ message PermissionListRespData{
 
 // 创建权限
 message PermissionAddReq{
-  int32 id = 1;//权限ID
   int32 menuId = 2;//权限对应的菜单ID
   string key = 3;//权限唯一标识符
   string name = 4;//权限名称
@@ -71,19 +70,29 @@ message PermissionInfo{
 }
 
 // 编辑权限
-message PermissionEditReq{}
+message PermissionEditReq{
+  int32 id = 1;//权限ID
+  int32 menuId = 2;//权限对应的菜单ID
+  string key = 3;//权限唯一标识符
+  string name = 4;//权限名称
+  string describe = 5;//权限描述
+  string type = 6;//权限类型
+  string redirect = 7;//重定向地址
+  bool enabled = 8;//是否启用
+}
 
-message PermissionEditResp{}
 
 // 启用禁用权限
-message PermissionEnabledReq{}
+message PermissionEnableReq{
+  int32 id = 1;//权限ID
+  bool enabled = 2;//状态
+}
 
-message PermissionEnabledResp{}
 
 // 删除权限
-message PermissionDeleteReq{}
-
-message PermissionDeleteResp{}
+message PermissionDeleteReq{
+  int32 id = 1;//权限ID
+}
 
 // 权限绑定接口
 message PermissionApisBindReq{}

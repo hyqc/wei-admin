@@ -28,7 +28,7 @@ type IAdminMenu interface {
 type AdminMenu struct {
 }
 
-func newAdminMenu() *AdminMenu {
+func newAdminMenu() IAdminMenu {
 	return &AdminMenu{}
 }
 
@@ -41,14 +41,14 @@ func (a *AdminMenu) Update(ctx *gin.Context, data *model.AdminMenu) error {
 }
 
 func (a *AdminMenu) Enable(ctx *gin.Context, id int32, enabled bool) error {
-	apiDB := query.AdminMenu
-	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).UpdateColumn(apiDB.IsEnabled, enabled)
+	db := query.AdminMenu
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
 	return err
 }
 
 func (a *AdminMenu) Delete(ctx *gin.Context, id int32) error {
-	apiDB := query.AdminMenu
-	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).Delete()
+	db := query.AdminMenu
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
 	return err
 }
 
@@ -147,4 +147,8 @@ func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.MenuL
 	}
 
 	return q
+}
+
+func (a *AdminMenu) FindByIds(ctx *gin.Context, ids []int32) (list []*model.AdminMenu, err error) {
+	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.In(ids...)).Find()
 }

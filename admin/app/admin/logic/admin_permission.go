@@ -20,6 +20,9 @@ type IAdminPermissionLogic interface {
 	List(ctx *gin.Context, params *admin_proto.PermissionListReq) (*admin_proto.PermissionListRespData, error)
 	Add(ctx *gin.Context, params *admin_proto.PermissionAddReq) error
 	Info(ctx *gin.Context, params *admin_proto.PermissionInfoReq) (*admin_proto.PermissionInfo, error)
+	Edit(ctx *gin.Context, params *admin_proto.PermissionEditReq) error
+	Enable(ctx *gin.Context, params *admin_proto.PermissionEnableReq) error
+	Delete(ctx *gin.Context, params *admin_proto.PermissionDeleteReq) error
 }
 
 func newAdminPermissionLogic() IAdminPermissionLogic {
@@ -135,6 +138,25 @@ func (a *AdminPermissionLogic) Add(ctx *gin.Context, params *admin_proto.Permiss
 	return nil
 }
 
+func (a *AdminPermissionLogic) Edit(ctx *gin.Context, params *admin_proto.PermissionEditReq) error {
+	data := &model.AdminPermission{
+		ID:        params.Id,
+		MenuID:    params.MenuId,
+		Key:       params.Key,
+		Name:      params.Name,
+		Type:      params.Type,
+		Describe:  params.Describe,
+		IsEnabled: params.Enabled,
+	}
+	if err := dao.H.AdminPermission.Update(ctx, data); err != nil {
+		if strings.Contains(err.Error(), "uk_key") {
+			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionKeyExist, err)
+		}
+		return err
+	}
+	return nil
+}
+
 func (a *AdminPermissionLogic) Info(ctx *gin.Context, params *admin_proto.PermissionInfoReq) (*admin_proto.PermissionInfo, error) {
 	data, err := dao.H.AdminPermission.FindPermissionMenuInfoById(ctx, params.Id)
 	if err != nil {
@@ -160,4 +182,32 @@ func (a *AdminPermissionLogic) Info(ctx *gin.Context, params *admin_proto.Permis
 		CreatedAt: data.CreatedAt.Format(time.DateTime),
 		UpdatedAt: data.UpdatedAt.Format(time.DateTime),
 	}, nil
+}
+
+func (a *AdminPermissionLogic) Enable(ctx *gin.Context, params *admin_proto.PermissionEnableReq) error {
+	info, err := dao.H.AdminPermission.Info(ctx, params.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	if info.IsEnabled == params.Enabled {
+		return nil
+	}
+	return dao.H.AdminPermission.Enable(ctx, params.Id, params.Enabled)
+}
+
+func (a *AdminPermissionLogic) Delete(ctx *gin.Context, params *admin_proto.PermissionDeleteReq) error {
+	info, err := dao.H.AdminPermission.Info(ctx, params.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	if info.IsEnabled {
+		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
+	}
+	return dao.H.AdminPermission.Delete(ctx, params.Id)
 }

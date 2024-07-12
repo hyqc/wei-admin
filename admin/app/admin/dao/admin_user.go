@@ -21,25 +21,25 @@ func newAdminUser() *AdminUser {
 }
 
 func (a *AdminUser) FindAdminUserByUsername(ctx context.Context, username string) (*model.AdminUser, error) {
-	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
-	return adminUser.WithContext(ctx).Where(adminUser.Username.Eq(username)).First()
+	db := query.AdminUser.Table(query.AdminUser.TableName())
+	return db.WithContext(ctx).Where(db.Username.Eq(username)).First()
 }
 
 func (a *AdminUser) UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error {
-	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
-	_, err := adminUser.WithContext(ctx).Where(adminUser.ID.Eq(adminId)).
-		Select(adminUser.LoginTotal, adminUser.LastLoginIP, adminUser.LastLoginTime).
+	db := query.AdminUser.Table(query.AdminUser.TableName())
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(adminId)).
+		Select(db.LoginTotal, db.LastLoginIP, db.LastLoginTime).
 		Updates(data)
 	return err
 }
 
 func (a *AdminUser) FindAdminUserByAdminId(ctx context.Context, id int32) (*model.AdminUser, error) {
-	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
-	return adminUser.WithContext(ctx).Where(adminUser.ID.Eq(id)).First()
+	db := query.AdminUser.Table(query.AdminUser.TableName())
+	return db.WithContext(ctx).Where(db.ID.Eq(id)).First()
 }
 
 func (a *AdminUser) UpdateAdminUser(ctx context.Context, data *model.AdminUser) error {
-	adminUser := query.AdminUser.Table(query.AdminUser.TableName())
-	_, err := adminUser.WithContext(ctx).Where(adminUser.ID.Eq(data.ID)).Updates(data)
+	db := query.AdminUser.Table(query.AdminUser.TableName())
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(data.ID)).Updates(data)
 	return err
 }

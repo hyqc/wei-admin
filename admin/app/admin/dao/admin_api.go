@@ -13,12 +13,12 @@ import (
 
 type IAdminAPI interface {
 	Create(ctx *gin.Context, data *model.AdminAPI) error
+	Info(ctx *gin.Context, id int32) (*model.AdminAPI, error)
 	Update(ctx *gin.Context, data *model.AdminAPI) error
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
 	FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
-	FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error)
 	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error)
 }
 
@@ -62,11 +62,11 @@ func (a *AdminAPI) FindList(ctx context.Context, params *admin_proto.ApiListReq)
 }
 
 func (a *AdminAPI) FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) {
-	apiDB := query.AdminAPI
-	return apiDB.WithContext(ctx).Where(apiDB.IsEnabled.Is(true)).Find()
+	db := query.AdminAPI
+	return db.WithContext(ctx).Where(db.IsEnabled.Is(true)).Find()
 }
 
-func (a *AdminAPI) FindById(ctx *gin.Context, id int32) (*model.AdminAPI, error) {
+func (a *AdminAPI) Info(ctx *gin.Context, id int32) (*model.AdminAPI, error) {
 	return query.AdminAPI.WithContext(ctx).Where(query.AdminAPI.ID.Eq(id)).First()
 }
 
@@ -99,31 +99,31 @@ func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr
 }
 
 func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ApiListReq) (q query.IAdminAPIDo) {
-	apiDB := query.AdminAPI
-	q = apiDB.WithContext(ctx)
+	db := query.AdminAPI
+	q = db.WithContext(ctx)
 	if params.Path != "" {
-		q = q.Where(apiDB.Path.Like(params.Key))
+		q = q.Where(db.Path.Like(params.Key))
 	}
 	if params.Name != "" {
-		q = q.Where(apiDB.Name.Like(params.Key))
+		q = q.Where(db.Name.Like(params.Key))
 	}
 	if params.Key != "" {
-		q = q.Where(apiDB.Key.Like(params.Key))
+		q = q.Where(db.Key.Like(params.Key))
 	}
 
 	switch params.Base.Enabled {
 	case common.EnabledValidQueryValue:
-		q = q.Where(apiDB.IsEnabled.Is(true))
+		q = q.Where(db.IsEnabled.Is(true))
 	case common.EnabledInvalidQueryValue:
-		q = q.Where(apiDB.IsEnabled.Is(false))
+		q = q.Where(db.IsEnabled.Is(false))
 	}
 
 	if params.Base.CreateStartTime > 0 {
-		q = q.Where(apiDB.CreatedAt.Gte(time.Unix(params.Base.CreateStartTime, 0)))
+		q = q.Where(db.CreatedAt.Gte(time.Unix(params.Base.CreateStartTime, 0)))
 	}
 
 	if params.Base.CreateEndTime > 0 {
-		q = q.Where(apiDB.CreatedAt.Lte(time.Unix(params.Base.CreateEndTime, 0)))
+		q = q.Where(db.CreatedAt.Lte(time.Unix(params.Base.CreateEndTime, 0)))
 	}
 
 	return q

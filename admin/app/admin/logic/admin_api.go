@@ -98,7 +98,7 @@ func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ApiAddReq) (er
 }
 
 func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (*admin_proto.ApiItem, error) {
-	data, err := dao.H.AdminAPI.FindById(ctx, params.Id)
+	data, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -109,7 +109,7 @@ func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (
 }
 
 func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) error {
-	info, err := dao.H.AdminAPI.FindById(ctx, params.Id)
+	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -125,7 +125,7 @@ func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) e
 }
 
 func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableReq) error {
-	info, err := dao.H.AdminAPI.FindById(ctx, params.Id)
+	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -139,7 +139,7 @@ func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableRe
 }
 
 func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ApiDeleteReq) error {
-	info, err := dao.H.AdminAPI.FindById(ctx, params.Id)
+	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)

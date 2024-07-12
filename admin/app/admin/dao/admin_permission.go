@@ -18,8 +18,11 @@ type IAdminPermission interface {
 	FindPermissionsByMenuId(ctx context.Context, menuId int32) ([]*model.AdminPermission, error)
 	List(ctx *gin.Context, params *admin_proto.PermissionListReq) (total int64, list []*model.AdminPermission, err error)
 	Create(ctx *gin.Context, data *model.AdminPermission) error
-	FindById(ctx *gin.Context, id int32) (*model.AdminPermission, error)
+	Info(ctx *gin.Context, id int32) (*model.AdminPermission, error)
+	Update(ctx *gin.Context, data *model.AdminPermission) error
+	Enable(ctx *gin.Context, id int32, enabled bool) error
 	FindPermissionMenuInfoById(ctx *gin.Context, permissionId int32) (*admin_custom.AdminPermissionMenu, error)
+	Delete(ctx *gin.Context, id int32) error
 }
 
 type AdminPermission struct {
@@ -139,9 +142,26 @@ func (a *AdminPermission) Create(ctx *gin.Context, data *model.AdminPermission) 
 	return query.AdminPermission.WithContext(ctx).Create(data)
 }
 
-func (a *AdminPermission) FindById(ctx *gin.Context, id int32) (*model.AdminPermission, error) {
+func (a *AdminPermission) Info(ctx *gin.Context, id int32) (*model.AdminPermission, error) {
 	return query.AdminPermission.WithContext(ctx).Where(query.AdminPermission.ID.Eq(id)).First()
 }
+func (a *AdminPermission) Update(ctx *gin.Context, data *model.AdminPermission) error {
+	_, err := query.AdminPermission.WithContext(ctx).Where(query.AdminPermission.ID.Eq(data.ID)).Updates(data)
+	return err
+}
+
+func (a *AdminPermission) Enable(ctx *gin.Context, id int32, enabled bool) error {
+	db := query.AdminPermission
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
+	return err
+}
+
+func (a *AdminPermission) Delete(ctx *gin.Context, id int32) error {
+	db := query.AdminPermission
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
+	return err
+}
+
 func (a *AdminPermission) FindPermissionMenuInfoById(ctx *gin.Context, permissionId int32) (*admin_custom.AdminPermissionMenu, error) {
 	p := query.AdminPermission
 	m := query.AdminMenu

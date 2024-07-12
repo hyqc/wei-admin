@@ -43,7 +43,7 @@ func (a *AdminApiReqValidator) InfoReq(data interface{}) url.Values {
 		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:接口ID不能为空", "min:接口ID不能小于1"},
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:ID不能为空", "min:ID无效"},
 	}
 	opts := govalidator.Options{
 		Data:     data,
@@ -62,7 +62,7 @@ func (a *AdminApiReqValidator) EditReq(data interface{}) url.Values {
 		validator.GetValidateJsonOmitemptyTag("describe"): []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required:接口ID不能为空", "min:接口ID不能小于1"},
+		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required:ID不能为空", "min:ID无效"},
 		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required:接口路由不能为空", PatternAdminApiPathMsg},
 		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required:接口路由键名不能为空", PatternAdminApiKeyMsg},
 		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required:接口名称不能为空", PatternTrimBlankStringMsg},
@@ -82,7 +82,7 @@ func (a *AdminApiReqValidator) EnableReq(data interface{}) url.Values {
 		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):      []string{"required:接口ID不能为空", "min:接口ID不能小于1"},
+		validator.GetValidateJsonOmitemptyTag("id"):      []string{"required:ID不能为空", "min:ID无效"},
 		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool:类型错误"},
 	}
 	opts := govalidator.Options{
@@ -98,7 +98,7 @@ func (a *AdminApiReqValidator) DeleteReq(data interface{}) url.Values {
 		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:接口ID不能为空", "min:接口ID不能小于1"},
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:ID不能为空", "min:ID无效"},
 	}
 	opts := govalidator.Options{
 		Data:     data,
