@@ -2,6 +2,7 @@ package controller
 
 import (
 	"admin/app/admin/logic"
+	"admin/app/admin/validate"
 	"admin/app/common"
 	"admin/code"
 	"admin/config"
@@ -21,7 +22,7 @@ type AdminUserController struct {
 // List 管理员列表
 func (AdminUserController) List(ctx *gin.Context) {
 	msg := "AdminUserController.List"
-	params := &admin_proto.AdminUserListParamsReq{Base: common.NewListBaseReq()}
+	params := &admin_proto.AdminUserListReq{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -40,19 +41,44 @@ func (AdminUserController) List(ctx *gin.Context) {
 	return
 }
 
-// All 全部有效管理员
-func (AdminUserController) All(ctx *gin.Context) {
-
-}
-
 // Add 添加管理员
 func (AdminUserController) Add(ctx *gin.Context) {
-
+	msg := "AdminUserController.Add"
+	params := &admin_proto.AdminUserAddReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminUserReq.AddReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminUser.Add(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
 }
 
-// Detail 详情
-func (AdminUserController) Detail(ctx *gin.Context) {
-
+// Info 详情
+func (AdminUserController) Info(ctx *gin.Context) {
+	msg := "AdminUserController.Add"
+	params := &admin_proto.AdminUserInfoReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminUserReq.InfoReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	info, err := logic.H.AdminUser.Info(ctx, params.AdminId, false, constant.AdminTokenExpireSeconds)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	result.SetData(info)
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
 }
 
 // Edit 编辑管理员

@@ -6,10 +6,11 @@ import (
 )
 
 const (
-	Authorization             = "authorization"
-	ContextClaims             = "ctx_jwt_claims"
-	AdministerId        int32 = 1 // 超管ID
-	LogResponseMsgField       = "response"
+	Authorization                 = "authorization"
+	ContextClaims                 = "ctx_jwt_claims"
+	AdministerId            int32 = 1 // 超管ID
+	LogResponseMsgField           = "response"
+	AdminTokenExpireSeconds       = 3600 * 24 * 7
 )
 
 func IsAdministrator(adminId int32) bool {

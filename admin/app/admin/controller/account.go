@@ -63,7 +63,7 @@ func (AccountController) Info(ctx *gin.Context) {
 	msg := "AccountController.Info"
 	refreshToken := ctx.GetBool("refreshToken")
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := logic.H.AdminUser.Info(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, 3600)
+	data, err := logic.H.AdminUser.Info(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, constant.AdminTokenExpireSeconds)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return

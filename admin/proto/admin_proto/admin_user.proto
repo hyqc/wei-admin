@@ -4,7 +4,7 @@ option go_package = "./admin_proto;admin_proto";
 import "common.proto";
 
 // 账号列表请求参数
-message AdminUserListParamsReq{
+message AdminUserListReq{
   ListBaseReq base = 1;
   string username = 2;//账号
   string nickname = 3;//昵称
@@ -26,20 +26,23 @@ message AdminUserListItem{
   string lastLoginTime=11;//最后登录时间
 }
 
-message AdminUserListParamsResp{
+message AdminUserListResp{
   int64 total = 1;
   repeated AdminUserListItem rows = 2;
 }
 
 // 账号详情
-message UserDetailParamsReq{
+message AdminUserInfoReq{
   int32 adminId = 1;//管理员ID
 }
 
-message UserDetailParamsResp{}
+message AdminUserInfo{
+
+}
+
 
 // 添加账号
-message UserAddParamsReq{
+message AdminUserAddReq{
   string username = 1;//账号
   string nickname = 2;//昵称
   string password = 3;//密码
@@ -49,10 +52,8 @@ message UserAddParamsReq{
   string avatar = 7;//头像地址
 }
 
-message UserAddParamsResp{}
-
 // 账号编辑
-message UserEditParamsReq{
+message AdminUserEditReq{
   string username = 1;//账号
   string nickname = 2;//昵称
   string password = 3;//密码
@@ -63,24 +64,19 @@ message UserEditParamsReq{
   int32 adminId = 8;//管理员ID
 }
 
-message UserEditParamsResp{}
-
 // 账号状态更改
-message UserUpdateEnabledParamsReq{
+message AdminUserUpdateEnabledReq{
   int32 adminId = 1;//管理员ID
   bool enabled = 2;//账号启用状态
 }
-message UserUpdateEnabledParamsResp{}
 
 // 删除账号
-message UserDeleteParamsReq{
+message AdminUserDeleteReq{
   int32 adminId = 1;//管理员ID
 }
-message UserDeleteParamsResp{}
 
 // 账号绑定角色
-message UserBindRolesParamsReq{
+message AdminUserBindRolesReq{
   int32 adminId = 1;//管理员ID
   repeated int32 roleIds = 2;//角色ID列表
 }
-message UserBindRolesParamsResp{}

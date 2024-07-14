@@ -2,8 +2,10 @@ package logic
 
 import (
 	"admin/app/admin/dao"
+	"admin/app/gen/model"
 	"admin/code"
 	"admin/config"
+	"admin/pkg/utils"
 	"admin/pkg/utils/pwd"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
@@ -22,6 +24,8 @@ type IAdminUserLogic interface {
 	EditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error
 	MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error)
 	MyPermission(ctx *gin.Context, adminId int32) (permissionKeys map[string]string, err error)
+	Add(ctx *gin.Context, params *admin_proto.AdminUserAddReq) error
+	List(ctx *gin.Context, params *admin_proto.AdminUserListReq) (*admin_proto.AdminUserListResp, error)
 }
 
 func newAdminUserLogic() IAdminUserLogic {
@@ -102,4 +106,64 @@ func (a *AdminUserLogic) MyPermission(ctx *gin.Context, adminId int32) (permissi
 	}
 	_, permissionKeys = getMenuIdsFromAdminPermissions(permissions)
 	return permissionKeys, nil
+}
+
+func (a *AdminUserLogic) List(ctx *gin.Context, params *admin_proto.AdminUserListReq) (*admin_proto.AdminUserListResp, error) {
+	adminIds := make([]int32, 0)
+	if params.RoleIds != nil && len(params.RoleIds) > 0 {
+		adminRoles, err := dao.H.AdminRole.FindAdminUserByRoleIds(ctx, params.RoleIds)
+		if err != nil {
+			return nil, err
+		}
+		for _, item := range adminRoles {
+			adminIds = append(adminIds, item.AdminID)
+		}
+	}
+	total, rows, err := dao.H.AdminUser.List(ctx, params, adminIds)
+	if err != nil {
+		return nil, err
+	}
+	data := &admin_proto.AdminUserListResp{}
+	data.Total = total
+	data.Rows, err = a.HandleListData(rows)
+	return data, err
+}
+
+func (a *AdminUserLogic) HandleListData(list []*model.AdminUser) (rows []*admin_proto.AdminUserListItem, err error) {
+	for _, item := range list {
+		data, err := a.HandleItemData(item)
+		if err != nil {
+			return nil, err
+		}
+		rows = append(rows, data)
+	}
+	return rows, nil
+}
+
+func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_proto.AdminUserListItem, err error) {
+	data = &admin_proto.AdminUserListItem{}
+	err = utils.BeanCopy(data, item)
+	if err != nil {
+		return nil, err
+	}
+	data.Enabled = item.IsEnabled
+	data.CreatedAt = item.CreatedAt.Format(time.DateTime)
+	data.UpdatedAt = item.UpdatedAt.Format(time.DateTime)
+	return data, nil
+}
+
+func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.AdminUserAddReq) error {
+	password, err := pwd.Encode(params.Password)
+	if err != nil {
+		return err
+	}
+	data := &model.AdminUser{
+		Username:  params.Username,
+		Password:  password,
+		Nickname:  params.Nickname,
+		Email:     params.Email,
+		Avatar:    params.Avatar,
+		IsEnabled: params.Enabled,
+	}
+	return dao.H.AdminUser.Create(ctx, data)
 }

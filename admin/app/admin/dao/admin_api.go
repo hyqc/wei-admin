@@ -17,7 +17,7 @@ type IAdminAPI interface {
 	Update(ctx *gin.Context, data *model.AdminAPI) error
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
-	FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
+	List(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
 	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error)
 	FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error)
@@ -50,7 +50,7 @@ func (a *AdminAPI) Delete(ctx *gin.Context, id int32) error {
 	return err
 }
 
-func (a *AdminAPI) FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error) {
+func (a *AdminAPI) List(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)

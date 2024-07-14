@@ -31,7 +31,7 @@ func newAdminAPILogic() IAdminAPILogic {
 }
 
 func (a *AdminAPILogic) List(ctx *gin.Context, params *admin_proto.ApiListReq) (data *admin_proto.ApiListResp, err error) {
-	total, rows, err := dao.H.AdminAPI.FindList(ctx, params)
+	total, rows, err := dao.H.AdminAPI.List(ctx, params)
 	if err != nil {
 		return nil, err
 	}
