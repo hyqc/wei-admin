@@ -45,7 +45,6 @@ message PermissionAddReq{
   bool enabled = 8;//是否启用
 }
 
-message PermissionAddResp{}
 
 //权限详情
 message PermissionInfoReq{
@@ -95,14 +94,17 @@ message PermissionDeleteReq{
 }
 
 // 权限绑定接口
-message PermissionApisBindReq{}
-
-message PermissionApisBindResp{}
+message PermissionBindApisReq{
+  int32 permissionId =1; // 权限ID
+  repeated int32 apiIds = 2; // 接口ID列表
+}
 
 //指定菜单创建查看编辑删除权限
-message PermissionBindMenuReq{}
+message PermissionBindMenuReq{
+  int32 menuId = 1; // 菜单ID
+  repeated PermissionAddReq permissions = 2; // 菜单对应的权限ID列表
+}
 
-message PermissionBindMenuResp{}
 
 message PermissionApiItem{
   int32 id = 1;//权限ID

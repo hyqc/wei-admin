@@ -144,10 +144,40 @@ func (PermissionController) Delete(ctx *gin.Context) {
 
 // BindAPI 绑定权限接口
 func (PermissionController) BindAPI(ctx *gin.Context) {
-
+	msg := "PermissionController.BindAPI"
+	params := &admin_proto.PermissionBindApisReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.BindAPIReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminPermission.BindAPI(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }
 
 // AddMenuPermissions 指定菜单创建查看编辑删除权限
 func (PermissionController) AddMenuPermissions(ctx *gin.Context) {
-
+	msg := "PermissionController.AddMenuPermissions"
+	params := &admin_proto.PermissionBindMenuReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.PermissionBindMenuReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminPermission.AddMenuPermissions(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }

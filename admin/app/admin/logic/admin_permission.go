@@ -23,6 +23,8 @@ type IAdminPermissionLogic interface {
 	Edit(ctx *gin.Context, params *admin_proto.PermissionEditReq) error
 	Enable(ctx *gin.Context, params *admin_proto.PermissionEnableReq) error
 	Delete(ctx *gin.Context, params *admin_proto.PermissionDeleteReq) error
+	BindAPI(ctx *gin.Context, params *admin_proto.PermissionBindApisReq) error
+	AddMenuPermissions(ctx *gin.Context, params *admin_proto.PermissionBindMenuReq) error
 }
 
 func newAdminPermissionLogic() IAdminPermissionLogic {
@@ -210,4 +212,53 @@ func (a *AdminPermissionLogic) Delete(ctx *gin.Context, params *admin_proto.Perm
 		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
 	}
 	return dao.H.AdminPermission.Delete(ctx, params.Id)
+}
+
+func (a *AdminPermissionLogic) BindAPI(ctx *gin.Context, params *admin_proto.PermissionBindApisReq) error {
+	_, err := dao.H.AdminPermission.Info(ctx, params.PermissionId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	apisList, err := dao.H.AdminAPI.FindByIds(ctx, params.ApiIds, true)
+	if err != nil {
+		return err
+	}
+	if len(apisList) == 0 {
+		return code.NewCodeError(code_proto.ErrorCode_AdminApiNotExist, err)
+	}
+	permissionAps := make([]*model.AdminPermissionAPI, 0, len(apisList))
+	for _, item := range apisList {
+		permissionAps = append(permissionAps, &model.AdminPermissionAPI{
+			PermissionID: params.PermissionId,
+			APIID:        item.ID,
+		})
+	}
+	return dao.H.AdminPermission.BindApis(ctx, params.PermissionId, permissionAps)
+}
+
+func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admin_proto.PermissionBindMenuReq) error {
+	data := make([]*model.AdminPermission, 0, len(params.Permissions))
+	for _, item := range params.Permissions {
+		if item.Key == "" {
+			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionKeyNeed, nil)
+		}
+		if item.Name == "" {
+			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionNameNeed, nil)
+		}
+		if dao.GetAdminPermissionTypeText(dao.AdminPermissionType(item.Type)) == "" {
+			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionTypeInvalid, nil)
+		}
+		data = append(data, &model.AdminPermission{
+			MenuID:    params.MenuId,
+			Key:       item.Key,
+			Name:      item.Name,
+			Type:      item.Type,
+			Describe:  item.Describe,
+			IsEnabled: item.Enabled,
+		})
+	}
+	return dao.H.AdminPermission.BatchAddPermissions(ctx, data)
 }

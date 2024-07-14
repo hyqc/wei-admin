@@ -20,6 +20,7 @@ type IAdminAPI interface {
 	FindList(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
 	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error)
+	FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error)
 }
 
 type AdminAPI struct {
@@ -64,6 +65,10 @@ func (a *AdminAPI) FindList(ctx context.Context, params *admin_proto.ApiListReq)
 func (a *AdminAPI) FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) {
 	db := query.AdminAPI
 	return db.WithContext(ctx).Where(db.IsEnabled.Is(true)).Find()
+}
+func (a *AdminAPI) FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error) {
+	db := query.AdminAPI
+	return db.WithContext(ctx).Where(db.IsEnabled.Is(enabled), db.ID.In(ids...)).Find()
 }
 
 func (a *AdminAPI) Info(ctx *gin.Context, id int32) (*model.AdminAPI, error) {

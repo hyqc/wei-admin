@@ -10,6 +10,7 @@ type Config struct {
 	Server   Server   `yaml:"server"`
 	Database Database `yaml:"database"`
 	Logger   Logger   `yaml:"logger"`
+	DBClient *DBClient
 }
 
 var (

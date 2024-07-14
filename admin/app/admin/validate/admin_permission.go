@@ -111,3 +111,37 @@ func (a *AdminPermissionReqValidator) DeleteReq(data interface{}) url.Values {
 	}
 	return govalidator.New(opts).ValidateStruct()
 }
+
+func (a *AdminPermissionReqValidator) BindAPIReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("permissionId"): []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("apiIds"):       []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("permissionId"): []string{"required:权限ID不能为空", "min:权限ID无效"},
+		validator.GetValidateJsonOmitemptyTag("apiIds"):       []string{"required:至少选择一项权限", "min:至少选择一项权限"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}
+
+func (a *AdminPermissionReqValidator) PermissionBindMenuReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("menuId"):      []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("permissions"): []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("menuId"):      []string{"required:菜单ID不能为空", "min:菜单ID无效"},
+		validator.GetValidateJsonOmitemptyTag("permissions"): []string{"required:权限配置不能为空", "min:权限配置不能为空"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}

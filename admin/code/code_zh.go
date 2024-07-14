@@ -25,7 +25,11 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminApiNameExist: "接口名称已存在",
 	code_proto.ErrorCode_AdminApiPathExist: "接口路径已存在",
 	code_proto.ErrorCode_AdminApiKeyExist:  "接口键名已存在",
+	code_proto.ErrorCode_AdminApiNotExist:  "接口不存在货已失效",
 
-	code_proto.ErrorCode_AdminPermissionKeyExist: "权限键名已存在",
-	code_proto.ErrorCode_AdminPermissionExist:    "该菜单下权限已存在",
+	code_proto.ErrorCode_AdminPermissionKeyExist:    "权限键名已存在",
+	code_proto.ErrorCode_AdminPermissionExist:       "该菜单下权限已存在",
+	code_proto.ErrorCode_AdminPermissionKeyNeed:     "权限键名必填",
+	code_proto.ErrorCode_AdminPermissionNameNeed:    "权限名称必填",
+	code_proto.ErrorCode_AdminPermissionTypeInvalid: "权限类型无效",
 }

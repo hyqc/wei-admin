@@ -26,6 +26,10 @@ type MySQLConfig struct {
 	ConnMaxLifetimeMinutes int    `yaml:"conn_max_lifetime_minutes"`
 }
 
+type DBClient struct {
+	Wei *gorm.DB
+}
+
 func InitMySQLDB() error {
 	conf := AppConfig.Database.Wei
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=%s&loc=%s",
@@ -59,5 +63,11 @@ func InitMySQLDB() error {
 
 	query.SetDefault(db)
 
+	AppConfig.DBClient.Wei = db
+
 	return nil
+}
+
+func initClientDBClient() {
+	AppConfig.DBClient = &DBClient{}
 }

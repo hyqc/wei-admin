@@ -5,10 +5,12 @@ import (
 	"admin/app/gen/custom/admin_custom"
 	"admin/app/gen/model"
 	"admin/app/gen/query"
+	"admin/config"
 	"admin/proto/admin_proto"
 	"context"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -23,6 +25,8 @@ type IAdminPermission interface {
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	FindPermissionMenuInfoById(ctx *gin.Context, permissionId int32) (*admin_custom.AdminPermissionMenu, error)
 	Delete(ctx *gin.Context, id int32) error
+	BindApis(ctx *gin.Context, permissionId int32, permissionApes []*model.AdminPermissionAPI) error
+	BatchAddPermissions(ctx *gin.Context, data []*model.AdminPermission) error
 }
 
 type AdminPermission struct {
@@ -159,6 +163,21 @@ func (a *AdminPermission) Enable(ctx *gin.Context, id int32, enabled bool) error
 func (a *AdminPermission) Delete(ctx *gin.Context, id int32) error {
 	db := query.AdminPermission
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
+	return err
+}
+
+func (a *AdminPermission) BatchAddPermissions(ctx *gin.Context, data []*model.AdminPermission) error {
+	return query.AdminPermission.WithContext(ctx).Create(data...)
+}
+
+func (a *AdminPermission) BindApis(ctx *gin.Context, permissionId int32, permissionApes []*model.AdminPermissionAPI) error {
+	pa := query.AdminPermissionAPI
+	err := config.AppConfig.DBClient.Wei.Transaction(func(tx *gorm.DB) error {
+		if _, err := pa.WithContext(ctx).Where(pa.PermissionID.Eq(permissionId)).Delete(); err != nil {
+			return err
+		}
+		return pa.WithContext(ctx).Create(permissionApes...)
+	})
 	return err
 }
 
