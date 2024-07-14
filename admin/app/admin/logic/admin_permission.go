@@ -240,6 +240,13 @@ func (a *AdminPermissionLogic) BindAPI(ctx *gin.Context, params *admin_proto.Per
 }
 
 func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admin_proto.PermissionBindMenuReq) error {
+	_, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_AdminMenuNotExist, err)
+		}
+		return err
+	}
 	data := make([]*model.AdminPermission, 0, len(params.Permissions))
 	for _, item := range params.Permissions {
 		if item.Key == "" {

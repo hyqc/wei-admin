@@ -22,7 +22,7 @@ var (
 	}
 	AdminPermissionEnumEdit = &AdminPermissionEnum{
 		Type: "edit",
-		Key:  "Edit",
+		Key:  "AccountEdit",
 		Name: "编辑",
 	}
 	AdminPermissionEnumDelete = &AdminPermissionEnum{

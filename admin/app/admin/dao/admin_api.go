@@ -39,14 +39,14 @@ func (a *AdminAPI) Update(ctx *gin.Context, data *model.AdminAPI) error {
 }
 
 func (a *AdminAPI) Enable(ctx *gin.Context, id int32, enabled bool) error {
-	apiDB := query.AdminAPI
-	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).UpdateColumn(apiDB.IsEnabled, enabled)
+	db := query.AdminAPI
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
 	return err
 }
 
 func (a *AdminAPI) Delete(ctx *gin.Context, id int32) error {
-	apiDB := query.AdminAPI
-	_, err := apiDB.WithContext(ctx).Where(apiDB.ID.Eq(id)).Delete()
+	db := query.AdminAPI
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
 	return err
 }
 

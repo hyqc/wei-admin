@@ -6,6 +6,7 @@ import (
 	"admin/app/gen/query"
 	"admin/proto/admin_proto"
 	"context"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
 	"time"
 )
@@ -17,6 +18,9 @@ type IAdminUser interface {
 	UpdateAdminUser(ctx context.Context, data *model.AdminUser) error
 	Create(ctx context.Context, data *model.AdminUser) error
 	List(ctx context.Context, params *admin_proto.AdminUserListReq, adminIds []int32) (total int64, list []*model.AdminUser, err error)
+	Enable(ctx *gin.Context, id int32, enabled bool) error
+	Delete(ctx *gin.Context, id int32) error
+	AddRoles(ctx *gin.Context, roles []*model.AdminUserRole) error
 }
 
 type AdminUser struct {
@@ -121,4 +125,21 @@ func (a *AdminUser) handleListReq(ctx context.Context, params *admin_proto.Admin
 	}
 
 	return q
+}
+
+func (a *AdminUser) Enable(ctx *gin.Context, id int32, enabled bool) error {
+	db := query.AdminUser
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
+	return err
+}
+
+func (a *AdminUser) Delete(ctx *gin.Context, id int32) error {
+	db := query.AdminUser
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
+	return err
+}
+
+func (a *AdminUser) AddRoles(ctx *gin.Context, roles []*model.AdminUserRole) error {
+	db := query.AdminUserRole
+	return db.WithContext(ctx).Create(roles...)
 }

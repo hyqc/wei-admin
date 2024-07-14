@@ -65,7 +65,7 @@ message AdminUserEditReq{
 }
 
 // 账号状态更改
-message AdminUserUpdateEnabledReq{
+message AdminUserEnabledReq{
   int32 adminId = 1;//管理员ID
   bool enabled = 2;//账号启用状态
 }

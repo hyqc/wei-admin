@@ -21,6 +21,8 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_RequestParamsInvalid: "请求参数无效",
 
 	code_proto.ErrorCode_AdminAccountPasswordInvalid: "账号或密码错误",
+	code_proto.ErrorCode_AdminAccountNotExist:        "账号不存在或已被删除",
+	code_proto.ErrorCode_AdminAccountInvalid:         "账号无效",
 
 	code_proto.ErrorCode_AdminApiNameExist: "接口名称已存在",
 	code_proto.ErrorCode_AdminApiPathExist: "接口路径已存在",
@@ -32,4 +34,6 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminPermissionKeyNeed:     "权限键名必填",
 	code_proto.ErrorCode_AdminPermissionNameNeed:    "权限名称必填",
 	code_proto.ErrorCode_AdminPermissionTypeInvalid: "权限类型无效",
+
+	code_proto.ErrorCode_AdminMenuNotExist: "菜单不存在",
 }

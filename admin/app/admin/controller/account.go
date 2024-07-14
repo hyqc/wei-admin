@@ -37,7 +37,7 @@ func (AccountController) Register(ctx *gin.Context) {
 // @Success 200 {object}
 // @Router /admin_proto/login [post]
 func (AccountController) Login(ctx *gin.Context) {
-	msg := "AccountController.Login"
+	msg := "AccountController.AccountLogin"
 	params := &admin_proto.LoginReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.LoginReq); err != nil {
@@ -46,7 +46,7 @@ func (AccountController) Login(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	data, err := logic.H.AdminUser.Login(ctx, params, ctx.ClientIP())
+	data, err := logic.H.AdminUser.AccountLogin(ctx, params, ctx.ClientIP())
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -60,10 +60,10 @@ func (AccountController) Login(ctx *gin.Context) {
 
 // Info 管理员账号详情
 func (AccountController) Info(ctx *gin.Context) {
-	msg := "AccountController.Info"
+	msg := "AccountController.AccountInfo"
 	refreshToken := ctx.GetBool("refreshToken")
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := logic.H.AdminUser.Info(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, constant.AdminTokenExpireSeconds)
+	data, err := logic.H.AdminUser.AccountInfo(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, constant.AdminTokenExpireSeconds)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -77,7 +77,7 @@ func (AccountController) Info(ctx *gin.Context) {
 
 // Edit 编辑账号
 func (AccountController) Edit(ctx *gin.Context) {
-	msg := "AccountController.Edit"
+	msg := "AccountController.AccountEdit"
 	params := &admin_proto.AccountEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditReq); err != nil {
@@ -86,7 +86,7 @@ func (AccountController) Edit(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	err := logic.H.AdminUser.Edit(ctx, constant.GetCustomClaims(ctx).AdminID, params)
+	err := logic.H.AdminUser.AccountEdit(ctx, constant.GetCustomClaims(ctx).AdminID, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -107,7 +107,7 @@ func (AccountController) Password(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	err := logic.H.AdminUser.EditPassword(ctx, constant.GetCustomClaims(ctx).AdminID, params)
+	err := logic.H.AdminUser.AccountEditPassword(ctx, constant.GetCustomClaims(ctx).AdminID, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return

@@ -15,13 +15,13 @@ import (
 	"go.uber.org/zap"
 )
 
-type AdminUserController struct {
+type UserController struct {
 	core.Controller
 }
 
 // List 管理员列表
-func (AdminUserController) List(ctx *gin.Context) {
-	msg := "AdminUserController.List"
+func (UserController) List(ctx *gin.Context) {
+	msg := "UserController.List"
 	params := &admin_proto.AdminUserListReq{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params); err != nil {
@@ -42,8 +42,8 @@ func (AdminUserController) List(ctx *gin.Context) {
 }
 
 // Add 添加管理员
-func (AdminUserController) Add(ctx *gin.Context) {
-	msg := "AdminUserController.Add"
+func (UserController) Add(ctx *gin.Context) {
+	msg := "UserController.Add"
 	params := &admin_proto.AdminUserAddReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.AddReq); err != nil {
@@ -61,8 +61,8 @@ func (AdminUserController) Add(ctx *gin.Context) {
 }
 
 // Info 详情
-func (AdminUserController) Info(ctx *gin.Context) {
-	msg := "AdminUserController.Add"
+func (UserController) Info(ctx *gin.Context) {
+	msg := "UserController.AccountInfo"
 	params := &admin_proto.AdminUserInfoReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.InfoReq); err != nil {
@@ -71,7 +71,7 @@ func (AdminUserController) Info(ctx *gin.Context) {
 		code.JSON(ctx, result)
 		return
 	}
-	info, err := logic.H.AdminUser.Info(ctx, params.AdminId, false, constant.AdminTokenExpireSeconds)
+	info, err := logic.H.AdminUser.AccountInfo(ctx, params.AdminId, false, constant.AdminTokenExpireSeconds)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
@@ -82,21 +82,77 @@ func (AdminUserController) Info(ctx *gin.Context) {
 }
 
 // Edit 编辑管理员
-func (AdminUserController) Edit(ctx *gin.Context) {
-
+func (UserController) Edit(ctx *gin.Context) {
+	msg := "UserController.Edit"
+	params := &admin_proto.AdminUserEditReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminUserReq.EditReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminUser.Edit(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
 }
 
 // Enable 启用禁用
-func (AdminUserController) Enable(ctx *gin.Context) {
-
+func (UserController) Enable(ctx *gin.Context) {
+	msg := "UserController.Enable"
+	params := &admin_proto.AdminUserEnabledReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminUserReq.EnableReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminUser.Enable(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
 }
 
 // Delete 删除管理员
-func (AdminUserController) Delete(ctx *gin.Context) {
-
+func (UserController) Delete(ctx *gin.Context) {
+	msg := "UserController.Delete"
+	params := &admin_proto.AdminUserDeleteReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminUserReq.DeleteReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminUser.Delete(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
 }
 
 // BindRoles 管理员绑定角色
-func (AdminUserController) BindRoles(ctx *gin.Context) {
-
+func (UserController) BindRoles(ctx *gin.Context) {
+	msg := "UserController.BindRoles"
+	params := &admin_proto.AdminUserBindRolesReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminUserReq.BindRolesReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminUser.BindRoles(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
 }

@@ -10,7 +10,9 @@ import (
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"context"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -18,21 +20,25 @@ type AdminUserLogic struct {
 }
 
 type IAdminUserLogic interface {
-	Login(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error)
-	Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error)
-	Edit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error
-	EditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error
+	AccountLogin(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error)
+	AccountInfo(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error)
+	AccountEdit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error
+	AccountEditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error
 	MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error)
 	MyPermission(ctx *gin.Context, adminId int32) (permissionKeys map[string]string, err error)
-	Add(ctx *gin.Context, params *admin_proto.AdminUserAddReq) error
 	List(ctx *gin.Context, params *admin_proto.AdminUserListReq) (*admin_proto.AdminUserListResp, error)
+	Add(ctx *gin.Context, params *admin_proto.AdminUserAddReq) error
+	Edit(ctx *gin.Context, params *admin_proto.AdminUserEditReq) error
+	Enable(ctx *gin.Context, params *admin_proto.AdminUserEnabledReq) error
+	Delete(ctx *gin.Context, params *admin_proto.AdminUserDeleteReq) error
+	BindRoles(ctx *gin.Context, params *admin_proto.AdminUserBindRolesReq) error
 }
 
 func newAdminUserLogic() IAdminUserLogic {
 	return &AdminUserLogic{}
 }
 
-func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error) {
+func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error) {
 	data, err := dao.H.AdminUser.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil {
 		return nil, err
@@ -58,7 +64,7 @@ func (a *AdminUserLogic) Login(ctx context.Context, params *admin_proto.LoginReq
 	return result, nil
 }
 
-func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
+func (a *AdminUserLogic) AccountInfo(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
 	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return nil, err
@@ -67,7 +73,7 @@ func (a *AdminUserLogic) Info(ctx context.Context, adminId int32, refreshToken b
 	return getAccountInfo(ctx, data, refreshToken, seconds)
 }
 
-func (a *AdminUserLogic) Edit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error {
+func (a *AdminUserLogic) AccountEdit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error {
 	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
@@ -78,7 +84,7 @@ func (a *AdminUserLogic) Edit(ctx context.Context, adminId int32, params *admin_
 	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
 
-func (a *AdminUserLogic) EditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error {
+func (a *AdminUserLogic) AccountEditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error {
 	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
@@ -166,4 +172,69 @@ func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.AdminUserAddR
 		IsEnabled: params.Enabled,
 	}
 	return dao.H.AdminUser.Create(ctx, data)
+}
+
+func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.AdminUserEditReq) error {
+	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
+	if err != nil {
+		return err
+	}
+	if params.Password != "" {
+		data.Password, err = pwd.Encode(params.Password)
+	}
+	data.Username = params.Username
+	data.Nickname = params.Nickname
+	data.Email = params.Email
+	data.IsEnabled = params.Enabled
+	data.Avatar = params.Avatar
+	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
+}
+
+func (a *AdminUserLogic) Enable(ctx *gin.Context, params *admin_proto.AdminUserEnabledReq) error {
+	info, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	if info.IsEnabled == params.Enabled {
+		return nil
+	}
+	return dao.H.AdminUser.Enable(ctx, params.AdminId, params.Enabled)
+}
+
+func (a *AdminUserLogic) Delete(ctx *gin.Context, params *admin_proto.AdminUserDeleteReq) error {
+	info, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	if info.IsEnabled {
+		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
+	}
+	return dao.H.AdminUser.Delete(ctx, params.AdminId)
+}
+
+func (a *AdminUserLogic) BindRoles(ctx *gin.Context, params *admin_proto.AdminUserBindRolesReq) error {
+	info, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_AdminAccountNotExist, err)
+		}
+		return err
+	}
+	if !info.IsEnabled {
+		return code.NewCodeError(code_proto.ErrorCode_AdminAccountInvalid, err)
+	}
+	adminUserRoles := make([]*model.AdminUserRole, 0, len(params.RoleIds))
+	for _, roleId := range params.RoleIds {
+		adminUserRoles = append(adminUserRoles, &model.AdminUserRole{
+			AdminID: params.AdminId,
+			RoleID:  roleId,
+		})
+	}
+	return dao.H.AdminUser.AddRoles(ctx, adminUserRoles)
 }

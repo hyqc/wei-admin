@@ -18,7 +18,9 @@ enum ErrorCode{
   RequestQueryInvalid = 300002;// 请求查询参数无效
   RequestParamsInvalid = 300003;// 请求参数无效
 
-  AdminAccountPasswordInvalid = 400001;// 账号账号或密码错误
+  AdminAccountPasswordInvalid = 400001;// 账号或密码错误
+  AdminAccountNotExist = 400002;// 账号不存在或已被删除
+  AdminAccountInvalid = 400003;// 账号已被封禁
 
   AdminApiNameExist = 500001; // 接口名称已存在
   AdminApiPathExist = 500002; // 接口路径已存在
@@ -30,4 +32,6 @@ enum ErrorCode{
   AdminPermissionKeyNeed = 600003; // 权限键名不能为空
   AdminPermissionNameNeed = 600004; // 权限名称不能为空
   AdminPermissionTypeInvalid = 600005; // 权限类型无效
+
+  AdminMenuNotExist = 700001; // 菜单不存在
 }
