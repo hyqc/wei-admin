@@ -118,18 +118,6 @@ func (a *AdminMenu) handleListReqSortField(sortField, sortType string) field.Exp
 func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.MenuListReq) (q query.IAdminMenuDo) {
 	DB := query.AdminMenu
 	q = DB.WithContext(ctx)
-	if params.Path != "" {
-		q = q.Where(DB.Path.Like(params.Key))
-	}
-	if params.Name != "" {
-		q = q.Where(DB.Name.Like(params.Key))
-	}
-	if params.Key != "" {
-		q = q.Where(DB.Key.Like(params.Key))
-	}
-	if params.ParentId > 0 {
-		q = q.Where(DB.ParentID.Eq(params.ParentId))
-	}
 
 	switch params.Base.Enabled {
 	case common.EnabledValidQueryValue:
@@ -144,6 +132,19 @@ func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.MenuL
 
 	if params.Base.CreateEndTime > 0 {
 		q = q.Where(DB.CreatedAt.Lte(time.Unix(params.Base.CreateEndTime, 0)))
+	}
+
+	if params.Path != "" {
+		q = q.Where(DB.Path.Like("%" + params.Path + "%"))
+	}
+	if params.Name != "" {
+		q = q.Where(DB.Name.Like("%" + params.Name + "%"))
+	}
+	if params.Key != "" {
+		q = q.Where(DB.Key.Like("%" + params.Key + "%"))
+	}
+	if params.ParentId > 0 {
+		q = q.Where(DB.ParentID.Eq(params.ParentId))
 	}
 
 	return q

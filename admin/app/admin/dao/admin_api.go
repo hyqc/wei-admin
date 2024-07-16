@@ -106,15 +106,6 @@ func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr
 func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ApiListReq) (q query.IAdminAPIDo) {
 	db := query.AdminAPI
 	q = db.WithContext(ctx)
-	if params.Path != "" {
-		q = q.Where(db.Path.Like(params.Key))
-	}
-	if params.Name != "" {
-		q = q.Where(db.Name.Like(params.Key))
-	}
-	if params.Key != "" {
-		q = q.Where(db.Key.Like(params.Key))
-	}
 
 	switch params.Base.Enabled {
 	case common.EnabledValidQueryValue:
@@ -129,6 +120,16 @@ func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ApiLis
 
 	if params.Base.CreateEndTime > 0 {
 		q = q.Where(db.CreatedAt.Lte(time.Unix(params.Base.CreateEndTime, 0)))
+	}
+
+	if params.Path != "" {
+		q = q.Where(db.Path.Like("%" + params.Path + "%"))
+	}
+	if params.Name != "" {
+		q = q.Where(db.Name.Like("%" + params.Name + "%"))
+	}
+	if params.Key != "" {
+		q = q.Where(db.Key.Like("%" + params.Key + "%"))
 	}
 
 	return q

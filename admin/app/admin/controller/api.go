@@ -74,7 +74,7 @@ func (APIController) Add(ctx *gin.Context) {
 }
 
 func (APIController) Info(ctx *gin.Context) {
-	msg := "APIController.AccountInfo"
+	msg := "APIController.Info"
 	params := &admin_proto.ApiInfoReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminApiReq.InfoReq); err != nil {
@@ -95,7 +95,7 @@ func (APIController) Info(ctx *gin.Context) {
 }
 
 func (APIController) Edit(ctx *gin.Context) {
-	msg := "APIController.AccountEdit"
+	msg := "APIController.Edit"
 	params := &admin_proto.ApiEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminApiReq.EditReq); err != nil {

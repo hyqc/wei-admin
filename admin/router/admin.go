@@ -66,4 +66,16 @@ func admins(g *gin.RouterGroup) {
 		user.POST("/delete", userAPI.Delete)
 		user.POST("/bind_roles", userAPI.BindRoles)
 	}
+
+	role := admin.Group("/user")
+	{
+		roleAPI := adminCtl.RoleController{}
+		role.GET("/list", roleAPI.List)
+		role.GET("/info", roleAPI.Info)
+		role.POST("/add", roleAPI.Add)
+		role.POST("/edit", roleAPI.Edit)
+		role.POST("/enable", roleAPI.Enable)
+		role.POST("/delete", roleAPI.Delete)
+		role.POST("/bind_roles", roleAPI.BindPermissions)
+	}
 }

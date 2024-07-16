@@ -62,7 +62,7 @@ func (PermissionController) Add(ctx *gin.Context) {
 
 // Info 详情
 func (PermissionController) Info(ctx *gin.Context) {
-	msg := "PermissionController.AccountInfo"
+	msg := "PermissionController.Info"
 	params := &admin_proto.PermissionInfoReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.InfoReq); err != nil {
@@ -84,7 +84,7 @@ func (PermissionController) Info(ctx *gin.Context) {
 
 // Edit 编辑权限
 func (PermissionController) Edit(ctx *gin.Context) {
-	msg := "PermissionController.AccountEdit"
+	msg := "PermissionController.Edit"
 	params := &admin_proto.PermissionEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.EditReq); err != nil {

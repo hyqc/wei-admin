@@ -78,7 +78,7 @@ func (MenuController) Add(ctx *gin.Context) {
 
 // Info 菜单详情
 func (MenuController) Info(ctx *gin.Context) {
-	msg := "MenuController.AccountInfo"
+	msg := "MenuController.Info"
 	params := &admin_proto.MenuInfoReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminMenuReq.InfoReq); err != nil {
@@ -100,7 +100,7 @@ func (MenuController) Info(ctx *gin.Context) {
 
 // Edit 编辑菜单
 func (MenuController) Edit(ctx *gin.Context) {
-	msg := "MenuController.AccountEdit"
+	msg := "MenuController.Edit"
 	params := &admin_proto.MenuEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminMenuReq.EditReq); err != nil {

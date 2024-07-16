@@ -62,7 +62,7 @@ func (UserController) Add(ctx *gin.Context) {
 
 // Info 详情
 func (UserController) Info(ctx *gin.Context) {
-	msg := "UserController.AccountInfo"
+	msg := "UserController.Info"
 	params := &admin_proto.AdminUserInfoReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.InfoReq); err != nil {

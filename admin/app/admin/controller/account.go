@@ -60,7 +60,7 @@ func (AccountController) Login(ctx *gin.Context) {
 
 // Info 管理员账号详情
 func (AccountController) Info(ctx *gin.Context) {
-	msg := "AccountController.AccountInfo"
+	msg := "AccountController.Info"
 	refreshToken := ctx.GetBool("refreshToken")
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	data, err := logic.H.AdminUser.AccountInfo(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, constant.AdminTokenExpireSeconds)
@@ -77,7 +77,7 @@ func (AccountController) Info(ctx *gin.Context) {
 
 // Edit 编辑账号
 func (AccountController) Edit(ctx *gin.Context) {
-	msg := "AccountController.AccountEdit"
+	msg := "AccountController.Edit"
 	params := &admin_proto.AccountEditReq{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditReq); err != nil {
