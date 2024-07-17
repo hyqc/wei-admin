@@ -27,6 +27,7 @@ type IAdminPermission interface {
 	Delete(ctx *gin.Context, id int32) error
 	BindApis(ctx *gin.Context, permissionId int32, permissionApes []*model.AdminPermissionAPI) error
 	BatchAddPermissions(ctx *gin.Context, data []*model.AdminPermission) error
+	FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminPermission, error)
 }
 
 type AdminPermission struct {
@@ -201,4 +202,8 @@ func (a *AdminPermission) FindPermissionMenuInfoById(ctx *gin.Context, permissio
 	}
 	err := p.WithContext(ctx).Select(fields...).LeftJoin(m, m.ID.EqCol(p.MenuID)).Where(p.ID.Eq(permissionId)).Scan(data)
 	return data, err
+}
+
+func (a *AdminPermission) FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminPermission, error) {
+	return query.AdminPermission.WithContext(ctx).Where(query.AdminPermission.ID.In(ids...)).Find()
 }

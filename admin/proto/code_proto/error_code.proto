@@ -34,4 +34,6 @@ enum ErrorCode{
   AdminPermissionTypeInvalid = 600005; // 权限类型无效
 
   AdminMenuNotExist = 700001; // 菜单不存在
+
+  AdminRoleNotExist = 800001; // 角色不存在
 }

@@ -150,10 +150,42 @@ func (RoleController) Delete(ctx *gin.Context) {
 
 // BindPermissions 角色绑定权限
 func (RoleController) BindPermissions(ctx *gin.Context) {
-
+	msg := "RoleController.Delete"
+	params := &admin_proto.RoleBindPermissionsReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminRoleReq.RoleBindPermissionsReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminRole.RoleBindPermissions(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }
 
 // Permissions 角色权限列表
 func (RoleController) Permissions(ctx *gin.Context) {
-
+	msg := "RoleController.Permissions"
+	params := &admin_proto.RolePermissionsReq{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminRoleReq.RolePermissionsReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	data, err := logic.H.AdminRole.RolePermissions(ctx, params)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	result.SetData(data)
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }

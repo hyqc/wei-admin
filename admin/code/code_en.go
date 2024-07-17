@@ -34,4 +34,6 @@ var enMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminPermissionTypeInvalid: "permission type invalid",
 
 	code_proto.ErrorCode_AdminMenuNotExist: "menu not exist",
+
+	code_proto.ErrorCode_AdminRoleNotExist: "role not exist",
 }

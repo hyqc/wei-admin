@@ -14,3 +14,11 @@ type AdminRoleInfo struct {
 	CreatedAt       *time.Time `json:"created_at"`
 	UpdatedAt       *time.Time `json:"updated_at"`
 }
+
+type AdminRolePermissionItem struct {
+	RoleID         int32  `json:"role_id"`
+	PermissionID   int32  `json:"permission_id"`
+	PermissionKey  string `json:"permission_key"`
+	PermissionName string `json:"permission_name"`
+	PermissionType string `json:"permission_type"`
+}

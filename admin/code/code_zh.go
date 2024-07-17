@@ -36,4 +36,6 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminPermissionTypeInvalid: "权限类型无效",
 
 	code_proto.ErrorCode_AdminMenuNotExist: "菜单不存在",
+
+	code_proto.ErrorCode_AdminRoleNotExist: "角色不存在",
 }

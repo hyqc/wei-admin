@@ -6,6 +6,7 @@ import (
 	"admin/code"
 	"admin/constant"
 	"admin/pkg/utils"
+	"admin/pkg/utils/array"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"errors"
@@ -24,6 +25,8 @@ type IAdminRoleLogic interface {
 	Edit(ctx *gin.Context, params *admin_proto.RoleEditReq) error
 	Enable(ctx *gin.Context, params *admin_proto.RoleEnableReq) error
 	Delete(ctx *gin.Context, params *admin_proto.RoleDeleteReq) error
+	RolePermissions(ctx *gin.Context, params *admin_proto.RolePermissionsReq) ([]*admin_proto.RolePermissionItem, error)
+	RoleBindPermissions(ctx *gin.Context, params *admin_proto.RoleBindPermissionsReq) error
 }
 
 func newAdminRoleLogic() IAdminRoleLogic {
@@ -138,4 +141,51 @@ func (a *AdminRoleLogic) Delete(ctx *gin.Context, params *admin_proto.RoleDelete
 		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
 	}
 	return dao.H.AdminRole.Delete(ctx, params.Id)
+}
+
+func (a *AdminRoleLogic) RolePermissions(ctx *gin.Context, params *admin_proto.RolePermissionsReq) (list []*admin_proto.RolePermissionItem, err error) {
+	data, err := dao.H.AdminRole.FindAdminRolePermissionByRoleId(ctx, params.Id)
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range data {
+		list = append(list, &admin_proto.RolePermissionItem{
+			PermissionId:       item.PermissionID,
+			PermissionName:     item.PermissionName,
+			PermissionKey:      item.PermissionKey,
+			PermissionType:     item.PermissionType,
+			PermissionTypeText: dao.AdminPermissionTypeTextMap[dao.AdminPermissionType(item.PermissionType)],
+			RoleId:             item.RoleID,
+		})
+	}
+	return list, nil
+}
+
+func (a *AdminRoleLogic) RoleBindPermissions(ctx *gin.Context, params *admin_proto.RoleBindPermissionsReq) error {
+	params.PermissionIds = array.Deduplicate(params.PermissionIds, true, true)
+	if len(params.PermissionIds) == 0 {
+		return code.NewCode(code_proto.ErrorCode_RequestParamsInvalid)
+	}
+	_, err := dao.H.AdminRole.FindById(ctx, params.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	permissions, err := dao.H.AdminPermission.FindByIds(ctx, params.PermissionIds)
+	if err != nil {
+		return err
+	}
+	if len(permissions) == 0 {
+		return code.NewCode(code_proto.ErrorCode_AdminPermissionExist)
+	}
+	data := make([]*model.AdminRolePermission, 0, len(params.PermissionIds))
+	for _, item := range params.PermissionIds {
+		data = append(data, &model.AdminRolePermission{
+			RoleID:       params.Id,
+			PermissionID: item,
+		})
+	}
+	return dao.H.AdminRole.BindPermissions(ctx, params.Id, data)
 }

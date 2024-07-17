@@ -99,3 +99,35 @@ func (a *AdminRoleReqValidator) DeleteReq(data interface{}) url.Values {
 	}
 	return govalidator.New(opts).ValidateStruct()
 }
+
+func (a *AdminRoleReqValidator) RolePermissionsReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:角色ID不能为空", "min:角色ID无效"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}
+
+func (a *AdminRoleReqValidator) RoleBindPermissionsReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"):            []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("permissionIds"): []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"):            []string{"required:角色ID不能为空", "min:角色ID无效"},
+		validator.GetValidateJsonOmitemptyTag("permissionIds"): []string{"required:权限ID不能为空", "min:权限ID无效"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}

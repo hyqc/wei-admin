@@ -84,6 +84,16 @@ message RoleDeleteReq{
 //角色绑定权限
 message RoleBindPermissionsReq{
   int32 id=1;//角色ID
+  repeated int32 permissionIds=2;//权限ID集合
+}
+
+message RolePermissionItem{
+  int32 roleId=1;//权限ID
+  int32 permissionId=2;//权限ID
+  string permissionName=3;//权限名称
+  string permissionKey=4;//权限键名
+  string permissionType=5;//权限类型
+  string permissionTypeText=6;//权限类型
 }
 
 //角色权限列表
