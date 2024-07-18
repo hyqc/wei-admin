@@ -31,6 +31,7 @@ type DBClient struct {
 }
 
 func InitMySQLDB() error {
+	initClientDBClient()
 	conf := AppConfig.Database.Wei
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=%s&loc=%s",
 		conf.User, conf.Password, conf.Host, conf.Port, conf.Dbname, conf.Charset, conf.ParseTime, conf.Location)
