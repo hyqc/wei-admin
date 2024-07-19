@@ -1,9 +1,12 @@
 import * as IconMap from '@ant-design/icons';
 import { MenuDataItem } from '@umijs/route-utils';
+import { rest } from 'lodash';
 import { parse } from 'query-string';
 import { stringify } from 'querystring';
 import React from 'react';
 import { history } from 'umi';
+
+const iconMap: Map<string, any> = new Set(Object.entries(IconMap))
 /**
  * 合并远程菜单和本地菜单
  * @param result
@@ -22,14 +25,14 @@ export const HandleRemoteMenuIntoLocal = (
     let tmpItem: MenuDataItem = { ...item };
     if (tmpItem.key && remoteMenus[tmpItem.key]) {
       // 更新合并后的菜单的访问权限：access | forbidden，用于访问权限判断
-      tmpItem.access = AccessAllow;
+      tmpItem.access = true;
       tmpItem.unaccessible = false;
       if (remoteMenus[tmpItem.key].hideInMenu === false) {
         tmpItem.hideInMenu = false;
       }
     }
-    if (tmpItem.icon !== undefined && tmpItem.icon.length > 0 && IconMap[tmpItem.icon]) {
-      tmpItem.icon = React.createElement(IconMap[tmpItem.icon]);
+    if (tmpItem.icon !== undefined && tmpItem.icon.length > 0 && iconMap.get(tmpItem.icon) !== undefined) {
+      tmpItem.icon = React.createElement(iconMap.get(tmpItem.icon));
     }
     result.push(tmpItem);
     if (item[childrenKey] !== undefined && item[childrenKey].length > 0) {
@@ -47,7 +50,7 @@ export const HandleRemoteMenuIntoLocal = (
  */
 export type MenusMapType = {
   [key: string]: {
-    access: string;
+    access: boolean;
   };
 };
 
@@ -66,7 +69,7 @@ export const HandleMenusToMap = (
   menus.forEach((item) => {
     if (item.path !== undefined && item.path !== '') {
       // 用户判断访问权限
-      result[item.path] = { access: item.access || AccessAllow };
+      result[item.path] = { access: item.access };
       if (item[childrenKey] !== undefined && item[childrenKey].length > 0) {
         HandleMenusToMap(result, item[childrenKey], childrenKey);
       }
@@ -80,7 +83,8 @@ export const HandleMenusToMap = (
  * @param initialState
  * @returns
  */
-export function IsLogin(initialState: any) {
+export function IsLogin() {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const tokenInfo: TokenType | undefined = GetLoginToken();
   const token = tokenInfo !== undefined && tokenInfo !== null ? tokenInfo.token : '';
   return token.length > 0;

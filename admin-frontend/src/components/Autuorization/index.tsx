@@ -13,6 +13,9 @@ const Authorization: React.FC<AuthorizationType> = (props) => {
   if (permissions && name && permissions[name]) {
     return <>{children}</>;
   }
+  if(forbidden===undefined){
+    return <></>
+  }
   return <>{forbidden}</>;
 };
 

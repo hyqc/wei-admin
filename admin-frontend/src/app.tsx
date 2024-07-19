@@ -38,7 +38,6 @@ export async function getInitialState(): Promise<{
   if (!IsLongPage()) {
     const currentUser: ReponseCurrentAdminUserDetailType = await fetchUserInfo();
     const permissions = { ...currentUser.permissions };
-    currentUser.permissions = null;
     return {
       fetchUserInfo,
       currentUser,
@@ -97,29 +96,29 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     ],
     links: isDev
       ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-        ]
+        <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
+          <LinkOutlined />
+          <span>OpenAPI 文档</span>
+        </Link>,
+      ]
       : [],
-      menuItemRender: (menuItemProps, defaultDom) => {
-        // if (menuItemProps.isUrl) {
-        //   return defaultDom;
-        // }
-        // 支持二级菜单显示icon
-        const styleSpan = { display: 'inline-block', marginRight: '2px' };
-        return (
-          <Link to={menuItemProps.path}>
-            <span style={styleSpan}>
-              {menuItemProps.pro_layout_parentKeys &&
-                menuItemProps.pro_layout_parentKeys.length > 0 &&
-                menuItemProps.icon}
-            </span>
-            <span style={styleSpan}> {defaultDom}</span>
-          </Link>
-        );
-      },
+    menuItemRender: (menuItemProps, defaultDom) => {
+      // if (menuItemProps.isUrl) {
+      //   return defaultDom;
+      // }
+      // 支持二级菜单显示icon
+      const styleSpan = { display: 'inline-block', marginRight: '2px' };
+      return (
+        <Link to={menuItemProps.path}>
+          <span style={styleSpan}>
+            {menuItemProps.pro_layout_parentKeys &&
+              menuItemProps.pro_layout_parentKeys.length > 0 &&
+              menuItemProps.icon}
+          </span>
+          <span style={styleSpan}> {defaultDom}</span>
+        </Link>
+      );
+    },
     menuHeaderRender: undefined,
     menu: {
       locale: true,

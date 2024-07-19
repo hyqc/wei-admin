@@ -12,9 +12,12 @@ const Content: React.FC<ContentType> = (props: any) => {
   const { wrapperStyle } = props;
   const { initialState } = useModel('@@initialState');
   const menuMap = initialState?.menuData || {};
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const pathname = path(location.pathname);
-
-  const canAccessLocalMenu = menuMap[pathname]?.access === AccessAllow;
+  let canAccessLocalMenu = true
+  if(menuMap[pathname]!==undefined){
+    canAccessLocalMenu = menuMap[pathname]?.access;
+  }
 
   const initCardStyle: any = () => {
     let wrapperStyless = {

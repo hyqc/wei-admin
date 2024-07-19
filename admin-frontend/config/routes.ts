@@ -1,17 +1,19 @@
-﻿export default [
+﻿import { layout } from "@/app";
+
+export default [
   {
     key: 'Login',
     path: '/login',
     component: './Login',
     title: 'login',
     layout: false,
-    allow: 'allow',
+    access: true
   },
   {
     path: '/',
     redirect: '/home',
     key: 'Home',
-    access: 'allow',
+    access: true
   },
   {
     path: '/home',
@@ -19,7 +21,7 @@
     icon: 'HomeOutlined',
     component: './Home',
     key: 'Home',
-    access: 'allow',
+    access: true
   },
   {
     path: '/account',
@@ -27,15 +29,13 @@
     icon: 'UserOutlined',
     component: './Account',
     key: 'Account',
-    access: 'allow',
+    access: true
   },
   {
     path: '/admin',
     key: 'Admin',
     name: 'admin',
     icon: 'SettingOutlined',
-    access: 'forbidden',
-    hideInMenu: true,
     routes: [
       {
         key: 'AdminUser',
@@ -44,14 +44,12 @@
         icon: 'TeamOutlined',
         component: './Admin/User',
         hideInMenu: true,
-        access: 'forbidden',
       },
       {
         key: 'AdminRole',
         name: 'role',
         icon: 'UserSwitchOutlined',
         hideInMenu: true,
-        access: 'forbidden',
         path: '/admin/role',
         component: './Admin/Role',
       },
@@ -60,8 +58,8 @@
         name: 'menu',
         icon: 'MenuUnfoldOutlined',
         hideInMenu: true,
-        access: 'forbidden',
         path: '/admin/menu',
+        parentKeys: ["Admin"],
         routes: [
           {
             key: 'AdminMenu',
@@ -69,7 +67,6 @@
             path: '/admin/menu',
             component: './Admin/Menu',
             hideInMenu: true,
-            access: 'forbidden',
           },
           {
             key: 'AdminMenuAdd',
@@ -77,7 +74,6 @@
             name: 'add',
             component: './Admin/Menu/add',
             hideInMenu: true,
-            access: 'forbidden',
           },
           {
             key: 'AdminMenuEdit',
@@ -85,7 +81,6 @@
             name: 'edit',
             component: './Admin/Menu/edit',
             hideInMenu: true,
-            access: 'forbidden',
           },
         ],
       },
@@ -96,7 +91,6 @@
         icon: 'UnlockOutlined',
         component: './Admin/Permission',
         hideInMenu: true,
-        access: 'forbidden',
       },
       {
         key: 'AdminApi',
@@ -105,11 +99,10 @@
         icon: 'ApiOutlined',
         component: './Admin/Api',
         hideInMenu: true,
-        access: 'forbidden',
       },
       {
         component: './404',
-        access: 'allow',
+        access: true,
         key: '404',
       },
     ],
@@ -120,7 +113,7 @@
     icon: 'BookOutlined',
     component: './Document',
     key: 'Doc',
-    access: 'allow',
+    access: true,
     layout: false,
   },
   {
@@ -129,11 +122,11 @@
     icon: 'BookOutlined',
     component: './Demo',
     key: 'Demo',
-    access: 'allow',
+    access: true,
   },
   {
     component: './404',
     key: '404',
-    access: 'allow',
+    access: true,
   },
 ];

@@ -161,8 +161,6 @@ export default defineConfig({
     UploadImageAccept: '.png, .jpg, .jpeg,.ico', // 上传图片允许的类型
     DefaultModalWidth: 600, // modal default width 800px
     DefaultDrawerWidth: 600, // drawer default width 600px
-    AccessAllow: 'allow', // 403权限允许访问
-    AccessForbidden: 'forbidden', // 403权限禁止访问
     AdminId: 1, // 超管ID
   },
 });

@@ -1,8 +1,8 @@
 import { PureSettings } from '@ant-design/pro-layout/lib/defaultSettings';
-import { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
 import { request } from 'umi';
 import { ResponseBodyType } from '../types';
 import { APIAccount, APICommon } from './api';
+import { MenuDataItem } from '@ant-design/pro-components';
 
 export type MenusRemoteItem = {
   [key: string]: MenuDataItem;
@@ -17,7 +17,7 @@ export type ReponseCurrentAdminUserDetailType = {
   email: string;
   token: string;
   expire: number;
-  permissions: CurrentUserPermissionsType | null | undefined;
+  permissions: CurrentUserPermissionsType;
   menus: MenusRemoteItem | null | undefined;
   signature?: string;
   settings?: PureSettings;
