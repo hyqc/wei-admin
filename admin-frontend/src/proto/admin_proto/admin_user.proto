@@ -1,0 +1,82 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+
+// 账号列表请求参数
+message AdminUserListReq{
+  ListBaseReq base = 1;
+  string username = 2;//账号
+  string nickname = 3;//昵称
+  string email = 4; //邮箱
+  repeated int32 roleIds = 5;// 角色ID
+}
+
+message AdminUserListItem{
+  int32 adminId=1;//账号ID
+  string username=2;//管理员名称
+  string email=3;//邮箱
+  string avatar=4;//头像地址
+  bool enabled=5;//启用状态
+  string enabledText=6;//启用状态
+  string createdAt=7;//创建时间
+  string updatedAt=8;//更新时间
+  int64 loginTotal=9;//登录次数
+  string lastLoginIp=10;//最后登录IP
+  string lastLoginTime=11;//最后登录时间
+}
+
+message AdminUserListResp{
+  int64 total = 1;
+  repeated AdminUserListItem rows = 2;
+}
+
+// 账号详情
+message AdminUserInfoReq{
+  int32 adminId = 1;//管理员ID
+}
+
+message AdminUserInfo{
+
+}
+
+
+// 添加账号
+message AdminUserAddReq{
+  string username = 1;//账号
+  string nickname = 2;//昵称
+  string password = 3;//密码
+  string confirmPassword = 4;//确认密码
+  bool enabled = 5;//账号启用状态
+  string email = 6;//邮箱
+  string avatar = 7;//头像地址
+}
+
+// 账号编辑
+message AdminUserEditReq{
+  string username = 1;//账号
+  string nickname = 2;//昵称
+  string password = 3;//密码
+  string confirmPassword = 4;//确认密码
+  bool enabled = 5;//账号启用状态
+  string email = 6;//邮箱
+  string avatar = 7;//头像地址
+  int32 adminId = 8;//管理员ID
+}
+
+// 账号状态更改
+message AdminUserEnabledReq{
+  int32 adminId = 1;//管理员ID
+  bool enabled = 2;//账号启用状态
+}
+
+// 删除账号
+message AdminUserDeleteReq{
+  int32 adminId = 1;//管理员ID
+}
+
+// 账号绑定角色
+message AdminUserBindRolesReq{
+  int32 adminId = 1;//管理员ID
+  repeated int32 roleIds = 2;//角色ID列表
+}

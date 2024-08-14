@@ -1,0 +1,3 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";

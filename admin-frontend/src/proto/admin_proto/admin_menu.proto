@@ -1,0 +1,152 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+import "admin_permission.proto";
+
+message MenuItem{
+  string key = 1; // 菜单唯一键
+  string path = 2; // 菜单路由
+  string name = 3; // 菜单名称
+  string icon = 4; // 菜单图标
+  string component = 5;
+  string authority = 6;
+  repeated RouteItem routes = 7;
+}
+
+message RouteItem {
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  string icon = 4;//
+  string component = 5;
+}
+
+// 菜单列表
+message MenuListReq{
+  ListBaseReq base = 1;
+  string key = 2;// 菜单键名
+  string path = 3;//菜单路由
+  string name = 4;//菜单名称
+  int32 parentId = 5; // 父级菜单
+}
+
+message MenuListRespData{
+  int64 total = 1;
+  repeated MenuItem rows = 2;
+}
+
+// 有效菜单树
+message MenuTreeItem{
+  //菜单层级
+  int32 level = 1;
+  //菜单自增ID
+  int32 id = 2;
+  //菜单唯一键
+  string key = 3;
+  //菜单名称
+  string name = 4;
+  //父级菜单ID
+  int32 parentId = 5;
+  //菜单描述
+  string describe = 6;
+  //菜单路径
+  string path = 7;
+  //重定向地址
+  string redirect = 8;
+  //组件名称
+  string component = 9;
+
+  //菜单排序
+  int32 sort = 10;
+
+  //菜单图标
+  string icon = 11;
+  //是否在菜单中隐藏子菜单
+  bool hideChildrenInMenu = 12;
+  //是否隐藏菜单
+  bool hideInMenu = 13;
+
+  //是否启用
+  bool enabled = 14;
+
+  int64 createTime = 15;
+
+  int64 modifyTime = 16;
+  repeated MenuTreeItem children = 17;
+}
+
+message MenuTreeRespData{}
+
+// 创建菜单
+message MenuAddReq{
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  int32 parentId = 4; // 父级菜单
+  string describe = 5;//菜单描述
+  string redirect = 6;//菜单重定向路由
+  string icon = 7;//菜单图标
+  bool hideChildrenInMenu = 8;//是否隐藏子菜单
+  bool hideInMenu = 9;//是否隐藏菜单
+  bool enabled = 10;//是否启用菜单
+  int32 sort = 11;//菜单排序值
+  string component = 12;//菜单组件
+}
+
+// 菜单想去
+message MenuInfoReq{
+  int32 menuId = 1;//菜单ID
+}
+
+message MenuInfoRespData{}
+
+// 便捷菜单
+message MenuEditReq{
+  int32 menuId = 1;//菜单ID
+  string key = 2;// 菜单键名
+  string path = 3;//菜单路由
+  string name = 4;//菜单名称
+  int32 parentId = 5; // 父级菜单
+  string describe = 6;//菜单描述
+  string redirect = 7;//菜单重定向路由
+  string icon = 8;//菜单图标
+  bool hideChildrenInMenu = 9;//是否隐藏子菜单
+  bool hideInMenu = 10;//是否隐藏菜单
+  bool enabled = 11;//是否启用菜单
+  int32 sort = 12;//菜单排序值
+  string component = 13;//菜单组件
+}
+
+// 启用禁用菜单
+message MenuEnableReq{
+  int32 menuId = 1;//菜单ID
+  bool enabled = 2;//是否启用菜单
+}
+
+// 删除菜单
+message MenuDeleteReq{
+  int32 menuId = 1;//菜单ID
+}
+
+// 菜单权限列表
+message MenuPermissionsReq{
+  int32 menuId = 1;//菜单ID
+}
+
+message MenuPermissions{
+  MenuTreeItem menu=1;
+  repeated PermissionApiItem permissions=2;
+}
+
+// 页面菜单列表
+message MenuPagesReq{
+  bool all = 1;//是否顶部插入全部
+}
+
+message MenuPagesRespData{}
+
+// 页面模块权限列表
+message MenuModeReq{}
+
+message MenuModeRespData{}
