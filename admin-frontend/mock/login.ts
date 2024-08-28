@@ -1,9 +1,11 @@
+import { AdminInfo } from '@/proto/admin_ts/admin_account';
 import type { ReponseCurrentAdminUserDetailType } from '@/services/apis/admin/account';
 
 const AvatarImage =
   'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png';
 
-const currentAdminUserDetail: ReponseCurrentAdminUserDetailType = {
+
+const currentAdminUserDetail: AdminInfo = {
   adminId: 1,
   username: 'admin',
   nickname: '超管',

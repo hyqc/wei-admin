@@ -29,7 +29,13 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 	if err != nil {
 		return nil, err
 	}
-	resp.Menus = menus
+
+	menusMap := make(map[string]*admin_proto.MenuItem)
+	for _, item := range menus {
+		menusMap[item.Key] = item
+	}
+
+	resp.Menus = menusMap
 	resp.Permissions = perms
 
 	return resp, err

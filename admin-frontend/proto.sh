@@ -5,5 +5,5 @@ cd src/proto
 rm -rf admin_ts
 mkdir admin_ts
 cd admin_proto
-protoc --plugin=proto-gen-ts --ts_out=../admin_ts *.proto
+protoc --plugin=proto-gen-ts --ts_out=../admin_ts *.proto --ts_opt=no_grpc,no_namespace,json_names,npm:google-protobuf
 
