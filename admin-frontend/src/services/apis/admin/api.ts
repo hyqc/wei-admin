@@ -25,8 +25,8 @@ export const APIAccount = {
     url: '/admin/account/logout',
     method: POST,
   },
-  detail: {
-    url: '/admin/account/detail',
+  info: {
+    url: '/admin/account/info',
     method: POST,
   },
   edit: {
@@ -44,8 +44,8 @@ export const APIAdminUsers = {
     url: '/admin/user/list',
     method: POST,
   },
-  detail: {
-    url: '/admin/user/detail',
+  info: {
+    url: '/admin/user/info',
     method: POST,
   },
   add: {
@@ -75,8 +75,8 @@ export const APIAdminRoles = {
     url: '/admin/role/list',
     method: POST,
   },
-  detail: {
-    url: '/admin/role/detail',
+  info: {
+    url: '/admin/role/info',
     method: POST,
   },
   add: {
@@ -114,8 +114,8 @@ export const APIAdminMenus = {
     url: '/admin/menu/list',
     method: POST,
   },
-  detail: {
-    url: '/admin/menu/detail',
+  info: {
+    url: '/admin/menu/info',
     method: POST,
   },
   add: {
@@ -157,8 +157,8 @@ export const APIAdminPermissions = {
     url: '/admin/permission/list',
     method: POST,
   },
-  detail: {
-    url: '/admin/permission/detail',
+  info: {
+    url: '/admin/permission/info',
     method: POST,
   },
   add: {
@@ -200,8 +200,8 @@ export const APIAdminAPIResources = {
     url: '/admin/api/list',
     method: POST,
   },
-  detail: {
-    url: '/admin/api/detail',
+  info: {
+    url: '/admin/api/info',
     method: POST,
   },
   add: {

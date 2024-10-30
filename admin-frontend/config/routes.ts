@@ -2,8 +2,9 @@
 
 export default [
   {
-    key: 'Login',
     path: '/login',
+    key: 'Login',
+    name: '登录',
     component: './Login',
     title: 'login',
     layout: false,
@@ -17,10 +18,10 @@ export default [
   },
   {
     path: '/home',
+    key: 'Home',
     name: 'home',
     icon: 'HomeOutlined',
     component: './Home',
-    key: 'Home',
     access: true
   },
   {
@@ -43,7 +44,8 @@ export default [
         name: 'user',
         icon: 'TeamOutlined',
         component: './Admin/User',
-        hideInMenu: true,
+        //hideInMenu: true,
+        access: true
       },
       {
         key: 'AdminRole',
@@ -106,15 +108,6 @@ export default [
         key: '404',
       },
     ],
-  },
-  {
-    name: 'doc',
-    path: '/doc',
-    icon: 'BookOutlined',
-    component: './Document',
-    key: 'Doc',
-    access: true,
-    layout: false,
   },
   {
     name: 'demo',

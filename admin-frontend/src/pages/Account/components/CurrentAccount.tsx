@@ -7,7 +7,7 @@ import {
 import { APICommon } from '@/services/apis/admin/api';
 import { GetLoginToken } from '@/utils/common';
 import { CloudUploadOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message, Upload, UploadFile } from 'antd';
+import { Button, Form, Input, message, msg, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -42,7 +42,7 @@ const CurrentAccountInfo: React.FC = () => {
         };
         console.log(data);
         currentAdminEdit(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {});
+          message.success(res.msg, MessageDuritain, () => {});
         });
       })
       .catch((err) => {

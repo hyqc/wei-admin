@@ -1,7 +1,7 @@
 // 接口返回结构
 export interface ResponseBodyType {
   code: number;
-  message: string;
+  msg: string;
   type?: string;
   data?: any;
 }
@@ -25,7 +25,7 @@ export interface ResponseDetailDataType {
 // 列表返回结构
 export interface ResponseListType extends ResponseBodyType {
   code: number;
-  message: string;
+  msg: string;
   type?: string;
   data: ResponseListDataType;
 }
@@ -33,7 +33,7 @@ export interface ResponseListType extends ResponseBodyType {
 // 详情返回结构
 export interface ResponseDetailType extends ResponseBodyType {
   code: number;
-  message: string;
+  msg: string;
   type?: string;
   data: ResponseDetailDataType;
 }

@@ -1,6 +1,5 @@
 import * as IconMap from '@ant-design/icons';
 import { MenuDataItem } from '@umijs/route-utils';
-import { rest } from 'lodash';
 import { parse } from 'query-string';
 import { stringify } from 'querystring';
 import React from 'react';
@@ -133,8 +132,8 @@ export const GetLoginToken = (): TokenType | undefined => {
  * @param remember 是否自动刷新token
  */
 export const SetLoginToken = (token: string, expire: number, remember: boolean): void => {
-  const now = new Date().getTime();
-  const tokenInfo: TokenType = { token, expire: expire * 1000 + now, remember };
+  const tokenInfo: TokenType = { token, expire: expire * 1000, remember };
+  console.log('============', tokenInfo)
   // 设置token
   localStorage.setItem(LocalStorageTokenKey, JSON.stringify(tokenInfo));
 };
@@ -147,6 +146,7 @@ export const Logout = (): void => {
   const query = parse(history.location.search);
   const { search, pathname } = history.location;
   const { redirect } = query;
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   if (!IsLongPage() && !redirect) {
     history.replace({
       pathname: LoginPath,

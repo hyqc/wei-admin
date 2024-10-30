@@ -30,7 +30,8 @@ export async function getInitialState(): Promise<{
       }
       return undefined;
     } catch (error) {
-      history.push(LoginPath);
+      console.log('=========', error)
+      //history.push(LoginPath);
     }
     return undefined;
   };

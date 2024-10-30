@@ -4,7 +4,7 @@ import {
   ResponseAdminUserDetailType,
 } from '@/services/apis/admin/user';
 import { APICommon } from '@/services/apis/admin/api';
-import { Form, Input, message, Modal, Switch, Upload } from 'antd';
+import { Form, Input, msg, Modal, Switch, Upload } from 'antd';
 import { useEffect, useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 import { CloudUploadOutlined } from '@ant-design/icons';
@@ -46,7 +46,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
           avatar,
         };
         adminUserEdit(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          msg.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
           });
         });

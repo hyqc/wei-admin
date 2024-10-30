@@ -40,50 +40,51 @@ export const errorConfig: RequestConfig = {
         throw error; // 抛出自制的错误
       }
     },
-    // 错误接收及处理
-    errorHandler: (error: any, opts: any) => {
-      if (opts?.skipErrorHandler) throw error;
-      // 我们的 errorThrower 抛出的错误。
-      if (error.name === 'BizError') {
-        const errorInfo: ResponseStructure | undefined = error.info;
-        if (errorInfo) {
-          switch (errorInfo.type) {
-            case ErrorShowType.SILENT:
-              // do nothing
-              break;
-            case ErrorShowType.WARN_MESSAGE:
-              message.warning(errorInfo.message);
-              break;
-            case ErrorShowType.ERROR_MESSAGE:
-              message.error(errorInfo.message);
-              break;
-            case ErrorShowType.NOTIFICATION:
-              notification.open({
-                description: errorInfo.message,
-                message: errorInfo.message,
-              });
-              break;
-            case ErrorShowType.REDIRECT:
-              // TODO: redirect
-              break;
-            default:
-              message.error(errorInfo.message);
-          }
-        }
-      } else if (error.response) {
-        // Axios 的错误
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        message.error(`Response status:${error.response.status}`);
-      } else if (error.request) {
-        // 请求已经成功发起，但没有收到响应
-        // \`error.request\` 在浏览器中是 XMLHttpRequest 的实例，
-        // 而在node.js中是 http.ClientRequest 的实例
-        message.error('None response! Please retry.');
-      } else {
-        // 发送请求时出了点问题
-        message.error('Request error, please retry.');
-      }
-    },
+    // // 错误接收及处理
+    // errorHandler: (error: any, opts: any) => {
+    //   console.log('=======', error, opts)
+    //   if (opts?.skipErrorHandler) throw error;
+    //   // 我们的 errorThrower 抛出的错误。
+    //   if (error.name === 'BizError') {
+    //     const errorInfo: ResponseStructure | undefined = error.info;
+    //     if (errorInfo) {
+    //       switch (errorInfo.type) {
+    //         case ErrorShowType.SILENT:
+    //           // do nothing
+    //           break;
+    //         case ErrorShowType.WARN_MESSAGE:
+    //           message.warning(errorInfo.message);
+    //           break;
+    //         case ErrorShowType.ERROR_MESSAGE:
+    //           message.error(errorInfo.message);
+    //           break;
+    //         case ErrorShowType.NOTIFICATION:
+    //           notification.open({
+    //             description: errorInfo.message,
+    //             message: errorInfo.message,
+    //           });
+    //           break;
+    //         case ErrorShowType.REDIRECT:
+    //           // TODO: redirect
+    //           break;
+    //         default:
+    //           message.error(errorInfo.message);
+    //       }
+    //     }
+    //   } else if (error.response) {
+    //     // Axios 的错误
+    //     // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+    //     message.error(`Response status:${error.response.status}`);
+    //   } else if (error.request) {
+    //     // 请求已经成功发起，但没有收到响应
+    //     // \`error.request\` 在浏览器中是 XMLHttpRequest 的实例，
+    //     // 而在node.js中是 http.ClientRequest 的实例
+    //     message.error('None response! Please retry.');
+    //   } else {
+    //     // 发送请求时出了点问题
+    //     message.error('Request error, please retry.');
+    //   }
+    // },
   },
 
   // 请求拦截器
@@ -117,18 +118,16 @@ export const errorConfig: RequestConfig = {
       console.log('返回数据：', response.data);
       const data: any = response.data;
       return new Promise((resolve, reject) => {
+        message.destroy();
         if (response.status !== 200) {
-          const msg: string = data.message;
-
+          const msg: string = data.msg;
           message.error(msg, MessageDuritain);
           // eslint-disable-next-line no-promise-executor-return
           return reject(msg);
-        }
-        if (data.code !== SUCCESS) {
-          message.destroy();
-          message.error(data.message, MessageDuritain);
+        }else if (data.code !== SUCCESS) {
+          message.error(data.msg, MessageDuritain);
           // eslint-disable-next-line no-promise-executor-return
-          return reject(data.message);
+          return reject(data.msg);
         }
         // eslint-disable-next-line no-promise-executor-return
         return resolve(response);

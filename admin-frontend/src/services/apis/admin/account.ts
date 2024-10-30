@@ -9,7 +9,7 @@ export type MenusRemoteItem = {
 };
 
 // 当前登录返回的用户详情
-export type ReponseCurrentAdminUserDetailType = {
+export type ReponseCurrentAdminUserinfoType = {
   adminId: number;
   username: string;
   nickname: string;
@@ -37,7 +37,7 @@ export type RequestLoginParamsType = {
 };
 
 // 登录响应数据
-export type ResponseLoginDataType = ReponseCurrentAdminUserDetailType;
+export type ResponseLoginDataType = ReponseCurrentAdminUserinfoType;
 
 export type RequestLogoutParamsType = {
   id: number;
@@ -73,8 +73,8 @@ export type RequestCurrentAdminInfoParamsType = {
 };
 
 export async function currentAdminInfo(refreshToken?: boolean) {
-  return request<ResponseBodyType>(APIAccount.detail.url, {
-    method: APIAccount.detail.method,
+  return request<ResponseBodyType>(APIAccount.info.url, {
+    method: APIAccount.info.method,
     data: {
       refreshToken: refreshToken || false,
     },

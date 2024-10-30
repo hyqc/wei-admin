@@ -42,7 +42,8 @@ const Password: React.FC<AdminUserEditPasswordModalPropsType> = (props) => {
           confirmPassword: values.confirmPassword,
         };
         adminUserEdit(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          console.log('========', res)
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
           });
         });
