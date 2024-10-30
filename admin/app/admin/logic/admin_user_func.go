@@ -49,7 +49,6 @@ func createToken(adminId int32, username string, seconds int64) (string, error) 
 	}
 	token, err := core.JWTCreate(core.CustomClaimsOption{
 		AccountId:     adminId,
-		AccountName:   username,
 		ExpireSeconds: time.Duration(seconds),
 		UUID:          jti,
 		Secret:        config.AppConfig.Server.JWT.Secret,
