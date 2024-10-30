@@ -18,7 +18,7 @@ message AdminInfo{
   bool enabled = 11;
   string token = 12;
   int32 expire = 13;
-  repeated MenuItem menus = 14;
+  map<string, MenuItem> menus = 14;
   map<string, string> permissions = 15;
 }
 
