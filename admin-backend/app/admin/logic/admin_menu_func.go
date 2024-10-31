@@ -53,11 +53,13 @@ func getAllChildrenPagesByPageIds(menusMap map[int32]*model.AdminMenu, pageIds [
 func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId int32) (data []*admin_proto.MenuItem) {
 	if menu, ok := menusMap[parentId]; ok {
 		data = append(data, &admin_proto.MenuItem{
-			Key:       menu.Key,
-			Path:      menu.Path,
-			Name:      menu.Name,
-			Icon:      menu.Icon,
-			Component: menu.Component,
+			Key:                menu.Key,
+			Path:               menu.Path,
+			Name:               menu.Name,
+			Icon:               menu.Icon,
+			Component:          menu.Component,
+			HideInMenu:         menu.IsHideInMenu,
+			HideChildrenInMenu: menu.IsHideChildrenInMenu,
 		})
 		arr := getAllFatherMenuByChildrenId(menusMap, menu.ParentID)
 		if len(arr) > 0 {
@@ -71,11 +73,13 @@ func getAllChildrenMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentI
 	for menuId, menu := range menusMap {
 		if menu.ParentID == parentId {
 			data = append(data, &admin_proto.MenuItem{
-				Key:       menu.Key,
-				Path:      menu.Path,
-				Name:      menu.Name,
-				Icon:      menu.Icon,
-				Component: menu.Component,
+				Key:                menu.Key,
+				Path:               menu.Path,
+				Name:               menu.Name,
+				Icon:               menu.Icon,
+				Component:          menu.Component,
+				HideInMenu:         menu.IsHideInMenu,
+				HideChildrenInMenu: menu.IsHideChildrenInMenu,
 			})
 
 			tmpIds := make(map[int32]*model.AdminMenu)

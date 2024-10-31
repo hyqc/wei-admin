@@ -38,7 +38,7 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.Permis
 	}
 
 	data := &admin_proto.PermissionListRespData{
-		Rows:  make([]*admin_proto.PermissionListItem, 0),
+		List:  make([]*admin_proto.PermissionListItem, 0),
 		Total: total,
 	}
 	if len(list) > 0 {
@@ -83,7 +83,7 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.Permis
 				menusMap[item.ID] = item
 			}
 		}
-		data.Rows = a.handleListData(list, apisMap, menusMap)
+		data.List = a.handleListData(list, apisMap, menusMap)
 	}
 	return data, err
 }

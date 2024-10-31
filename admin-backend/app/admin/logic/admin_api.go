@@ -37,19 +37,19 @@ func (a *AdminAPILogic) List(ctx *gin.Context, params *admin_proto.ApiListReq) (
 	}
 	data = &admin_proto.ApiListResp{}
 	data.Total = total
-	data.Rows, err = a.HandleListData(rows)
+	data.List, err = a.HandleListData(rows)
 	return data, err
 }
 
-func (a *AdminAPILogic) HandleListData(list []*model.AdminAPI) (rows []*admin_proto.ApiItem, err error) {
-	for _, item := range list {
+func (a *AdminAPILogic) HandleListData(rows []*model.AdminAPI) (list []*admin_proto.ApiItem, err error) {
+	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
 			return nil, err
 		}
-		rows = append(rows, data)
+		list = append(list, data)
 	}
-	return rows, nil
+	return list, nil
 }
 
 func (a *AdminAPILogic) HandleItemData(item *model.AdminAPI) (data *admin_proto.ApiItem, err error) {

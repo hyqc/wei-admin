@@ -23,12 +23,9 @@ export const HandleRemoteMenuIntoLocal = (
   defaultMenuData?.forEach((item) => {
     let tmpItem: MenuDataItem = { ...item };
     if (tmpItem.key && remoteMenus[tmpItem.key]) {
-      // 更新合并后的菜单的访问权限：access | forbidden，用于访问权限判断
+      //远程返回的菜单中包含，则表面有访问权限
       tmpItem.access = true;
-      tmpItem.unaccessible = false;
-      if (remoteMenus[tmpItem.key].hideInMenu === false) {
-        tmpItem.hideInMenu = false;
-      }
+      tmpItem.hideInMenu = !!remoteMenus[tmpItem.key].hideInMenu;
     }
     if (tmpItem.icon !== undefined && tmpItem.icon.length > 0 && iconMap.get(tmpItem.icon) !== undefined) {
       tmpItem.icon = React.createElement(iconMap.get(tmpItem.icon));
@@ -110,6 +107,7 @@ export const GetLoginToken = (): TokenType | undefined => {
     if (obj.token !== undefined && obj.token.length > 0) {
       if (now >= obj.expire) {
         // 过期
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         Logout();
         return undefined;
       }

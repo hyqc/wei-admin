@@ -27,6 +27,7 @@ type IAdminRoleLogic interface {
 	Delete(ctx *gin.Context, params *admin_proto.RoleDeleteReq) error
 	RolePermissions(ctx *gin.Context, params *admin_proto.RolePermissionsReq) ([]*admin_proto.RolePermissionItem, error)
 	RoleBindPermissions(ctx *gin.Context, params *admin_proto.RoleBindPermissionsReq) error
+	All(ctx *gin.Context) ([]*admin_proto.RoleItem, error)
 }
 
 func newAdminRoleLogic() IAdminRoleLogic {
@@ -40,19 +41,19 @@ func (a *AdminRoleLogic) List(ctx *gin.Context, params *admin_proto.RoleListReq)
 	}
 	data := &admin_proto.RoleListRespData{}
 	data.Total = total
-	data.Rows, err = a.HandleListData(rows)
+	data.List, err = a.HandleListData(rows)
 	return data, err
 }
 
-func (a *AdminRoleLogic) HandleListData(list []*model.AdminRole) (rows []*admin_proto.RoleItem, err error) {
-	for _, item := range list {
+func (a *AdminRoleLogic) HandleListData(rows []*model.AdminRole) (list []*admin_proto.RoleItem, err error) {
+	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
 			return nil, err
 		}
-		rows = append(rows, data)
+		list = append(list, data)
 	}
-	return rows, nil
+	return list, nil
 }
 
 func (a *AdminRoleLogic) HandleItemData(item *model.AdminRole) (data *admin_proto.RoleItem, err error) {
@@ -188,4 +189,18 @@ func (a *AdminRoleLogic) RoleBindPermissions(ctx *gin.Context, params *admin_pro
 		})
 	}
 	return dao.H.AdminRole.BindPermissions(ctx, params.Id, data)
+}
+
+func (a *AdminRoleLogic) All(ctx *gin.Context) (list []*admin_proto.RoleItem, err error) {
+	data, err := dao.H.AdminRole.FindAllValid(ctx)
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range data {
+		list = append(list, &admin_proto.RoleItem{
+			Id:   item.ID,
+			Name: item.Name,
+		})
+	}
+	return list, nil
 }

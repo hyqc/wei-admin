@@ -8,6 +8,7 @@ import (
 	"admin/config"
 	"admin/proto/admin_proto"
 	"context"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
 	"gorm.io/gorm"
 	"time"
@@ -25,6 +26,7 @@ type IAdminRole interface {
 	FindAdminRolePermissionByRoleId(ctx context.Context, id int32) ([]*admin_custom.AdminRolePermissionItem, error)
 	BindPermissions(ctx context.Context, id int32, data []*model.AdminRolePermission) error
 	FindRolesById(ctx context.Context, id int32) ([]*model.AdminRole, error)
+	FindAllValid(ctx *gin.Context) ([]*model.AdminRole, error)
 }
 
 type AdminRole struct {
@@ -159,4 +161,8 @@ func (a *AdminRole) BindPermissions(ctx context.Context, roleId int32, data []*m
 
 func (a *AdminRole) FindRolesById(ctx context.Context, id int32) ([]*model.AdminRole, error) {
 	return query.AdminRole.WithContext(ctx).Where(query.AdminRole.ID.Eq(id)).Find()
+}
+
+func (a *AdminRole) FindAllValid(ctx *gin.Context) ([]*model.AdminRole, error) {
+	return query.AdminRole.WithContext(ctx).Where(query.AdminRole.IsEnabled.Is(true)).Find()
 }

@@ -71,6 +71,7 @@ func admins(g *gin.RouterGroup) {
 	{
 		roleAPI := adminCtl.RoleController{}
 		role.POST("/list", roleAPI.List)
+		role.POST("/all", roleAPI.All)
 		role.POST("/info", roleAPI.Info)
 		role.POST("/add", roleAPI.Add)
 		role.POST("/edit", roleAPI.Edit)

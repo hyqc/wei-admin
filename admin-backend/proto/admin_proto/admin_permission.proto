@@ -31,7 +31,7 @@ message PermissionListReq{
 
 message PermissionListRespData{
   int64 total = 1;
-  repeated PermissionListItem rows = 2;
+  repeated PermissionListItem list = 2;
 }
 
 // 创建权限

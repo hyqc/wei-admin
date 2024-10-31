@@ -5,7 +5,7 @@ import { success } from '../common';
 const allData: ResponseBodyType = {
   code: 0,
   type: 'SUCCESS',
-  message: '操作成功',
+  msg: '操作成功',
   data: [
     { id: 34, path: '/admin/api/add', key: 'adminApi::add', name: '接口创建' },
     { id: 39, path: '/admin/api/all', key: 'adminApi::all', name: '接口全部' },

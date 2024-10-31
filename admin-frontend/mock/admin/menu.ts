@@ -5,7 +5,7 @@ import { success } from '../common';
 const menuTree: ResponseDetailType = {
   code: 0,
   type: 'SUCCESS',
-  message: '操作成功',
+  msg: '操作成功',
   data: [
     {
       id: 0,

@@ -20,15 +20,12 @@ import type { Gutter } from 'antd/lib/grid/row';
 import { ColumnsType } from 'antd/lib/table';
 import {
   adminUserList,
-  ResponseAdminUserListItemRolesItemType,
   adminUserDetail,
   adminUserDelete,
   adminUserEnable,
   RequestAdminUserEnableParamsType,
 } from '@/services/apis/admin/user';
 import type {
-  ResponseAdminUserListItemType,
-  RequestAdminUserListParamsType,
 } from '@/services/apis/admin/user';
 import type {
   PageInfoType,
@@ -45,6 +42,7 @@ import AdminUserEditPasswordModal from './password';
 import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admin/role';
 import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
+import { AdminUserListReq } from '@/proto/admin_ts/admin_user';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -90,7 +88,7 @@ const Admin: React.FC = () => {
       width: '8rem',
       dataIndex: 'roles',
       render: (roles, record: ResponseAdminUserListItemType) => {
-        if (record.adminId === AdminId) {
+        if (record.id === AdminId) {
           return (
             <Tag color="geekblue" style={{ cursor: 'default' }}>
               超管
@@ -213,10 +211,11 @@ const Admin: React.FC = () => {
   ];
 
   // 获取账号列表
-  function getRows(data?: RequestAdminUserListParamsType) {
+  function getRows(data?: AdminUserListReq) {
     setLoading(true);
     adminUserList(data)
       .then((res: ResponseListType) => {
+        console.log('==========res', res)
         const data: ResponseListDataType = res.data;
         const rows = data?.list || [];
         const page = { total: data.total, pageSize: data.pageSize, pageNum: data.pageNum };

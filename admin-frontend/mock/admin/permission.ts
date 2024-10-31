@@ -375,7 +375,7 @@ const list: ResponseAdminPermissionListItemType[] = [
 const listData: ResponseBodyType = {
   code: 0,
   type: 'SUCCESS',
-  message: '操作成功',
+  msg: '操作成功',
   data: {
     pageNum: 1,
     pageSize: 10,
@@ -387,7 +387,7 @@ const listData: ResponseBodyType = {
 const detail: ResponseDetailType = {
   code: 0,
   type: 'SUCCESS',
-  message: '操作成功',
+  msg: '操作成功',
   data: {
     id: 1,
     menuId: 2,

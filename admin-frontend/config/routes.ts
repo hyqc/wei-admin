@@ -44,7 +44,7 @@ export default [
         name: 'user',
         icon: 'TeamOutlined',
         component: './Admin/User',
-        //hideInMenu: true,
+        hideInMenu: true,
         access: true
       },
       {

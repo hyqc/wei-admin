@@ -134,19 +134,19 @@ func (a *AdminUserLogic) List(ctx *gin.Context, params *admin_proto.AdminUserLis
 	}
 	data := &admin_proto.AdminUserListResp{}
 	data.Total = total
-	data.Rows, err = a.HandleListData(rows)
+	data.List, err = a.HandleListData(rows)
 	return data, err
 }
 
-func (a *AdminUserLogic) HandleListData(list []*model.AdminUser) (rows []*admin_proto.AdminUserListItem, err error) {
-	for _, item := range list {
+func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser) (list []*admin_proto.AdminUserListItem, err error) {
+	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
 			return nil, err
 		}
-		rows = append(rows, data)
+		list = append(list, data)
 	}
-	return rows, nil
+	return list, nil
 }
 
 func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_proto.AdminUserListItem, err error) {

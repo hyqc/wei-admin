@@ -24,7 +24,7 @@ message RoleListReq{
 
 message RoleListRespData{
   int64 total = 1;
-  repeated RoleItem rows = 2;
+  repeated RoleItem list = 2;
 }
 
 //有效角色列表

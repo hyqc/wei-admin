@@ -13,6 +13,7 @@ init:
 	go install github.com/gogo/protobuf/protoc-gen-gogofaster@latest
 	go install github.com/mwitkow/go-proto-validators/protoc-gen-govalidators@latest
 	go install github.com/go-micro/generator/cmd/protoc-gen-micro@latest
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go mod tidy
 
 .PHONY: proto
@@ -20,6 +21,7 @@ proto:
 	cd proto/$(dir) && protoc \
     			   --proto_path=. \
     			   --go_out=paths=source_relative:. \
+    			   --proto_path=$(go env GOPATH)/pkg/mod/github.com/golang/protobuf@v1.5.2/ptypes \
     			   *.proto
 
 .PHONY: proto_all

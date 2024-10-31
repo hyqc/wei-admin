@@ -84,7 +84,7 @@ const userListDataRows: ResponseAdminUserListItemType[] = [
 const list: ResponseListType = {
   code: 0,
   type: 'success',
-  message: '成功',
+  msg: '成功',
   data: {
     total: 105,
     pageNum: 1,
@@ -115,7 +115,7 @@ const userDetail: ResponseAdminUserDetailType = {
 
 const userDetailResponse: ResponseDetailType = {
   code: 0,
-  message: '成功',
+  msg: '成功',
   type: 'SUCCESS',
   data: userDetail,
 };

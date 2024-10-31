@@ -39,7 +39,7 @@ func (a *AdminMenuLogic) List(ctx *gin.Context, params *admin_proto.MenuListReq)
 	}
 	data = &admin_proto.MenuListRespData{}
 	data.Total = total
-	data.Rows, err = a.handleListData(rows)
+	data.List, err = a.handleListData(rows)
 	return data, err
 }
 
@@ -214,15 +214,15 @@ func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.MenuPagesRe
 	return
 }
 
-func (a *AdminMenuLogic) handleListData(list []*model.AdminMenu) (rows []*admin_proto.MenuItem, err error) {
-	for _, item := range list {
+func (a *AdminMenuLogic) handleListData(rows []*model.AdminMenu) (list []*admin_proto.MenuItem, err error) {
+	for _, item := range rows {
 		data, err := a.handleItemData(item)
 		if err != nil {
 			return nil, err
 		}
-		rows = append(rows, data)
+		list = append(list, data)
 	}
-	return rows, nil
+	return list, nil
 }
 
 func (a *AdminMenuLogic) handleItemData(item *model.AdminMenu) (data *admin_proto.MenuItem, err error) {

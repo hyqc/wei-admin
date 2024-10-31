@@ -32,7 +32,7 @@ const allRoles: ResponseAdminRoleAllItemType[] = [
 
 const rolesAll = {
   code: 0,
-  message: '成功',
+  msg: '成功',
   type: 1,
   data: allRoles,
 };
@@ -51,7 +51,7 @@ const rolesListRows: ResponseAdminRoleListItemType[] = [
 
 const list: ResponseListType = {
   code: 0,
-  message: '成功',
+  msg: '成功',
   type: 'SUCCESS',
   data: {
     total: 22,
@@ -77,7 +77,7 @@ const roleDetailData: ResponseAdminRoleDetailType = {
 
 const roleDetail: ResponseDetailType = {
   code: 0,
-  message: '成功',
+  msg: '成功',
   type: 'SUCCESS',
   data: roleDetailData,
 };

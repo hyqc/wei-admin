@@ -43,7 +43,17 @@ func (RoleController) List(ctx *gin.Context) {
 
 // All 全部有效角色
 func (RoleController) All(ctx *gin.Context) {
-
+	msg := "RoleController.All"
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	data, err := logic.H.AdminRole.All(ctx)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	result.SetData(data)
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }
 
 // Add 添加角色
