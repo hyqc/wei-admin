@@ -20,8 +20,8 @@ init:
 proto:
 	cd proto/$(dir) && protoc \
     			   --proto_path=. \
+    			   --proto_path=../../third_party  \
     			   --go_out=paths=source_relative:. \
-    			   --proto_path=$(go env GOPATH)/pkg/mod/github.com/golang/protobuf@v1.5.2/ptypes \
     			   *.proto
 
 .PHONY: proto_all
