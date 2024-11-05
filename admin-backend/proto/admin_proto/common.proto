@@ -11,3 +11,10 @@ message ListBaseReq{
   int64 createStartTime = 6; // 查询开始时间戳秒
   int64 createEndTime = 7; //查询结束时间戳秒
 }
+
+message RespData{
+  int32 code = 1;
+  string msg = 2;
+  string reason = 3;
+  google.protobuf.Any data = 4;
+}
