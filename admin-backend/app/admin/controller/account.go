@@ -37,8 +37,8 @@ func (AccountController) Register(ctx *gin.Context) {
 // @Success 200 {object}
 // @Router /admin_proto/login [post]
 func (AccountController) Login(ctx *gin.Context) {
-	msg := "AccountController.AccountLogin"
-	params := &admin_proto.LoginReq{}
+	msg := "AccountController.Login"
+	params := &admin_proto.ReqLogin{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.LoginReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -78,7 +78,7 @@ func (AccountController) Info(ctx *gin.Context) {
 // Edit 编辑账号
 func (AccountController) Edit(ctx *gin.Context) {
 	msg := "AccountController.Edit"
-	params := &admin_proto.AccountEditReq{}
+	params := &admin_proto.ReqAccountEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -99,7 +99,7 @@ func (AccountController) Edit(ctx *gin.Context) {
 // Password 修改密码
 func (AccountController) Password(ctx *gin.Context) {
 	msg := "AccountController.Password"
-	params := &admin_proto.AccountPasswordEditReq{}
+	params := &admin_proto.ReqAccountPasswordEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditPasswordReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)

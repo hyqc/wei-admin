@@ -1,3 +1,63 @@
-syntax = "proto3";
-package admin;
-option go_package = "./admin_proto;admin_proto";
+syntax = "proto3";;
+package admin;;
+option go_package = "./admin_proto;admin_proto";;
+
+
+message AdminRoleModel {
+  int32 id = 1;
+  string name = 2;
+  string describe = 3;
+  int32 modifyAdminId = 4;
+  int32 createAdminId = 5;
+  bool isEnabled = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+}
+
+
+message AdminMenuModel {
+  int32 id = 1;
+  int32 parentId = 2;
+  string path = 3;
+  string name = 4;
+  string key = 5;
+  string describe = 6;
+  string icon = 7;
+  int32 sort = 8;
+  string redirect = 9;
+  string component = 10;
+  bool isHideInMenu = 11;
+  bool isHideChildrenInMenu = 12;
+  bool isEnabled = 13;
+  string createdAt = 14;
+  string updatedAt = 15;
+}
+
+
+message AdminApiModel {
+  int32 id = 1;
+  string path = 2;
+  string key = 3;
+  string name = 4;
+  string describe = 5;
+  bool isEnabled = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+}
+
+
+message AdminUserModel {
+  int32 id = 1;
+  string username = 2;
+  string nickname = 3;
+  string email = 4;
+  string avatar = 5;
+  int32 loginTotal = 6;
+  string lastLoginIp = 7;
+  string lastLoginTime = 8;
+  bool isEnabled = 9;
+  string createdAt = 10;
+  string updatedAt = 11;
+}
+
+

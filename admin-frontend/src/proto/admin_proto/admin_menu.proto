@@ -11,7 +11,9 @@ message MenuItem{
   string icon = 4; // 菜单图标
   string component = 5;
   string authority = 6;
-  repeated RouteItem routes = 7;
+  bool hideInMenu=7;
+  bool hideChildrenInMenu=8;
+  repeated RouteItem routes = 9;
 }
 
 message RouteItem {
@@ -33,7 +35,7 @@ message MenuListReq{
 
 message MenuListRespData{
   int64 total = 1;
-  repeated MenuItem rows = 2;
+  repeated MenuItem list = 2;
 }
 
 // 有效菜单树

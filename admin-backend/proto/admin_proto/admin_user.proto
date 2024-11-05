@@ -12,7 +12,7 @@ message ReqAdminUserList{
   string email = 4; //邮箱
   repeated int32 roleIds = 5;// 角色ID
 }
-message RespAdminUserData{
+message RespAdminUserListData{
   int64 total = 1;
   repeated AdminUserModel list = 2;
 }

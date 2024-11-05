@@ -26,7 +26,7 @@ message ApiItem{
 // 接口列表返回数据
 message ApiListResp{
   int64 total = 1;
-  repeated ApiItem rows = 2;
+  repeated ApiItem list = 2;
 }
 
 // 全部接口列表

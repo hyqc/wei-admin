@@ -69,7 +69,7 @@ func (a *AdminAccountReqValidator) AccountEditPasswordReq(data interface{}) url.
 	if len(errs) > 0 {
 		return res
 	}
-	tmp := data.(*admin_proto.AccountPasswordEditReq)
+	tmp := data.(*admin_proto.ReqAccountPasswordEdit)
 	if tmp.Password != tmp.ConfirmPassword {
 		res["confirmPassword"] = []string{"两次输入的密码不一致"}
 	}

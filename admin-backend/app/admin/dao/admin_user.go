@@ -17,7 +17,7 @@ type IAdminUser interface {
 	FindAdminUserByAdminId(ctx context.Context, id int32) (*model.AdminUser, error)           // 根据管理员ID查询详情
 	UpdateAdminUser(ctx context.Context, data *model.AdminUser) error
 	Create(ctx context.Context, data *model.AdminUser) error
-	List(ctx context.Context, params *admin_proto.AdminUserListReq, adminIds []int32) (total int64, list []*model.AdminUser, err error)
+	List(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (total int64, list []*model.AdminUser, err error)
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
 	AddRoles(ctx *gin.Context, roles []*model.AdminUserRole) error
@@ -58,7 +58,7 @@ func (a *AdminUser) Create(ctx context.Context, data *model.AdminUser) error {
 	return query.AdminUser.WithContext(ctx).Create(data)
 }
 
-func (a *AdminUser) List(ctx context.Context, params *admin_proto.AdminUserListReq, adminIds []int32) (total int64, list []*model.AdminUser, err error) {
+func (a *AdminUser) List(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (total int64, list []*model.AdminUser, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params, adminIds)
@@ -91,7 +91,7 @@ func (a *AdminUser) handleListReqSortField(sortField, sortType string) field.Exp
 	return res
 }
 
-func (a *AdminUser) handleListReq(ctx context.Context, params *admin_proto.AdminUserListReq, adminIds []int32) (q query.IAdminUserDo) {
+func (a *AdminUser) handleListReq(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (q query.IAdminUserDo) {
 	db := query.AdminUser
 	q = db.WithContext(ctx)
 

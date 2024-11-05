@@ -1,7 +1,6 @@
 syntax = "proto3";;
 package admin;;
 option go_package = "./admin_proto;admin_proto";;
-import "google/protobuf/timestamp.proto";;
 
 
 message AdminRoleModel {
@@ -11,8 +10,8 @@ message AdminRoleModel {
   int32 modifyAdminId = 4;
   int32 createAdminId = 5;
   bool isEnabled = 6;
-  google.protobuf.Timestamp createdAt = 7;
-  google.protobuf.Timestamp updatedAt = 8;
+  string createdAt = 7;
+  string updatedAt = 8;
 }
 
 
@@ -30,8 +29,8 @@ message AdminMenuModel {
   bool isHideInMenu = 11;
   bool isHideChildrenInMenu = 12;
   bool isEnabled = 13;
-  google.protobuf.Timestamp createdAt = 14;
-  google.protobuf.Timestamp updatedAt = 15;
+  string createdAt = 14;
+  string updatedAt = 15;
 }
 
 
@@ -42,8 +41,8 @@ message AdminApiModel {
   string name = 4;
   string describe = 5;
   bool isEnabled = 6;
-  google.protobuf.Timestamp createdAt = 7;
-  google.protobuf.Timestamp updatedAt = 8;
+  string createdAt = 7;
+  string updatedAt = 8;
 }
 
 
@@ -55,10 +54,10 @@ message AdminUserModel {
   string avatar = 5;
   int32 loginTotal = 6;
   string lastLoginIp = 7;
-  google.protobuf.Timestamp lastLoginTime = 8;
+  string lastLoginTime = 8;
   bool isEnabled = 9;
-  google.protobuf.Timestamp createdAt = 10;
-  google.protobuf.Timestamp updatedAt = 11;
+  string createdAt = 10;
+  string updatedAt = 11;
 }
 
 

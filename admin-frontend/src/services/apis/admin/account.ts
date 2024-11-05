@@ -9,7 +9,7 @@ export type MenusRemoteItem = {
 
 
 
-export async function login(params: Req) {
+export async function login(params: ReqLogin) {
   return request<ResponseBodyType>(APIAccount.login.url, {
     method: APIAccount.login.method,
     data: params,

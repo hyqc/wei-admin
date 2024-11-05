@@ -22,7 +22,7 @@ type UserController struct {
 // List 管理员列表
 func (UserController) List(ctx *gin.Context) {
 	msg := "UserController.List"
-	params := &admin_proto.AdminUserListReq{Base: common.NewListBaseReq()}
+	params := &admin_proto.ReqAdminUserList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)

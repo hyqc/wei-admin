@@ -17,44 +17,37 @@ message AdminInfo{
   int32 loginTotal = 10;
   bool enabled = 11;
   string token = 12;
-  int32 expire = 13;
+  int64 expire = 13;
   map<string, MenuItem> menus = 14;
   map<string, string> permissions = 15;
 }
 
 // 登录
-message LoginReq{
+message ReqLogin{
   string username = 1; // 用户名
   string password = 2; // 密码
 }
 
 //账号详情
-message AccountDetailReq{
+message ReqAccountInfo{
   bool refreshToken=1;//刷新token
 }
 
 // 账号编辑
-message AccountEditReq{
+message ReqAccountEdit{
   string nickname=1;//名称
   string avatar=2;//头像
   string email=3;//邮箱
 }
 
-message AccountEditResp{}
-
 // 修改密码
-message AccountPasswordEditReq{
+message ReqAccountPasswordEdit{
   string oldPassword=1;//旧密码
   string password=2;//新密码
   string confirmPassword=3;//确认密码
 }
 
-message AccountPasswordEditResp{}
-
 // 个人权限
-message AccountPermissionReq{
+message ReqAccountPermission{
   int32 menuId=1;//菜单ID
 }
-
-message AccountPermissionResp{}
-

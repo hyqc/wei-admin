@@ -20,13 +20,13 @@ type AdminUserLogic struct {
 }
 
 type IAdminUserLogic interface {
-	AccountLogin(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error)
+	AccountLogin(ctx context.Context, params *admin_proto.ReqLogin, clientIp string) (*admin_proto.AdminInfo, error)
 	AccountInfo(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error)
-	AccountEdit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error
-	AccountEditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error
+	AccountEdit(ctx context.Context, adminId int32, params *admin_proto.ReqAccountEdit) error
+	AccountEditPassword(ctx *gin.Context, adminId int32, params *admin_proto.ReqAccountPasswordEdit) error
 	MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error)
 	MyPermission(ctx *gin.Context, adminId int32) (permissionKeys map[string]string, err error)
-	List(ctx *gin.Context, params *admin_proto.AdminUserListReq) (*admin_proto.AdminUserListResp, error)
+	List(ctx *gin.Context, params *admin_proto.ReqAdminUserList) (*admin_proto.RespAdminUserListData, error)
 	Add(ctx *gin.Context, params *admin_proto.AdminUserAddReq) error
 	Edit(ctx *gin.Context, params *admin_proto.AdminUserEditReq) error
 	Enable(ctx *gin.Context, params *admin_proto.AdminUserEnabledReq) error
@@ -38,7 +38,7 @@ func newAdminUserLogic() IAdminUserLogic {
 	return &AdminUserLogic{}
 }
 
-func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.LoginReq, clientIp string) (*admin_proto.AdminInfo, error) {
+func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.ReqLogin, clientIp string) (*admin_proto.AdminInfo, error) {
 	data, err := dao.H.AdminUser.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
@@ -76,7 +76,7 @@ func (a *AdminUserLogic) AccountInfo(ctx context.Context, adminId int32, refresh
 	return getAccountInfo(ctx, data, refreshToken, seconds)
 }
 
-func (a *AdminUserLogic) AccountEdit(ctx context.Context, adminId int32, params *admin_proto.AccountEditReq) error {
+func (a *AdminUserLogic) AccountEdit(ctx context.Context, adminId int32, params *admin_proto.ReqAccountEdit) error {
 	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
@@ -87,7 +87,7 @@ func (a *AdminUserLogic) AccountEdit(ctx context.Context, adminId int32, params 
 	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
 
-func (a *AdminUserLogic) AccountEditPassword(ctx *gin.Context, adminId int32, params *admin_proto.AccountPasswordEditReq) error {
+func (a *AdminUserLogic) AccountEditPassword(ctx *gin.Context, adminId int32, params *admin_proto.ReqAccountPasswordEdit) error {
 	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return err
@@ -117,7 +117,7 @@ func (a *AdminUserLogic) MyPermission(ctx *gin.Context, adminId int32) (permissi
 	return permissionKeys, nil
 }
 
-func (a *AdminUserLogic) List(ctx *gin.Context, params *admin_proto.AdminUserListReq) (*admin_proto.AdminUserListResp, error) {
+func (a *AdminUserLogic) List(ctx *gin.Context, params *admin_proto.ReqAdminUserList) (*admin_proto.RespAdminUserListData, error) {
 	adminIds := make([]int32, 0)
 	if params.RoleIds != nil && len(params.RoleIds) > 0 {
 		adminRoles, err := dao.H.AdminRole.FindAdminUserByRoleIds(ctx, params.RoleIds)
@@ -132,13 +132,13 @@ func (a *AdminUserLogic) List(ctx *gin.Context, params *admin_proto.AdminUserLis
 	if err != nil {
 		return nil, err
 	}
-	data := &admin_proto.AdminUserListResp{}
+	data := &admin_proto.RespAdminUserListData{}
 	data.Total = total
 	data.List, err = a.HandleListData(rows)
 	return data, err
 }
 
-func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser) (list []*admin_proto.AdminUserListItem, err error) {
+func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser) (list []*admin_proto.AdminUserModel, err error) {
 	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
@@ -149,13 +149,12 @@ func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser) (list []*admin_
 	return list, nil
 }
 
-func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_proto.AdminUserListItem, err error) {
-	data = &admin_proto.AdminUserListItem{}
+func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_proto.AdminUserModel, err error) {
+	data = &admin_proto.AdminUserModel{}
 	err = utils.BeanCopy(data, item)
 	if err != nil {
 		return nil, err
 	}
-	data.Enabled = item.IsEnabled
 	data.CreatedAt = item.CreatedAt.Format(time.DateTime)
 	data.UpdatedAt = item.UpdatedAt.Format(time.DateTime)
 	return data, nil

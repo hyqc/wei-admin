@@ -52,13 +52,13 @@ var (
 
 	conf = Proto{
 		FileName: "admin_model",
-		Dir:      "./proto/admin_proto/",
+		Dir:      "./proto/",
 		Tables:   tables,
 		Headers: []string{
 			"syntax = \"proto3\";",
 			"package admin;",
 			"option go_package = \"./admin_proto;admin_proto\";",
-			"import \"google/protobuf/timestamp.proto\";",
+			//"import \"google/protobuf/timestamp.proto\";",
 		},
 	}
 )
@@ -162,7 +162,8 @@ func mapMySQLTypeToProtoType(fieldName, mysqlType string) string {
 	case "char", "varchar", "text", "blob":
 		return "string"
 	case "date", "datetime", "timestamp":
-		return "google.protobuf.Timestamp" // 或者使用 google.protobuf.Timestamp
+		//return "google.protobuf.Timestamp" // 或者使用 google.protobuf.Timestamp
+		return "string" // 或者使用 google.protobuf.Timestamp
 	case "bool", "boolean":
 		return "bool"
 	case "null":

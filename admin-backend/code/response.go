@@ -8,9 +8,9 @@ import (
 )
 
 type MessageBase struct {
-	Code code_proto.ErrorCode `json:"code"` // 错误码
-	Msg  string               `json:"msg"`  // 错误码描述
-	Err  string               `json:"err"`  // 错误具体信息
+	Code   code_proto.ErrorCode `json:"code"`   // 错误码
+	Msg    string               `json:"msg"`    // 错误码描述
+	Reason string               `json:"reason"` // 错误具体信息
 }
 
 type Message struct {
@@ -44,7 +44,7 @@ func NewMessage() IMessage {
 func (m *Message) SetCode(code code_proto.ErrorCode) {
 	m.Code = code
 	m.Msg = GetMsgByCode(code)
-	m.Err = m.Msg
+	m.Reason = m.Msg
 }
 
 func (m *Message) GetCode() code_proto.ErrorCode {
@@ -53,7 +53,7 @@ func (m *Message) GetCode() code_proto.ErrorCode {
 
 func (m *Message) SetMsg(message string) {
 	m.Msg = message
-	m.Err = m.Msg
+	m.Reason = m.Msg
 }
 
 func (m *Message) GetMsg() string {
@@ -61,18 +61,18 @@ func (m *Message) GetMsg() string {
 }
 
 func (m *Message) GetError() string {
-	return m.Err
+	return m.Reason
 }
 
 func (m *Message) SetCodeMsg(code code_proto.ErrorCode, message string) {
 	m.Code = code
 	m.Msg = message
-	m.Err = m.Msg
+	m.Reason = m.Msg
 }
 func (m *Message) SetCodeError(code code_proto.ErrorCode, err error) {
 	m.Code = code
 	m.Msg = GetMsgByCode(code)
-	m.Err = err.Error()
+	m.Reason = err.Error()
 }
 
 func (m *Message) SetData(data interface{}) {
@@ -84,20 +84,20 @@ func (m *Message) GetData() interface{} {
 }
 
 func (m *Message) Error() string {
-	if m.Err != "" {
-		return m.Err
+	if m.Reason != "" {
+		return m.Reason
 	}
 	return m.Msg
 }
 
 func (m *Message) SetError(err error) {
-	m.Err = err.Error()
+	m.Reason = err.Error()
 }
 
 func (m *Message) SetMessage(err IMessage) {
 	m.Code = err.GetCode()
 	m.Msg = err.GetMsg()
-	m.Err = err.GetError()
+	m.Reason = err.GetError()
 	m.Data = err.GetData()
 }
 
@@ -112,7 +112,7 @@ func JSON(ctx *gin.Context, data IMessage) {
 		Msg:  data.GetMsg(),
 	}
 	if debug {
-		base.Err = data.GetError()
+		base.Reason = data.GetError()
 	}
 	if data.GetData() == nil {
 		ctx.AbortWithStatusJSON(http.StatusOK, base)
