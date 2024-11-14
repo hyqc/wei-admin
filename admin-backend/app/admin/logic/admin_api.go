@@ -11,31 +11,32 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strings"
+	"time"
 )
 
 type AdminAPILogic struct {
 }
 
 type IAdminAPILogic interface {
-	List(ctx *gin.Context, params *admin_proto.ApiListReq) (data *admin_proto.ApiListResp, err error)
+	List(ctx *gin.Context, params *admin_proto.ReqApiList) (data *admin_proto.RespApiListData, err error)
 	AllValid(ctx *gin.Context) (list []*admin_proto.ApiItem, err error)
-	Add(ctx *gin.Context, params *admin_proto.ApiAddReq) (err error)
-	Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (*admin_proto.ApiItem, error)
-	Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) error
-	Enable(ctx *gin.Context, params *admin_proto.ApiEnableReq) error
-	Delete(ctx *gin.Context, params *admin_proto.ApiDeleteReq) error
+	Add(ctx *gin.Context, params *admin_proto.ReqApiAdd) (err error)
+	Info(ctx *gin.Context, params *admin_proto.ReqApiInfo) (*admin_proto.ApiItem, error)
+	Edit(ctx *gin.Context, params *admin_proto.ReqApiEdit) error
+	Enable(ctx *gin.Context, params *admin_proto.ReqApiEnable) error
+	Delete(ctx *gin.Context, params *admin_proto.ReqApiDelete) error
 }
 
 func newAdminAPILogic() IAdminAPILogic {
 	return &AdminAPILogic{}
 }
 
-func (a *AdminAPILogic) List(ctx *gin.Context, params *admin_proto.ApiListReq) (data *admin_proto.ApiListResp, err error) {
+func (a *AdminAPILogic) List(ctx *gin.Context, params *admin_proto.ReqApiList) (data *admin_proto.RespApiListData, err error) {
 	total, rows, err := dao.H.AdminAPI.List(ctx, params)
 	if err != nil {
 		return nil, err
 	}
-	data = &admin_proto.ApiListResp{}
+	data = &admin_proto.RespApiListData{}
 	data.Total = total
 	data.List, err = a.HandleListData(rows)
 	return data, err
@@ -58,9 +59,8 @@ func (a *AdminAPILogic) HandleItemData(item *model.AdminAPI) (data *admin_proto.
 	if err != nil {
 		return nil, err
 	}
-	data.Enabled = item.IsEnabled
-	data.CreatedAt = item.CreatedAt.Unix()
-	data.UpdatedAt = item.UpdatedAt.Unix()
+	data.CreatedAt = item.CreatedAt.Format(time.DateTime)
+	data.UpdatedAt = item.UpdatedAt.Format(time.DateTime)
 	return data, nil
 }
 
@@ -73,7 +73,7 @@ func (a *AdminAPILogic) AllValid(ctx *gin.Context) (list []*admin_proto.ApiItem,
 	return list, err
 }
 
-func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ApiAddReq) (err error) {
+func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ReqApiAdd) (err error) {
 	data := &model.AdminAPI{
 		Path:      params.Path,
 		Key:       params.Key,
@@ -97,7 +97,7 @@ func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ApiAddReq) (er
 	return nil
 }
 
-func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (*admin_proto.ApiItem, error) {
+func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ReqApiInfo) (*admin_proto.ApiItem, error) {
 	data, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -108,7 +108,7 @@ func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ApiInfoReq) (
 	return a.HandleItemData(data)
 }
 
-func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) error {
+func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ReqApiEdit) error {
 	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -124,7 +124,7 @@ func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ApiEditReq) e
 	return dao.H.AdminAPI.Update(ctx, info)
 }
 
-func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableReq) error {
+func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ReqApiEnable) error {
 	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -138,7 +138,7 @@ func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ApiEnableRe
 	return dao.H.AdminAPI.Enable(ctx, params.Id, params.Enabled)
 }
 
-func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ApiDeleteReq) error {
+func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ReqApiDelete) error {
 	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

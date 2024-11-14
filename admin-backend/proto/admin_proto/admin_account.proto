@@ -27,10 +27,16 @@ message ReqLogin{
   string username = 1; // 用户名
   string password = 2; // 密码
 }
+message RespLoginData{
+  AdminInfo info = 1;
+}
 
 //账号详情
 message ReqAccountInfo{
   bool refreshToken=1;//刷新token
+}
+message RespAccountInfoData{
+  AdminInfo info = 1;
 }
 
 // 账号编辑

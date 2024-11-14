@@ -17,7 +17,7 @@ type IAdminAPI interface {
 	Update(ctx *gin.Context, data *model.AdminAPI) error
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
-	List(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error)
+	List(ctx context.Context, params *admin_proto.ReqApiList) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
 	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error)
 	FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error)
@@ -50,7 +50,7 @@ func (a *AdminAPI) Delete(ctx *gin.Context, id int32) error {
 	return err
 }
 
-func (a *AdminAPI) List(ctx context.Context, params *admin_proto.ApiListReq) (total int64, list []*model.AdminAPI, err error) {
+func (a *AdminAPI) List(ctx context.Context, params *admin_proto.ReqApiList) (total int64, list []*model.AdminAPI, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)
@@ -75,7 +75,7 @@ func (a *AdminAPI) Info(ctx *gin.Context, id int32) (*model.AdminAPI, error) {
 	return query.AdminAPI.WithContext(ctx).Where(query.AdminAPI.ID.Eq(id)).First()
 }
 
-func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error) {
+func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.AdminApiModel, err error) {
 	api := query.AdminAPI
 	per := query.AdminPermissionAPI
 	per.WithContext(ctx).Join(api, api.ID.EqCol(per.APIID)).Where(per.PermissionID.In(ids...)).Scan(&data).Error()
@@ -103,7 +103,7 @@ func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr
 	return res
 }
 
-func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ApiListReq) (q query.IAdminAPIDo) {
+func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ReqApiList) (q query.IAdminAPIDo) {
 	db := query.AdminAPI
 	q = db.WithContext(ctx)
 

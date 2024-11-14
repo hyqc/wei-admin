@@ -2,7 +2,6 @@ syntax = "proto3";
 package admin;
 option go_package = "./admin_proto;admin_proto";
 import "common.proto";
-import "admin_api.proto";
 
 message PermissionListItem{
   int32 id = 1;//权限ID
@@ -21,7 +20,7 @@ message PermissionListItem{
 }
 
 // 权限列表
-message PermissionListReq{
+message ReqPermissionList{
   ListBaseReq base = 1;
   int32 menuId=2;//菜单ID
   string key=3;//权限唯一标识符
@@ -29,13 +28,13 @@ message PermissionListReq{
   string type=5;//权限类型
 }
 
-message PermissionListRespData{
+message RespPermissionListData{
   int64 total = 1;
   repeated PermissionListItem list = 2;
 }
 
 // 创建权限
-message PermissionAddReq{
+message ReqPermissionAdd{
   int32 menuId = 2;//权限对应的菜单ID
   string key = 3;//权限唯一标识符
   string name = 4;//权限名称
@@ -47,7 +46,7 @@ message PermissionAddReq{
 
 
 //权限详情
-message PermissionInfoReq{
+message ReqPermissionInfo{
   int32 id = 1 ;  //权限ID
 }
 
@@ -69,7 +68,7 @@ message PermissionInfo{
 }
 
 // 编辑权限
-message PermissionEditReq{
+message ReqPermissionEdit{
   int32 id = 1;//权限ID
   int32 menuId = 2;//权限对应的菜单ID
   string key = 3;//权限唯一标识符
@@ -82,7 +81,7 @@ message PermissionEditReq{
 
 
 // 启用禁用权限
-message PermissionEnableReq{
+message ReqPermissionEnable{
   int32 id = 1;//权限ID
   bool enabled = 2;//状态
 }
@@ -102,7 +101,7 @@ message PermissionBindApisReq{
 //指定菜单创建查看编辑删除权限
 message PermissionBindMenuReq{
   int32 menuId = 1; // 菜单ID
-  repeated PermissionAddReq permissions = 2; // 菜单对应的权限ID列表
+  repeated ReqPermissionAdd permissions = 2; // 菜单对应的权限ID列表
 }
 
 

@@ -14,9 +14,21 @@ message ListBaseReq{
   int64 createEndTime = 7; //查询结束时间戳秒
 }
 
-message RespData{
+message RespCode{
   int32 code = 1;
   string msg = 2;
   string reason = 3;
   google.protobuf.Any data = 4;
+}
+
+// 接口列表返回结构
+message ApiItem{
+  int32  id = 1;
+  string path = 2;
+  string key = 3;
+  string name = 4;
+  bool enabled = 5;
+  int32 permissionId = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
 }

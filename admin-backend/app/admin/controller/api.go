@@ -21,7 +21,7 @@ type APIController struct {
 
 func (APIController) List(ctx *gin.Context) {
 	msg := "APIController.List"
-	params := &admin_proto.ApiListReq{Base: common.NewListBaseReq()}
+	params := &admin_proto.ReqApiList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -56,7 +56,7 @@ func (APIController) All(ctx *gin.Context) {
 
 func (APIController) Add(ctx *gin.Context) {
 	msg := "APIController.Add"
-	params := &admin_proto.ApiAddReq{}
+	params := &admin_proto.ReqApiAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminApiReq.AddReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -75,7 +75,7 @@ func (APIController) Add(ctx *gin.Context) {
 
 func (APIController) Info(ctx *gin.Context) {
 	msg := "APIController.Info"
-	params := &admin_proto.ApiInfoReq{}
+	params := &admin_proto.ReqApiInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminApiReq.InfoReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -96,7 +96,7 @@ func (APIController) Info(ctx *gin.Context) {
 
 func (APIController) Edit(ctx *gin.Context) {
 	msg := "APIController.Edit"
-	params := &admin_proto.ApiEditReq{}
+	params := &admin_proto.ReqApiEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminApiReq.EditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -115,7 +115,7 @@ func (APIController) Edit(ctx *gin.Context) {
 
 func (APIController) Enable(ctx *gin.Context) {
 	msg := "APIController.Enable"
-	params := &admin_proto.ApiEnableReq{}
+	params := &admin_proto.ReqApiEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminApiReq.EnableReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -134,7 +134,7 @@ func (APIController) Enable(ctx *gin.Context) {
 
 func (APIController) Delete(ctx *gin.Context) {
 	msg := "APIController.Delete"
-	params := &admin_proto.ApiDeleteReq{}
+	params := &admin_proto.ReqApiDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminApiReq.DeleteReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)

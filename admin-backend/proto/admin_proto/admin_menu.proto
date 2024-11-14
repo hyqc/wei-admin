@@ -25,7 +25,7 @@ message RouteItem {
 }
 
 // 菜单列表
-message MenuListReq{
+message ReqMenuList{
   ListBaseReq base = 1;
   string key = 2;// 菜单键名
   string path = 3;//菜单路由
@@ -33,7 +33,7 @@ message MenuListReq{
   int32 parentId = 5; // 父级菜单
 }
 
-message MenuListRespData{
+message RespMenuListData{
   int64 total = 1;
   repeated MenuItem list = 2;
 }
@@ -78,10 +78,8 @@ message MenuTreeItem{
   repeated MenuTreeItem children = 17;
 }
 
-message MenuTreeRespData{}
-
 // 创建菜单
-message MenuAddReq{
+message ReqMenuAdd{
   string key = 1;// 菜单键名
   string path = 2;//菜单路由
   string name = 3;//菜单名称
@@ -97,14 +95,12 @@ message MenuAddReq{
 }
 
 // 菜单想去
-message MenuInfoReq{
+message ReqMenuInfo{
   int32 menuId = 1;//菜单ID
 }
 
-message MenuInfoRespData{}
-
 // 便捷菜单
-message MenuEditReq{
+message ReqMenuEdit{
   int32 menuId = 1;//菜单ID
   string key = 2;// 菜单键名
   string path = 3;//菜单路由
@@ -121,18 +117,18 @@ message MenuEditReq{
 }
 
 // 启用禁用菜单
-message MenuEnableReq{
+message ReqMenuEnable{
   int32 menuId = 1;//菜单ID
   bool enabled = 2;//是否启用菜单
 }
 
 // 删除菜单
-message MenuDeleteReq{
+message ReqMenuDelete{
   int32 menuId = 1;//菜单ID
 }
 
 // 菜单权限列表
-message MenuPermissionsReq{
+message ReqMenuPermissions{
   int32 menuId = 1;//菜单ID
 }
 
@@ -142,13 +138,9 @@ message MenuPermissions{
 }
 
 // 页面菜单列表
-message MenuPagesReq{
+message ReqMenuPages{
   bool all = 1;//是否顶部插入全部
 }
 
-message MenuPagesRespData{}
-
 // 页面模块权限列表
-message MenuModeReq{}
-
-message MenuModeRespData{}
+message ReqMenuMode{}

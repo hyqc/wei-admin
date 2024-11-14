@@ -20,8 +20,8 @@ type AdminUserLogic struct {
 }
 
 type IAdminUserLogic interface {
-	AccountLogin(ctx context.Context, params *admin_proto.ReqLogin, clientIp string) (*admin_proto.AdminInfo, error)
-	AccountInfo(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error)
+	AccountLogin(ctx context.Context, params *admin_proto.ReqLogin, clientIp string) (*admin_proto.RespLoginData, error)
+	AccountInfo(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.RespAccountInfoData, error)
 	AccountEdit(ctx context.Context, adminId int32, params *admin_proto.ReqAccountEdit) error
 	AccountEditPassword(ctx *gin.Context, adminId int32, params *admin_proto.ReqAccountPasswordEdit) error
 	MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error)
@@ -38,7 +38,7 @@ func newAdminUserLogic() IAdminUserLogic {
 	return &AdminUserLogic{}
 }
 
-func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.ReqLogin, clientIp string) (*admin_proto.AdminInfo, error) {
+func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.ReqLogin, clientIp string) (*admin_proto.RespLoginData, error) {
 	data, err := dao.H.AdminUser.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
@@ -50,7 +50,7 @@ func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.R
 		return nil, code.NewCodeError(code_proto.ErrorCode_AdminAccountPasswordInvalid, nil)
 	}
 
-	result, err := getAccountInfo(ctx, data, true, config.AppConfig.Server.JWT.UsefulLife)
+	info, err := getAccountInfo(ctx, data, true, config.AppConfig.Server.JWT.UsefulLife)
 	if err != nil {
 		return nil, err
 	}
@@ -64,16 +64,24 @@ func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.R
 		return nil, err
 	}
 
-	return result, nil
+	return &admin_proto.RespLoginData{
+		Info: info,
+	}, nil
 }
 
-func (a *AdminUserLogic) AccountInfo(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
+func (a *AdminUserLogic) AccountInfo(ctx context.Context, adminId int32, refreshToken bool, seconds int64) (*admin_proto.RespAccountInfoData, error) {
 	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, adminId)
 	if err != nil {
 		return nil, err
 	}
 
-	return getAccountInfo(ctx, data, refreshToken, seconds)
+	info, err := getAccountInfo(ctx, data, refreshToken, seconds)
+	if err != nil {
+		return nil, err
+	}
+	return &admin_proto.RespAccountInfoData{
+		Info: info,
+	}, nil
 }
 
 func (a *AdminUserLogic) AccountEdit(ctx context.Context, adminId int32, params *admin_proto.ReqAccountEdit) error {

@@ -17,27 +17,27 @@ type AdminMenuLogic struct {
 }
 
 type IAdminMenuLogic interface {
-	List(ctx *gin.Context, params *admin_proto.MenuListReq) (data *admin_proto.MenuListRespData, err error)
+	List(ctx *gin.Context, params *admin_proto.ReqMenuList) (data *admin_proto.RespMenuListData, err error)
 	Tree(ctx *gin.Context) ([]*admin_proto.MenuTreeItem, error)
-	Add(ctx *gin.Context, params *admin_proto.MenuAddReq) error
-	Info(ctx *gin.Context, params *admin_proto.MenuInfoReq) (*admin_proto.MenuItem, error)
-	Edit(ctx *gin.Context, params *admin_proto.MenuEditReq) error
-	Enable(ctx *gin.Context, params *admin_proto.MenuEnableReq) error
-	Delete(ctx *gin.Context, params *admin_proto.MenuDeleteReq) error
-	Permissions(ctx *gin.Context, params *admin_proto.MenuPermissionsReq) (*admin_proto.MenuPermissions, error)
-	Pages(ctx *gin.Context, params *admin_proto.MenuPagesReq) (list []*admin_proto.MenuTreeItem, err error)
+	Add(ctx *gin.Context, params *admin_proto.ReqMenuAdd) error
+	Info(ctx *gin.Context, params *admin_proto.ReqMenuInfo) (*admin_proto.MenuItem, error)
+	Edit(ctx *gin.Context, params *admin_proto.ReqMenuEdit) error
+	Enable(ctx *gin.Context, params *admin_proto.ReqMenuEnable) error
+	Delete(ctx *gin.Context, params *admin_proto.ReqMenuDelete) error
+	Permissions(ctx *gin.Context, params *admin_proto.ReqMenuPermissions) (*admin_proto.MenuPermissions, error)
+	Pages(ctx *gin.Context, params *admin_proto.ReqMenuPages) (list []*admin_proto.MenuTreeItem, err error)
 }
 
 func newAdminMenuLogic() IAdminMenuLogic {
 	return &AdminMenuLogic{}
 }
 
-func (a *AdminMenuLogic) List(ctx *gin.Context, params *admin_proto.MenuListReq) (data *admin_proto.MenuListRespData, err error) {
+func (a *AdminMenuLogic) List(ctx *gin.Context, params *admin_proto.ReqMenuList) (data *admin_proto.RespMenuListData, err error) {
 	total, rows, err := dao.H.AdminMenu.FindList(ctx, params)
 	if err != nil {
 		return nil, err
 	}
-	data = &admin_proto.MenuListRespData{}
+	data = &admin_proto.RespMenuListData{}
 	data.Total = total
 	data.List, err = a.handleListData(rows)
 	return data, err
@@ -69,7 +69,7 @@ func (a *AdminMenuLogic) Tree(ctx *gin.Context) ([]*admin_proto.MenuTreeItem, er
 	return common.GetMenuTreeWithTop(data), nil
 }
 
-func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.MenuAddReq) error {
+func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.ReqMenuAdd) error {
 	data := &model.AdminMenu{
 		ParentID:             params.ParentId,
 		Path:                 params.Path,
@@ -87,7 +87,7 @@ func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.MenuAddReq) e
 	return dao.H.AdminMenu.Create(ctx, data)
 }
 
-func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.MenuInfoReq) (*admin_proto.MenuItem, error) {
+func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.ReqMenuInfo) (*admin_proto.MenuItem, error) {
 	data, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -98,7 +98,7 @@ func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.MenuInfoReq)
 	return a.handleItemData(data)
 }
 
-func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.MenuEditReq) error {
+func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.ReqMenuEdit) error {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -120,7 +120,7 @@ func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.MenuEditReq)
 	return dao.H.AdminMenu.Update(ctx, info)
 }
 
-func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.MenuEnableReq) error {
+func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.ReqMenuEnable) error {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -134,7 +134,7 @@ func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.MenuEnable
 	return dao.H.AdminMenu.Enable(ctx, params.MenuId, params.Enabled)
 }
 
-func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.MenuDeleteReq) error {
+func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.ReqMenuDelete) error {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -148,7 +148,7 @@ func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.MenuDelete
 	return dao.H.AdminMenu.Delete(ctx, params.MenuId)
 }
 
-func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.MenuPermissionsReq) (*admin_proto.MenuPermissions, error) {
+func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqMenuPermissions) (*admin_proto.MenuPermissions, error) {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -198,7 +198,7 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.MenuP
 	return data, nil
 }
 
-func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.MenuPagesReq) (list []*admin_proto.MenuTreeItem, err error) {
+func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.ReqMenuPages) (list []*admin_proto.MenuTreeItem, err error) {
 	//data, err := dao.H.AdminMenu.FindPages(ctx)
 	//if err != nil {
 	//	return nil, err
