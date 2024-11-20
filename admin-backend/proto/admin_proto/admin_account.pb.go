@@ -20,6 +20,474 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// 登录
+type ReqLogin struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"` // 用户名
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"` // 密码
+}
+
+func (x *ReqLogin) Reset() {
+	*x = ReqLogin{}
+	mi := &file_admin_account_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReqLogin) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReqLogin) ProtoMessage() {}
+
+func (x *ReqLogin) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReqLogin.ProtoReflect.Descriptor instead.
+func (*ReqLogin) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ReqLogin) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *ReqLogin) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type RespLoginData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *AdminInfo `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *RespLoginData) Reset() {
+	*x = RespLoginData{}
+	mi := &file_admin_account_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespLoginData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespLoginData) ProtoMessage() {}
+
+func (x *RespLoginData) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespLoginData.ProtoReflect.Descriptor instead.
+func (*RespLoginData) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *RespLoginData) GetData() *AdminInfo {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// 账号详情
+type ReqAccountInfo struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	RefreshToken bool `protobuf:"varint,1,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"` //刷新token
+}
+
+func (x *ReqAccountInfo) Reset() {
+	*x = ReqAccountInfo{}
+	mi := &file_admin_account_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReqAccountInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReqAccountInfo) ProtoMessage() {}
+
+func (x *ReqAccountInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReqAccountInfo.ProtoReflect.Descriptor instead.
+func (*ReqAccountInfo) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ReqAccountInfo) GetRefreshToken() bool {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return false
+}
+
+type RespAccountInfoData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *AdminInfo `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *RespAccountInfoData) Reset() {
+	*x = RespAccountInfoData{}
+	mi := &file_admin_account_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespAccountInfoData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespAccountInfoData) ProtoMessage() {}
+
+func (x *RespAccountInfoData) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespAccountInfoData.ProtoReflect.Descriptor instead.
+func (*RespAccountInfoData) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *RespAccountInfoData) GetData() *AdminInfo {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// 账号编辑
+type ReqAccountEdit struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Nickname string `protobuf:"bytes,1,opt,name=nickname,proto3" json:"nickname,omitempty"` //名称
+	Avatar   string `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty"`     //头像
+	Email    string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`       //邮箱
+}
+
+func (x *ReqAccountEdit) Reset() {
+	*x = ReqAccountEdit{}
+	mi := &file_admin_account_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReqAccountEdit) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReqAccountEdit) ProtoMessage() {}
+
+func (x *ReqAccountEdit) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReqAccountEdit.ProtoReflect.Descriptor instead.
+func (*ReqAccountEdit) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ReqAccountEdit) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *ReqAccountEdit) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+func (x *ReqAccountEdit) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+type RespAccountEditData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *RespAccountEditData) Reset() {
+	*x = RespAccountEditData{}
+	mi := &file_admin_account_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespAccountEditData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespAccountEditData) ProtoMessage() {}
+
+func (x *RespAccountEditData) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespAccountEditData.ProtoReflect.Descriptor instead.
+func (*RespAccountEditData) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{5}
+}
+
+// 修改密码
+type ReqAccountPasswordEdit struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OldPassword     string `protobuf:"bytes,1,opt,name=oldPassword,proto3" json:"oldPassword,omitempty"`         //旧密码
+	Password        string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`               //新密码
+	ConfirmPassword string `protobuf:"bytes,3,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty"` //确认密码
+}
+
+func (x *ReqAccountPasswordEdit) Reset() {
+	*x = ReqAccountPasswordEdit{}
+	mi := &file_admin_account_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReqAccountPasswordEdit) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReqAccountPasswordEdit) ProtoMessage() {}
+
+func (x *ReqAccountPasswordEdit) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReqAccountPasswordEdit.ProtoReflect.Descriptor instead.
+func (*ReqAccountPasswordEdit) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ReqAccountPasswordEdit) GetOldPassword() string {
+	if x != nil {
+		return x.OldPassword
+	}
+	return ""
+}
+
+func (x *ReqAccountPasswordEdit) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *ReqAccountPasswordEdit) GetConfirmPassword() string {
+	if x != nil {
+		return x.ConfirmPassword
+	}
+	return ""
+}
+
+type RespAccountPasswordEditData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *RespAccountPasswordEditData) Reset() {
+	*x = RespAccountPasswordEditData{}
+	mi := &file_admin_account_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespAccountPasswordEditData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespAccountPasswordEditData) ProtoMessage() {}
+
+func (x *RespAccountPasswordEditData) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespAccountPasswordEditData.ProtoReflect.Descriptor instead.
+func (*RespAccountPasswordEditData) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{7}
+}
+
+// 个人权限
+type ReqAccountPermission struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"` //菜单ID
+}
+
+func (x *ReqAccountPermission) Reset() {
+	*x = ReqAccountPermission{}
+	mi := &file_admin_account_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReqAccountPermission) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReqAccountPermission) ProtoMessage() {}
+
+func (x *ReqAccountPermission) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReqAccountPermission.ProtoReflect.Descriptor instead.
+func (*ReqAccountPermission) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ReqAccountPermission) GetMenuId() int32 {
+	if x != nil {
+		return x.MenuId
+	}
+	return 0
+}
+
+type RespAccountPermissionData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *RespAccountPermissionData) Reset() {
+	*x = RespAccountPermissionData{}
+	mi := &file_admin_account_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespAccountPermissionData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespAccountPermissionData) ProtoMessage() {}
+
+func (x *RespAccountPermissionData) ProtoReflect() protoreflect.Message {
+	mi := &file_admin_account_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespAccountPermissionData.ProtoReflect.Descriptor instead.
+func (*RespAccountPermissionData) Descriptor() ([]byte, []int) {
+	return file_admin_account_proto_rawDescGZIP(), []int{9}
+}
+
 // 管理员账号详情
 type AdminInfo struct {
 	state         protoimpl.MessageState
@@ -45,7 +513,7 @@ type AdminInfo struct {
 
 func (x *AdminInfo) Reset() {
 	*x = AdminInfo{}
-	mi := &file_admin_account_proto_msgTypes[0]
+	mi := &file_admin_account_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -57,7 +525,7 @@ func (x *AdminInfo) String() string {
 func (*AdminInfo) ProtoMessage() {}
 
 func (x *AdminInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[0]
+	mi := &file_admin_account_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -70,7 +538,7 @@ func (x *AdminInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminInfo.ProtoReflect.Descriptor instead.
 func (*AdminInfo) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{0}
+	return file_admin_account_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *AdminInfo) GetAdminId() int32 {
@@ -178,372 +646,49 @@ func (x *AdminInfo) GetPermissions() map[string]string {
 	return nil
 }
 
-// 登录
-type ReqLogin struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"` // 用户名
-	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"` // 密码
-}
-
-func (x *ReqLogin) Reset() {
-	*x = ReqLogin{}
-	mi := &file_admin_account_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ReqLogin) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ReqLogin) ProtoMessage() {}
-
-func (x *ReqLogin) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ReqLogin.ProtoReflect.Descriptor instead.
-func (*ReqLogin) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *ReqLogin) GetUsername() string {
-	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-func (x *ReqLogin) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
-}
-
-type RespLoginData struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Info *AdminInfo `protobuf:"bytes,1,opt,name=info,proto3" json:"info,omitempty"`
-}
-
-func (x *RespLoginData) Reset() {
-	*x = RespLoginData{}
-	mi := &file_admin_account_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *RespLoginData) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RespLoginData) ProtoMessage() {}
-
-func (x *RespLoginData) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RespLoginData.ProtoReflect.Descriptor instead.
-func (*RespLoginData) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *RespLoginData) GetInfo() *AdminInfo {
-	if x != nil {
-		return x.Info
-	}
-	return nil
-}
-
-// 账号详情
-type ReqAccountInfo struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	RefreshToken bool `protobuf:"varint,1,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"` //刷新token
-}
-
-func (x *ReqAccountInfo) Reset() {
-	*x = ReqAccountInfo{}
-	mi := &file_admin_account_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ReqAccountInfo) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ReqAccountInfo) ProtoMessage() {}
-
-func (x *ReqAccountInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ReqAccountInfo.ProtoReflect.Descriptor instead.
-func (*ReqAccountInfo) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ReqAccountInfo) GetRefreshToken() bool {
-	if x != nil {
-		return x.RefreshToken
-	}
-	return false
-}
-
-type RespAccountInfoData struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Info *AdminInfo `protobuf:"bytes,1,opt,name=info,proto3" json:"info,omitempty"`
-}
-
-func (x *RespAccountInfoData) Reset() {
-	*x = RespAccountInfoData{}
-	mi := &file_admin_account_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *RespAccountInfoData) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RespAccountInfoData) ProtoMessage() {}
-
-func (x *RespAccountInfoData) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RespAccountInfoData.ProtoReflect.Descriptor instead.
-func (*RespAccountInfoData) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *RespAccountInfoData) GetInfo() *AdminInfo {
-	if x != nil {
-		return x.Info
-	}
-	return nil
-}
-
-// 账号编辑
-type ReqAccountEdit struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Nickname string `protobuf:"bytes,1,opt,name=nickname,proto3" json:"nickname,omitempty"` //名称
-	Avatar   string `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty"`     //头像
-	Email    string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`       //邮箱
-}
-
-func (x *ReqAccountEdit) Reset() {
-	*x = ReqAccountEdit{}
-	mi := &file_admin_account_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ReqAccountEdit) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ReqAccountEdit) ProtoMessage() {}
-
-func (x *ReqAccountEdit) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ReqAccountEdit.ProtoReflect.Descriptor instead.
-func (*ReqAccountEdit) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *ReqAccountEdit) GetNickname() string {
-	if x != nil {
-		return x.Nickname
-	}
-	return ""
-}
-
-func (x *ReqAccountEdit) GetAvatar() string {
-	if x != nil {
-		return x.Avatar
-	}
-	return ""
-}
-
-func (x *ReqAccountEdit) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-// 修改密码
-type ReqAccountPasswordEdit struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	OldPassword     string `protobuf:"bytes,1,opt,name=oldPassword,proto3" json:"oldPassword,omitempty"`         //旧密码
-	Password        string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`               //新密码
-	ConfirmPassword string `protobuf:"bytes,3,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty"` //确认密码
-}
-
-func (x *ReqAccountPasswordEdit) Reset() {
-	*x = ReqAccountPasswordEdit{}
-	mi := &file_admin_account_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ReqAccountPasswordEdit) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ReqAccountPasswordEdit) ProtoMessage() {}
-
-func (x *ReqAccountPasswordEdit) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ReqAccountPasswordEdit.ProtoReflect.Descriptor instead.
-func (*ReqAccountPasswordEdit) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *ReqAccountPasswordEdit) GetOldPassword() string {
-	if x != nil {
-		return x.OldPassword
-	}
-	return ""
-}
-
-func (x *ReqAccountPasswordEdit) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
-}
-
-func (x *ReqAccountPasswordEdit) GetConfirmPassword() string {
-	if x != nil {
-		return x.ConfirmPassword
-	}
-	return ""
-}
-
-// 个人权限
-type ReqAccountPermission struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"` //菜单ID
-}
-
-func (x *ReqAccountPermission) Reset() {
-	*x = ReqAccountPermission{}
-	mi := &file_admin_account_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ReqAccountPermission) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ReqAccountPermission) ProtoMessage() {}
-
-func (x *ReqAccountPermission) ProtoReflect() protoreflect.Message {
-	mi := &file_admin_account_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ReqAccountPermission.ProtoReflect.Descriptor instead.
-func (*ReqAccountPermission) Descriptor() ([]byte, []int) {
-	return file_admin_account_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *ReqAccountPermission) GetMenuId() int32 {
-	if x != nil {
-		return x.MenuId
-	}
-	return 0
-}
-
 var File_admin_account_proto protoreflect.FileDescriptor
 
 var file_admin_account_proto_rawDesc = []byte{
 	0x0a, 0x13, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x1a, 0x10, 0x61, 0x64,
-	0x6d, 0x69, 0x6e, 0x5f, 0x6d, 0x65, 0x6e, 0x75, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xfe,
+	0x6d, 0x69, 0x6e, 0x5f, 0x6d, 0x65, 0x6e, 0x75, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x42,
+	0x0a, 0x08, 0x52, 0x65, 0x71, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73,
+	0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73,
+	0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f,
+	0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f,
+	0x72, 0x64, 0x22, 0x35, 0x0a, 0x0d, 0x52, 0x65, 0x73, 0x70, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x44,
+	0x61, 0x74, 0x61, 0x12, 0x24, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x10, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x49,
+	0x6e, 0x66, 0x6f, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x34, 0x0a, 0x0e, 0x52, 0x65, 0x71,
+	0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x22, 0x0a, 0x0c, 0x72,
+	0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x0c, 0x72, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22,
+	0x3b, 0x0a, 0x13, 0x52, 0x65, 0x73, 0x70, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e,
+	0x66, 0x6f, 0x44, 0x61, 0x74, 0x61, 0x12, 0x24, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x64, 0x6d,
+	0x69, 0x6e, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x5a, 0x0a, 0x0e,
+	0x52, 0x65, 0x71, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x45, 0x64, 0x69, 0x74, 0x12, 0x1a,
+	0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x76,
+	0x61, 0x74, 0x61, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x76, 0x61, 0x74,
+	0x61, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x22, 0x15, 0x0a, 0x13, 0x52, 0x65, 0x73, 0x70,
+	0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x45, 0x64, 0x69, 0x74, 0x44, 0x61, 0x74, 0x61, 0x22,
+	0x80, 0x01, 0x0a, 0x16, 0x52, 0x65, 0x71, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x50, 0x61,
+	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x45, 0x64, 0x69, 0x74, 0x12, 0x20, 0x0a, 0x0b, 0x6f, 0x6c,
+	0x64, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0b, 0x6f, 0x6c, 0x64, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1a, 0x0a, 0x08,
+	0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x28, 0x0a, 0x0f, 0x63, 0x6f, 0x6e, 0x66,
+	0x69, 0x72, 0x6d, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f,
+	0x72, 0x64, 0x22, 0x1d, 0x0a, 0x1b, 0x52, 0x65, 0x73, 0x70, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e,
+	0x74, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x45, 0x64, 0x69, 0x74, 0x44, 0x61, 0x74,
+	0x61, 0x22, 0x2e, 0x0a, 0x14, 0x52, 0x65, 0x71, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x50,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x6e,
+	0x75, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49,
+	0x64, 0x22, 0x1b, 0x0a, 0x19, 0x52, 0x65, 0x73, 0x70, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74,
+	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x22, 0xfe,
 	0x04, 0x0a, 0x09, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x18, 0x0a, 0x07,
 	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x61,
 	0x64, 0x6d, 0x69, 0x6e, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
@@ -583,42 +728,10 @@ var file_admin_account_proto_rawDesc = []byte{
 	0x3e, 0x0a, 0x10, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e,
 	0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22,
-	0x42, 0x0a, 0x08, 0x52, 0x65, 0x71, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x75,
-	0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75,
-	0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77,
-	0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77,
-	0x6f, 0x72, 0x64, 0x22, 0x35, 0x0a, 0x0d, 0x52, 0x65, 0x73, 0x70, 0x4c, 0x6f, 0x67, 0x69, 0x6e,
-	0x44, 0x61, 0x74, 0x61, 0x12, 0x24, 0x0a, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x10, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x64, 0x6d, 0x69, 0x6e,
-	0x49, 0x6e, 0x66, 0x6f, 0x52, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x22, 0x34, 0x0a, 0x0e, 0x52, 0x65,
-	0x71, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x22, 0x0a, 0x0c,
-	0x72, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x08, 0x52, 0x0c, 0x72, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x54, 0x6f, 0x6b, 0x65, 0x6e,
-	0x22, 0x3b, 0x0a, 0x13, 0x52, 0x65, 0x73, 0x70, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49,
-	0x6e, 0x66, 0x6f, 0x44, 0x61, 0x74, 0x61, 0x12, 0x24, 0x0a, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x64,
-	0x6d, 0x69, 0x6e, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x22, 0x5a, 0x0a,
-	0x0e, 0x52, 0x65, 0x71, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x45, 0x64, 0x69, 0x74, 0x12,
-	0x1a, 0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x61,
-	0x76, 0x61, 0x74, 0x61, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x76, 0x61,
-	0x74, 0x61, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x22, 0x80, 0x01, 0x0a, 0x16, 0x52, 0x65,
-	0x71, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64,
-	0x45, 0x64, 0x69, 0x74, 0x12, 0x20, 0x0a, 0x0b, 0x6f, 0x6c, 0x64, 0x50, 0x61, 0x73, 0x73, 0x77,
-	0x6f, 0x72, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6f, 0x6c, 0x64, 0x50, 0x61,
-	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f,
-	0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f,
-	0x72, 0x64, 0x12, 0x28, 0x0a, 0x0f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x61, 0x73,
-	0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x63, 0x6f, 0x6e,
-	0x66, 0x69, 0x72, 0x6d, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x2e, 0x0a, 0x14,
-	0x52, 0x65, 0x71, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49, 0x64, 0x42, 0x1b, 0x5a, 0x19,
-	0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x61, 0x64,
-	0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42,
+	0x1b, 0x5a, 0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -633,26 +746,29 @@ func file_admin_account_proto_rawDescGZIP() []byte {
 	return file_admin_account_proto_rawDescData
 }
 
-var file_admin_account_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_admin_account_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_admin_account_proto_goTypes = []any{
-	(*AdminInfo)(nil),              // 0: admin.AdminInfo
-	(*ReqLogin)(nil),               // 1: admin.ReqLogin
-	(*RespLoginData)(nil),          // 2: admin.RespLoginData
-	(*ReqAccountInfo)(nil),         // 3: admin.ReqAccountInfo
-	(*RespAccountInfoData)(nil),    // 4: admin.RespAccountInfoData
-	(*ReqAccountEdit)(nil),         // 5: admin.ReqAccountEdit
-	(*ReqAccountPasswordEdit)(nil), // 6: admin.ReqAccountPasswordEdit
-	(*ReqAccountPermission)(nil),   // 7: admin.ReqAccountPermission
-	nil,                            // 8: admin.AdminInfo.MenusEntry
-	nil,                            // 9: admin.AdminInfo.PermissionsEntry
-	(*MenuItem)(nil),               // 10: admin.MenuItem
+	(*ReqLogin)(nil),                    // 0: admin.ReqLogin
+	(*RespLoginData)(nil),               // 1: admin.RespLoginData
+	(*ReqAccountInfo)(nil),              // 2: admin.ReqAccountInfo
+	(*RespAccountInfoData)(nil),         // 3: admin.RespAccountInfoData
+	(*ReqAccountEdit)(nil),              // 4: admin.ReqAccountEdit
+	(*RespAccountEditData)(nil),         // 5: admin.RespAccountEditData
+	(*ReqAccountPasswordEdit)(nil),      // 6: admin.ReqAccountPasswordEdit
+	(*RespAccountPasswordEditData)(nil), // 7: admin.RespAccountPasswordEditData
+	(*ReqAccountPermission)(nil),        // 8: admin.ReqAccountPermission
+	(*RespAccountPermissionData)(nil),   // 9: admin.RespAccountPermissionData
+	(*AdminInfo)(nil),                   // 10: admin.AdminInfo
+	nil,                                 // 11: admin.AdminInfo.MenusEntry
+	nil,                                 // 12: admin.AdminInfo.PermissionsEntry
+	(*MenuItem)(nil),                    // 13: admin.MenuItem
 }
 var file_admin_account_proto_depIdxs = []int32{
-	8,  // 0: admin.AdminInfo.menus:type_name -> admin.AdminInfo.MenusEntry
-	9,  // 1: admin.AdminInfo.permissions:type_name -> admin.AdminInfo.PermissionsEntry
-	0,  // 2: admin.RespLoginData.info:type_name -> admin.AdminInfo
-	0,  // 3: admin.RespAccountInfoData.info:type_name -> admin.AdminInfo
-	10, // 4: admin.AdminInfo.MenusEntry.value:type_name -> admin.MenuItem
+	10, // 0: admin.RespLoginData.data:type_name -> admin.AdminInfo
+	10, // 1: admin.RespAccountInfoData.data:type_name -> admin.AdminInfo
+	11, // 2: admin.AdminInfo.menus:type_name -> admin.AdminInfo.MenusEntry
+	12, // 3: admin.AdminInfo.permissions:type_name -> admin.AdminInfo.PermissionsEntry
+	13, // 4: admin.AdminInfo.MenusEntry.value:type_name -> admin.MenuItem
 	5,  // [5:5] is the sub-list for method output_type
 	5,  // [5:5] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
@@ -672,7 +788,7 @@ func file_admin_account_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_admin_account_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

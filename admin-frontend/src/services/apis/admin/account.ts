@@ -2,6 +2,7 @@ import { request } from 'umi';
 import { ResponseBodyType } from '../types';
 import { APIAccount, APICommon } from './api';
 import { MenuDataItem } from '@ant-design/pro-components';
+import { ReqLogin } from '@/proto/admin_ts/admin_account';
 
 export type MenusRemoteItem = {
   [key: string]: MenuDataItem;

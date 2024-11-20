@@ -27,11 +27,11 @@ type IAdminUserLogic interface {
 	MyMenus(ctx *gin.Context, adminId int32) (menus []*admin_proto.MenuItem, err error)
 	MyPermission(ctx *gin.Context, adminId int32) (permissionKeys map[string]string, err error)
 	List(ctx *gin.Context, params *admin_proto.ReqAdminUserList) (*admin_proto.RespAdminUserListData, error)
-	Add(ctx *gin.Context, params *admin_proto.AdminUserAddReq) error
-	Edit(ctx *gin.Context, params *admin_proto.AdminUserEditReq) error
-	Enable(ctx *gin.Context, params *admin_proto.AdminUserEnabledReq) error
-	Delete(ctx *gin.Context, params *admin_proto.AdminUserDeleteReq) error
-	BindRoles(ctx *gin.Context, params *admin_proto.AdminUserBindRolesReq) error
+	Add(ctx *gin.Context, params *admin_proto.ReqAdminUserAdd) error
+	Edit(ctx *gin.Context, params *admin_proto.ReqAdminUserEdit) error
+	Enable(ctx *gin.Context, params *admin_proto.ReqAdminUserEnabled) error
+	Delete(ctx *gin.Context, params *admin_proto.ReqAdminUserDelete) error
+	BindRoles(ctx *gin.Context, params *admin_proto.ReqAdminUserBindRoles) error
 }
 
 func newAdminUserLogic() IAdminUserLogic {
@@ -65,7 +65,7 @@ func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.R
 	}
 
 	return &admin_proto.RespLoginData{
-		Info: info,
+		Data: info,
 	}, nil
 }
 
@@ -80,7 +80,7 @@ func (a *AdminUserLogic) AccountInfo(ctx context.Context, adminId int32, refresh
 		return nil, err
 	}
 	return &admin_proto.RespAccountInfoData{
-		Info: info,
+		Data: info,
 	}, nil
 }
 
@@ -168,7 +168,7 @@ func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_prot
 	return data, nil
 }
 
-func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.AdminUserAddReq) error {
+func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminUserAdd) error {
 	password, err := pwd.Encode(params.Password)
 	if err != nil {
 		return err
@@ -184,7 +184,7 @@ func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.AdminUserAddR
 	return dao.H.AdminUser.Create(ctx, data)
 }
 
-func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.AdminUserEditReq) error {
+func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminUserEdit) error {
 	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
 	if err != nil {
 		return err
@@ -200,7 +200,7 @@ func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.AdminUserEdi
 	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
 
-func (a *AdminUserLogic) Enable(ctx *gin.Context, params *admin_proto.AdminUserEnabledReq) error {
+func (a *AdminUserLogic) Enable(ctx *gin.Context, params *admin_proto.ReqAdminUserEnabled) error {
 	info, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -214,7 +214,7 @@ func (a *AdminUserLogic) Enable(ctx *gin.Context, params *admin_proto.AdminUserE
 	return dao.H.AdminUser.Enable(ctx, params.AdminId, params.Enabled)
 }
 
-func (a *AdminUserLogic) Delete(ctx *gin.Context, params *admin_proto.AdminUserDeleteReq) error {
+func (a *AdminUserLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminUserDelete) error {
 	info, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -228,7 +228,7 @@ func (a *AdminUserLogic) Delete(ctx *gin.Context, params *admin_proto.AdminUserD
 	return dao.H.AdminUser.Delete(ctx, params.AdminId)
 }
 
-func (a *AdminUserLogic) BindRoles(ctx *gin.Context, params *admin_proto.AdminUserBindRolesReq) error {
+func (a *AdminUserLogic) BindRoles(ctx *gin.Context, params *admin_proto.ReqAdminUserBindRoles) error {
 	info, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

@@ -5,12 +5,11 @@ import "common.proto";
 
 // 接口列表请求参数
 message ReqApiList{
-  ListBaseReq base=1;
+  ReqListBase base=1;
   string key = 2;//接口键名
   string name = 3;//接口名称
   string path = 4;//接口路由
 }
-
 message RespApiListData{
   int64 total=1;
   repeated ApiItem list=2;
@@ -30,13 +29,14 @@ message ReqApiAdd{
   string describe = 4;//接口描述
   bool enabled = 5;//启用状态
 }
+message RespApiAddData{}
 
 // 接口详情
 message ReqApiInfo{
   int32 id = 1;//接口ID
 }
 message RespApiInfoData{
-  ApiItem info = 1;
+  ApiItem data = 1;
 }
 
 // 接口编辑
@@ -48,14 +48,17 @@ message ReqApiEdit{
   string describe = 5;//接口描述
   bool enabled = 6;//接口状态
 }
+message RespApiEditData{}
 
 // 接口禁用启用
 message ReqApiEnable{
   int32 id = 1;//接口ID
   bool enabled = 2;//接口状态
 }
+message RespApiEnableData{}
 
 // 删除接口
 message ReqApiDelete{
   int32 id = 1;//接口ID
 }
+message RespApiDeleteData{}

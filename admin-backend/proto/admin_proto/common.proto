@@ -2,9 +2,13 @@ syntax = "proto3";
 package admin;
 option go_package = "./admin_proto;admin_proto";
 
-import "google/protobuf/any.proto";
+message RespCode{
+  int32 code = 1;
+  string msg = 2;
+  string reason = 3;
+}
 
-message ListBaseReq{
+message ReqListBase{
   int32 pageSize = 1; // 分页偏移量
   int32 pageNum = 2; // 页码
   string sortField = 3; // 排序字段
@@ -12,13 +16,6 @@ message ListBaseReq{
   int32 enabled = 5; // 0：全部 1：启用 2：禁用
   int64 createStartTime = 6; // 查询开始时间戳秒
   int64 createEndTime = 7; //查询结束时间戳秒
-}
-
-message RespCode{
-  int32 code = 1;
-  string msg = 2;
-  string reason = 3;
-  google.protobuf.Any data = 4;
 }
 
 // 接口列表返回结构

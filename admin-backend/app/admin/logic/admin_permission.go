@@ -17,27 +17,27 @@ type AdminPermissionLogic struct {
 }
 
 type IAdminPermissionLogic interface {
-	List(ctx *gin.Context, params *admin_proto.PermissionListReq) (*admin_proto.PermissionListRespData, error)
-	Add(ctx *gin.Context, params *admin_proto.PermissionAddReq) error
-	Info(ctx *gin.Context, params *admin_proto.PermissionInfoReq) (*admin_proto.PermissionInfo, error)
-	Edit(ctx *gin.Context, params *admin_proto.PermissionEditReq) error
-	Enable(ctx *gin.Context, params *admin_proto.PermissionEnableReq) error
-	Delete(ctx *gin.Context, params *admin_proto.PermissionDeleteReq) error
-	BindAPI(ctx *gin.Context, params *admin_proto.PermissionBindApisReq) error
-	AddMenuPermissions(ctx *gin.Context, params *admin_proto.PermissionBindMenuReq) error
+	List(ctx *gin.Context, params *admin_proto.ReqPermissionList) (*admin_proto.RespPermissionListData, error)
+	Add(ctx *gin.Context, params *admin_proto.ReqPermissionAdd) error
+	Info(ctx *gin.Context, params *admin_proto.ReqPermissionInfo) (*admin_proto.PermissionInfo, error)
+	Edit(ctx *gin.Context, params *admin_proto.ReqPermissionEdit) error
+	Enable(ctx *gin.Context, params *admin_proto.ReqPermissionEnable) error
+	Delete(ctx *gin.Context, params *admin_proto.ReqPermissionDelete) error
+	BindAPI(ctx *gin.Context, params *admin_proto.ReqPermissionBindApis) error
+	AddMenuPermissions(ctx *gin.Context, params *admin_proto.ReqPermissionBindMenu) error
 }
 
 func newAdminPermissionLogic() IAdminPermissionLogic {
 	return &AdminPermissionLogic{}
 }
 
-func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.PermissionListReq) (*admin_proto.PermissionListRespData, error) {
+func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.ReqPermissionList) (*admin_proto.RespPermissionListData, error) {
 	total, list, err := dao.H.AdminPermission.List(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	data := &admin_proto.PermissionListRespData{
+	data := &admin_proto.RespPermissionListData{
 		List:  make([]*admin_proto.PermissionListItem, 0),
 		Total: total,
 	}
@@ -118,7 +118,7 @@ func (a *AdminPermissionLogic) handleListItemData(item *model.AdminPermission, a
 	return tmp
 }
 
-func (a *AdminPermissionLogic) Add(ctx *gin.Context, params *admin_proto.PermissionAddReq) error {
+func (a *AdminPermissionLogic) Add(ctx *gin.Context, params *admin_proto.ReqPermissionAdd) error {
 	data := &model.AdminPermission{
 		MenuID:    params.MenuId,
 		Key:       params.Key,
@@ -140,7 +140,7 @@ func (a *AdminPermissionLogic) Add(ctx *gin.Context, params *admin_proto.Permiss
 	return nil
 }
 
-func (a *AdminPermissionLogic) Edit(ctx *gin.Context, params *admin_proto.PermissionEditReq) error {
+func (a *AdminPermissionLogic) Edit(ctx *gin.Context, params *admin_proto.ReqPermissionEdit) error {
 	data := &model.AdminPermission{
 		ID:        params.Id,
 		MenuID:    params.MenuId,
@@ -159,7 +159,7 @@ func (a *AdminPermissionLogic) Edit(ctx *gin.Context, params *admin_proto.Permis
 	return nil
 }
 
-func (a *AdminPermissionLogic) Info(ctx *gin.Context, params *admin_proto.PermissionInfoReq) (*admin_proto.PermissionInfo, error) {
+func (a *AdminPermissionLogic) Info(ctx *gin.Context, params *admin_proto.ReqPermissionInfo) (*admin_proto.PermissionInfo, error) {
 	data, err := dao.H.AdminPermission.FindPermissionMenuInfoById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -186,7 +186,7 @@ func (a *AdminPermissionLogic) Info(ctx *gin.Context, params *admin_proto.Permis
 	}, nil
 }
 
-func (a *AdminPermissionLogic) Enable(ctx *gin.Context, params *admin_proto.PermissionEnableReq) error {
+func (a *AdminPermissionLogic) Enable(ctx *gin.Context, params *admin_proto.ReqPermissionEnable) error {
 	info, err := dao.H.AdminPermission.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -200,7 +200,7 @@ func (a *AdminPermissionLogic) Enable(ctx *gin.Context, params *admin_proto.Perm
 	return dao.H.AdminPermission.Enable(ctx, params.Id, params.Enabled)
 }
 
-func (a *AdminPermissionLogic) Delete(ctx *gin.Context, params *admin_proto.PermissionDeleteReq) error {
+func (a *AdminPermissionLogic) Delete(ctx *gin.Context, params *admin_proto.ReqPermissionDelete) error {
 	info, err := dao.H.AdminPermission.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -214,7 +214,7 @@ func (a *AdminPermissionLogic) Delete(ctx *gin.Context, params *admin_proto.Perm
 	return dao.H.AdminPermission.Delete(ctx, params.Id)
 }
 
-func (a *AdminPermissionLogic) BindAPI(ctx *gin.Context, params *admin_proto.PermissionBindApisReq) error {
+func (a *AdminPermissionLogic) BindAPI(ctx *gin.Context, params *admin_proto.ReqPermissionBindApis) error {
 	_, err := dao.H.AdminPermission.Info(ctx, params.PermissionId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -239,7 +239,7 @@ func (a *AdminPermissionLogic) BindAPI(ctx *gin.Context, params *admin_proto.Per
 	return dao.H.AdminPermission.BindApis(ctx, params.PermissionId, permissionAps)
 }
 
-func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admin_proto.PermissionBindMenuReq) error {
+func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admin_proto.ReqPermissionBindMenu) error {
 	_, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

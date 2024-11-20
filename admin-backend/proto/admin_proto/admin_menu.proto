@@ -4,6 +4,97 @@ option go_package = "./admin_proto;admin_proto";
 import "common.proto";
 import "admin_permission.proto";
 
+
+// 菜单列表
+message ReqMenuList{
+  ReqListBase base = 1;
+  string key = 2;// 菜单键名
+  string path = 3;//菜单路由
+  string name = 4;//菜单名称
+  int32 parentId = 5; // 父级菜单
+}
+message RespMenuListData{
+  int64 total = 1;
+  repeated MenuItem list = 2;
+}
+
+
+// 创建菜单
+message ReqMenuAdd{
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  int32 parentId = 4; // 父级菜单
+  string describe = 5;//菜单描述
+  string redirect = 6;//菜单重定向路由
+  string icon = 7;//菜单图标
+  bool hideChildrenInMenu = 8;//是否隐藏子菜单
+  bool hideInMenu = 9;//是否隐藏菜单
+  bool enabled = 10;//是否启用菜单
+  int32 sort = 11;//菜单排序值
+  string component = 12;//菜单组件
+}
+message RespMenuAddData{}
+
+// 菜单想去
+message ReqMenuInfo{
+  int32 menuId = 1;//菜单ID
+}
+message RespMenuInfoData{
+  MenuItem data = 1;
+}
+
+// 便捷菜单
+message ReqMenuEdit{
+  int32 menuId = 1;//菜单ID
+  string key = 2;// 菜单键名
+  string path = 3;//菜单路由
+  string name = 4;//菜单名称
+  int32 parentId = 5; // 父级菜单
+  string describe = 6;//菜单描述
+  string redirect = 7;//菜单重定向路由
+  string icon = 8;//菜单图标
+  bool hideChildrenInMenu = 9;//是否隐藏子菜单
+  bool hideInMenu = 10;//是否隐藏菜单
+  bool enabled = 11;//是否启用菜单
+  int32 sort = 12;//菜单排序值
+  string component = 13;//菜单组件
+}
+message RespMenuEditData{}
+
+// 启用禁用菜单
+message ReqMenuEnable{
+  int32 menuId = 1;//菜单ID
+  bool enabled = 2;//是否启用菜单
+}
+message RespMenuEnableData{}
+
+// 删除菜单
+message ReqMenuDelete{
+  int32 menuId = 1;//菜单ID
+}
+message RespMenuDeleteData{}
+
+// 菜单权限列表
+message ReqMenuPermissions{
+  int32 menuId = 1;//菜单ID
+}
+message RespMenuPermissionsData{
+  repeated MenuPermissions list=1;
+}
+
+
+
+// 页面菜单列表
+message ReqMenuPages{
+  bool all = 1;//是否顶部插入全部
+}
+
+// 页面模块权限列表
+message ReqMenuMode{}
+
+//////////////////////////////////
+//菜单
 message MenuItem{
   string key = 1; // 菜单唯一键
   string path = 2; // 菜单路由
@@ -13,29 +104,7 @@ message MenuItem{
   string authority = 6;
   bool hideInMenu=7;
   bool hideChildrenInMenu=8;
-  repeated RouteItem routes = 9;
-}
-
-message RouteItem {
-  string key = 1;// 菜单键名
-  string path = 2;//菜单路由
-  string name = 3;//菜单名称
-  string icon = 4;//
-  string component = 5;
-}
-
-// 菜单列表
-message ReqMenuList{
-  ListBaseReq base = 1;
-  string key = 2;// 菜单键名
-  string path = 3;//菜单路由
-  string name = 4;//菜单名称
-  int32 parentId = 5; // 父级菜单
-}
-
-message RespMenuListData{
-  int64 total = 1;
-  repeated MenuItem list = 2;
+  repeated MenuItem routes = 9;
 }
 
 // 有效菜单树
@@ -78,69 +147,8 @@ message MenuTreeItem{
   repeated MenuTreeItem children = 17;
 }
 
-// 创建菜单
-message ReqMenuAdd{
-  string key = 1;// 菜单键名
-  string path = 2;//菜单路由
-  string name = 3;//菜单名称
-  int32 parentId = 4; // 父级菜单
-  string describe = 5;//菜单描述
-  string redirect = 6;//菜单重定向路由
-  string icon = 7;//菜单图标
-  bool hideChildrenInMenu = 8;//是否隐藏子菜单
-  bool hideInMenu = 9;//是否隐藏菜单
-  bool enabled = 10;//是否启用菜单
-  int32 sort = 11;//菜单排序值
-  string component = 12;//菜单组件
-}
-
-// 菜单想去
-message ReqMenuInfo{
-  int32 menuId = 1;//菜单ID
-}
-
-// 便捷菜单
-message ReqMenuEdit{
-  int32 menuId = 1;//菜单ID
-  string key = 2;// 菜单键名
-  string path = 3;//菜单路由
-  string name = 4;//菜单名称
-  int32 parentId = 5; // 父级菜单
-  string describe = 6;//菜单描述
-  string redirect = 7;//菜单重定向路由
-  string icon = 8;//菜单图标
-  bool hideChildrenInMenu = 9;//是否隐藏子菜单
-  bool hideInMenu = 10;//是否隐藏菜单
-  bool enabled = 11;//是否启用菜单
-  int32 sort = 12;//菜单排序值
-  string component = 13;//菜单组件
-}
-
-// 启用禁用菜单
-message ReqMenuEnable{
-  int32 menuId = 1;//菜单ID
-  bool enabled = 2;//是否启用菜单
-}
-
-// 删除菜单
-message ReqMenuDelete{
-  int32 menuId = 1;//菜单ID
-}
-
-// 菜单权限列表
-message ReqMenuPermissions{
-  int32 menuId = 1;//菜单ID
-}
-
+// 菜单权限
 message MenuPermissions{
   MenuTreeItem menu=1;
   repeated PermissionApiItem permissions=2;
 }
-
-// 页面菜单列表
-message ReqMenuPages{
-  bool all = 1;//是否顶部插入全部
-}
-
-// 页面模块权限列表
-message ReqMenuMode{}

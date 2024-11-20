@@ -19,14 +19,14 @@ type AdminRoleLogic struct {
 }
 
 type IAdminRoleLogic interface {
-	List(ctx *gin.Context, params *admin_proto.RoleListReq) (*admin_proto.RoleListRespData, error)
-	Add(ctx *gin.Context, params *admin_proto.RoleAddReq) error
-	Info(ctx *gin.Context, params *admin_proto.RoleInfoReq) (*admin_proto.RoleInfoRespData, error)
-	Edit(ctx *gin.Context, params *admin_proto.RoleEditReq) error
-	Enable(ctx *gin.Context, params *admin_proto.RoleEnableReq) error
-	Delete(ctx *gin.Context, params *admin_proto.RoleDeleteReq) error
-	RolePermissions(ctx *gin.Context, params *admin_proto.RolePermissionsReq) ([]*admin_proto.RolePermissionItem, error)
-	RoleBindPermissions(ctx *gin.Context, params *admin_proto.RoleBindPermissionsReq) error
+	List(ctx *gin.Context, params *admin_proto.ReqRoleList) (*admin_proto.RespRoleListData, error)
+	Add(ctx *gin.Context, params *admin_proto.ReqRoleAdd) error
+	Info(ctx *gin.Context, params *admin_proto.ReqRoleInfo) (*admin_proto.RespRoleInfoData, error)
+	Edit(ctx *gin.Context, params *admin_proto.ReqRoleEdit) error
+	Enable(ctx *gin.Context, params *admin_proto.ReqRoleEnable) error
+	Delete(ctx *gin.Context, params *admin_proto.ReqRoleDelete) error
+	RolePermissions(ctx *gin.Context, params *admin_proto.ReqRolePermissions) ([]*admin_proto.RolePermissionItem, error)
+	RoleBindPermissions(ctx *gin.Context, params *admin_proto.ReqRoleBindPermissions) error
 	All(ctx *gin.Context) ([]*admin_proto.RoleItem, error)
 }
 
@@ -34,12 +34,12 @@ func newAdminRoleLogic() IAdminRoleLogic {
 	return &AdminRoleLogic{}
 }
 
-func (a *AdminRoleLogic) List(ctx *gin.Context, params *admin_proto.RoleListReq) (*admin_proto.RoleListRespData, error) {
+func (a *AdminRoleLogic) List(ctx *gin.Context, params *admin_proto.ReqRoleList) (*admin_proto.RespRoleListData, error) {
 	total, rows, err := dao.H.AdminRole.List(ctx, params)
 	if err != nil {
 		return nil, err
 	}
-	data := &admin_proto.RoleListRespData{}
+	data := &admin_proto.RespRoleListData{}
 	data.Total = total
 	data.List, err = a.HandleListData(rows)
 	return data, err
@@ -68,7 +68,7 @@ func (a *AdminRoleLogic) HandleItemData(item *model.AdminRole) (data *admin_prot
 	return data, nil
 }
 
-func (a *AdminRoleLogic) Add(ctx *gin.Context, params *admin_proto.RoleAddReq) error {
+func (a *AdminRoleLogic) Add(ctx *gin.Context, params *admin_proto.ReqRoleAdd) error {
 	adminId := constant.GetCustomClaims(ctx).AdminID
 	data := &model.AdminRole{
 		Name:          params.Name,
@@ -80,7 +80,7 @@ func (a *AdminRoleLogic) Add(ctx *gin.Context, params *admin_proto.RoleAddReq) e
 	return dao.H.AdminRole.Create(ctx, data)
 }
 
-func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.RoleInfoReq) (*admin_proto.RoleInfoRespData, error) {
+func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.ReqRoleInfo) (*admin_proto.RespRoleInfoData, error) {
 	adminInfo, err := dao.H.AdminRole.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -88,7 +88,7 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.RoleInfoReq)
 		}
 		return nil, err
 	}
-	return &admin_proto.RoleInfoRespData{
+	return &admin_proto.RespRoleInfoData{
 		Id:              adminInfo.ID,
 		Name:            adminInfo.Name,
 		Describe:        adminInfo.Describe,
@@ -102,7 +102,7 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.RoleInfoReq)
 	}, nil
 }
 
-func (a *AdminRoleLogic) Edit(ctx *gin.Context, params *admin_proto.RoleEditReq) error {
+func (a *AdminRoleLogic) Edit(ctx *gin.Context, params *admin_proto.ReqRoleEdit) error {
 	adminInfo, err := dao.H.AdminRole.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -116,7 +116,7 @@ func (a *AdminRoleLogic) Edit(ctx *gin.Context, params *admin_proto.RoleEditReq)
 	return dao.H.AdminRole.Update(ctx, adminInfo)
 }
 
-func (a *AdminRoleLogic) Enable(ctx *gin.Context, params *admin_proto.RoleEnableReq) error {
+func (a *AdminRoleLogic) Enable(ctx *gin.Context, params *admin_proto.ReqRoleEnable) error {
 	info, err := dao.H.AdminRole.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -130,7 +130,7 @@ func (a *AdminRoleLogic) Enable(ctx *gin.Context, params *admin_proto.RoleEnable
 	return dao.H.AdminRole.Enable(ctx, params.Id, params.Enabled)
 }
 
-func (a *AdminRoleLogic) Delete(ctx *gin.Context, params *admin_proto.RoleDeleteReq) error {
+func (a *AdminRoleLogic) Delete(ctx *gin.Context, params *admin_proto.ReqRoleDelete) error {
 	info, err := dao.H.AdminRole.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -144,7 +144,7 @@ func (a *AdminRoleLogic) Delete(ctx *gin.Context, params *admin_proto.RoleDelete
 	return dao.H.AdminRole.Delete(ctx, params.Id)
 }
 
-func (a *AdminRoleLogic) RolePermissions(ctx *gin.Context, params *admin_proto.RolePermissionsReq) (list []*admin_proto.RolePermissionItem, err error) {
+func (a *AdminRoleLogic) RolePermissions(ctx *gin.Context, params *admin_proto.ReqRolePermissions) (list []*admin_proto.RolePermissionItem, err error) {
 	data, err := dao.H.AdminRole.FindAdminRolePermissionByRoleId(ctx, params.Id)
 	if err != nil {
 		return nil, err
@@ -162,7 +162,7 @@ func (a *AdminRoleLogic) RolePermissions(ctx *gin.Context, params *admin_proto.R
 	return list, nil
 }
 
-func (a *AdminRoleLogic) RoleBindPermissions(ctx *gin.Context, params *admin_proto.RoleBindPermissionsReq) error {
+func (a *AdminRoleLogic) RoleBindPermissions(ctx *gin.Context, params *admin_proto.ReqRoleBindPermissions) error {
 	params.PermissionIds = array.Deduplicate(params.PermissionIds, true, true)
 	if len(params.PermissionIds) == 0 {
 		return code.NewCode(code_proto.ErrorCode_RequestParamsInvalid)
