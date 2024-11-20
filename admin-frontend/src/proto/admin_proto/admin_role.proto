@@ -3,40 +3,29 @@ package admin;
 option go_package = "./admin_proto;admin_proto";
 import "common.proto";
 
-message RoleItem{
-  int32 id = 1;//角色ID
-  string name = 2;//角色名称
-  string roleName=3;//角色名称
-  int32 createAdminId=4;//创建人ID
-  string createAdminName=5;//创建人名称
-  bool enabled = 6;//是否启用
-  string createdAt = 7;
-  string updatedAt = 8;
-}
 
 //角色列表
-message RoleListReq{
-  ListBaseReq base = 1;
+message ReqRoleList{
+  ReqListBase base = 1;
   int32 id=2;//角色ID
   string name=3;//角色名称
   int32 enabled=4;//启用状态，0：全部，1：启用，2：禁用
 }
-
-message RoleListRespData{
+message RespRoleListData{
   int64 total = 1;
   repeated RoleItem list = 2;
 }
 
 //有效角色列表
-message RoleAllReq{
+message ReqRoleAll{
   int32 id=1;//角色ID
   string name=2;//角色名称
   int32 enabled=3;//启用状态，0：全部，1：启用，2：禁用
 }
-message RoleAllResp{}
+message RespRoleAll{}
 
 //创建角色
-message RoleAddReq{
+message ReqRoleAdd{
   string name=1;//角色名称
   string describe=2;//角色描述
   bool enabled=3;//启用状态
@@ -44,11 +33,10 @@ message RoleAddReq{
 message RoleAddResp{}
 
 //角色详情
-message RoleInfoReq{
+message ReqRoleInfo{
   int32 id=1;//角色ID
 }
-
-message RoleInfoRespData{
+message RespRoleInfoData{
   int32 id=1;//角色ID
   string name=2;//角色名称
   string describe=3;//角色描述
@@ -62,31 +50,58 @@ message RoleInfoRespData{
 }
 
 //编辑角色
-message RoleEditReq{
+message ReqRoleEdit{
   int32 id=1;//角色ID
   string name=2;//角色名称
   string describe=3;//角色描述
   bool enabled=4;//启用状态
 }
+message RespRoleEditData{}
 
 //启用禁用角色
-message RoleEnableReq{
+message ReqRoleEnable{
   int32 id=1;//角色ID
   bool enabled=2;//启用状态
 }
+message RespRoleEnableData{}
 
 //删除角色
-message RoleDeleteReq{
+message ReqRoleDelete{
   int32 id=1;//角色ID
   repeated int32 permissionIds=2;//权限ID集合
 }
+message RespRoleDeleteData{}
 
 //角色绑定权限
-message RoleBindPermissionsReq{
+message ReqRoleBindPermissions{
   int32 id=1;//角色ID
   repeated int32 permissionIds=2;//权限ID集合
 }
+message RespRoleBindPermissionsData{}
 
+
+//角色权限列表
+message ReqRolePermissions{
+  int32 id=1;//角色ID
+}
+message RespRolePermissionsData{
+  repeated RolePermissionItem list=1;
+}
+
+///////////////////////////////////////////
+//角色
+message RoleItem{
+  int32 id = 1;//角色ID
+  string name = 2;//角色名称
+  string roleName=3;//角色名称
+  int32 createAdminId=4;//创建人ID
+  string createAdminName=5;//创建人名称
+  bool enabled = 6;//是否启用
+  string createdAt = 7;
+  string updatedAt = 8;
+}
+
+//角色权限
 message RolePermissionItem{
   int32 roleId=1;//权限ID
   int32 permissionId=2;//权限ID
@@ -94,9 +109,4 @@ message RolePermissionItem{
   string permissionKey=4;//权限键名
   string permissionType=5;//权限类型
   string permissionTypeText=6;//权限类型
-}
-
-//角色权限列表
-message RolePermissionsReq{
-  int32 id=1;//角色ID
 }

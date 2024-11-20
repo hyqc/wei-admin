@@ -6,7 +6,7 @@ import "admin_model.proto";
 
 // 账号列表请求参数
 message ReqAdminUserList{
-  ListBaseReq base = 1;
+  ReqListBase base = 1;
   string username = 2;//账号
   string nickname = 3;//昵称
   string email = 4; //邮箱
@@ -18,17 +18,16 @@ message RespAdminUserListData{
 }
 
 // 账号详情
-message AdminUserInfoReq{
+message ReqAdminUserInfo{
   int32 adminId = 1;//管理员ID
 }
-
-message AdminUserInfo{
-
+message RespAdminUserInfoData{
+  AdminUserModel data = 1;
 }
 
 
 // 添加账号
-message AdminUserAddReq{
+message ReqAdminUserAdd{
   string username = 1;//账号
   string nickname = 2;//昵称
   string password = 3;//密码
@@ -37,9 +36,11 @@ message AdminUserAddReq{
   string email = 6;//邮箱
   string avatar = 7;//头像地址
 }
+message RespAdminUserAddData{
+}
 
 // 账号编辑
-message AdminUserEditReq{
+message ReqAdminUserEdit{
   string username = 1;//账号
   string nickname = 2;//昵称
   string password = 3;//密码
@@ -49,20 +50,28 @@ message AdminUserEditReq{
   string avatar = 7;//头像地址
   int32 adminId = 8;//管理员ID
 }
+message RespAdminUserEditData{
+}
 
 // 账号状态更改
-message AdminUserEnabledReq{
+message ReqAdminUserEnabled{
   int32 adminId = 1;//管理员ID
   bool enabled = 2;//账号启用状态
 }
+message RespAdminUserEnabledData{
+}
 
 // 删除账号
-message AdminUserDeleteReq{
+message ReqAdminUserDelete{
   int32 adminId = 1;//管理员ID
+}
+message RespAdminUserDeleteData{
 }
 
 // 账号绑定角色
-message AdminUserBindRolesReq{
+message ReqAdminUserBindRoles{
   int32 adminId = 1;//管理员ID
   repeated int32 roleIds = 2;//角色ID列表
+}
+message RespAdminUserBindRolesData{
 }
