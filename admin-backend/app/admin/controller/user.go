@@ -44,7 +44,7 @@ func (UserController) List(ctx *gin.Context) {
 // Add 添加管理员
 func (UserController) Add(ctx *gin.Context) {
 	msg := "UserController.Add"
-	params := &admin_proto.AdminUserAddReq{}
+	params := &admin_proto.ReqAdminUserAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.AddReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -63,7 +63,7 @@ func (UserController) Add(ctx *gin.Context) {
 // Info 详情
 func (UserController) Info(ctx *gin.Context) {
 	msg := "UserController.Info"
-	params := &admin_proto.AdminUserInfoReq{}
+	params := &admin_proto.ReqAdminUserInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.InfoReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -84,7 +84,7 @@ func (UserController) Info(ctx *gin.Context) {
 // Edit 编辑管理员
 func (UserController) Edit(ctx *gin.Context) {
 	msg := "UserController.Edit"
-	params := &admin_proto.AdminUserEditReq{}
+	params := &admin_proto.ReqAdminUserEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.EditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -103,7 +103,7 @@ func (UserController) Edit(ctx *gin.Context) {
 // Enable 启用禁用
 func (UserController) Enable(ctx *gin.Context) {
 	msg := "UserController.Enable"
-	params := &admin_proto.AdminUserEnabledReq{}
+	params := &admin_proto.ReqAdminUserEnabled{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.EnableReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -122,7 +122,7 @@ func (UserController) Enable(ctx *gin.Context) {
 // Delete 删除管理员
 func (UserController) Delete(ctx *gin.Context) {
 	msg := "UserController.Delete"
-	params := &admin_proto.AdminUserDeleteReq{}
+	params := &admin_proto.ReqAdminUserDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.DeleteReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -141,7 +141,7 @@ func (UserController) Delete(ctx *gin.Context) {
 // BindRoles 管理员绑定角色
 func (UserController) BindRoles(ctx *gin.Context) {
 	msg := "UserController.BindRoles"
-	params := &admin_proto.AdminUserBindRolesReq{}
+	params := &admin_proto.ReqAdminUserBindRoles{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminUserReq.BindRolesReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)

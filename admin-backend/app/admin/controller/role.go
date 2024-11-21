@@ -22,7 +22,7 @@ type RoleController struct {
 // List 角色列表
 func (RoleController) List(ctx *gin.Context) {
 	msg := "RoleController.List"
-	params := &admin_proto.RoleListReq{Base: common.NewListBaseReq()}
+	params := &admin_proto.ReqRoleList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.ListReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -59,7 +59,7 @@ func (RoleController) All(ctx *gin.Context) {
 // Add 添加角色
 func (RoleController) Add(ctx *gin.Context) {
 	msg := "RoleController.Add"
-	params := &admin_proto.RoleAddReq{}
+	params := &admin_proto.ReqRoleAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.AddReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -79,7 +79,7 @@ func (RoleController) Add(ctx *gin.Context) {
 // Info 详情
 func (RoleController) Info(ctx *gin.Context) {
 	msg := "RoleController.Info"
-	params := &admin_proto.RoleInfoReq{}
+	params := &admin_proto.ReqRoleInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.InfoReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -101,7 +101,7 @@ func (RoleController) Info(ctx *gin.Context) {
 // Edit 编辑角色
 func (RoleController) Edit(ctx *gin.Context) {
 	msg := "RoleController.Edit"
-	params := &admin_proto.RoleEditReq{}
+	params := &admin_proto.ReqRoleEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.EditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -121,7 +121,7 @@ func (RoleController) Edit(ctx *gin.Context) {
 // Enable 启用禁用
 func (RoleController) Enable(ctx *gin.Context) {
 	msg := "RoleController.Enable"
-	params := &admin_proto.RoleEnableReq{}
+	params := &admin_proto.ReqRoleEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.EnableReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -141,7 +141,7 @@ func (RoleController) Enable(ctx *gin.Context) {
 // Delete 删除角色
 func (RoleController) Delete(ctx *gin.Context) {
 	msg := "RoleController.Delete"
-	params := &admin_proto.RoleDeleteReq{}
+	params := &admin_proto.ReqRoleDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.DeleteReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -161,7 +161,7 @@ func (RoleController) Delete(ctx *gin.Context) {
 // BindPermissions 角色绑定权限
 func (RoleController) BindPermissions(ctx *gin.Context) {
 	msg := "RoleController.Delete"
-	params := &admin_proto.RoleBindPermissionsReq{}
+	params := &admin_proto.ReqRoleBindPermissions{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.RoleBindPermissionsReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -181,7 +181,7 @@ func (RoleController) BindPermissions(ctx *gin.Context) {
 // Permissions 角色权限列表
 func (RoleController) Permissions(ctx *gin.Context) {
 	msg := "RoleController.Permissions"
-	params := &admin_proto.RolePermissionsReq{}
+	params := &admin_proto.ReqRolePermissions{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminRoleReq.RolePermissionsReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)

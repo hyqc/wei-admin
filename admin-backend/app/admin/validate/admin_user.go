@@ -45,7 +45,7 @@ func (a *AdminUserReqValidator) AddReq(data interface{}) url.Values {
 	if len(errs) > 0 {
 		return res
 	}
-	tmp := data.(*admin_proto.AdminUserAddReq)
+	tmp := data.(*admin_proto.ReqAdminUserAdd)
 	if tmp.Password != tmp.ConfirmPassword {
 		res["confirmPassword"] = []string{"两次输入的密码不一致"}
 	}
@@ -96,7 +96,7 @@ func (a *AdminUserReqValidator) EditReq(data interface{}) url.Values {
 	if len(errs) > 0 {
 		return res
 	}
-	tmp := data.(*admin_proto.AdminUserAddReq)
+	tmp := data.(*admin_proto.ReqAdminUserAdd)
 	if tmp.Password != "" && tmp.Password != tmp.ConfirmPassword {
 		res["confirmPassword"] = []string{"两次输入的密码不一致"}
 	}

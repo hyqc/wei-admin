@@ -18,7 +18,7 @@ type IAdminPermission interface {
 	FindAdministerPermissions(ctx context.Context) ([]*model.AdminPermission, error) // 根据管理员名称查询详情
 	FindAdminPermissions(ctx context.Context, adminId, menuId int32) ([]*model.AdminPermission, error)
 	FindPermissionsByMenuId(ctx context.Context, menuId int32) ([]*model.AdminPermission, error)
-	List(ctx *gin.Context, params *admin_proto.PermissionListReq) (total int64, list []*model.AdminPermission, err error)
+	List(ctx *gin.Context, params *admin_proto.ReqPermissionList) (total int64, list []*model.AdminPermission, err error)
 	Create(ctx *gin.Context, data *model.AdminPermission) error
 	Info(ctx *gin.Context, id int32) (*model.AdminPermission, error)
 	Update(ctx *gin.Context, data *model.AdminPermission) error
@@ -95,7 +95,7 @@ func (a *AdminPermission) FindPermissionsByMenuId(ctx context.Context, menuId in
 	return permission.WithContext(ctx).Where(permission.MenuID.Eq(menuId)).Find()
 }
 
-func (a *AdminPermission) List(ctx *gin.Context, params *admin_proto.PermissionListReq) (total int64, list []*model.AdminPermission, err error) {
+func (a *AdminPermission) List(ctx *gin.Context, params *admin_proto.ReqPermissionList) (total int64, list []*model.AdminPermission, err error) {
 	DB := query.AdminPermission
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
@@ -108,7 +108,7 @@ func (a *AdminPermission) List(ctx *gin.Context, params *admin_proto.PermissionL
 	return total, list, err
 }
 
-func (a *AdminPermission) handleListReq(ctx context.Context, params *admin_proto.PermissionListReq) (q query.IAdminPermissionDo) {
+func (a *AdminPermission) handleListReq(ctx context.Context, params *admin_proto.ReqPermissionList) (q query.IAdminPermissionDo) {
 	DB := query.AdminPermission
 	q = DB.WithContext(ctx)
 

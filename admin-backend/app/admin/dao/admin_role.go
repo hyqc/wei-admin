@@ -16,7 +16,7 @@ import (
 
 type IAdminRole interface {
 	FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]*model.AdminUserRole, error)
-	List(ctx context.Context, params *admin_proto.RoleListReq) (int64, []*model.AdminRole, error)
+	List(ctx context.Context, params *admin_proto.ReqRoleList) (int64, []*model.AdminRole, error)
 	Create(ctx context.Context, data *model.AdminRole) error
 	Info(ctx context.Context, id int32) (*admin_custom.AdminRoleInfo, error)
 	FindById(ctx context.Context, id int32) (*model.AdminRole, error)
@@ -40,7 +40,7 @@ func (a *AdminRole) FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]
 	return query.AdminUserRole.WithContext(ctx).Where(query.AdminUserRole.RoleID.In(ids...)).Find()
 }
 
-func (a *AdminRole) List(ctx context.Context, params *admin_proto.RoleListReq) (total int64, list []*model.AdminRole, err error) {
+func (a *AdminRole) List(ctx context.Context, params *admin_proto.ReqRoleList) (total int64, list []*model.AdminRole, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)
@@ -73,7 +73,7 @@ func (a *AdminRole) handleListReqSortField(sortField, sortType string) field.Exp
 	return res
 }
 
-func (a *AdminRole) handleListReq(ctx context.Context, params *admin_proto.RoleListReq) (q query.IAdminRoleDo) {
+func (a *AdminRole) handleListReq(ctx context.Context, params *admin_proto.ReqRoleList) (q query.IAdminRoleDo) {
 	db := query.AdminRole
 	q = db.WithContext(ctx)
 	if params.Id > 0 {

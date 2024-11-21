@@ -19,14 +19,14 @@ var (
 	EnabledInvalidQueryValue int32 = 2
 )
 
-func NewListBaseReq() *admin_proto.ListBaseReq {
-	return &admin_proto.ListBaseReq{}
+func NewListBaseReq() *admin_proto.ReqListBase {
+	return &admin_proto.ReqListBase{}
 }
 
 // HandleListBaseReq 处理通用列表查询参数
-func HandleListBaseReq(params *admin_proto.ListBaseReq) (offset, limit int, data *admin_proto.ListBaseReq) {
+func HandleListBaseReq(params *admin_proto.ReqListBase) (offset, limit int, data *admin_proto.ReqListBase) {
 	if params == nil {
-		params = &admin_proto.ListBaseReq{}
+		params = &admin_proto.ReqListBase{}
 	}
 	if params.PageSize == 0 {
 		params.PageSize = 10
