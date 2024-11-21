@@ -2,31 +2,25 @@ import { request } from 'umi';
 import { ResponseBodyType } from '../types';
 import { APIAccount, APICommon } from './api';
 import { MenuDataItem } from '@ant-design/pro-components';
-import { ReqLogin } from '@/proto/admin_ts/admin_account';
+import { ReqLogin, RespLoginData } from '@/proto/admin_ts/admin_account';
 
 export type MenusRemoteItem = {
   [key: string]: MenuDataItem;
 };
 
-
-
-export async function login(params: ReqLogin) {
+export async function login(params: ReqLogin)  {
   return request<ResponseBodyType>(APIAccount.login.url, {
     method: APIAccount.login.method,
     data: params,
   });
 }
 
-export async function logout(params?: RequestLogoutParamsType) {
+export async function logout(params?: any) {
   return request<ResponseBodyType>(APIAccount.logout.url, {
     method: APIAccount.logout.method,
     data: params,
   });
 }
-
-export type RequestCurrentAdminInfoParamsType = {
-  refreshToken?: boolean;
-};
 
 export async function currentAdminInfo(refreshToken?: boolean) {
   return request<ResponseBodyType>(APIAccount.info.url, {

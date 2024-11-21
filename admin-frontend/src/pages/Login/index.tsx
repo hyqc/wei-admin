@@ -1,4 +1,3 @@
-import type { RequestLoginParamsType } from '@/services/apis/admin/account';
 import { login } from '@/services/apis/admin/account';
 import { SetLoginToken } from '@/utils/common';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
@@ -8,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { history, SelectLang, useModel } from 'umi';
 import { AdminUserFormRules } from '../Admin/User/common';
 import styles from './index.less';
+import { ReqLogin,RespLoginData } from '@/proto/admin_ts/admin_account';
 
 const Login: React.FC = () => {
   const [form] = Form.useForm();
@@ -15,17 +15,18 @@ const Login: React.FC = () => {
   const [loginBtnLoading, setLoginBtnLoading] = useState<boolean>(false);
   const rules: any = AdminUserFormRules(form);
 
-  const handleSubmit = async (values: RequestLoginParamsType) => {
+  const handleSubmit = async (values: ReqLogin) => {
     try {
       setLoginBtnLoading(true);
-      const res = await login(values);
-      console.log('登录返回：', res, history);
+      const {data} = await login(values);
+      console.log('登录返回：', data, history);
+      const userInfo: RespLoginData = data;
       // 设置token
-      SetLoginToken(res.data.token, res.data.expire, values.remember || false);
+      SetLoginToken(data.data.token, data.data.expire, false);
       // 设置菜单
       await setInitialState((s: any) => ({
         ...s,
-        currentUser: res.data,
+        currentUser: data,
       }));
       /** 此方法会跳转到 redirect 参数所在的位置 */
       if (!history) return;
