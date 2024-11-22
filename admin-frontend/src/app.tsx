@@ -7,8 +7,9 @@ import { history, Link } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import React from 'react';
-import { currentAdminInfo, CurrentUserPermissionsType, ReponseCurrentAdminUserDetailType } from './services/apis/admin/account';
+import { currentAdminInfo } from './services/apis/admin/account';
 import { GetLoginToken, HandleMenusToMap, HandleRemoteMenuIntoLocal, IsLogin, IsLongPage, Logout, MenusMapType } from './utils/common';
+import { AdminInfo, RespAccountInfoData, RespAccountPermissionData } from './proto/admin_ts/admin_account';
 const isDev = process.env.NODE_ENV === 'development';
 
 /**
@@ -16,11 +17,12 @@ const isDev = process.env.NODE_ENV === 'development';
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: ReponseCurrentAdminUserDetailType;
-  permissions?: CurrentUserPermissionsType;
+  currentUser?: AdminInfo;
+  permissions?: Map<string, string>;
   menuData?: MenusMapType;
-  fetchUserInfo?: () => Promise<ReponseCurrentAdminUserDetailType | undefined>;
+  fetchUserInfo?: () => Promise<RespAccountInfoData | undefined>;
 }> {
+  //定义获取账号详情的请求方法
   const fetchUserInfo = async () => {
     try {
       const tokenInfo = GetLoginToken();
@@ -37,7 +39,8 @@ export async function getInitialState(): Promise<{
   };
   // 如果不是登录页面，执行
   if (!IsLongPage()) {
-    const currentUser: ReponseCurrentAdminUserDetailType = await fetchUserInfo();
+    const currentUserData: RespAccountInfoData = await fetchUserInfo();
+    const currentUser = currentUserData?.data;
     const permissions = { ...currentUser.permissions };
     return {
       fetchUserInfo,

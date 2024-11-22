@@ -30,8 +30,6 @@ import type {
 import type {
   PageInfoType,
   ResponseBodyType,
-  ResponseListDataType,
-  ResponseListType,
 } from '@/services/apis/types';
 import { DEFAULT_PAGE_INFO } from '@/services/apis/config';
 import AdminUserAddModal, { NoticeModalPropsType } from './add';
@@ -42,7 +40,7 @@ import AdminUserEditPasswordModal from './password';
 import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admin/role';
 import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
-import { AdminUserListReq } from '@/proto/admin_ts/admin_user';
+import { AdminUserModel } from '@/proto/admin_ts/admin_model';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -51,7 +49,7 @@ const Admin: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
-  const [rowsData, setRowsData] = useState<ResponseAdminUserListItemType[]>([]);
+  const [rowsData, setRowsData] = useState<AdminUserModel[]>([]);
   const [detailData, setDetailData] = useState<any>();
   const [detailModalStatus, setDetailModalStatus] = useState<boolean>(false);
   const [editModalStatus, setEditModalStatus] = useState<boolean>(false);
@@ -87,7 +85,7 @@ const Admin: React.FC = () => {
       title: '角色',
       width: '8rem',
       dataIndex: 'roles',
-      render: (roles, record: ResponseAdminUserListItemType) => {
+      render: (roles, record: AdminUserModel) => {
         if (record.id === AdminId) {
           return (
             <Tag color="geekblue" style={{ cursor: 'default' }}>
