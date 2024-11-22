@@ -32,7 +32,7 @@ func newAdminRole(db *gorm.DB, opts ...gen.DOOption) adminRole {
 	_adminRole.Describe = field.NewString(tableName, "describe")
 	_adminRole.ModifyAdminID = field.NewInt32(tableName, "modify_admin_id")
 	_adminRole.CreateAdminID = field.NewInt32(tableName, "create_admin_id")
-	_adminRole.IsEnabled = field.NewBool(tableName, "is_enabled")
+	_adminRole.IsEnabled = field.NewInt32(tableName, "is_enabled")
 	_adminRole.CreatedAt = field.NewTime(tableName, "created_at")
 	_adminRole.UpdatedAt = field.NewTime(tableName, "updated_at")
 
@@ -50,7 +50,7 @@ type adminRole struct {
 	Describe      field.String // 角色描述
 	ModifyAdminID field.Int32  // 修改人
 	CreateAdminID field.Int32  // 创建人
-	IsEnabled     field.Bool   // 1：启用，0：禁用
+	IsEnabled     field.Int32  // 1：启用，0：禁用
 	CreatedAt     field.Time   // 创建时间
 	UpdatedAt     field.Time   // 更新时间
 
@@ -74,7 +74,7 @@ func (a *adminRole) updateTableName(table string) *adminRole {
 	a.Describe = field.NewString(table, "describe")
 	a.ModifyAdminID = field.NewInt32(table, "modify_admin_id")
 	a.CreateAdminID = field.NewInt32(table, "create_admin_id")
-	a.IsEnabled = field.NewBool(table, "is_enabled")
+	a.IsEnabled = field.NewInt32(table, "is_enabled")
 	a.CreatedAt = field.NewTime(table, "created_at")
 	a.UpdatedAt = field.NewTime(table, "updated_at")
 

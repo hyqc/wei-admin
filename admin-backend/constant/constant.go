@@ -13,6 +13,11 @@ const (
 	AdminTokenExpireSeconds       = 3600 * 24 * 7
 )
 
+const (
+	DBModelIsEnabledTrue  int32 = 1
+	DBModelIsEnabledFalse int32 = 0
+)
+
 func IsAdministrator(adminId int32) bool {
 	return adminId == AdministerId
 }

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package admin;
 option go_package = "./admin_proto;admin_proto";
+import "common.proto";
 import "admin_menu.proto";
 
 // 登录
@@ -65,4 +66,5 @@ message AdminInfo{
   int64 expire = 13;
   map<string, MenuItem> menus = 14;
   map<string, string> permissions = 15;
+  repeated AdminUserRoleItem roles = 16;
 }

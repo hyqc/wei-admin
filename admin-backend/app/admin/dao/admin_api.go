@@ -4,6 +4,7 @@ import (
 	"admin/app/common"
 	"admin/app/gen/model"
 	"admin/app/gen/query"
+	"admin/constant"
 	"admin/proto/admin_proto"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -64,7 +65,7 @@ func (a *AdminAPI) List(ctx context.Context, params *admin_proto.ReqApiList) (to
 
 func (a *AdminAPI) FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) {
 	db := query.AdminAPI
-	return db.WithContext(ctx).Where(db.IsEnabled.Is(true)).Find()
+	return db.WithContext(ctx).Where(db.IsEnabled.Eq(constant.DBModelIsEnabledTrue)).Find()
 }
 func (a *AdminAPI) FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error) {
 	db := query.AdminAPI

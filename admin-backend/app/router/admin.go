@@ -18,6 +18,19 @@ func admins(g *gin.RouterGroup) {
 		account.POST("/permission", accountApi.Permission)
 	}
 
+	user := admin.Group("/user")
+	{
+		userAPI := adminCtl.UserController{}
+		user.POST("/list", userAPI.List)
+		user.POST("/info", userAPI.Info)
+		user.POST("/add", userAPI.Add)
+		user.POST("/edit", userAPI.Edit)
+		user.POST("/edit_pwd", userAPI.EditPassword)
+		user.POST("/enable", userAPI.Enable)
+		user.POST("/delete", userAPI.Delete)
+		user.POST("/bind_roles", userAPI.BindRoles)
+	}
+
 	api := admin.Group("/api")
 	{
 		apiAPI := adminCtl.APIController{}
@@ -53,18 +66,6 @@ func admins(g *gin.RouterGroup) {
 		permission.POST("/delete", permissionAPI.Delete)
 		permission.POST("/bind_api", permissionAPI.BindAPI)
 		permission.POST("/add_menu_permission", permissionAPI.AddMenuPermissions)
-	}
-
-	user := admin.Group("/user")
-	{
-		userAPI := adminCtl.UserController{}
-		user.POST("/list", userAPI.List)
-		user.POST("/info", userAPI.Info)
-		user.POST("/add", userAPI.Add)
-		user.POST("/edit", userAPI.Edit)
-		user.POST("/enable", userAPI.Enable)
-		user.POST("/delete", userAPI.Delete)
-		user.POST("/bind_roles", userAPI.BindRoles)
 	}
 
 	role := admin.Group("/role")

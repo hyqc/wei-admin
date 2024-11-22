@@ -7,6 +7,7 @@ import (
 	"net"
 	"reflect"
 	"strings"
+	"time"
 )
 
 // GetOutBoundIP 获取对外IP
@@ -55,4 +56,30 @@ func BeanCopy(dst, src interface{}) error {
 func GetConfigEnv(env string) string {
 	viper.AutomaticEnv()
 	return viper.GetString(env)
+}
+
+func HandleTime2Local(data ...*time.Time) {
+	if data == nil || len(data) == 0 {
+		return
+	}
+	for _, d := range data {
+		if d == nil {
+			continue
+		}
+		*d = d.In(time.Local)
+	}
+}
+
+func HandleTime2String(data time.Time) string {
+	if data.IsZero() {
+		return ""
+	}
+	return data.Format(time.RFC3339)
+}
+
+func HandleTimePointer2String(data *time.Time) string {
+	if data == nil || data.IsZero() {
+		return ""
+	}
+	return data.Format(time.RFC3339)
 }

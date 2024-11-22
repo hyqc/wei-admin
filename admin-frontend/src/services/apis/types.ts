@@ -12,6 +12,8 @@ export interface PageInfoType {
   pageSize: number;
 }
 
-
+export type PermissionsType = {
+  [key: string]: string;
+};
 
 

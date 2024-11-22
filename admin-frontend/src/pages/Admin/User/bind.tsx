@@ -1,7 +1,6 @@
 import {
   adminUserBindRoles,
   RequestAdminUserAssignRolesParamsType,
-  ResponseAdminUserDetailType,
 } from '@/services/apis/admin/user';
 import { Form, Input, message, Modal, Select } from 'antd';
 import { useEffect, useState } from 'react';
@@ -13,7 +12,8 @@ import { useEffect, useState } from 'react';
 
 
 import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admin/role';
-import { ResponseAdminUserListItemRolesItemType } from '@/services/apis/admin/user';
+import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
+import { RoleItem } from '@/proto/admin_ts/admin_role';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -21,7 +21,7 @@ export type NoticeModalPropsType = {
 
 export type BindModalPropsType = {
   modalStatus: boolean;
-  detailData: ResponseAdminUserDetailType;
+  detailData: AdminUserListItem;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
@@ -29,12 +29,14 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
   const [form] = Form.useForm();
   const { modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-  const [roleOptions, setRoleOptions] = useState<ResponseAdminRoleAllItemType[]>([]);
+  const [roleOptions, setRoleOptions] = useState<RoleItem[]>([]);
 
   const roleIdsValue: number[] =
-    detailData?.roles?.map((item: ResponseAdminUserListItemRolesItemType) => {
+    detailData?.roles?.map((item: AdminUserRoleItem) => {
       return item.roleId;
     }) || [];
+
+    console.log('===========', detailData, roleIdsValue)
 
   function handleOk() {
     setConfirmLoading(true);
@@ -48,7 +50,7 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
         adminUserBindRoles(data)
           .then((res) => {
             message.destroy();
-            message.success(res.message, MessageDuritain, () => {
+            message.success(res.msg, MessageDuritain, () => {
               noticeModal({ reload: true });
             });
           })
@@ -117,8 +119,8 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
           >
             {roleOptions?.map((item) => {
               return (
-                <Select.Option key={item.roleId} value={item.roleId}>
-                  {item.roleName}
+                <Select.Option key={item.id} value={item.id}>
+                  {item.name}
                 </Select.Option>
               );
             })}

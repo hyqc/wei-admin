@@ -3,6 +3,8 @@ import { request } from 'umi';
 import { APIAdminUsers } from './api';
 import { ResponseBodyType } from '../types';
 import { ReqAdminUserInfo, ReqAdminUserList } from '@/proto/admin_ts/admin_user';
+import { ReqAdminUserEdit } from '@/proto/admin_ts/admin_user';
+import { ReqAdminUserEditPassword } from '@/proto/admin_ts/admin_user';
 
 
 export async function adminUserList(params?: ReqAdminUserList) {
@@ -41,25 +43,16 @@ export async function adminUserDetail(params: ReqAdminUserInfo) {
   });
 }
 
-/************************************************************/
-/**
- * 编辑
- */
-export type RequestAdminUserEditParamsType = {
-  adminId: number;
-  username?: string; // 管理员名称（账号）
-  nickname?: string; // 管理员昵称
-  roleIds?: string; // 角色ID，示例："1,2,3"
-  avatar?: string;
-  email?: string;
-  enabled?: boolean;
-  password?: string;
-  confirmPassword?: string;
-};
-
-export async function adminUserEdit(params: RequestAdminUserEditParamsType) {
+export async function adminUserEdit(params: ReqAdminUserEdit) {
   return request<ResponseBodyType>(APIAdminUsers.edit.url, {
     method: APIAdminUsers.edit.method,
+    data: params,
+  });
+}
+
+export async function adminUserEditPwd(params: ReqAdminUserEditPassword) {
+  return request<ResponseBodyType>(APIAdminUsers.editPwd.url, {
+    method: APIAdminUsers.editPwd.method,
     data: params,
   });
 }

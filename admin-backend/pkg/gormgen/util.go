@@ -16,14 +16,14 @@ type GenType struct {
 	Fields []gen.ModelOpt
 }
 
-func Init(name, pwd, ip, database, charset string, tables []GenType) {
+func Init(name, pwd, ip, database, charset string, tables []GenType, outputPath string) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local", name, pwd, ip, database, charset)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 	g := gen.NewGenerator(gen.Config{
-		OutPath:       "./query",
+		OutPath:       outputPath,
 		Mode:          gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
 		FieldNullable: true,
 	})

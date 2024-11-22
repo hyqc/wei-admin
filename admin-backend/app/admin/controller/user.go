@@ -100,6 +100,25 @@ func (UserController) Edit(ctx *gin.Context) {
 	code.JSON(ctx, result)
 }
 
+// EditPassword 编辑管理员密码
+func (UserController) EditPassword(ctx *gin.Context) {
+	msg := "UserController.EditPassword"
+	params := &admin_proto.ReqAdminUserEditPassword{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminUserReq.EditPasswordReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminUser.EditPassword(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+}
+
 // Enable 启用禁用
 func (UserController) Enable(ctx *gin.Context) {
 	msg := "UserController.Enable"

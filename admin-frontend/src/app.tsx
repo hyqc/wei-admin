@@ -10,7 +10,10 @@ import React from 'react';
 import { currentAdminInfo } from './services/apis/admin/account';
 import { GetLoginToken, HandleMenusToMap, HandleRemoteMenuIntoLocal, IsLogin, IsLongPage, Logout, MenusMapType } from './utils/common';
 import { AdminInfo, RespAccountInfoData, RespAccountPermissionData } from './proto/admin_ts/admin_account';
+import { PermissionsType } from './services/apis/types';
 const isDev = process.env.NODE_ENV === 'development';
+
+
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -18,7 +21,7 @@ const isDev = process.env.NODE_ENV === 'development';
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: AdminInfo;
-  permissions?: Map<string, string>;
+  permissions?: PermissionsType;
   menuData?: MenusMapType;
   fetchUserInfo?: () => Promise<RespAccountInfoData | undefined>;
 }> {
@@ -41,7 +44,7 @@ export async function getInitialState(): Promise<{
   if (!IsLongPage()) {
     const currentUserData: RespAccountInfoData = await fetchUserInfo();
     const currentUser = currentUserData?.data;
-    const permissions = { ...currentUser.permissions };
+    const permissions = { ...currentUser?.permissions };
     return {
       fetchUserInfo,
       currentUser,

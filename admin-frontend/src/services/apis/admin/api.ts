@@ -60,6 +60,10 @@ export const APIAdminUsers = {
     url: '/admin/user/edit',
     method: POST,
   },
+  editPwd: {
+    url: '/admin/user/edit_pwd',
+    method: POST,
+  },
   enable: {
     url: '/admin/user/enable',
     method: POST,

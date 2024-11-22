@@ -77,15 +77,17 @@ func (a *AdminPermission) FindAdminPermissions(ctx context.Context, adminId, men
 	role := query.AdminRole
 	rolePermission := query.AdminRolePermission
 	userRole := query.AdminUserRole
+	user := query.AdminUser
 
 	db := permission.WithContext(ctx).
-		Join(menu, menu.ID.EqCol(permission.MenuID), menu.IsEnabled.Is(true)).
-		Join(rolePermission, rolePermission.RoleID.EqCol(userRole.RoleID)).
-		Join(role, role.ID.EqCol(userRole.RoleID), role.IsEnabled.Is(true)).
+		Join(rolePermission, rolePermission.PermissionID.EqCol(permission.ID)).
+		Join(role, role.ID.EqCol(rolePermission.RoleID), role.IsEnabled.Is(true)).
 		Join(userRole, userRole.RoleID.EqCol(role.ID), userRole.AdminID.Eq(adminId)).
-		Where(userRole.AdminID.Eq(adminId))
+		Join(user, user.ID.EqCol(userRole.AdminID)).
+		Join(menu, menu.ID.EqCol(permission.MenuID), menu.IsEnabled.Is(true)).
+		Where(user.ID.Eq(adminId))
 	if menuId > 0 {
-		db.Where(permission.MenuID.Eq(menuId))
+		db = db.Where(permission.MenuID.Eq(menuId))
 	}
 	return db.Order(permission.MenuID).Find()
 }

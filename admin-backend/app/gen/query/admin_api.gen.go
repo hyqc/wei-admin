@@ -32,7 +32,7 @@ func newAdminAPI(db *gorm.DB, opts ...gen.DOOption) adminAPI {
 	_adminAPI.Key = field.NewString(tableName, "key")
 	_adminAPI.Name = field.NewString(tableName, "name")
 	_adminAPI.Describe = field.NewString(tableName, "describe")
-	_adminAPI.IsEnabled = field.NewBool(tableName, "is_enabled")
+	_adminAPI.IsEnabled = field.NewInt32(tableName, "is_enabled")
 	_adminAPI.CreatedAt = field.NewTime(tableName, "created_at")
 	_adminAPI.UpdatedAt = field.NewTime(tableName, "updated_at")
 
@@ -50,7 +50,7 @@ type adminAPI struct {
 	Key       field.String // 接口唯一名称
 	Name      field.String // 接口名称
 	Describe  field.String // 接口描述
-	IsEnabled field.Bool   // 接口状态：1：正常，0：禁用
+	IsEnabled field.Int32  // 接口状态：1：正常，0：禁用
 	CreatedAt field.Time
 	UpdatedAt field.Time
 
@@ -74,7 +74,7 @@ func (a *adminAPI) updateTableName(table string) *adminAPI {
 	a.Key = field.NewString(table, "key")
 	a.Name = field.NewString(table, "name")
 	a.Describe = field.NewString(table, "describe")
-	a.IsEnabled = field.NewBool(table, "is_enabled")
+	a.IsEnabled = field.NewInt32(table, "is_enabled")
 	a.CreatedAt = field.NewTime(table, "created_at")
 	a.UpdatedAt = field.NewTime(table, "updated_at")
 

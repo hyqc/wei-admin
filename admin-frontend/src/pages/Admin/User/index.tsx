@@ -42,7 +42,7 @@ import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
 import { AdminUserModel } from '@/proto/admin_ts/admin_model';
 import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
-import { ReqAdminUserDelete, ReqAdminUserInfo, ReqAdminUserList, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
+import { ReqAdminUserDelete, ReqAdminUserInfo, ReqAdminUserList, RespAdminUserBindRolesData, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -110,23 +110,26 @@ const Admin: React.FC = () => {
       width: '7rem',
       dataIndex: 'loginTotal',
       sorter: true,
+      render(loginTotal: number, record: AdminUserListItem) {
+       return <>{loginTotal ?? 0 }</>
+      },
     },
     {
       title: '更新时间',
       align: 'center',
       width: '12rem',
-      dataIndex: 'modifyTime',
+      dataIndex: 'updatedAt',
       sorter: true,
     },
     {
       title: '状态',
       width: '6rem',
       align: 'center',
-      dataIndex: 'enabled',
+      dataIndex: 'isEnabled',
       render(isEnabled: boolean, record: AdminUserListItem) {
         if (record.adminId === AdminId) {
           return (
-            <Button disabled size='small'>{isEnabled ? '禁用' : '启用'}</Button>
+            <Button type='primary' disabled color={isEnabled ? 'primary' : 'danger'} size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
           );
         }
         return (
@@ -134,7 +137,7 @@ const Admin: React.FC = () => {
             name="AdminUserEdit"
             forbidden={
               <>
-                <Button disabled size='small'>{isEnabled ? '禁用' : '启用'}</Button>
+                <Button type='primary' color={isEnabled ? 'primary' : 'danger'} size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
               </>
             }
           >
@@ -144,7 +147,7 @@ const Admin: React.FC = () => {
               cancelText="取消"
               onConfirm={() => updateEnabled(record)}
             >
-              <Button type='primary' danger size='small'>{isEnabled ? '禁用' : '启用'}</Button>
+              <Button type='primary' color={isEnabled ? 'primary' : 'danger'} size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
             </Popconfirm>
           </Authorization>
         );
@@ -158,7 +161,7 @@ const Admin: React.FC = () => {
         return (
           <Space>
             <Authorization name="AdminUserView">
-              <FetchButton onClick={() => openDetailModal(record)}>详情</FetchButton>
+              <FetchButton onClick={() => openDetailModal(record)} >详情</FetchButton>
             </Authorization>
             {record.adminId === AdminId ? (
               <></>
@@ -205,7 +208,6 @@ const Admin: React.FC = () => {
     setLoading(true);
     adminUserList(data)
       .then((res: ResponseBodyType) => {
-        console.log('==========res', res)
         const data: RespAdminUserListData = res.data;
         const rows = data?.list || [];
         const page = { total: data.total, pageSize: data.pageSize, pageNum: data.pageNum };
@@ -253,28 +255,27 @@ const Admin: React.FC = () => {
 
   // 账号详情
   function openDetailModal(record: AdminUserListItem) {
-    const req = new ReqAdminUserInfo({adminId: record.adminId})
-    console.log('=========', req)
-    adminUserDetail(req).then((res) => {
-      setDetailData(res.data);
+    adminUserDetail({adminId: record.adminId}).then((res) => {
+      const data: RespAdminUserInfoData = res.data;
+      setDetailData(data.data);
       setDetailModalStatus(true);
     });
   }
 
   // 分配角色
   function openBindRolesModal(record: AdminUserListItem) {
-    const req = new ReqAdminUserInfo({adminId: record.adminId})
-    adminUserDetail(req).then((res) => {
-      setDetailData(res.data);
+    adminUserDetail({adminId: record.adminId}).then((res) => {
+      const data: RespAdminUserInfoData = res.data;
+      setDetailData(data.data);
       setBindRolesModalStatus(true);
     });
   }
 
   // 账号编辑
   function openEditModal(record: AdminUserListItem) {
-    const req = new ReqAdminUserInfo({adminId: record.adminId})
-    adminUserDetail(req).then((res) => {
-      setDetailData(res.data);
+    adminUserDetail({adminId: record.adminId}).then((res) => {
+      const data: RespAdminUserInfoData = res.data;
+      setDetailData(data.data);
       setEditModalStatus(true);
     });
   }
@@ -285,9 +286,9 @@ const Admin: React.FC = () => {
   }
 
   function openEditPasswordModal(record: AdminUserListItem) {
-    const req = new ReqAdminUserInfo({adminId: record.adminId})
-    adminUserDetail(req).then((res) => {
-      setDetailData(res.data);
+    adminUserDetail({adminId: record.adminId}).then((res) => {
+      const data: RespAdminUserInfoData = res.data;
+      setDetailData(data.data);
       setEditPasswordModalStatus(true);
     });
   }

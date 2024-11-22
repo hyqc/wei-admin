@@ -54,10 +54,10 @@ func (a *AdminUserReqValidator) AddReq(data interface{}) url.Values {
 
 func (a *AdminUserReqValidator) InfoReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required", "min:1"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:ID不能为空", "min:ID无效"},
+		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required:ID不能为空", "min:ID无效"},
 	}
 	opts := govalidator.Options{
 		Data:     data,
@@ -69,22 +69,38 @@ func (a *AdminUserReqValidator) InfoReq(data interface{}) url.Values {
 
 func (a *AdminUserReqValidator) EditReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):              []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("username"):        []string{"required", fmt.Sprintf("regex:%s", PatternAdminUsernameRule)},
-		validator.GetValidateJsonOmitemptyTag("nickname"):        []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
-		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
-		validator.GetValidateJsonOmitemptyTag("email"):           []string{"email"},
-		validator.GetValidateJsonOmitemptyTag("avatar"):          []string{"url"},
+		validator.GetValidateJsonOmitemptyTag("adminId"):  []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("username"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminUsernameRule)},
+		validator.GetValidateJsonOmitemptyTag("nickname"): []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
+		validator.GetValidateJsonOmitemptyTag("email"):    []string{"email"},
+		validator.GetValidateJsonOmitemptyTag("avatar"):   []string{"url"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):              []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("username"):        []string{"required:账号不能为空", fmt.Sprintf("regex:%s", PatternAdminUsernameMsg)},
-		validator.GetValidateJsonOmitemptyTag("nickname"):        []string{"required:昵称不能为空", fmt.Sprintf("regex:%s", PatternTrimBlankStringMsg)},
+		validator.GetValidateJsonOmitemptyTag("adminId"):  []string{"required:ID不能为空", "min:ID无效"},
+		validator.GetValidateJsonOmitemptyTag("username"): []string{"required:账号不能为空", fmt.Sprintf("regex:%s", PatternAdminUsernameMsg)},
+		validator.GetValidateJsonOmitemptyTag("nickname"): []string{"required:昵称不能为空", fmt.Sprintf("regex:%s", PatternTrimBlankStringMsg)},
+		validator.GetValidateJsonOmitemptyTag("email"):    []string{"email:邮箱格式错误"},
+		validator.GetValidateJsonOmitemptyTag("avatar"):   []string{"url:无效链接地址"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	res := govalidator.New(opts).ValidateStruct()
+	return res
+}
+
+func (a *AdminUserReqValidator) EditPasswordReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("adminId"):         []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
+		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("adminId"):         []string{"required:ID不能为空", "min:ID无效"},
 		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required:密码不能为空", PatternAdminPasswordMsg},
 		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required:密码不能为空", PatternAdminPasswordMsg},
-		validator.GetValidateJsonOmitemptyTag("email"):           []string{"email:邮箱格式错误"},
-		validator.GetValidateJsonOmitemptyTag("avatar"):          []string{"url:无效链接地址"},
 	}
 	opts := govalidator.Options{
 		Data:     data,

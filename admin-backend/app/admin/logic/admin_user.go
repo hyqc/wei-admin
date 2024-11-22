@@ -2,6 +2,7 @@ package logic
 
 import (
 	"admin/app/admin/dao"
+	"admin/app/common"
 	"admin/app/gen/model"
 	"admin/code"
 	"admin/config"
@@ -30,6 +31,7 @@ type IAdminUserLogic interface {
 	List(ctx *gin.Context, params *admin_proto.ReqAdminUserList) (*admin_proto.RespAdminUserListData, error)
 	Add(ctx *gin.Context, params *admin_proto.ReqAdminUserAdd) error
 	Edit(ctx *gin.Context, params *admin_proto.ReqAdminUserEdit) error
+	EditPassword(ctx *gin.Context, params *admin_proto.ReqAdminUserEditPassword) error
 	Enable(ctx *gin.Context, params *admin_proto.ReqAdminUserEnabled) error
 	Delete(ctx *gin.Context, params *admin_proto.ReqAdminUserDelete) error
 	BindRoles(ctx *gin.Context, params *admin_proto.ReqAdminUserBindRoles) error
@@ -207,7 +209,7 @@ func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminUserA
 		Nickname:  params.Nickname,
 		Email:     params.Email,
 		Avatar:    params.Avatar,
-		IsEnabled: params.Enabled,
+		IsEnabled: common.HandleEnabledField(params.Enabled),
 	}
 	return dao.H.AdminUser.Create(ctx, data)
 }
@@ -217,14 +219,29 @@ func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminUser
 	if err != nil {
 		return err
 	}
-	if params.Password != "" {
-		data.Password, err = pwd.Encode(params.Password)
-	}
 	data.Username = params.Username
 	data.Nickname = params.Nickname
 	data.Email = params.Email
-	data.IsEnabled = params.Enabled
+	data.IsEnabled = common.HandleEnabledField(params.Enabled)
 	data.Avatar = params.Avatar
+	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
+}
+
+func (a *AdminUserLogic) EditPassword(ctx *gin.Context, params *admin_proto.ReqAdminUserEditPassword) error {
+	data, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return err
+	}
+	if err == gorm.ErrRecordNotFound {
+		return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+	}
+	if len(params.Password) != 0 && params.Password != params.ConfirmPassword {
+		return code.NewCode(code_proto.ErrorCode_RequestParamsInvalid)
+	}
+	data.Password, err = pwd.Encode(params.Password)
+	if err != nil {
+		return err
+	}
 	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
 
@@ -236,7 +253,7 @@ func (a *AdminUserLogic) Enable(ctx *gin.Context, params *admin_proto.ReqAdminUs
 		}
 		return err
 	}
-	if info.IsEnabled == params.Enabled {
+	if info.IsEnabled == common.HandleEnabledField(params.Enabled) {
 		return nil
 	}
 	return dao.H.AdminUser.Enable(ctx, params.AdminId, params.Enabled)
@@ -250,7 +267,7 @@ func (a *AdminUserLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminUs
 		}
 		return err
 	}
-	if info.IsEnabled {
+	if common.HandleIsEnabledField(info.IsEnabled) {
 		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
 	}
 	return dao.H.AdminUser.Delete(ctx, params.AdminId)
@@ -264,7 +281,7 @@ func (a *AdminUserLogic) BindRoles(ctx *gin.Context, params *admin_proto.ReqAdmi
 		}
 		return err
 	}
-	if !info.IsEnabled {
+	if !common.HandleIsEnabledField(info.IsEnabled) {
 		return code.NewCodeError(code_proto.ErrorCode_AdminAccountInvalid, err)
 	}
 	adminUserRoles := make([]*model.AdminUserRole, 0, len(params.RoleIds))
