@@ -14,7 +14,9 @@ message ReqAdminUserList{
 }
 message RespAdminUserListData{
   int64 total = 1;
-  repeated AdminUserModel list = 2;
+  int32 pageNum = 2;
+  int32 pageSize = 3;
+  repeated AdminUserListItem list = 4;
 }
 
 // 账号详情

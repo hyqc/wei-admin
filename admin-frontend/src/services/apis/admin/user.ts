@@ -2,7 +2,7 @@
 import { request } from 'umi';
 import { APIAdminUsers } from './api';
 import { ResponseBodyType } from '../types';
-import { ReqAdminUserList } from '@/proto/admin_ts/admin_user';
+import { ReqAdminUserInfo, ReqAdminUserList } from '@/proto/admin_ts/admin_user';
 
 
 export async function adminUserList(params?: ReqAdminUserList) {
@@ -33,34 +33,8 @@ export async function adminUserAdd(params: RequestAdminUserAddParamsType) {
   });
 }
 
-/************************************************************/
-/**
- * 管理员详情参数
- */
-export type RequestAdminUserDetailParamsType = {
-  adminId: number;
-};
 
-/**
- * 管理员详情
- */
-export type ResponseAdminUserDetailType = {
-  adminId: number; // 管理员ID，唯一键
-  username: string; // 管理员名称，唯一键
-  nickname: string; // 管理员昵称
-  email: string; // 邮箱地址唯一键
-  avatar: string; // 管理员头像
-  roles: ResponseAdminUserListItemRolesItemType[]; // 管理员有效角色信息列表
-  enabled: boolean; // 正常，管理员状态, true启用，false禁用，
-  enabledText?: string; //
-  createTime: string; // 创建时间 "2021-12-01 12:23:21"
-  modifyTime: string; // 最后更新时间
-  loginTotal?: number; // 登录总次数
-  lastLoginIp: string; // 最后一次登录的IP地址
-  lastLoginTime: string; // 最后登录时间
-};
-
-export async function adminUserDetail(params: RequestAdminUserDetailParamsType) {
+export async function adminUserDetail(params: ReqAdminUserInfo) {
   return request<ResponseBodyType>(APIAdminUsers.info.url, {
     method: APIAdminUsers.info.method,
     data: params,

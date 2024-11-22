@@ -41,6 +41,8 @@ import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admi
 import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
 import { AdminUserModel } from '@/proto/admin_ts/admin_model';
+import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
+import { ReqAdminUserDelete, ReqAdminUserInfo, ReqAdminUserList, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -49,7 +51,7 @@ const Admin: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
-  const [rowsData, setRowsData] = useState<AdminUserModel[]>([]);
+  const [rowsData, setRowsData] = useState<AdminUserListItem[]>([]);
   const [detailData, setDetailData] = useState<any>();
   const [detailModalStatus, setDetailModalStatus] = useState<boolean>(false);
   const [editModalStatus, setEditModalStatus] = useState<boolean>(false);
@@ -85,15 +87,15 @@ const Admin: React.FC = () => {
       title: '角色',
       width: '8rem',
       dataIndex: 'roles',
-      render: (roles, record: AdminUserModel) => {
-        if (record.id === AdminId) {
+      render: (roles, record: AdminUserListItem) => {
+        if (record.adminId === AdminId) {
           return (
             <Tag color="geekblue" style={{ cursor: 'default' }}>
               超管
             </Tag>
           );
         }
-        return roles?.map((item: ResponseAdminUserListItemRolesItemType) => {
+        return roles?.map((item: AdminUserRoleItem) => {
           return (
             <Tag color="geekblue" style={{ cursor: 'default' }} key={item.roleId}>
               {item.roleName}
@@ -121,15 +123,10 @@ const Admin: React.FC = () => {
       width: '6rem',
       align: 'center',
       dataIndex: 'enabled',
-      render(enabled: boolean, record: ResponseAdminUserListItemType) {
+      render(isEnabled: boolean, record: AdminUserListItem) {
         if (record.adminId === AdminId) {
           return (
-            <Switch
-              checkedChildren={'启用'}
-              disabled
-              unCheckedChildren={'禁用'}
-              checked={enabled}
-            />
+            <Button disabled size='small'>{isEnabled ? '禁用' : '启用'}</Button>
           );
         }
         return (
@@ -137,22 +134,17 @@ const Admin: React.FC = () => {
             name="AdminUserEdit"
             forbidden={
               <>
-                <Switch
-                  disabled
-                  checkedChildren={'启用'}
-                  unCheckedChildren={'禁用'}
-                  checked={enabled}
-                />
+                <Button disabled size='small'>{isEnabled ? '禁用' : '启用'}</Button>
               </>
             }
           >
             <Popconfirm
-              title={`确定要${record.enabled ? '禁用' : '启用'}该账号吗？`}
+              title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
               okText="确定"
               cancelText="取消"
               onConfirm={() => updateEnabled(record)}
             >
-              <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} checked={enabled} />
+              <Button type='primary' danger size='small'>{isEnabled ? '禁用' : '启用'}</Button>
             </Popconfirm>
           </Authorization>
         );
@@ -162,7 +154,7 @@ const Admin: React.FC = () => {
       title: '操作',
       align: 'left',
       width: '1rem',
-      render(text, record: ResponseAdminUserListItemType) {
+      render(text, record: AdminUserListItem) {
         return (
           <Space>
             <Authorization name="AdminUserView">
@@ -187,7 +179,7 @@ const Admin: React.FC = () => {
 
                 {/* 禁用的才能删除 */}
                 <Authorization name="AdminUserDelete">
-                  {!record.enabled ? (
+                  {!record.isEnabled ? (
                     <Popconfirm
                       title="确定要删除该账号吗？"
                       okText="确定"
@@ -209,12 +201,12 @@ const Admin: React.FC = () => {
   ];
 
   // 获取账号列表
-  function getRows(data?: AdminUserListReq) {
+  function getRows(data?: ReqAdminUserList) {
     setLoading(true);
     adminUserList(data)
-      .then((res: ResponseListType) => {
+      .then((res: ResponseBodyType) => {
         console.log('==========res', res)
-        const data: ResponseListDataType = res.data;
+        const data: RespAdminUserListData = res.data;
         const rows = data?.list || [];
         const page = { total: data.total, pageSize: data.pageSize, pageNum: data.pageNum };
         setPageInfo(page);
@@ -229,13 +221,13 @@ const Admin: React.FC = () => {
   }
 
   // 账号状态更新
-  function updateEnabled(record: ResponseAdminUserListItemType) {
+  function updateEnabled(record: AdminUserListItem) {
     const updateData: RequestAdminUserEnableParamsType = {
       adminId: record.adminId,
-      enabled: !record.enabled,
+      enabled: !record.isEnabled,
     };
     adminUserEnable(updateData).then((res) => {
-      message.success(res.message, MessageDuritain, () => {
+      message.success(res.msg, MessageDuritain, () => {
         getRows({ ...pageInfo, ...form.getFieldsValue() });
       });
     });
@@ -249,10 +241,10 @@ const Admin: React.FC = () => {
   }
 
   // 删除账号
-  function onDelete(record: ResponseAdminUserListItemType) {
-    adminUserDelete({ adminId: record.adminId, enabled: record.enabled }).then(
+  function onDelete(record: AdminUserListItem) {
+    adminUserDelete({ adminId: record.adminId, enabled: record.isEnabled }).then(
       (res: ResponseBodyType) => {
-        message.success(res.message, MessageDuritain, () => {
+        message.success(res.msg, MessageDuritain, () => {
           getRows({ ...pageInfo, ...form.getFieldsValue() });
         });
       },
@@ -260,24 +252,28 @@ const Admin: React.FC = () => {
   }
 
   // 账号详情
-  function openDetailModal(record: ResponseAdminUserListItemType) {
-    adminUserDetail({ adminId: record.adminId }).then((res) => {
+  function openDetailModal(record: AdminUserListItem) {
+    const req = new ReqAdminUserInfo({adminId: record.adminId})
+    console.log('=========', req)
+    adminUserDetail(req).then((res) => {
       setDetailData(res.data);
       setDetailModalStatus(true);
     });
   }
 
   // 分配角色
-  function openBindRolesModal(record: ResponseAdminUserListItemType) {
-    adminUserDetail({ adminId: record.adminId }).then((res) => {
+  function openBindRolesModal(record: AdminUserListItem) {
+    const req = new ReqAdminUserInfo({adminId: record.adminId})
+    adminUserDetail(req).then((res) => {
       setDetailData(res.data);
       setBindRolesModalStatus(true);
     });
   }
 
   // 账号编辑
-  function openEditModal(record: ResponseAdminUserListItemType) {
-    adminUserDetail({ adminId: record.adminId }).then((res) => {
+  function openEditModal(record: AdminUserListItem) {
+    const req = new ReqAdminUserInfo({adminId: record.adminId})
+    adminUserDetail(req).then((res) => {
       setDetailData(res.data);
       setEditModalStatus(true);
     });
@@ -288,8 +284,9 @@ const Admin: React.FC = () => {
     setAddModalStatus(true);
   }
 
-  function openEditPasswordModal(record: ResponseAdminUserListItemType) {
-    adminUserDetail({ adminId: record.adminId }).then((res) => {
+  function openEditPasswordModal(record: AdminUserListItem) {
+    const req = new ReqAdminUserInfo({adminId: record.adminId})
+    adminUserDetail(req).then((res) => {
       setDetailData(res.data);
       setEditPasswordModalStatus(true);
     });

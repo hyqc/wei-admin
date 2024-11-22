@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"admin/app/admin/dao/types"
 	"admin/app/common"
 	"admin/app/gen/model"
 	"admin/app/gen/query"
@@ -21,6 +22,7 @@ type IAdminUser interface {
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
 	AddRoles(ctx *gin.Context, roles []*model.AdminUserRole) error
+	FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) ([]*types.AdminUserRole, error)
 }
 
 type AdminUser struct {
@@ -142,4 +144,14 @@ func (a *AdminUser) Delete(ctx *gin.Context, id int32) error {
 func (a *AdminUser) AddRoles(ctx *gin.Context, roles []*model.AdminUserRole) error {
 	db := query.AdminUserRole
 	return db.WithContext(ctx).Create(roles...)
+}
+
+func (a *AdminUser) FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) (list []*types.AdminUserRole, err error) {
+	db := query.AdminUserRole
+	role := query.AdminRole
+	err = db.WithContext(ctx).
+		Select(db.AdminID, db.RoleID, role.Name.As("role_name")).
+		Join(role, role.ID.EqCol(db.RoleID)).
+		Where(db.AdminID.In(adminIds...)).Scan(&list)
+	return list, err
 }

@@ -6,6 +6,7 @@ import (
 	"admin/code"
 	"admin/config"
 	"admin/pkg/utils"
+	"admin/pkg/utils/array"
 	"admin/pkg/utils/pwd"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
@@ -141,28 +142,55 @@ func (a *AdminUserLogic) List(ctx *gin.Context, params *admin_proto.ReqAdminUser
 		return nil, err
 	}
 	data := &admin_proto.RespAdminUserListData{}
+	if total == 0 {
+		return nil, nil
+	}
+	for _, item := range rows {
+		adminIds = append(adminIds, item.ID)
+	}
+	adminIds = array.Deduplicate(adminIds, true, true)
+	roles, err := dao.H.AdminUser.FindAdminUserRolesByAdminId(ctx, adminIds)
+	if err != nil {
+		return nil, err
+	}
+	rolesMap := make(map[int32][]*admin_proto.AdminUserRoleItem)
+	for _, item := range roles {
+		if _, ok := rolesMap[item.AdminId]; !ok {
+			rolesMap[item.AdminId] = make([]*admin_proto.AdminUserRoleItem, 0)
+		}
+		rolesMap[item.AdminId] = append(rolesMap[item.AdminId], &admin_proto.AdminUserRoleItem{
+			RoleId:   item.RoleId,
+			RoleName: item.RoleName,
+		})
+	}
 	data.Total = total
-	data.List, err = a.HandleListData(rows)
+	data.PageSize = params.Base.PageSize
+	data.PageNum = params.Base.PageNum
+	data.List, err = a.HandleListData(rows, rolesMap)
 	return data, err
 }
 
-func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser) (list []*admin_proto.AdminUserModel, err error) {
+func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser, rolesMap map[int32][]*admin_proto.AdminUserRoleItem) (list []*admin_proto.AdminUserListItem, err error) {
 	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
 			return nil, err
+		}
+		if roles, ok := rolesMap[item.ID]; ok {
+			data.Roles = roles
 		}
 		list = append(list, data)
 	}
 	return list, nil
 }
 
-func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_proto.AdminUserModel, err error) {
-	data = &admin_proto.AdminUserModel{}
+func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_proto.AdminUserListItem, err error) {
+	data = &admin_proto.AdminUserListItem{}
 	err = utils.BeanCopy(data, item)
 	if err != nil {
 		return nil, err
 	}
+	data.AdminId = item.ID
 	data.CreatedAt = item.CreatedAt.Format(time.DateTime)
 	data.UpdatedAt = item.UpdatedAt.Format(time.DateTime)
 	return data, nil
