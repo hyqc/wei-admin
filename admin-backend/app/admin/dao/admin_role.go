@@ -1,10 +1,10 @@
 package dao
 
 import (
+	"admin/app/admin/gen/custom/admin_custom"
+	model2 "admin/app/admin/gen/model"
+	query2 "admin/app/admin/gen/query"
 	"admin/app/common"
-	"admin/app/gen/custom/admin_custom"
-	"admin/app/gen/model"
-	"admin/app/gen/query"
 	"admin/config"
 	"admin/proto/admin_proto"
 	"context"
@@ -15,18 +15,18 @@ import (
 )
 
 type IAdminRole interface {
-	FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]*model.AdminUserRole, error)
-	List(ctx context.Context, params *admin_proto.ReqRoleList) (int64, []*model.AdminRole, error)
-	Create(ctx context.Context, data *model.AdminRole) error
+	FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]*model2.AdminUserRole, error)
+	List(ctx context.Context, params *admin_proto.ReqRoleList) (int64, []*model2.AdminRole, error)
+	Create(ctx context.Context, data *model2.AdminRole) error
 	Info(ctx context.Context, id int32) (*admin_custom.AdminRoleInfo, error)
-	FindById(ctx context.Context, id int32) (*model.AdminRole, error)
-	Update(ctx context.Context, info *model.AdminRole) error
+	FindById(ctx context.Context, id int32) (*model2.AdminRole, error)
+	Update(ctx context.Context, info *model2.AdminRole) error
 	Enable(ctx context.Context, id int32, enabled bool) error
 	Delete(ctx context.Context, id int32) error
 	FindAdminRolePermissionByRoleId(ctx context.Context, id int32) ([]*admin_custom.AdminRolePermissionItem, error)
-	BindPermissions(ctx context.Context, id int32, data []*model.AdminRolePermission) error
-	FindRolesById(ctx context.Context, id int32) ([]*model.AdminRole, error)
-	FindAllValid(ctx *gin.Context) ([]*model.AdminRole, error)
+	BindPermissions(ctx context.Context, id int32, data []*model2.AdminRolePermission) error
+	FindRolesById(ctx context.Context, id int32) ([]*model2.AdminRole, error)
+	FindAllValid(ctx *gin.Context) ([]*model2.AdminRole, error)
 }
 
 type AdminRole struct {
@@ -36,11 +36,11 @@ func newAdminRole() IAdminRole {
 	return &AdminRole{}
 }
 
-func (a *AdminRole) FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]*model.AdminUserRole, error) {
-	return query.AdminUserRole.WithContext(ctx).Where(query.AdminUserRole.RoleID.In(ids...)).Find()
+func (a *AdminRole) FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]*model2.AdminUserRole, error) {
+	return query2.AdminUserRole.WithContext(ctx).Where(query2.AdminUserRole.RoleID.In(ids...)).Find()
 }
 
-func (a *AdminRole) List(ctx context.Context, params *admin_proto.ReqRoleList) (total int64, list []*model.AdminRole, err error) {
+func (a *AdminRole) List(ctx context.Context, params *admin_proto.ReqRoleList) (total int64, list []*model2.AdminRole, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)
@@ -53,7 +53,7 @@ func (a *AdminRole) List(ctx context.Context, params *admin_proto.ReqRoleList) (
 }
 
 func (a *AdminRole) handleListReqSortField(sortField, sortType string) field.Expr {
-	api := query.AdminRole
+	api := query2.AdminRole
 	var res field.OrderExpr
 	switch sortField {
 	case api.CreatedAt.ColumnName().String():
@@ -73,8 +73,8 @@ func (a *AdminRole) handleListReqSortField(sortField, sortType string) field.Exp
 	return res
 }
 
-func (a *AdminRole) handleListReq(ctx context.Context, params *admin_proto.ReqRoleList) (q query.IAdminRoleDo) {
-	db := query.AdminRole
+func (a *AdminRole) handleListReq(ctx context.Context, params *admin_proto.ReqRoleList) (q query2.IAdminRoleDo) {
+	db := query2.AdminRole
 	q = db.WithContext(ctx)
 	if params.Id > 0 {
 		q = q.Where(db.ID.Eq(params.Id))
@@ -101,13 +101,13 @@ func (a *AdminRole) handleListReq(ctx context.Context, params *admin_proto.ReqRo
 	return q
 }
 
-func (a *AdminRole) Create(ctx context.Context, data *model.AdminRole) error {
-	return query.AdminRole.WithContext(ctx).Create(data)
+func (a *AdminRole) Create(ctx context.Context, data *model2.AdminRole) error {
+	return query2.AdminRole.WithContext(ctx).Create(data)
 }
 
 func (a *AdminRole) Info(ctx context.Context, id int32) (*admin_custom.AdminRoleInfo, error) {
-	t1 := query.AdminRole
-	t2 := query.AdminUser
+	t1 := query2.AdminRole
+	t2 := query2.AdminUser
 	b := t2.As("b")
 	c := t2.As("c")
 	data := &admin_custom.AdminRoleInfo{}
@@ -117,29 +117,29 @@ func (a *AdminRole) Info(ctx context.Context, id int32) (*admin_custom.AdminRole
 	return data, err
 }
 
-func (a *AdminRole) FindById(ctx context.Context, id int32) (*model.AdminRole, error) {
-	return query.AdminRole.WithContext(ctx).Where(query.AdminRole.ID.Eq(id)).First()
+func (a *AdminRole) FindById(ctx context.Context, id int32) (*model2.AdminRole, error) {
+	return query2.AdminRole.WithContext(ctx).Where(query2.AdminRole.ID.Eq(id)).First()
 }
 
-func (a *AdminRole) Update(ctx context.Context, data *model.AdminRole) error {
-	return query.AdminRole.WithContext(ctx).Where(query.AdminRole.ID.Eq(data.ID)).Save(data)
+func (a *AdminRole) Update(ctx context.Context, data *model2.AdminRole) error {
+	return query2.AdminRole.WithContext(ctx).Where(query2.AdminRole.ID.Eq(data.ID)).Save(data)
 }
 
 func (a *AdminRole) Enable(ctx context.Context, id int32, enabled bool) error {
-	db := query.AdminRole
+	db := query2.AdminRole
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
 	return err
 }
 
 func (a *AdminRole) Delete(ctx context.Context, id int32) error {
-	db := query.AdminRole
+	db := query2.AdminRole
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
 	return err
 }
 
 func (a *AdminRole) FindAdminRolePermissionByRoleId(ctx context.Context, roleId int32) (list []*admin_custom.AdminRolePermissionItem, err error) {
-	ta := query.AdminRolePermission.As("a")
-	tb := query.AdminPermission.As("b")
+	ta := query2.AdminRolePermission.As("a")
+	tb := query2.AdminPermission.As("b")
 	err = ta.WithContext(ctx).
 		Select(ta.RoleID, ta.PermissionID, tb.Key.As("permission_key"), tb.Name.As("permission_name"), tb.Type.As("permission_type")).
 		Join(tb, tb.ID.EqCol(ta.PermissionID)).
@@ -148,8 +148,8 @@ func (a *AdminRole) FindAdminRolePermissionByRoleId(ctx context.Context, roleId 
 	return list, err
 }
 
-func (a *AdminRole) BindPermissions(ctx context.Context, roleId int32, data []*model.AdminRolePermission) error {
-	pa := query.AdminRolePermission
+func (a *AdminRole) BindPermissions(ctx context.Context, roleId int32, data []*model2.AdminRolePermission) error {
+	pa := query2.AdminRolePermission
 	err := config.AppConfig.DBClient.Wei.Transaction(func(tx *gorm.DB) error {
 		if _, err := pa.WithContext(ctx).Where(pa.PermissionID.Eq(roleId)).Delete(); err != nil {
 			return err
@@ -159,10 +159,10 @@ func (a *AdminRole) BindPermissions(ctx context.Context, roleId int32, data []*m
 	return err
 }
 
-func (a *AdminRole) FindRolesById(ctx context.Context, id int32) ([]*model.AdminRole, error) {
-	return query.AdminRole.WithContext(ctx).Where(query.AdminRole.ID.Eq(id)).Find()
+func (a *AdminRole) FindRolesById(ctx context.Context, id int32) ([]*model2.AdminRole, error) {
+	return query2.AdminRole.WithContext(ctx).Where(query2.AdminRole.ID.Eq(id)).Find()
 }
 
-func (a *AdminRole) FindAllValid(ctx *gin.Context) ([]*model.AdminRole, error) {
-	return query.AdminRole.WithContext(ctx).Where(query.AdminRole.IsEnabled.Is(true)).Find()
+func (a *AdminRole) FindAllValid(ctx *gin.Context) ([]*model2.AdminRole, error) {
+	return query2.AdminRole.WithContext(ctx).Where(query2.AdminRole.IsEnabled.Is(true)).Find()
 }

@@ -2,8 +2,8 @@ package logic
 
 import (
 	"admin/app/admin/dao"
+	"admin/app/admin/gen/model"
 	"admin/app/common"
-	"admin/app/gen/model"
 	"admin/code"
 	"admin/pkg/utils"
 	"admin/proto/admin_proto"

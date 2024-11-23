@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"admin/app/gen/query"
+	"admin/app/admin/gen/query"
 	"admin/pkg/utils"
 	"fmt"
 	"gorm.io/gorm"

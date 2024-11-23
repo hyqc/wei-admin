@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"admin/app/gen/model"
+	"admin/app/admin/gen/model"
 )
 
 func newAdminPermission(db *gorm.DB, opts ...gen.DOOption) adminPermission {
@@ -33,7 +33,7 @@ func newAdminPermission(db *gorm.DB, opts ...gen.DOOption) adminPermission {
 	_adminPermission.Name = field.NewString(tableName, "name")
 	_adminPermission.Type = field.NewString(tableName, "type")
 	_adminPermission.Describe = field.NewString(tableName, "describe")
-	_adminPermission.IsEnabled = field.NewInt32(tableName, "is_enabled")
+	_adminPermission.IsEnabled = field.NewBool(tableName, "is_enabled")
 	_adminPermission.CreatedAt = field.NewTime(tableName, "created_at")
 	_adminPermission.UpdatedAt = field.NewTime(tableName, "updated_at")
 
@@ -58,7 +58,7 @@ type adminPermission struct {
 	*/
 	Type      field.String
 	Describe  field.String // 权限描述
-	IsEnabled field.Int32  // 是否启用：1启用，0禁用
+	IsEnabled field.Bool   // 是否启用：1启用，0禁用
 	CreatedAt field.Time   // 创建时间
 	UpdatedAt field.Time   // 更新时间
 
@@ -83,7 +83,7 @@ func (a *adminPermission) updateTableName(table string) *adminPermission {
 	a.Name = field.NewString(table, "name")
 	a.Type = field.NewString(table, "type")
 	a.Describe = field.NewString(table, "describe")
-	a.IsEnabled = field.NewInt32(table, "is_enabled")
+	a.IsEnabled = field.NewBool(table, "is_enabled")
 	a.CreatedAt = field.NewTime(table, "created_at")
 	a.UpdatedAt = field.NewTime(table, "updated_at")
 

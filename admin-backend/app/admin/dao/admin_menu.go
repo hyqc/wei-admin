@@ -1,9 +1,9 @@
 package dao
 
 import (
+	"admin/app/admin/gen/model"
+	query2 "admin/app/admin/gen/query"
 	"admin/app/common"
-	"admin/app/gen/model"
-	"admin/app/gen/query"
 	"admin/proto/admin_proto"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -33,21 +33,21 @@ func newAdminMenu() IAdminMenu {
 }
 
 func (a *AdminMenu) Create(ctx *gin.Context, data *model.AdminMenu) error {
-	return query.AdminMenu.WithContext(ctx).Create(data)
+	return query2.AdminMenu.WithContext(ctx).Create(data)
 }
 
 func (a *AdminMenu) Update(ctx *gin.Context, data *model.AdminMenu) error {
-	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.Eq(data.ID)).Save(data)
+	return query2.AdminMenu.WithContext(ctx).Where(query2.AdminMenu.ID.Eq(data.ID)).Save(data)
 }
 
 func (a *AdminMenu) Enable(ctx *gin.Context, id int32, enabled bool) error {
-	db := query.AdminMenu
+	db := query2.AdminMenu
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
 	return err
 }
 
 func (a *AdminMenu) Delete(ctx *gin.Context, id int32) error {
-	db := query.AdminMenu
+	db := query2.AdminMenu
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
 	return err
 }
@@ -59,17 +59,17 @@ func (a *AdminMenu) FindMyMenus(ctx context.Context, adminId, menuId int) ([]*mo
 
 // FindAllValid 获取全部有效菜单
 func (a *AdminMenu) FindAllValid(ctx context.Context) ([]*model.AdminMenu, error) {
-	menu := query.AdminMenu
+	menu := query2.AdminMenu
 	return menu.WithContext(ctx).Where(menu.IsEnabled.Is(true)).Order(menu.Sort, menu.ParentID, menu.ID).Find()
 }
 
 func (a *AdminMenu) FindAll(ctx *gin.Context) ([]*model.AdminMenu, error) {
-	menu := query.AdminMenu
+	menu := query2.AdminMenu
 	return menu.WithContext(ctx).Order(menu.Sort, menu.ParentID, menu.ID).Find()
 }
 
 func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.ReqMenuList) (total int64, list []*model.AdminMenu, err error) {
-	DB := query.AdminMenu
+	DB := query2.AdminMenu
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)
@@ -82,12 +82,12 @@ func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.ReqMenuList) 
 }
 
 func (a *AdminMenu) FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error) {
-	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.Eq(id)).First()
+	return query2.AdminMenu.WithContext(ctx).Where(query2.AdminMenu.ID.Eq(id)).First()
 }
 
 func (a *AdminMenu) FindPages(ctx *gin.Context) ([]*model.AdminMenu, error) {
-	DB := query.AdminMenu
-	perDB := query.AdminPermission
+	DB := query2.AdminMenu
+	perDB := query2.AdminPermission
 	return DB.WithContext(ctx).Distinct(DB.ID).
 		Join(perDB, DB.ID.EqCol(perDB.MenuID)).
 		Where(DB.IsEnabled.Is(true), DB.IsHideInMenu.Is(true)).
@@ -95,7 +95,7 @@ func (a *AdminMenu) FindPages(ctx *gin.Context) ([]*model.AdminMenu, error) {
 }
 
 func (a *AdminMenu) handleListReqSortField(sortField, sortType string) field.Expr {
-	DB := query.AdminMenu
+	DB := query2.AdminMenu
 	var res field.OrderExpr
 	switch sortField {
 	case DB.CreatedAt.ColumnName().String():
@@ -115,8 +115,8 @@ func (a *AdminMenu) handleListReqSortField(sortField, sortType string) field.Exp
 	return res
 }
 
-func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.ReqMenuList) (q query.IAdminMenuDo) {
-	DB := query.AdminMenu
+func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.ReqMenuList) (q query2.IAdminMenuDo) {
+	DB := query2.AdminMenu
 	q = DB.WithContext(ctx)
 
 	switch params.Base.Enabled {
@@ -151,5 +151,5 @@ func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.ReqMe
 }
 
 func (a *AdminMenu) FindByIds(ctx *gin.Context, ids []int32) (list []*model.AdminMenu, err error) {
-	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.In(ids...)).Find()
+	return query2.AdminMenu.WithContext(ctx).Where(query2.AdminMenu.ID.In(ids...)).Find()
 }

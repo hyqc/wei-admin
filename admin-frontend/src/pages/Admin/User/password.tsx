@@ -1,7 +1,5 @@
 import {
-  adminUserEdit,
-  RequestAdminUserEditParamsType,
-  ResponseAdminUserDetailType,
+  adminUserEditPwd,
 } from '@/services/apis/admin/user';
 import { Form, Input, message, Modal } from 'antd';
 import { useEffect, useState } from 'react';
@@ -13,6 +11,8 @@ import { useEffect, useState } from 'react';
 
 
 import { AdminUserFormRules } from './common';
+import { ReqAdminUserEditPassword } from '@/proto/admin_ts/admin_user';
+import { AdminUserListItem } from '@/proto/admin_ts/common';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -20,7 +20,7 @@ export type NoticeModalPropsType = {
 
 export type AdminUserEditPasswordModalPropsType = {
   modalStatus: boolean;
-  detailData: ResponseAdminUserDetailType;
+  detailData: AdminUserListItem;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
@@ -36,13 +36,12 @@ const Password: React.FC<AdminUserEditPasswordModalPropsType> = (props) => {
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminUserEditParamsType = {
+        const data: ReqAdminUserEditPassword = {
           adminId: detailData.adminId,
           password: values.password,
           confirmPassword: values.confirmPassword,
         };
-        adminUserEdit(data).then((res) => {
-          console.log('========', res)
+        adminUserEditPwd(data).then((res) => {
           message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
           });

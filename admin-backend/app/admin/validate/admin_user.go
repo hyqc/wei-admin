@@ -112,7 +112,11 @@ func (a *AdminUserReqValidator) EditPasswordReq(data interface{}) url.Values {
 	if len(errs) > 0 {
 		return res
 	}
-	tmp := data.(*admin_proto.ReqAdminUserAdd)
+	tmp, ok := data.(*admin_proto.ReqAdminUserEditPassword)
+	if !ok {
+		res["adminId"] = []string{"请求参数格式错误"}
+		return res
+	}
 	if tmp.Password != "" && tmp.Password != tmp.ConfirmPassword {
 		res["confirmPassword"] = []string{"两次输入的密码不一致"}
 	}
@@ -121,11 +125,11 @@ func (a *AdminUserReqValidator) EditPasswordReq(data interface{}) url.Values {
 
 func (a *AdminUserReqValidator) EnableReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):      []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required", "min:1"},
 		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):      []string{"required:ID不能为空", "min:ID无效"},
+		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required:ID不能为空", "min:ID无效"},
 		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool:类型错误"},
 	}
 	opts := govalidator.Options{
@@ -138,10 +142,10 @@ func (a *AdminUserReqValidator) EnableReq(data interface{}) url.Values {
 
 func (a *AdminUserReqValidator) DeleteReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"): []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required", "min:1"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"): []string{"required:ID不能为空", "min:ID无效"},
+		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required:ID不能为空", "min:ID无效"},
 	}
 	opts := govalidator.Options{
 		Data:     data,

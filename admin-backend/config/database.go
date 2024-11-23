@@ -1,7 +1,7 @@
 package config
 
 import (
-	"admin/app/gen/query"
+	"admin/app/admin/gen/query"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

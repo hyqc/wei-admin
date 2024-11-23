@@ -17,7 +17,7 @@ type AdminAPI struct {
 	Key       string    `gorm:"column:key;not null;comment:接口唯一名称" json:"key"`                                 // 接口唯一名称
 	Name      string    `gorm:"column:name;not null;comment:接口名称" json:"name"`                                 // 接口名称
 	Describe  string    `gorm:"column:describe;not null;comment:接口描述" json:"describe"`                         // 接口描述
-	IsEnabled int32     `gorm:"column:is_enabled;not null;default:1;comment:接口状态：1：正常，0：禁用" json:"is_enabled"` // 接口状态：1：正常，0：禁用
+	IsEnabled bool      `gorm:"column:is_enabled;not null;default:1;comment:接口状态：1：正常，0：禁用" json:"is_enabled"` // 接口状态：1：正常，0：禁用
 	CreatedAt time.Time `gorm:"column:created_at;not null" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at;not null" json:"updated_at"`
 }

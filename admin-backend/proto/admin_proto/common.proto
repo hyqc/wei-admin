@@ -44,6 +44,7 @@ message AdminUserListItem{
   string createdAt = 10; // 创建时间
   string updatedAt = 11; // 更新时间
   repeated AdminUserRoleItem roles = 12;
+  bool isEnabledButtonDisabled = 13;
 }
 // 账号角色列表
 message AdminUserRoleItem{

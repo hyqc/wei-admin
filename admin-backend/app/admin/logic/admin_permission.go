@@ -2,7 +2,7 @@ package logic
 
 import (
 	"admin/app/admin/dao"
-	"admin/app/gen/model"
+	model2 "admin/app/admin/gen/model"
 	"admin/code"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
@@ -72,7 +72,7 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.ReqPer
 			}
 		}
 
-		menusMap := make(map[int32]*model.AdminMenu)
+		menusMap := make(map[int32]*model2.AdminMenu)
 		if len(menuIds) > 0 {
 			// 根据菜单id获取菜单列表
 			menusList, err := dao.H.AdminMenu.FindByIds(ctx, menuIds)
@@ -88,14 +88,14 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.ReqPer
 	return data, err
 }
 
-func (a *AdminPermissionLogic) handleListData(list []*model.AdminPermission, apisMap map[int32][]*admin_proto.ApiItem, menusMap map[int32]*model.AdminMenu) (data []*admin_proto.PermissionListItem) {
+func (a *AdminPermissionLogic) handleListData(list []*model2.AdminPermission, apisMap map[int32][]*admin_proto.ApiItem, menusMap map[int32]*model2.AdminMenu) (data []*admin_proto.PermissionListItem) {
 	for _, item := range list {
 		data = append(data, a.handleListItemData(item, apisMap, menusMap))
 	}
 	return data
 }
 
-func (a *AdminPermissionLogic) handleListItemData(item *model.AdminPermission, apisMap map[int32][]*admin_proto.ApiItem, menusMap map[int32]*model.AdminMenu) *admin_proto.PermissionListItem {
+func (a *AdminPermissionLogic) handleListItemData(item *model2.AdminPermission, apisMap map[int32][]*admin_proto.ApiItem, menusMap map[int32]*model2.AdminMenu) *admin_proto.PermissionListItem {
 	tmp := &admin_proto.PermissionListItem{
 		Id:        item.ID,
 		MenuId:    item.MenuID,
@@ -119,7 +119,7 @@ func (a *AdminPermissionLogic) handleListItemData(item *model.AdminPermission, a
 }
 
 func (a *AdminPermissionLogic) Add(ctx *gin.Context, params *admin_proto.ReqPermissionAdd) error {
-	data := &model.AdminPermission{
+	data := &model2.AdminPermission{
 		MenuID:    params.MenuId,
 		Key:       params.Key,
 		Name:      params.Name,
@@ -141,7 +141,7 @@ func (a *AdminPermissionLogic) Add(ctx *gin.Context, params *admin_proto.ReqPerm
 }
 
 func (a *AdminPermissionLogic) Edit(ctx *gin.Context, params *admin_proto.ReqPermissionEdit) error {
-	data := &model.AdminPermission{
+	data := &model2.AdminPermission{
 		ID:        params.Id,
 		MenuID:    params.MenuId,
 		Key:       params.Key,
@@ -229,9 +229,9 @@ func (a *AdminPermissionLogic) BindAPI(ctx *gin.Context, params *admin_proto.Req
 	if len(apisList) == 0 {
 		return code.NewCodeError(code_proto.ErrorCode_AdminApiNotExist, err)
 	}
-	permissionAps := make([]*model.AdminPermissionAPI, 0, len(apisList))
+	permissionAps := make([]*model2.AdminPermissionAPI, 0, len(apisList))
 	for _, item := range apisList {
-		permissionAps = append(permissionAps, &model.AdminPermissionAPI{
+		permissionAps = append(permissionAps, &model2.AdminPermissionAPI{
 			PermissionID: params.PermissionId,
 			APIID:        item.ID,
 		})
@@ -247,7 +247,7 @@ func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admi
 		}
 		return err
 	}
-	data := make([]*model.AdminPermission, 0, len(params.Permissions))
+	data := make([]*model2.AdminPermission, 0, len(params.Permissions))
 	for _, item := range params.Permissions {
 		if item.Key == "" {
 			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionKeyNeed, nil)
@@ -258,7 +258,7 @@ func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admi
 		if dao.GetAdminPermissionTypeText(dao.AdminPermissionType(item.Type)) == "" {
 			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionTypeInvalid, nil)
 		}
-		data = append(data, &model.AdminPermission{
+		data = append(data, &model2.AdminPermission{
 			MenuID:    params.MenuId,
 			Key:       item.Key,
 			Name:      item.Name,

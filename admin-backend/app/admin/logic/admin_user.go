@@ -2,8 +2,7 @@ package logic
 
 import (
 	"admin/app/admin/dao"
-	"admin/app/common"
-	"admin/app/gen/model"
+	model2 "admin/app/admin/gen/model"
 	"admin/code"
 	"admin/config"
 	"admin/pkg/utils"
@@ -172,7 +171,7 @@ func (a *AdminUserLogic) List(ctx *gin.Context, params *admin_proto.ReqAdminUser
 	return data, err
 }
 
-func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser, rolesMap map[int32][]*admin_proto.AdminUserRoleItem) (list []*admin_proto.AdminUserListItem, err error) {
+func (a *AdminUserLogic) HandleListData(rows []*model2.AdminUser, rolesMap map[int32][]*admin_proto.AdminUserRoleItem) (list []*admin_proto.AdminUserListItem, err error) {
 	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
@@ -186,7 +185,7 @@ func (a *AdminUserLogic) HandleListData(rows []*model.AdminUser, rolesMap map[in
 	return list, nil
 }
 
-func (a *AdminUserLogic) HandleItemData(item *model.AdminUser) (data *admin_proto.AdminUserListItem, err error) {
+func (a *AdminUserLogic) HandleItemData(item *model2.AdminUser) (data *admin_proto.AdminUserListItem, err error) {
 	data = &admin_proto.AdminUserListItem{}
 	err = utils.BeanCopy(data, item)
 	if err != nil {
@@ -203,13 +202,13 @@ func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminUserA
 	if err != nil {
 		return err
 	}
-	data := &model.AdminUser{
+	data := &model2.AdminUser{
 		Username:  params.Username,
 		Password:  password,
 		Nickname:  params.Nickname,
 		Email:     params.Email,
 		Avatar:    params.Avatar,
-		IsEnabled: common.HandleEnabledField(params.Enabled),
+		IsEnabled: params.Enabled,
 	}
 	return dao.H.AdminUser.Create(ctx, data)
 }
@@ -222,7 +221,7 @@ func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminUser
 	data.Username = params.Username
 	data.Nickname = params.Nickname
 	data.Email = params.Email
-	data.IsEnabled = common.HandleEnabledField(params.Enabled)
+	data.IsEnabled = params.Enabled
 	data.Avatar = params.Avatar
 	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
@@ -253,7 +252,7 @@ func (a *AdminUserLogic) Enable(ctx *gin.Context, params *admin_proto.ReqAdminUs
 		}
 		return err
 	}
-	if info.IsEnabled == common.HandleEnabledField(params.Enabled) {
+	if info.IsEnabled == params.Enabled {
 		return nil
 	}
 	return dao.H.AdminUser.Enable(ctx, params.AdminId, params.Enabled)
@@ -267,26 +266,26 @@ func (a *AdminUserLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminUs
 		}
 		return err
 	}
-	if common.HandleIsEnabledField(info.IsEnabled) {
+	if info.IsEnabled {
 		return code.NewCodeError(code_proto.ErrorCode_RecordNValidCanNotDeleted, nil)
 	}
 	return dao.H.AdminUser.Delete(ctx, params.AdminId)
 }
 
 func (a *AdminUserLogic) BindRoles(ctx *gin.Context, params *admin_proto.ReqAdminUserBindRoles) error {
-	info, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
+	_, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_AdminAccountNotExist, err)
 		}
 		return err
 	}
-	if !common.HandleIsEnabledField(info.IsEnabled) {
-		return code.NewCodeError(code_proto.ErrorCode_AdminAccountInvalid, err)
-	}
-	adminUserRoles := make([]*model.AdminUserRole, 0, len(params.RoleIds))
+	//if !info.IsEnabled {
+	//	return code.NewCodeError(code_proto.ErrorCode_AdminAccountInvalid, err)
+	//}
+	adminUserRoles := make([]*model2.AdminUserRole, 0, len(params.RoleIds))
 	for _, roleId := range params.RoleIds {
-		adminUserRoles = append(adminUserRoles, &model.AdminUserRole{
+		adminUserRoles = append(adminUserRoles, &model2.AdminUserRole{
 			AdminID: params.AdminId,
 			RoleID:  roleId,
 		})

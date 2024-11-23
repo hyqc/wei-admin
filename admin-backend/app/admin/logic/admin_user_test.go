@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"admin/app/gen/query"
+	"admin/app/admin/gen/query"
 	"admin/pkg/utils"
 	"admin/pkg/utils/files"
 	"admin/proto/admin_proto"

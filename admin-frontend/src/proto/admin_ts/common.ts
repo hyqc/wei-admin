@@ -69,6 +69,7 @@ export interface AdminUserListItem {
   /** 更新时间 */
   updatedAt: string;
   roles: AdminUserRoleItem[];
+  isEnabledButtonDisabled: boolean;
 }
 
 /** 账号角色列表 */
@@ -512,6 +513,7 @@ function createBaseAdminUserListItem(): AdminUserListItem {
     createdAt: "",
     updatedAt: "",
     roles: [],
+    isEnabledButtonDisabled: false,
   };
 }
 
@@ -552,6 +554,9 @@ export const AdminUserListItem: MessageFns<AdminUserListItem> = {
     }
     for (const v of message.roles) {
       AdminUserRoleItem.encode(v!, writer.uint32(98).fork()).join();
+    }
+    if (message.isEnabledButtonDisabled !== false) {
+      writer.uint32(104).bool(message.isEnabledButtonDisabled);
     }
     return writer;
   },
@@ -659,6 +664,14 @@ export const AdminUserListItem: MessageFns<AdminUserListItem> = {
           message.roles.push(AdminUserRoleItem.decode(reader, reader.uint32()));
           continue;
         }
+        case 13: {
+          if (tag !== 104) {
+            break;
+          }
+
+          message.isEnabledButtonDisabled = reader.bool();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -682,6 +695,9 @@ export const AdminUserListItem: MessageFns<AdminUserListItem> = {
       createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
       updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
       roles: globalThis.Array.isArray(object?.roles) ? object.roles.map((e: any) => AdminUserRoleItem.fromJSON(e)) : [],
+      isEnabledButtonDisabled: isSet(object.isEnabledButtonDisabled)
+        ? globalThis.Boolean(object.isEnabledButtonDisabled)
+        : false,
     };
   },
 
@@ -723,6 +739,9 @@ export const AdminUserListItem: MessageFns<AdminUserListItem> = {
     if (message.roles?.length) {
       obj.roles = message.roles.map((e) => AdminUserRoleItem.toJSON(e));
     }
+    if (message.isEnabledButtonDisabled !== false) {
+      obj.isEnabledButtonDisabled = message.isEnabledButtonDisabled;
+    }
     return obj;
   },
 
@@ -743,6 +762,7 @@ export const AdminUserListItem: MessageFns<AdminUserListItem> = {
     message.createdAt = object.createdAt ?? "";
     message.updatedAt = object.updatedAt ?? "";
     message.roles = object.roles?.map((e) => AdminUserRoleItem.fromPartial(e)) || [];
+    message.isEnabledButtonDisabled = object.isEnabledButtonDisabled ?? false;
     return message;
   },
 };

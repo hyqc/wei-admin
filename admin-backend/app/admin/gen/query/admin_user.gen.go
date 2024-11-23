@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"admin/app/gen/model"
+	"admin/app/admin/gen/model"
 )
 
 func newAdminUser(db *gorm.DB, opts ...gen.DOOption) adminUser {
@@ -36,7 +36,7 @@ func newAdminUser(db *gorm.DB, opts ...gen.DOOption) adminUser {
 	_adminUser.LoginTotal = field.NewInt32(tableName, "login_total")
 	_adminUser.LastLoginIP = field.NewString(tableName, "last_login_ip")
 	_adminUser.LastLoginTime = field.NewTime(tableName, "last_login_time")
-	_adminUser.IsEnabled = field.NewInt32(tableName, "is_enabled")
+	_adminUser.IsEnabled = field.NewBool(tableName, "is_enabled")
 	_adminUser.CreatedAt = field.NewTime(tableName, "created_at")
 	_adminUser.UpdatedAt = field.NewTime(tableName, "updated_at")
 
@@ -58,7 +58,7 @@ type adminUser struct {
 	LoginTotal    field.Int32  // 登录次数
 	LastLoginIP   field.String // 上次登录IP
 	LastLoginTime field.Time   // 上次登录时间
-	IsEnabled     field.Int32  // 账户状态：1正常，0：禁用
+	IsEnabled     field.Bool   // 账户状态：1正常，0：禁用
 	CreatedAt     field.Time   // 创建时间
 	UpdatedAt     field.Time   // 更新时间
 
@@ -86,7 +86,7 @@ func (a *adminUser) updateTableName(table string) *adminUser {
 	a.LoginTotal = field.NewInt32(table, "login_total")
 	a.LastLoginIP = field.NewString(table, "last_login_ip")
 	a.LastLoginTime = field.NewTime(table, "last_login_time")
-	a.IsEnabled = field.NewInt32(table, "is_enabled")
+	a.IsEnabled = field.NewBool(table, "is_enabled")
 	a.CreatedAt = field.NewTime(table, "created_at")
 	a.UpdatedAt = field.NewTime(table, "updated_at")
 

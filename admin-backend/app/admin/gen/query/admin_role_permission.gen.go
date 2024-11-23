@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"admin/app/gen/model"
+	"admin/app/admin/gen/model"
 )
 
 func newAdminRolePermission(db *gorm.DB, opts ...gen.DOOption) adminRolePermission {

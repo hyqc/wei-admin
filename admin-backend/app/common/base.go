@@ -52,14 +52,3 @@ func HandleLogicError(ctx *gin.Context, err error, msg string, result code.IMess
 	code.JSON(ctx, result)
 	return
 }
-
-func HandleEnabledField(enabled bool) int32 {
-	if enabled {
-		return constant.DBModelIsEnabledTrue
-	}
-	return constant.DBModelIsEnabledFalse
-}
-
-func HandleIsEnabledField(isEnabled int32) bool {
-	return isEnabled == constant.DBModelIsEnabledTrue
-}

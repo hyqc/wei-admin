@@ -2,7 +2,7 @@ package logic
 
 import (
 	"admin/app/admin/dao"
-	"admin/app/gen/model"
+	model2 "admin/app/admin/gen/model"
 	"admin/code"
 	"admin/constant"
 	"admin/pkg/utils"
@@ -45,7 +45,7 @@ func (a *AdminRoleLogic) List(ctx *gin.Context, params *admin_proto.ReqRoleList)
 	return data, err
 }
 
-func (a *AdminRoleLogic) HandleListData(rows []*model.AdminRole) (list []*admin_proto.RoleItem, err error) {
+func (a *AdminRoleLogic) HandleListData(rows []*model2.AdminRole) (list []*admin_proto.RoleItem, err error) {
 	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
@@ -56,7 +56,7 @@ func (a *AdminRoleLogic) HandleListData(rows []*model.AdminRole) (list []*admin_
 	return list, nil
 }
 
-func (a *AdminRoleLogic) HandleItemData(item *model.AdminRole) (data *admin_proto.RoleItem, err error) {
+func (a *AdminRoleLogic) HandleItemData(item *model2.AdminRole) (data *admin_proto.RoleItem, err error) {
 	data = &admin_proto.RoleItem{}
 	err = utils.BeanCopy(data, item)
 	if err != nil {
@@ -70,7 +70,7 @@ func (a *AdminRoleLogic) HandleItemData(item *model.AdminRole) (data *admin_prot
 
 func (a *AdminRoleLogic) Add(ctx *gin.Context, params *admin_proto.ReqRoleAdd) error {
 	adminId := constant.GetCustomClaims(ctx).AdminID
-	data := &model.AdminRole{
+	data := &model2.AdminRole{
 		Name:          params.Name,
 		Describe:      params.Describe,
 		ModifyAdminID: adminId,
@@ -181,9 +181,9 @@ func (a *AdminRoleLogic) RoleBindPermissions(ctx *gin.Context, params *admin_pro
 	if len(permissions) == 0 {
 		return code.NewCode(code_proto.ErrorCode_AdminPermissionExist)
 	}
-	data := make([]*model.AdminRolePermission, 0, len(params.PermissionIds))
+	data := make([]*model2.AdminRolePermission, 0, len(params.PermissionIds))
 	for _, item := range params.PermissionIds {
-		data = append(data, &model.AdminRolePermission{
+		data = append(data, &model2.AdminRolePermission{
 			RoleID:       params.Id,
 			PermissionID: item,
 		})

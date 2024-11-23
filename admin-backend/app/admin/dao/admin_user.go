@@ -2,9 +2,9 @@ package dao
 
 import (
 	"admin/app/admin/dao/types"
+	model2 "admin/app/admin/gen/model"
+	query2 "admin/app/admin/gen/query"
 	"admin/app/common"
-	"admin/app/gen/model"
-	"admin/app/gen/query"
 	"admin/proto/admin_proto"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -13,15 +13,15 @@ import (
 )
 
 type IAdminUser interface {
-	FindAdminUserByUsername(ctx context.Context, username string) (*model.AdminUser, error)   // 根据管理员名称查询详情
-	UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error // 更新管理员的登录信息
-	FindAdminUserByAdminId(ctx context.Context, id int32) (*model.AdminUser, error)           // 根据管理员ID查询详情
-	UpdateAdminUser(ctx context.Context, data *model.AdminUser) error
-	Create(ctx context.Context, data *model.AdminUser) error
-	List(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (total int64, list []*model.AdminUser, err error)
+	FindAdminUserByUsername(ctx context.Context, username string) (*model2.AdminUser, error)   // 根据管理员名称查询详情
+	UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model2.AdminUser) error // 更新管理员的登录信息
+	FindAdminUserByAdminId(ctx context.Context, id int32) (*model2.AdminUser, error)           // 根据管理员ID查询详情
+	UpdateAdminUser(ctx context.Context, data *model2.AdminUser) error
+	Create(ctx context.Context, data *model2.AdminUser) error
+	List(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (total int64, list []*model2.AdminUser, err error)
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
-	AddRoles(ctx *gin.Context, roles []*model.AdminUserRole) error
+	AddRoles(ctx *gin.Context, roles []*model2.AdminUserRole) error
 	FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) ([]*types.AdminUserRole, error)
 }
 
@@ -32,35 +32,35 @@ func newAdminUser() *AdminUser {
 	return &AdminUser{}
 }
 
-func (a *AdminUser) FindAdminUserByUsername(ctx context.Context, username string) (*model.AdminUser, error) {
-	db := query.AdminUser
+func (a *AdminUser) FindAdminUserByUsername(ctx context.Context, username string) (*model2.AdminUser, error) {
+	db := query2.AdminUser
 	return db.WithContext(ctx).Where(db.Username.Eq(username)).First()
 }
 
-func (a *AdminUser) UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model.AdminUser) error {
-	db := query.AdminUser
+func (a *AdminUser) UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model2.AdminUser) error {
+	db := query2.AdminUser
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(adminId)).
 		Select(db.LoginTotal, db.LastLoginIP, db.LastLoginTime).
 		Updates(data)
 	return err
 }
 
-func (a *AdminUser) FindAdminUserByAdminId(ctx context.Context, id int32) (*model.AdminUser, error) {
-	db := query.AdminUser
+func (a *AdminUser) FindAdminUserByAdminId(ctx context.Context, id int32) (*model2.AdminUser, error) {
+	db := query2.AdminUser
 	return db.WithContext(ctx).Where(db.ID.Eq(id)).First()
 }
 
-func (a *AdminUser) UpdateAdminUser(ctx context.Context, data *model.AdminUser) error {
-	db := query.AdminUser
-	_, err := db.WithContext(ctx).Where(db.ID.Eq(data.ID)).Updates(data)
+func (a *AdminUser) UpdateAdminUser(ctx context.Context, data *model2.AdminUser) error {
+	db := query2.AdminUser
+	err := db.WithContext(ctx).Where(db.ID.Eq(data.ID)).Save(data)
 	return err
 }
 
-func (a *AdminUser) Create(ctx context.Context, data *model.AdminUser) error {
-	return query.AdminUser.WithContext(ctx).Create(data)
+func (a *AdminUser) Create(ctx context.Context, data *model2.AdminUser) error {
+	return query2.AdminUser.WithContext(ctx).Create(data)
 }
 
-func (a *AdminUser) List(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (total int64, list []*model.AdminUser, err error) {
+func (a *AdminUser) List(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (total int64, list []*model2.AdminUser, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params, adminIds)
@@ -73,7 +73,7 @@ func (a *AdminUser) List(ctx context.Context, params *admin_proto.ReqAdminUserLi
 }
 
 func (a *AdminUser) handleListReqSortField(sortField, sortType string) field.Expr {
-	api := query.AdminUser
+	api := query2.AdminUser
 	var res field.OrderExpr
 	switch sortField {
 	case api.CreatedAt.ColumnName().String():
@@ -93,8 +93,8 @@ func (a *AdminUser) handleListReqSortField(sortField, sortType string) field.Exp
 	return res
 }
 
-func (a *AdminUser) handleListReq(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (q query.IAdminUserDo) {
-	db := query.AdminUser
+func (a *AdminUser) handleListReq(ctx context.Context, params *admin_proto.ReqAdminUserList, adminIds []int32) (q query2.IAdminUserDo) {
+	db := query2.AdminUser
 	q = db.WithContext(ctx)
 
 	if adminIds != nil && len(adminIds) > 0 {
@@ -130,25 +130,25 @@ func (a *AdminUser) handleListReq(ctx context.Context, params *admin_proto.ReqAd
 }
 
 func (a *AdminUser) Enable(ctx *gin.Context, id int32, enabled bool) error {
-	db := query.AdminUser
+	db := query2.AdminUser
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
 	return err
 }
 
 func (a *AdminUser) Delete(ctx *gin.Context, id int32) error {
-	db := query.AdminUser
+	db := query2.AdminUser
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
 	return err
 }
 
-func (a *AdminUser) AddRoles(ctx *gin.Context, roles []*model.AdminUserRole) error {
-	db := query.AdminUserRole
+func (a *AdminUser) AddRoles(ctx *gin.Context, roles []*model2.AdminUserRole) error {
+	db := query2.AdminUserRole
 	return db.WithContext(ctx).Create(roles...)
 }
 
 func (a *AdminUser) FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) (list []*types.AdminUserRole, err error) {
-	db := query.AdminUserRole
-	role := query.AdminRole
+	db := query2.AdminUserRole
+	role := query2.AdminRole
 	err = db.WithContext(ctx).
 		Select(db.AdminID, db.RoleID, role.Name.As("role_name")).
 		Join(role, role.ID.EqCol(db.RoleID)).

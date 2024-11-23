@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admin/role';
 import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
 import { RoleItem } from '@/proto/admin_ts/admin_role';
+import { ReqAdminUserBindRoles } from '@/proto/admin_ts/admin_user';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -36,14 +37,12 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
       return item.roleId;
     }) || [];
 
-    console.log('===========', detailData, roleIdsValue)
-
   function handleOk() {
     setConfirmLoading(true);
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminUserAssignRolesParamsType = {
+        const data: ReqAdminUserBindRoles = {
           adminId: detailData.adminId,
           roleIds: values.roleIds || [],
         };

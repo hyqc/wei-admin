@@ -17,7 +17,7 @@ type AdminRole struct {
 	Describe      string    `gorm:"column:describe;not null;comment:角色描述" json:"describe"`              // 角色描述
 	ModifyAdminID int32     `gorm:"column:modify_admin_id;not null;comment:修改人" json:"modify_admin_id"` // 修改人
 	CreateAdminID int32     `gorm:"column:create_admin_id;not null;comment:创建人" json:"create_admin_id"` // 创建人
-	IsEnabled     int32     `gorm:"column:is_enabled;not null;comment:1：启用，0：禁用" json:"is_enabled"`     // 1：启用，0：禁用
+	IsEnabled     bool      `gorm:"column:is_enabled;not null;comment:1：启用，0：禁用" json:"is_enabled"`     // 1：启用，0：禁用
 	CreatedAt     time.Time `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`          // 创建时间
 	UpdatedAt     time.Time `gorm:"column:updated_at;not null;comment:更新时间" json:"updated_at"`          // 更新时间
 }

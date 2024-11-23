@@ -2,7 +2,7 @@
 import { request } from 'umi';
 import { APIAdminUsers } from './api';
 import { ResponseBodyType } from '../types';
-import { ReqAdminUserInfo, ReqAdminUserList } from '@/proto/admin_ts/admin_user';
+import { ReqAdminUserBindRoles, ReqAdminUserInfo, ReqAdminUserList } from '@/proto/admin_ts/admin_user';
 import { ReqAdminUserEdit } from '@/proto/admin_ts/admin_user';
 import { ReqAdminUserEditPassword } from '@/proto/admin_ts/admin_user';
 
@@ -77,12 +77,8 @@ export async function adminUserDelete(params: RequestAdminUserDeleteParamsType) 
 /**
  * 绑定角色
  */
-export type RequestAdminUserAssignRolesParamsType = {
-  adminId: number;
-  roleIds: number[];
-};
 
-export async function adminUserBindRoles(params: RequestAdminUserAssignRolesParamsType) {
+export async function adminUserBindRoles(params: ReqAdminUserBindRoles) {
   return request<ResponseBodyType>(APIAdminUsers.bindRoles.url, {
     method: APIAdminUsers.bindRoles.method,
     data: params,

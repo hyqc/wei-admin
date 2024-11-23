@@ -42,7 +42,7 @@ import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
 import { AdminUserModel } from '@/proto/admin_ts/admin_model';
 import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
-import { ReqAdminUserDelete, ReqAdminUserInfo, ReqAdminUserList, RespAdminUserBindRolesData, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
+import { ReqAdminUserDelete, ReqAdminUserEnabled, ReqAdminUserInfo, ReqAdminUserList, RespAdminUserBindRolesData, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -129,7 +129,7 @@ const Admin: React.FC = () => {
       render(isEnabled: boolean, record: AdminUserListItem) {
         if (record.adminId === AdminId) {
           return (
-            <Button type='primary' disabled color={isEnabled ? 'primary' : 'danger'} size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
+            <>{rowEnableButton(isEnabled, true)}</>
           );
         }
         return (
@@ -137,7 +137,7 @@ const Admin: React.FC = () => {
             name="AdminUserEdit"
             forbidden={
               <>
-                <Button type='primary' color={isEnabled ? 'primary' : 'danger'} size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
+                {rowEnableButton(isEnabled, record.isEnabledButtonDisabled)}
               </>
             }
           >
@@ -147,7 +147,7 @@ const Admin: React.FC = () => {
               cancelText="取消"
               onConfirm={() => updateEnabled(record)}
             >
-              <Button type='primary' color={isEnabled ? 'primary' : 'danger'} size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
+              {rowEnableButton(isEnabled, record.isEnabledButtonDisabled)}
             </Popconfirm>
           </Authorization>
         );
@@ -203,6 +203,13 @@ const Admin: React.FC = () => {
     },
   ];
 
+  //列表禁用/启用按钮
+  function rowEnableButton(isEnabled: boolean, disabled: boolean) {
+    return (
+      <Button type='primary' disabled={!!disabled} danger={!isEnabled}  size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
+    );
+  }
+
   // 获取账号列表
   function getRows(data?: ReqAdminUserList) {
     setLoading(true);
@@ -224,7 +231,7 @@ const Admin: React.FC = () => {
 
   // 账号状态更新
   function updateEnabled(record: AdminUserListItem) {
-    const updateData: RequestAdminUserEnableParamsType = {
+    const updateData: ReqAdminUserEnabled = {
       adminId: record.adminId,
       enabled: !record.isEnabled,
     };

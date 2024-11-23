@@ -69,7 +69,7 @@ export const APIAdminUsers = {
     method: POST,
   },
   bindRoles: {
-    url: '/admin/user/bindRoles',
+    url: '/admin/user/bind_roles',
     method: POST,
   },
 };
