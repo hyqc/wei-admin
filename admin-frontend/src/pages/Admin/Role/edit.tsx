@@ -1,11 +1,7 @@
-import { adminRoleEdit, ResponseAdminRoleDetailType } from '@/services/apis/admin/role';
+import { RespAdminRoleInfoData } from '@/proto/admin_ts/admin_role';
+import { adminRoleEdit } from '@/services/apis/admin/role';
 import { Form, Input, message, Modal, Switch } from 'antd';
 import { useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
 
 
 export type NoticeModalPropsType = {
@@ -14,7 +10,7 @@ export type NoticeModalPropsType = {
 
 export type EditModalPropsType = {
   modalStatus: boolean;
-  detailData: ResponseAdminRoleDetailType;
+  detailData: RespAdminRoleInfoData;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
@@ -33,7 +29,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
       .validateFields()
       .then((values) => {
         adminRoleEdit(values).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
           });
         });
@@ -79,7 +75,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
         <Form.Item label="描述" name="describe">
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label="状态" name="enabled" valuePropName="checked">
+        <Form.Item label="状态" name="isEnabled" valuePropName="checked">
           <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} />
         </Form.Item>
       </Form>

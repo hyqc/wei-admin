@@ -16,7 +16,7 @@ import (
 
 type IAdminRole interface {
 	FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]*model2.AdminUserRole, error)
-	List(ctx context.Context, params *admin_proto.ReqRoleList) (int64, []*model2.AdminRole, error)
+	List(ctx context.Context, params *admin_proto.ReqAdminRoleList) (int64, []*model2.AdminRole, error)
 	Create(ctx context.Context, data *model2.AdminRole) error
 	Info(ctx context.Context, id int32) (*admin_custom.AdminRoleInfo, error)
 	FindById(ctx context.Context, id int32) (*model2.AdminRole, error)
@@ -40,7 +40,7 @@ func (a *AdminRole) FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]
 	return query2.AdminUserRole.WithContext(ctx).Where(query2.AdminUserRole.RoleID.In(ids...)).Find()
 }
 
-func (a *AdminRole) List(ctx context.Context, params *admin_proto.ReqRoleList) (total int64, list []*model2.AdminRole, err error) {
+func (a *AdminRole) List(ctx context.Context, params *admin_proto.ReqAdminRoleList) (total int64, list []*model2.AdminRole, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)
@@ -73,7 +73,7 @@ func (a *AdminRole) handleListReqSortField(sortField, sortType string) field.Exp
 	return res
 }
 
-func (a *AdminRole) handleListReq(ctx context.Context, params *admin_proto.ReqRoleList) (q query2.IAdminRoleDo) {
+func (a *AdminRole) handleListReq(ctx context.Context, params *admin_proto.ReqAdminRoleList) (q query2.IAdminRoleDo) {
 	db := query2.AdminRole
 	q = db.WithContext(ctx)
 	if params.Id > 0 {
@@ -111,7 +111,7 @@ func (a *AdminRole) Info(ctx context.Context, id int32) (*admin_custom.AdminRole
 	b := t2.As("b")
 	c := t2.As("c")
 	data := &admin_custom.AdminRoleInfo{}
-	err := t1.WithContext(ctx).Select().
+	err := t1.WithContext(ctx).Select(t1.ID, t1.Name, t1.Describe, t1.IsEnabled, t1.CreateAdminID, b.Username.As("create_admin_name"), t1.ModifyAdminID, c.Username.As("modify_admin_name"), t1.CreatedAt, t1.UpdatedAt).
 		LeftJoin(b, b.ID.EqCol(t1.CreateAdminID)).
 		LeftJoin(c, c.ID.EqCol(t1.ModifyAdminID)).Where(t1.ID.Eq(id)).Scan(data)
 	return data, err

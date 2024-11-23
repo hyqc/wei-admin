@@ -11,7 +11,7 @@ import { ReqListBase } from "./common";
 export const protobufPackage = "admin";
 
 /** 角色列表 */
-export interface ReqRoleList {
+export interface ReqAdminRoleList {
   base?:
     | ReqListBase
     | undefined;
@@ -27,13 +27,13 @@ export interface ReqRoleList {
   enabled?: number | undefined;
 }
 
-export interface RespRoleListData {
+export interface RespAdminRoleListData {
   total?: number | undefined;
   list?: RoleItem[] | undefined;
 }
 
 /** 有效角色列表 */
-export interface ReqRoleAll {
+export interface ReqAdminRoleAll {
   /** 角色ID */
   id?:
     | number
@@ -46,11 +46,11 @@ export interface ReqRoleAll {
   enabled?: number | undefined;
 }
 
-export interface RespRoleAll {
+export interface RespAdminRoleAll {
 }
 
 /** 创建角色 */
-export interface ReqRoleAdd {
+export interface ReqAdminRoleAdd {
   /** 角色名称 */
   name?:
     | string
@@ -67,12 +67,12 @@ export interface RoleAddResp {
 }
 
 /** 角色详情 */
-export interface ReqRoleInfo {
+export interface ReqAdminRoleInfo {
   /** 角色ID */
   id?: number | undefined;
 }
 
-export interface RespRoleInfoData {
+export interface RespAdminRoleInfoData {
   /** 角色ID */
   id?:
     | number
@@ -86,7 +86,7 @@ export interface RespRoleInfoData {
     | string
     | undefined;
   /** 启用状态 */
-  enabled?:
+  isEnabled?:
     | boolean
     | undefined;
   /** 创建人ID */
@@ -111,10 +111,11 @@ export interface RespRoleInfoData {
     | undefined;
   /** 更新时间 */
   updatedAt?: string | undefined;
+  permissions?: RolePermissionItem[] | undefined;
 }
 
 /** 编辑角色 */
-export interface ReqRoleEdit {
+export interface ReqAdminRoleEdit {
   /** 角色ID */
   id?:
     | number
@@ -131,11 +132,11 @@ export interface ReqRoleEdit {
   enabled?: boolean | undefined;
 }
 
-export interface RespRoleEditData {
+export interface RespAdminRoleEditData {
 }
 
 /** 启用禁用角色 */
-export interface ReqRoleEnable {
+export interface ReqAdminRoleEnable {
   /** 角色ID */
   id?:
     | number
@@ -144,11 +145,11 @@ export interface ReqRoleEnable {
   enabled?: boolean | undefined;
 }
 
-export interface RespRoleEnableData {
+export interface RespAdminRoleEnableData {
 }
 
 /** 删除角色 */
-export interface ReqRoleDelete {
+export interface ReqAdminRoleDelete {
   /** 角色ID */
   id?:
     | number
@@ -157,11 +158,11 @@ export interface ReqRoleDelete {
   permissionIds?: number[] | undefined;
 }
 
-export interface RespRoleDeleteData {
+export interface RespAdminRoleDeleteData {
 }
 
 /** 角色绑定权限 */
-export interface ReqRoleBindPermissions {
+export interface ReqAdminRoleBindPermissions {
   /** 角色ID */
   id?:
     | number
@@ -170,16 +171,16 @@ export interface ReqRoleBindPermissions {
   permissionIds?: number[] | undefined;
 }
 
-export interface RespRoleBindPermissionsData {
+export interface RespAdminRoleBindPermissionsData {
 }
 
 /** 角色权限列表 */
-export interface ReqRolePermissions {
+export interface ReqAdminRolePermissions {
   /** 角色ID */
   id?: number | undefined;
 }
 
-export interface RespRolePermissionsData {
+export interface RespAdminRolePermissionsData {
   list?: RolePermissionItem[] | undefined;
 }
 
@@ -197,7 +198,7 @@ export interface RoleItem {
     | string
     | undefined;
   /** 角色名称 */
-  roleName?:
+  describe?:
     | string
     | undefined;
   /** 创建人ID */
@@ -209,7 +210,7 @@ export interface RoleItem {
     | string
     | undefined;
   /** 是否启用 */
-  enabled?: boolean | undefined;
+  isEnabled?: boolean | undefined;
   createdAt?: string | undefined;
   updatedAt?: string | undefined;
 }
@@ -240,12 +241,12 @@ export interface RolePermissionItem {
   permissionTypeText?: string | undefined;
 }
 
-function createBaseReqRoleList(): ReqRoleList {
+function createBaseReqAdminRoleList(): ReqAdminRoleList {
   return { base: undefined, id: 0, name: "", enabled: 0 };
 }
 
-export const ReqRoleList: MessageFns<ReqRoleList> = {
-  encode(message: ReqRoleList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleList: MessageFns<ReqAdminRoleList> = {
+  encode(message: ReqAdminRoleList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
@@ -261,10 +262,10 @@ export const ReqRoleList: MessageFns<ReqRoleList> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleList {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleList {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleList();
+    const message = createBaseReqAdminRoleList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -309,7 +310,7 @@ export const ReqRoleList: MessageFns<ReqRoleList> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleList {
+  fromJSON(object: any): ReqAdminRoleList {
     return {
       base: isSet(object.base) ? ReqListBase.fromJSON(object.base) : undefined,
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
@@ -318,7 +319,7 @@ export const ReqRoleList: MessageFns<ReqRoleList> = {
     };
   },
 
-  toJSON(message: ReqRoleList): unknown {
+  toJSON(message: ReqAdminRoleList): unknown {
     const obj: any = {};
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
@@ -335,11 +336,11 @@ export const ReqRoleList: MessageFns<ReqRoleList> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleList>, I>>(base?: I): ReqRoleList {
-    return ReqRoleList.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleList>, I>>(base?: I): ReqAdminRoleList {
+    return ReqAdminRoleList.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleList>, I>>(object: I): ReqRoleList {
-    const message = createBaseReqRoleList();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleList>, I>>(object: I): ReqAdminRoleList {
+    const message = createBaseReqAdminRoleList();
     message.base = (object.base !== undefined && object.base !== null)
       ? ReqListBase.fromPartial(object.base)
       : undefined;
@@ -350,12 +351,12 @@ export const ReqRoleList: MessageFns<ReqRoleList> = {
   },
 };
 
-function createBaseRespRoleListData(): RespRoleListData {
+function createBaseRespAdminRoleListData(): RespAdminRoleListData {
   return { total: 0, list: [] };
 }
 
-export const RespRoleListData: MessageFns<RespRoleListData> = {
-  encode(message: RespRoleListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRoleListData: MessageFns<RespAdminRoleListData> = {
+  encode(message: RespAdminRoleListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
@@ -367,10 +368,10 @@ export const RespRoleListData: MessageFns<RespRoleListData> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRoleListData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRoleListData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRoleListData();
+    const message = createBaseRespAdminRoleListData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -402,14 +403,14 @@ export const RespRoleListData: MessageFns<RespRoleListData> = {
     return message;
   },
 
-  fromJSON(object: any): RespRoleListData {
+  fromJSON(object: any): RespAdminRoleListData {
     return {
       total: isSet(object.total) ? globalThis.Number(object.total) : 0,
       list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => RoleItem.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: RespRoleListData): unknown {
+  toJSON(message: RespAdminRoleListData): unknown {
     const obj: any = {};
     if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
@@ -420,23 +421,23 @@ export const RespRoleListData: MessageFns<RespRoleListData> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRoleListData>, I>>(base?: I): RespRoleListData {
-    return RespRoleListData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRoleListData>, I>>(base?: I): RespAdminRoleListData {
+    return RespAdminRoleListData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRoleListData>, I>>(object: I): RespRoleListData {
-    const message = createBaseRespRoleListData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRoleListData>, I>>(object: I): RespAdminRoleListData {
+    const message = createBaseRespAdminRoleListData();
     message.total = object.total ?? 0;
     message.list = object.list?.map((e) => RoleItem.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseReqRoleAll(): ReqRoleAll {
+function createBaseReqAdminRoleAll(): ReqAdminRoleAll {
   return { id: 0, name: "", enabled: 0 };
 }
 
-export const ReqRoleAll: MessageFns<ReqRoleAll> = {
-  encode(message: ReqRoleAll, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleAll: MessageFns<ReqAdminRoleAll> = {
+  encode(message: ReqAdminRoleAll, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -449,10 +450,10 @@ export const ReqRoleAll: MessageFns<ReqRoleAll> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleAll {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleAll {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleAll();
+    const message = createBaseReqAdminRoleAll();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -489,7 +490,7 @@ export const ReqRoleAll: MessageFns<ReqRoleAll> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleAll {
+  fromJSON(object: any): ReqAdminRoleAll {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
@@ -497,7 +498,7 @@ export const ReqRoleAll: MessageFns<ReqRoleAll> = {
     };
   },
 
-  toJSON(message: ReqRoleAll): unknown {
+  toJSON(message: ReqAdminRoleAll): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -511,11 +512,11 @@ export const ReqRoleAll: MessageFns<ReqRoleAll> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleAll>, I>>(base?: I): ReqRoleAll {
-    return ReqRoleAll.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleAll>, I>>(base?: I): ReqAdminRoleAll {
+    return ReqAdminRoleAll.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleAll>, I>>(object: I): ReqRoleAll {
-    const message = createBaseReqRoleAll();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleAll>, I>>(object: I): ReqAdminRoleAll {
+    const message = createBaseReqAdminRoleAll();
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
     message.enabled = object.enabled ?? 0;
@@ -523,19 +524,19 @@ export const ReqRoleAll: MessageFns<ReqRoleAll> = {
   },
 };
 
-function createBaseRespRoleAll(): RespRoleAll {
+function createBaseRespAdminRoleAll(): RespAdminRoleAll {
   return {};
 }
 
-export const RespRoleAll: MessageFns<RespRoleAll> = {
-  encode(_: RespRoleAll, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRoleAll: MessageFns<RespAdminRoleAll> = {
+  encode(_: RespAdminRoleAll, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRoleAll {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRoleAll {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRoleAll();
+    const message = createBaseRespAdminRoleAll();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -548,30 +549,30 @@ export const RespRoleAll: MessageFns<RespRoleAll> = {
     return message;
   },
 
-  fromJSON(_: any): RespRoleAll {
+  fromJSON(_: any): RespAdminRoleAll {
     return {};
   },
 
-  toJSON(_: RespRoleAll): unknown {
+  toJSON(_: RespAdminRoleAll): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRoleAll>, I>>(base?: I): RespRoleAll {
-    return RespRoleAll.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRoleAll>, I>>(base?: I): RespAdminRoleAll {
+    return RespAdminRoleAll.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRoleAll>, I>>(_: I): RespRoleAll {
-    const message = createBaseRespRoleAll();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRoleAll>, I>>(_: I): RespAdminRoleAll {
+    const message = createBaseRespAdminRoleAll();
     return message;
   },
 };
 
-function createBaseReqRoleAdd(): ReqRoleAdd {
+function createBaseReqAdminRoleAdd(): ReqAdminRoleAdd {
   return { name: "", describe: "", enabled: false };
 }
 
-export const ReqRoleAdd: MessageFns<ReqRoleAdd> = {
-  encode(message: ReqRoleAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleAdd: MessageFns<ReqAdminRoleAdd> = {
+  encode(message: ReqAdminRoleAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -584,10 +585,10 @@ export const ReqRoleAdd: MessageFns<ReqRoleAdd> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleAdd {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleAdd {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleAdd();
+    const message = createBaseReqAdminRoleAdd();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -624,7 +625,7 @@ export const ReqRoleAdd: MessageFns<ReqRoleAdd> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleAdd {
+  fromJSON(object: any): ReqAdminRoleAdd {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
@@ -632,7 +633,7 @@ export const ReqRoleAdd: MessageFns<ReqRoleAdd> = {
     };
   },
 
-  toJSON(message: ReqRoleAdd): unknown {
+  toJSON(message: ReqAdminRoleAdd): unknown {
     const obj: any = {};
     if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
@@ -646,11 +647,11 @@ export const ReqRoleAdd: MessageFns<ReqRoleAdd> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleAdd>, I>>(base?: I): ReqRoleAdd {
-    return ReqRoleAdd.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleAdd>, I>>(base?: I): ReqAdminRoleAdd {
+    return ReqAdminRoleAdd.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleAdd>, I>>(object: I): ReqRoleAdd {
-    const message = createBaseReqRoleAdd();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleAdd>, I>>(object: I): ReqAdminRoleAdd {
+    const message = createBaseReqAdminRoleAdd();
     message.name = object.name ?? "";
     message.describe = object.describe ?? "";
     message.enabled = object.enabled ?? false;
@@ -701,22 +702,22 @@ export const RoleAddResp: MessageFns<RoleAddResp> = {
   },
 };
 
-function createBaseReqRoleInfo(): ReqRoleInfo {
+function createBaseReqAdminRoleInfo(): ReqAdminRoleInfo {
   return { id: 0 };
 }
 
-export const ReqRoleInfo: MessageFns<ReqRoleInfo> = {
-  encode(message: ReqRoleInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleInfo: MessageFns<ReqAdminRoleInfo> = {
+  encode(message: ReqAdminRoleInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleInfo();
+    const message = createBaseReqAdminRoleInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -737,11 +738,11 @@ export const ReqRoleInfo: MessageFns<ReqRoleInfo> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleInfo {
+  fromJSON(object: any): ReqAdminRoleInfo {
     return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
   },
 
-  toJSON(message: ReqRoleInfo): unknown {
+  toJSON(message: ReqAdminRoleInfo): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -749,33 +750,34 @@ export const ReqRoleInfo: MessageFns<ReqRoleInfo> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleInfo>, I>>(base?: I): ReqRoleInfo {
-    return ReqRoleInfo.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleInfo>, I>>(base?: I): ReqAdminRoleInfo {
+    return ReqAdminRoleInfo.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleInfo>, I>>(object: I): ReqRoleInfo {
-    const message = createBaseReqRoleInfo();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleInfo>, I>>(object: I): ReqAdminRoleInfo {
+    const message = createBaseReqAdminRoleInfo();
     message.id = object.id ?? 0;
     return message;
   },
 };
 
-function createBaseRespRoleInfoData(): RespRoleInfoData {
+function createBaseRespAdminRoleInfoData(): RespAdminRoleInfoData {
   return {
     id: 0,
     name: "",
     describe: "",
-    enabled: false,
+    isEnabled: false,
     createAdminId: 0,
     createAdminName: "",
     modifyAdminId: 0,
     modifyAdminName: "",
     createdAt: "",
     updatedAt: "",
+    permissions: [],
   };
 }
 
-export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
-  encode(message: RespRoleInfoData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRoleInfoData: MessageFns<RespAdminRoleInfoData> = {
+  encode(message: RespAdminRoleInfoData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -785,8 +787,8 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
     if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(26).string(message.describe);
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      writer.uint32(32).bool(message.enabled);
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      writer.uint32(32).bool(message.isEnabled);
     }
     if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       writer.uint32(40).int32(message.createAdminId);
@@ -806,13 +808,18 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
     if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(82).string(message.updatedAt);
     }
+    if (message.permissions !== undefined && message.permissions.length !== 0) {
+      for (const v of message.permissions) {
+        RolePermissionItem.encode(v!, writer.uint32(90).fork()).join();
+      }
+    }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRoleInfoData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRoleInfoData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRoleInfoData();
+    const message = createBaseRespAdminRoleInfoData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -845,7 +852,7 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
             break;
           }
 
-          message.enabled = reader.bool();
+          message.isEnabled = reader.bool();
           continue;
         }
         case 5: {
@@ -896,6 +903,17 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
           message.updatedAt = reader.string();
           continue;
         }
+        case 11: {
+          if (tag !== 90) {
+            break;
+          }
+
+          const el = RolePermissionItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.permissions!.push(el);
+          }
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -905,22 +923,25 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
     return message;
   },
 
-  fromJSON(object: any): RespRoleInfoData {
+  fromJSON(object: any): RespAdminRoleInfoData {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
-      enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
+      isEnabled: isSet(object.isEnabled) ? globalThis.Boolean(object.isEnabled) : false,
       createAdminId: isSet(object.createAdminId) ? globalThis.Number(object.createAdminId) : 0,
       createAdminName: isSet(object.createAdminName) ? globalThis.String(object.createAdminName) : "",
       modifyAdminId: isSet(object.modifyAdminId) ? globalThis.Number(object.modifyAdminId) : 0,
       modifyAdminName: isSet(object.modifyAdminName) ? globalThis.String(object.modifyAdminName) : "",
       createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
       updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
+      permissions: globalThis.Array.isArray(object?.permissions)
+        ? object.permissions.map((e: any) => RolePermissionItem.fromJSON(e))
+        : [],
     };
   },
 
-  toJSON(message: RespRoleInfoData): unknown {
+  toJSON(message: RespAdminRoleInfoData): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -931,8 +952,8 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
     if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      obj.enabled = message.enabled;
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      obj.isEnabled = message.isEnabled;
     }
     if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       obj.createAdminId = Math.round(message.createAdminId);
@@ -952,34 +973,38 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
     if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
+    if (message.permissions?.length) {
+      obj.permissions = message.permissions.map((e) => RolePermissionItem.toJSON(e));
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRoleInfoData>, I>>(base?: I): RespRoleInfoData {
-    return RespRoleInfoData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRoleInfoData>, I>>(base?: I): RespAdminRoleInfoData {
+    return RespAdminRoleInfoData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRoleInfoData>, I>>(object: I): RespRoleInfoData {
-    const message = createBaseRespRoleInfoData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRoleInfoData>, I>>(object: I): RespAdminRoleInfoData {
+    const message = createBaseRespAdminRoleInfoData();
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
     message.describe = object.describe ?? "";
-    message.enabled = object.enabled ?? false;
+    message.isEnabled = object.isEnabled ?? false;
     message.createAdminId = object.createAdminId ?? 0;
     message.createAdminName = object.createAdminName ?? "";
     message.modifyAdminId = object.modifyAdminId ?? 0;
     message.modifyAdminName = object.modifyAdminName ?? "";
     message.createdAt = object.createdAt ?? "";
     message.updatedAt = object.updatedAt ?? "";
+    message.permissions = object.permissions?.map((e) => RolePermissionItem.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseReqRoleEdit(): ReqRoleEdit {
+function createBaseReqAdminRoleEdit(): ReqAdminRoleEdit {
   return { id: 0, name: "", describe: "", enabled: false };
 }
 
-export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
-  encode(message: ReqRoleEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleEdit: MessageFns<ReqAdminRoleEdit> = {
+  encode(message: ReqAdminRoleEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -995,10 +1020,10 @@ export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleEdit {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleEdit {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleEdit();
+    const message = createBaseReqAdminRoleEdit();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1043,7 +1068,7 @@ export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleEdit {
+  fromJSON(object: any): ReqAdminRoleEdit {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
@@ -1052,7 +1077,7 @@ export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
     };
   },
 
-  toJSON(message: ReqRoleEdit): unknown {
+  toJSON(message: ReqAdminRoleEdit): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1069,11 +1094,11 @@ export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleEdit>, I>>(base?: I): ReqRoleEdit {
-    return ReqRoleEdit.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleEdit>, I>>(base?: I): ReqAdminRoleEdit {
+    return ReqAdminRoleEdit.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleEdit>, I>>(object: I): ReqRoleEdit {
-    const message = createBaseReqRoleEdit();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleEdit>, I>>(object: I): ReqAdminRoleEdit {
+    const message = createBaseReqAdminRoleEdit();
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
     message.describe = object.describe ?? "";
@@ -1082,19 +1107,19 @@ export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
   },
 };
 
-function createBaseRespRoleEditData(): RespRoleEditData {
+function createBaseRespAdminRoleEditData(): RespAdminRoleEditData {
   return {};
 }
 
-export const RespRoleEditData: MessageFns<RespRoleEditData> = {
-  encode(_: RespRoleEditData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRoleEditData: MessageFns<RespAdminRoleEditData> = {
+  encode(_: RespAdminRoleEditData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRoleEditData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRoleEditData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRoleEditData();
+    const message = createBaseRespAdminRoleEditData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1107,30 +1132,30 @@ export const RespRoleEditData: MessageFns<RespRoleEditData> = {
     return message;
   },
 
-  fromJSON(_: any): RespRoleEditData {
+  fromJSON(_: any): RespAdminRoleEditData {
     return {};
   },
 
-  toJSON(_: RespRoleEditData): unknown {
+  toJSON(_: RespAdminRoleEditData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRoleEditData>, I>>(base?: I): RespRoleEditData {
-    return RespRoleEditData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRoleEditData>, I>>(base?: I): RespAdminRoleEditData {
+    return RespAdminRoleEditData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRoleEditData>, I>>(_: I): RespRoleEditData {
-    const message = createBaseRespRoleEditData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRoleEditData>, I>>(_: I): RespAdminRoleEditData {
+    const message = createBaseRespAdminRoleEditData();
     return message;
   },
 };
 
-function createBaseReqRoleEnable(): ReqRoleEnable {
+function createBaseReqAdminRoleEnable(): ReqAdminRoleEnable {
   return { id: 0, enabled: false };
 }
 
-export const ReqRoleEnable: MessageFns<ReqRoleEnable> = {
-  encode(message: ReqRoleEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleEnable: MessageFns<ReqAdminRoleEnable> = {
+  encode(message: ReqAdminRoleEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -1140,10 +1165,10 @@ export const ReqRoleEnable: MessageFns<ReqRoleEnable> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleEnable {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleEnable {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleEnable();
+    const message = createBaseReqAdminRoleEnable();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1172,14 +1197,14 @@ export const ReqRoleEnable: MessageFns<ReqRoleEnable> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleEnable {
+  fromJSON(object: any): ReqAdminRoleEnable {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
     };
   },
 
-  toJSON(message: ReqRoleEnable): unknown {
+  toJSON(message: ReqAdminRoleEnable): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1190,30 +1215,30 @@ export const ReqRoleEnable: MessageFns<ReqRoleEnable> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleEnable>, I>>(base?: I): ReqRoleEnable {
-    return ReqRoleEnable.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleEnable>, I>>(base?: I): ReqAdminRoleEnable {
+    return ReqAdminRoleEnable.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleEnable>, I>>(object: I): ReqRoleEnable {
-    const message = createBaseReqRoleEnable();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleEnable>, I>>(object: I): ReqAdminRoleEnable {
+    const message = createBaseReqAdminRoleEnable();
     message.id = object.id ?? 0;
     message.enabled = object.enabled ?? false;
     return message;
   },
 };
 
-function createBaseRespRoleEnableData(): RespRoleEnableData {
+function createBaseRespAdminRoleEnableData(): RespAdminRoleEnableData {
   return {};
 }
 
-export const RespRoleEnableData: MessageFns<RespRoleEnableData> = {
-  encode(_: RespRoleEnableData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRoleEnableData: MessageFns<RespAdminRoleEnableData> = {
+  encode(_: RespAdminRoleEnableData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRoleEnableData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRoleEnableData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRoleEnableData();
+    const message = createBaseRespAdminRoleEnableData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1226,30 +1251,30 @@ export const RespRoleEnableData: MessageFns<RespRoleEnableData> = {
     return message;
   },
 
-  fromJSON(_: any): RespRoleEnableData {
+  fromJSON(_: any): RespAdminRoleEnableData {
     return {};
   },
 
-  toJSON(_: RespRoleEnableData): unknown {
+  toJSON(_: RespAdminRoleEnableData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRoleEnableData>, I>>(base?: I): RespRoleEnableData {
-    return RespRoleEnableData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRoleEnableData>, I>>(base?: I): RespAdminRoleEnableData {
+    return RespAdminRoleEnableData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRoleEnableData>, I>>(_: I): RespRoleEnableData {
-    const message = createBaseRespRoleEnableData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRoleEnableData>, I>>(_: I): RespAdminRoleEnableData {
+    const message = createBaseRespAdminRoleEnableData();
     return message;
   },
 };
 
-function createBaseReqRoleDelete(): ReqRoleDelete {
+function createBaseReqAdminRoleDelete(): ReqAdminRoleDelete {
   return { id: 0, permissionIds: [] };
 }
 
-export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
-  encode(message: ReqRoleDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleDelete: MessageFns<ReqAdminRoleDelete> = {
+  encode(message: ReqAdminRoleDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -1263,10 +1288,10 @@ export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleDelete {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleDelete {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleDelete();
+    const message = createBaseReqAdminRoleDelete();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1305,7 +1330,7 @@ export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleDelete {
+  fromJSON(object: any): ReqAdminRoleDelete {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       permissionIds: globalThis.Array.isArray(object?.permissionIds)
@@ -1314,7 +1339,7 @@ export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
     };
   },
 
-  toJSON(message: ReqRoleDelete): unknown {
+  toJSON(message: ReqAdminRoleDelete): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1325,30 +1350,30 @@ export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleDelete>, I>>(base?: I): ReqRoleDelete {
-    return ReqRoleDelete.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleDelete>, I>>(base?: I): ReqAdminRoleDelete {
+    return ReqAdminRoleDelete.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleDelete>, I>>(object: I): ReqRoleDelete {
-    const message = createBaseReqRoleDelete();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleDelete>, I>>(object: I): ReqAdminRoleDelete {
+    const message = createBaseReqAdminRoleDelete();
     message.id = object.id ?? 0;
     message.permissionIds = object.permissionIds?.map((e) => e) || [];
     return message;
   },
 };
 
-function createBaseRespRoleDeleteData(): RespRoleDeleteData {
+function createBaseRespAdminRoleDeleteData(): RespAdminRoleDeleteData {
   return {};
 }
 
-export const RespRoleDeleteData: MessageFns<RespRoleDeleteData> = {
-  encode(_: RespRoleDeleteData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRoleDeleteData: MessageFns<RespAdminRoleDeleteData> = {
+  encode(_: RespAdminRoleDeleteData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRoleDeleteData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRoleDeleteData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRoleDeleteData();
+    const message = createBaseRespAdminRoleDeleteData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1361,30 +1386,30 @@ export const RespRoleDeleteData: MessageFns<RespRoleDeleteData> = {
     return message;
   },
 
-  fromJSON(_: any): RespRoleDeleteData {
+  fromJSON(_: any): RespAdminRoleDeleteData {
     return {};
   },
 
-  toJSON(_: RespRoleDeleteData): unknown {
+  toJSON(_: RespAdminRoleDeleteData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRoleDeleteData>, I>>(base?: I): RespRoleDeleteData {
-    return RespRoleDeleteData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRoleDeleteData>, I>>(base?: I): RespAdminRoleDeleteData {
+    return RespAdminRoleDeleteData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRoleDeleteData>, I>>(_: I): RespRoleDeleteData {
-    const message = createBaseRespRoleDeleteData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRoleDeleteData>, I>>(_: I): RespAdminRoleDeleteData {
+    const message = createBaseRespAdminRoleDeleteData();
     return message;
   },
 };
 
-function createBaseReqRoleBindPermissions(): ReqRoleBindPermissions {
+function createBaseReqAdminRoleBindPermissions(): ReqAdminRoleBindPermissions {
   return { id: 0, permissionIds: [] };
 }
 
-export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
-  encode(message: ReqRoleBindPermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRoleBindPermissions: MessageFns<ReqAdminRoleBindPermissions> = {
+  encode(message: ReqAdminRoleBindPermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -1398,10 +1423,10 @@ export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRoleBindPermissions {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRoleBindPermissions {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRoleBindPermissions();
+    const message = createBaseReqAdminRoleBindPermissions();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1440,7 +1465,7 @@ export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRoleBindPermissions {
+  fromJSON(object: any): ReqAdminRoleBindPermissions {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       permissionIds: globalThis.Array.isArray(object?.permissionIds)
@@ -1449,7 +1474,7 @@ export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
     };
   },
 
-  toJSON(message: ReqRoleBindPermissions): unknown {
+  toJSON(message: ReqAdminRoleBindPermissions): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1460,30 +1485,30 @@ export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRoleBindPermissions>, I>>(base?: I): ReqRoleBindPermissions {
-    return ReqRoleBindPermissions.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRoleBindPermissions>, I>>(base?: I): ReqAdminRoleBindPermissions {
+    return ReqAdminRoleBindPermissions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRoleBindPermissions>, I>>(object: I): ReqRoleBindPermissions {
-    const message = createBaseReqRoleBindPermissions();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRoleBindPermissions>, I>>(object: I): ReqAdminRoleBindPermissions {
+    const message = createBaseReqAdminRoleBindPermissions();
     message.id = object.id ?? 0;
     message.permissionIds = object.permissionIds?.map((e) => e) || [];
     return message;
   },
 };
 
-function createBaseRespRoleBindPermissionsData(): RespRoleBindPermissionsData {
+function createBaseRespAdminRoleBindPermissionsData(): RespAdminRoleBindPermissionsData {
   return {};
 }
 
-export const RespRoleBindPermissionsData: MessageFns<RespRoleBindPermissionsData> = {
-  encode(_: RespRoleBindPermissionsData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRoleBindPermissionsData: MessageFns<RespAdminRoleBindPermissionsData> = {
+  encode(_: RespAdminRoleBindPermissionsData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRoleBindPermissionsData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRoleBindPermissionsData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRoleBindPermissionsData();
+    const message = createBaseRespAdminRoleBindPermissionsData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1496,40 +1521,44 @@ export const RespRoleBindPermissionsData: MessageFns<RespRoleBindPermissionsData
     return message;
   },
 
-  fromJSON(_: any): RespRoleBindPermissionsData {
+  fromJSON(_: any): RespAdminRoleBindPermissionsData {
     return {};
   },
 
-  toJSON(_: RespRoleBindPermissionsData): unknown {
+  toJSON(_: RespAdminRoleBindPermissionsData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRoleBindPermissionsData>, I>>(base?: I): RespRoleBindPermissionsData {
-    return RespRoleBindPermissionsData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRoleBindPermissionsData>, I>>(
+    base?: I,
+  ): RespAdminRoleBindPermissionsData {
+    return RespAdminRoleBindPermissionsData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRoleBindPermissionsData>, I>>(_: I): RespRoleBindPermissionsData {
-    const message = createBaseRespRoleBindPermissionsData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRoleBindPermissionsData>, I>>(
+    _: I,
+  ): RespAdminRoleBindPermissionsData {
+    const message = createBaseRespAdminRoleBindPermissionsData();
     return message;
   },
 };
 
-function createBaseReqRolePermissions(): ReqRolePermissions {
+function createBaseReqAdminRolePermissions(): ReqAdminRolePermissions {
   return { id: 0 };
 }
 
-export const ReqRolePermissions: MessageFns<ReqRolePermissions> = {
-  encode(message: ReqRolePermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminRolePermissions: MessageFns<ReqAdminRolePermissions> = {
+  encode(message: ReqAdminRolePermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqRolePermissions {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminRolePermissions {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqRolePermissions();
+    const message = createBaseReqAdminRolePermissions();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1550,11 +1579,11 @@ export const ReqRolePermissions: MessageFns<ReqRolePermissions> = {
     return message;
   },
 
-  fromJSON(object: any): ReqRolePermissions {
+  fromJSON(object: any): ReqAdminRolePermissions {
     return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
   },
 
-  toJSON(message: ReqRolePermissions): unknown {
+  toJSON(message: ReqAdminRolePermissions): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1562,22 +1591,22 @@ export const ReqRolePermissions: MessageFns<ReqRolePermissions> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqRolePermissions>, I>>(base?: I): ReqRolePermissions {
-    return ReqRolePermissions.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminRolePermissions>, I>>(base?: I): ReqAdminRolePermissions {
+    return ReqAdminRolePermissions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqRolePermissions>, I>>(object: I): ReqRolePermissions {
-    const message = createBaseReqRolePermissions();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminRolePermissions>, I>>(object: I): ReqAdminRolePermissions {
+    const message = createBaseReqAdminRolePermissions();
     message.id = object.id ?? 0;
     return message;
   },
 };
 
-function createBaseRespRolePermissionsData(): RespRolePermissionsData {
+function createBaseRespAdminRolePermissionsData(): RespAdminRolePermissionsData {
   return { list: [] };
 }
 
-export const RespRolePermissionsData: MessageFns<RespRolePermissionsData> = {
-  encode(message: RespRolePermissionsData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminRolePermissionsData: MessageFns<RespAdminRolePermissionsData> = {
+  encode(message: RespAdminRolePermissionsData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.list !== undefined && message.list.length !== 0) {
       for (const v of message.list) {
         RolePermissionItem.encode(v!, writer.uint32(10).fork()).join();
@@ -1586,10 +1615,10 @@ export const RespRolePermissionsData: MessageFns<RespRolePermissionsData> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespRolePermissionsData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminRolePermissionsData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespRolePermissionsData();
+    const message = createBaseRespAdminRolePermissionsData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1613,13 +1642,13 @@ export const RespRolePermissionsData: MessageFns<RespRolePermissionsData> = {
     return message;
   },
 
-  fromJSON(object: any): RespRolePermissionsData {
+  fromJSON(object: any): RespAdminRolePermissionsData {
     return {
       list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => RolePermissionItem.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: RespRolePermissionsData): unknown {
+  toJSON(message: RespAdminRolePermissionsData): unknown {
     const obj: any = {};
     if (message.list?.length) {
       obj.list = message.list.map((e) => RolePermissionItem.toJSON(e));
@@ -1627,11 +1656,11 @@ export const RespRolePermissionsData: MessageFns<RespRolePermissionsData> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespRolePermissionsData>, I>>(base?: I): RespRolePermissionsData {
-    return RespRolePermissionsData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminRolePermissionsData>, I>>(base?: I): RespAdminRolePermissionsData {
+    return RespAdminRolePermissionsData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespRolePermissionsData>, I>>(object: I): RespRolePermissionsData {
-    const message = createBaseRespRolePermissionsData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminRolePermissionsData>, I>>(object: I): RespAdminRolePermissionsData {
+    const message = createBaseRespAdminRolePermissionsData();
     message.list = object.list?.map((e) => RolePermissionItem.fromPartial(e)) || [];
     return message;
   },
@@ -1641,10 +1670,10 @@ function createBaseRoleItem(): RoleItem {
   return {
     id: 0,
     name: "",
-    roleName: "",
+    describe: "",
     createAdminId: 0,
     createAdminName: "",
-    enabled: false,
+    isEnabled: false,
     createdAt: "",
     updatedAt: "",
   };
@@ -1658,8 +1687,8 @@ export const RoleItem: MessageFns<RoleItem> = {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.roleName !== undefined && message.roleName !== "") {
-      writer.uint32(26).string(message.roleName);
+    if (message.describe !== undefined && message.describe !== "") {
+      writer.uint32(26).string(message.describe);
     }
     if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       writer.uint32(32).int32(message.createAdminId);
@@ -1667,8 +1696,8 @@ export const RoleItem: MessageFns<RoleItem> = {
     if (message.createAdminName !== undefined && message.createAdminName !== "") {
       writer.uint32(42).string(message.createAdminName);
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      writer.uint32(48).bool(message.enabled);
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      writer.uint32(48).bool(message.isEnabled);
     }
     if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(58).string(message.createdAt);
@@ -1707,7 +1736,7 @@ export const RoleItem: MessageFns<RoleItem> = {
             break;
           }
 
-          message.roleName = reader.string();
+          message.describe = reader.string();
           continue;
         }
         case 4: {
@@ -1731,7 +1760,7 @@ export const RoleItem: MessageFns<RoleItem> = {
             break;
           }
 
-          message.enabled = reader.bool();
+          message.isEnabled = reader.bool();
           continue;
         }
         case 7: {
@@ -1763,10 +1792,10 @@ export const RoleItem: MessageFns<RoleItem> = {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      roleName: isSet(object.roleName) ? globalThis.String(object.roleName) : "",
+      describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
       createAdminId: isSet(object.createAdminId) ? globalThis.Number(object.createAdminId) : 0,
       createAdminName: isSet(object.createAdminName) ? globalThis.String(object.createAdminName) : "",
-      enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
+      isEnabled: isSet(object.isEnabled) ? globalThis.Boolean(object.isEnabled) : false,
       createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
       updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
     };
@@ -1780,8 +1809,8 @@ export const RoleItem: MessageFns<RoleItem> = {
     if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.roleName !== undefined && message.roleName !== "") {
-      obj.roleName = message.roleName;
+    if (message.describe !== undefined && message.describe !== "") {
+      obj.describe = message.describe;
     }
     if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       obj.createAdminId = Math.round(message.createAdminId);
@@ -1789,8 +1818,8 @@ export const RoleItem: MessageFns<RoleItem> = {
     if (message.createAdminName !== undefined && message.createAdminName !== "") {
       obj.createAdminName = message.createAdminName;
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      obj.enabled = message.enabled;
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      obj.isEnabled = message.isEnabled;
     }
     if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
@@ -1808,10 +1837,10 @@ export const RoleItem: MessageFns<RoleItem> = {
     const message = createBaseRoleItem();
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
-    message.roleName = object.roleName ?? "";
+    message.describe = object.describe ?? "";
     message.createAdminId = object.createAdminId ?? 0;
     message.createAdminName = object.createAdminName ?? "";
-    message.enabled = object.enabled ?? false;
+    message.isEnabled = object.isEnabled ?? false;
     message.createdAt = object.createdAt ?? "";
     message.updatedAt = object.updatedAt ?? "";
     return message;

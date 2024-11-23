@@ -6,7 +6,7 @@ type AdminRoleInfo struct {
 	ID              int32      `json:"id"`
 	Name            string     `json:"name"`
 	Describe        string     `json:"describe"`
-	Enabled         bool       `json:"enabled"`
+	IsEnabled       bool       `json:"is_enabled"`
 	CreateAdminId   int32      `json:"create_admin_id"`
 	CreateAdminName string     `json:"create_admin_name"`
 	ModifyAdminId   int32      `json:"modify_admin_id"`
