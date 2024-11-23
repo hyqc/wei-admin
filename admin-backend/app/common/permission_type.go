@@ -17,9 +17,9 @@ var (
 	}
 
 	AdminPermissionEnumMap = map[string]*AdminPermissionEnum{
-		AdminPermissionEnumView.Key:   AdminPermissionEnumView,
-		AdminPermissionEnumEdit.Key:   AdminPermissionEnumEdit,
-		AdminPermissionEnumDelete.Key: AdminPermissionEnumDelete,
+		AdminPermissionEnumView.Type:   AdminPermissionEnumView,
+		AdminPermissionEnumEdit.Type:   AdminPermissionEnumEdit,
+		AdminPermissionEnumDelete.Type: AdminPermissionEnumDelete,
 	}
 
 	AdminPermissionEnumView = &AdminPermissionEnum{
@@ -35,7 +35,7 @@ var (
 	AdminPermissionEnumDelete = &AdminPermissionEnum{
 		Type: "delete",
 		Key:  "Delete",
-		Name: "编辑",
+		Name: "删除",
 	}
 )
 

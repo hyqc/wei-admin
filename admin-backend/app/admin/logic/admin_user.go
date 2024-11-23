@@ -203,12 +203,13 @@ func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminUserA
 		return err
 	}
 	data := &model2.AdminUser{
-		Username:  params.Username,
-		Password:  password,
-		Nickname:  params.Nickname,
-		Email:     params.Email,
-		Avatar:    params.Avatar,
-		IsEnabled: params.Enabled,
+		Username:    params.Username,
+		Password:    password,
+		Nickname:    params.Nickname,
+		Email:       params.Email,
+		Avatar:      params.Avatar,
+		IsEnabled:   params.Enabled,
+		LastLoginIP: "[]",
 	}
 	return dao.H.AdminUser.Create(ctx, data)
 }

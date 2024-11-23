@@ -144,7 +144,7 @@ func (a *AdminRole) FindAdminRolePermissionByRoleId(ctx context.Context, roleId 
 		Select(ta.RoleID, ta.PermissionID, tb.Key.As("permission_key"), tb.Name.As("permission_name"), tb.Type.As("permission_type")).
 		Join(tb, tb.ID.EqCol(ta.PermissionID)).
 		Where(tb.IsEnabled.Is(true), ta.RoleID.Eq(roleId)).
-		Scan(list)
+		Scan(&list)
 	return list, err
 }
 

@@ -108,7 +108,7 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminRole
 		Permissions:     make([]*admin_proto.RolePermissionItem, 0),
 	}
 	for _, item := range permissionsList {
-		enumItem, ok := common.AdminPermissionEnumMap[item.PermissionKey]
+		enumItem, ok := common.AdminPermissionEnumMap[item.PermissionType]
 		if !ok {
 			return nil, fmt.Errorf("配置错误")
 		}

@@ -1,4 +1,4 @@
-import { adminUserAdd, RequestAdminUserAddParamsType } from '@/services/apis/admin/user';
+import { adminUserAdd } from '@/services/apis/admin/user';
 import { APICommon } from '@/services/apis/admin/api';
 import { Form, Input, message, Modal, Switch, Upload } from 'antd';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ import { CloudUploadOutlined } from '@ant-design/icons';
 
 import ImgCrop from 'antd-img-crop';
 import { AdminUserFormRules } from './common';
+import { ReqAdminUserAdd } from '@/proto/admin_ts/admin_user';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -35,12 +36,12 @@ const AddModal: React.FC<AddModalPropsType> = (props) => {
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminUserAddParamsType = {
+        const data: ReqAdminUserAdd = {
           ...values,
           avatar,
         };
         adminUserAdd(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
             form.resetFields();
           });
