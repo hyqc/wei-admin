@@ -10,7 +10,8 @@ message ReqAdminUserList{
   string username = 2;//账号
   string nickname = 3;//昵称
   string email = 4; //邮箱
-  repeated int32 roleIds = 5;// 角色ID
+  int32 enabled = 5; // 0全部，1启用，2禁用
+  repeated int32 roleIds = 6;// 角色ID
 }
 message RespAdminUserListData{
   int64 total = 1;

@@ -25,6 +25,7 @@ declare const MessageDuritain: number;
 declare const UploadImageAccept: string;
 declare const DefaultModalWidth: number;
 declare const DefaultDrawerWidth: number;
+declare const DefaultPageArray: Array<number>;
 declare const AccessAllow: string;
 declare const AccessForbidden: string;
 declare const AdminId: number;

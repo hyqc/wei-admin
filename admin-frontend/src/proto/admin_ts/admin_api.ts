@@ -12,20 +12,24 @@ export const protobufPackage = "admin";
 
 /** 接口列表请求参数 */
 export interface ReqApiList {
-  base:
+  base?:
     | ReqListBase
     | undefined;
   /** 接口键名 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 接口名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 接口路由 */
-  path: string;
+  path?: string | undefined;
 }
 
 export interface RespApiListData {
-  total: number;
-  list: ApiItem[];
+  total?: number | undefined;
+  list?: ApiItem[] | undefined;
 }
 
 /** 全部接口列表 */
@@ -33,21 +37,29 @@ export interface ReqApiAll {
 }
 
 export interface RespApiAllData {
-  list: ApiItem[];
+  list?: ApiItem[] | undefined;
 }
 
 /** 创建接口 */
 export interface ReqApiAdd {
   /** 接口路由 */
-  path: string;
+  path?:
+    | string
+    | undefined;
   /** 接口键名 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 接口名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 接口描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 启用状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespApiAddData {
@@ -56,27 +68,37 @@ export interface RespApiAddData {
 /** 接口详情 */
 export interface ReqApiInfo {
   /** 接口ID */
-  id: number;
+  id?: number | undefined;
 }
 
 export interface RespApiInfoData {
-  data: ApiItem | undefined;
+  data?: ApiItem | undefined;
 }
 
 /** 接口编辑 */
 export interface ReqApiEdit {
   /** 接口ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 接口路由 */
-  path: string;
+  path?:
+    | string
+    | undefined;
   /** 接口键名 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 接口名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 接口描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 接口状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespApiEditData {
@@ -85,9 +107,11 @@ export interface RespApiEditData {
 /** 接口禁用启用 */
 export interface ReqApiEnable {
   /** 接口ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 接口状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespApiEnableData {
@@ -96,7 +120,7 @@ export interface RespApiEnableData {
 /** 删除接口 */
 export interface ReqApiDelete {
   /** 接口ID */
-  id: number;
+  id?: number | undefined;
 }
 
 export interface RespApiDeleteData {
@@ -111,13 +135,13 @@ export const ReqApiList: MessageFns<ReqApiList> = {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(18).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(34).string(message.path);
     }
     return writer;
@@ -185,13 +209,13 @@ export const ReqApiList: MessageFns<ReqApiList> = {
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
     return obj;
@@ -218,11 +242,13 @@ function createBaseRespApiListData(): RespApiListData {
 
 export const RespApiListData: MessageFns<RespApiListData> = {
   encode(message: RespApiListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
-    for (const v of message.list) {
-      ApiItem.encode(v!, writer.uint32(18).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        ApiItem.encode(v!, writer.uint32(18).fork()).join();
+      }
     }
     return writer;
   },
@@ -247,7 +273,10 @@ export const RespApiListData: MessageFns<RespApiListData> = {
             break;
           }
 
-          message.list.push(ApiItem.decode(reader, reader.uint32()));
+          const el = ApiItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -268,7 +297,7 @@ export const RespApiListData: MessageFns<RespApiListData> = {
 
   toJSON(message: RespApiListData): unknown {
     const obj: any = {};
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
     }
     if (message.list?.length) {
@@ -337,8 +366,10 @@ function createBaseRespApiAllData(): RespApiAllData {
 
 export const RespApiAllData: MessageFns<RespApiAllData> = {
   encode(message: RespApiAllData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.list) {
-      ApiItem.encode(v!, writer.uint32(10).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        ApiItem.encode(v!, writer.uint32(10).fork()).join();
+      }
     }
     return writer;
   },
@@ -355,7 +386,10 @@ export const RespApiAllData: MessageFns<RespApiAllData> = {
             break;
           }
 
-          message.list.push(ApiItem.decode(reader, reader.uint32()));
+          const el = ApiItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -395,19 +429,19 @@ function createBaseReqApiAdd(): ReqApiAdd {
 
 export const ReqApiAdd: MessageFns<ReqApiAdd> = {
   encode(message: ReqApiAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(10).string(message.path);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(18).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(34).string(message.describe);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(40).bool(message.enabled);
     }
     return writer;
@@ -481,19 +515,19 @@ export const ReqApiAdd: MessageFns<ReqApiAdd> = {
 
   toJSON(message: ReqApiAdd): unknown {
     const obj: any = {};
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -562,7 +596,7 @@ function createBaseReqApiInfo(): ReqApiInfo {
 
 export const ReqApiInfo: MessageFns<ReqApiInfo> = {
   encode(message: ReqApiInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
@@ -598,7 +632,7 @@ export const ReqApiInfo: MessageFns<ReqApiInfo> = {
 
   toJSON(message: ReqApiInfo): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     return obj;
@@ -678,22 +712,22 @@ function createBaseReqApiEdit(): ReqApiEdit {
 
 export const ReqApiEdit: MessageFns<ReqApiEdit> = {
   encode(message: ReqApiEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(18).string(message.path);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(42).string(message.describe);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(48).bool(message.enabled);
     }
     return writer;
@@ -776,22 +810,22 @@ export const ReqApiEdit: MessageFns<ReqApiEdit> = {
 
   toJSON(message: ReqApiEdit): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -861,10 +895,10 @@ function createBaseReqApiEnable(): ReqApiEnable {
 
 export const ReqApiEnable: MessageFns<ReqApiEnable> = {
   encode(message: ReqApiEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(16).bool(message.enabled);
     }
     return writer;
@@ -911,10 +945,10 @@ export const ReqApiEnable: MessageFns<ReqApiEnable> = {
 
   toJSON(message: ReqApiEnable): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -980,7 +1014,7 @@ function createBaseReqApiDelete(): ReqApiDelete {
 
 export const ReqApiDelete: MessageFns<ReqApiDelete> = {
   encode(message: ReqApiDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
@@ -1016,7 +1050,7 @@ export const ReqApiDelete: MessageFns<ReqApiDelete> = {
 
   toJSON(message: ReqApiDelete): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     return obj;

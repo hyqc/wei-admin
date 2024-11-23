@@ -9,7 +9,6 @@ import {
   Col,
   Table,
   Avatar,
-  Switch,
   message,
   Tag,
   Popconfirm,
@@ -23,7 +22,6 @@ import {
   adminUserDetail,
   adminUserDelete,
   adminUserEnable,
-  RequestAdminUserEnableParamsType,
 } from '@/services/apis/admin/user';
 import type {
 } from '@/services/apis/admin/user';
@@ -40,9 +38,9 @@ import AdminUserEditPasswordModal from './password';
 import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admin/role';
 import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
-import { AdminUserModel } from '@/proto/admin_ts/admin_model';
-import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
-import { ReqAdminUserDelete, ReqAdminUserEnabled, ReqAdminUserInfo, ReqAdminUserList, RespAdminUserBindRolesData, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
+import { AdminUserListItem, AdminUserRoleItem, ReqListBase } from '@/proto/admin_ts/common';
+import { ReqAdminUserEnabled, ReqAdminUserList, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
+import { handlePagination } from '@/services/common/utils';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -67,6 +65,7 @@ const Admin: React.FC = () => {
       dataIndex: 'username',
       width: '8rem',
       sorter: true,
+      fixed: 'left',
     },
     {
       title: '昵称',
@@ -82,6 +81,12 @@ const Admin: React.FC = () => {
       render: (avatar, record) => {
         return <Avatar src={avatar} />;
       },
+    },
+    {
+      title: '邮箱',
+      align: 'center',
+      width: '12rem',
+      dataIndex: 'email',
     },
     {
       title: '角色',
@@ -111,7 +116,7 @@ const Admin: React.FC = () => {
       dataIndex: 'loginTotal',
       sorter: true,
       render(loginTotal: number, record: AdminUserListItem) {
-       return <>{loginTotal ?? 0 }</>
+        return <>{loginTotal ?? 0}</>
       },
     },
     {
@@ -137,7 +142,7 @@ const Admin: React.FC = () => {
             name="AdminUserEdit"
             forbidden={
               <>
-                {rowEnableButton(isEnabled, record.isEnabledButtonDisabled)}
+                {rowEnableButton(isEnabled, false)}
               </>
             }
           >
@@ -147,7 +152,7 @@ const Admin: React.FC = () => {
               cancelText="取消"
               onConfirm={() => updateEnabled(record)}
             >
-              {rowEnableButton(isEnabled, record.isEnabledButtonDisabled)}
+              {rowEnableButton(isEnabled, false)}
             </Popconfirm>
           </Authorization>
         );
@@ -157,6 +162,7 @@ const Admin: React.FC = () => {
       title: '操作',
       align: 'left',
       width: '1rem',
+      fixed: 'right',
       render(text, record: AdminUserListItem) {
         return (
           <Space>
@@ -206,7 +212,7 @@ const Admin: React.FC = () => {
   //列表禁用/启用按钮
   function rowEnableButton(isEnabled: boolean, disabled: boolean) {
     return (
-      <Button type='primary' disabled={!!disabled} danger={!isEnabled}  size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
+      <Button type='primary' disabled={!!disabled} danger={!isEnabled} size='small'>{isEnabled ? '生效中' : '已禁用'}</Button>
     );
   }
 
@@ -217,9 +223,9 @@ const Admin: React.FC = () => {
       .then((res: ResponseBodyType) => {
         const data: RespAdminUserListData = res.data;
         const rows = data?.list || [];
-        const page = { total: data.total, pageSize: data.pageSize, pageNum: data.pageNum };
-        setPageInfo(page);
+        const total = data.total ?? 0
         setRowsData(rows);
+        setPageInfo((pageInfo)=>({...pageInfo,total}))
       })
       .catch((err) => {
         console.log('error', err);
@@ -237,7 +243,7 @@ const Admin: React.FC = () => {
     };
     adminUserEnable(updateData).then((res) => {
       message.success(res.msg, MessageDuritain, () => {
-        getRows({ ...pageInfo, ...form.getFieldsValue() });
+        getRows({ base: { ...pageInfo }, ...form.getFieldsValue() });
       });
     });
   }
@@ -251,10 +257,11 @@ const Admin: React.FC = () => {
 
   // 删除账号
   function onDelete(record: AdminUserListItem) {
-    adminUserDelete({ adminId: record.adminId, enabled: record.isEnabled }).then(
-      (res: ResponseBodyType) => {
+    adminUserDelete({ adminId: record.adminId }).then(
+      (res) => {
         message.success(res.msg, MessageDuritain, () => {
-          getRows({ ...pageInfo, ...form.getFieldsValue() });
+          const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+          getRows({ base, ...form.getFieldsValue() });
         });
       },
     );
@@ -262,7 +269,7 @@ const Admin: React.FC = () => {
 
   // 账号详情
   function openDetailModal(record: AdminUserListItem) {
-    adminUserDetail({adminId: record.adminId}).then((res) => {
+    adminUserDetail({ adminId: record.adminId }).then((res) => {
       const data: RespAdminUserInfoData = res.data;
       setDetailData(data.data);
       setDetailModalStatus(true);
@@ -271,7 +278,7 @@ const Admin: React.FC = () => {
 
   // 分配角色
   function openBindRolesModal(record: AdminUserListItem) {
-    adminUserDetail({adminId: record.adminId}).then((res) => {
+    adminUserDetail({ adminId: record.adminId }).then((res) => {
       const data: RespAdminUserInfoData = res.data;
       setDetailData(data.data);
       setBindRolesModalStatus(true);
@@ -280,7 +287,7 @@ const Admin: React.FC = () => {
 
   // 账号编辑
   function openEditModal(record: AdminUserListItem) {
-    adminUserDetail({adminId: record.adminId}).then((res) => {
+    adminUserDetail({ adminId: record.adminId }).then((res) => {
       const data: RespAdminUserInfoData = res.data;
       setDetailData(data.data);
       setEditModalStatus(true);
@@ -293,7 +300,7 @@ const Admin: React.FC = () => {
   }
 
   function openEditPasswordModal(record: AdminUserListItem) {
-    adminUserDetail({adminId: record.adminId}).then((res) => {
+    adminUserDetail({ adminId: record.adminId }).then((res) => {
       const data: RespAdminUserInfoData = res.data;
       setDetailData(data.data);
       setEditPasswordModalStatus(true);
@@ -303,7 +310,8 @@ const Admin: React.FC = () => {
   function noticeAddModal(data: NoticeModalPropsType) {
     setAddModalStatus(false);
     if (data.reload) {
-      getRows({ ...pageInfo, ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
@@ -311,7 +319,8 @@ const Admin: React.FC = () => {
     setDetailData(undefined);
     setEditModalStatus(false);
     if (data.reload) {
-      getRows({ ...pageInfo, ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
@@ -319,7 +328,8 @@ const Admin: React.FC = () => {
     setDetailData(undefined);
     setDetailModalStatus(false);
     if (data.reload) {
-      getRows({ ...pageInfo, ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
@@ -327,7 +337,8 @@ const Admin: React.FC = () => {
     setDetailData(undefined);
     setBindRolesModalStatus(false);
     if (data.reload) {
-      getRows({ ...pageInfo, ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
@@ -335,35 +346,36 @@ const Admin: React.FC = () => {
     setDetailData(undefined);
     setEditPasswordModalStatus(false);
     if (data.reload) {
-      getRows({ ...pageInfo, ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
   // 列表搜索
-  function onSearchFinish(values: RequestAdminUserListParamsType) {
-    const page = { ...pageInfo, pageNum: 1 };
-    getRows({ ...values, ...page });
+  function onSearchFinish(values: ReqAdminUserList) {
+    const base = handlePagination(1, pageInfo.pageSize)
+    getRows({ ...values, base });
   }
 
   // 搜索重置
   function onSearchReset() {
     form.resetFields();
-    getRows({ pageNum: 1, pageSize: pageInfo.pageSize });
+    const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+    getRows({ base });
   }
 
   function onShowSizeChange(current: number, size: number) {
-    const page = { pageSize: size, pageNum: current };
-    setPageInfo({ ...pageInfo, ...page });
+    const page = {...pageInfo, pageSize: size, pageNum: current }
+    setPageInfo(()=>({...page}));
   }
 
   function tableChange(pagination: any, filters: any, sorter: any) {
-    const page = { pageSize: pagination.pageSize, pageNum: pagination.current };
+    const page = handlePagination(pagination.current, pagination.pageSize)
     setPageInfo({ ...pageInfo, ...page });
+    const base = { ...page, sortField: sorter.field, sortType: sorter.order, }
     getRows({
       ...form.getFieldsValue(),
-      ...page,
-      sortField: sorter.field,
-      sortType: sorter.order,
+      base,
     });
   }
 
@@ -374,6 +386,10 @@ const Admin: React.FC = () => {
   useEffect(() => {
     fetchAdminRoles();
   }, []);
+
+  useEffect(() => {
+    console.log('pageInfo: ', pageInfo)
+  }, [pageInfo]);
 
   return (
     <Container>
@@ -468,6 +484,8 @@ const Admin: React.FC = () => {
             pageSize: pageInfo.pageSize,
             total: pageInfo.total,
             showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: DefaultPageArray,
             position: ['bottomRight'],
             showTotal: (total) => `共 ${total} 条数据`,
             onShowSizeChange,

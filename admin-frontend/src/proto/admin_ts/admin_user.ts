@@ -13,52 +13,74 @@ export const protobufPackage = "admin";
 
 /** 账号列表请求参数 */
 export interface ReqAdminUserList {
-  base:
+  base?:
     | ReqListBase
     | undefined;
   /** 账号 */
-  username: string;
+  username?:
+    | string
+    | undefined;
   /** 昵称 */
-  nickname: string;
+  nickname?:
+    | string
+    | undefined;
   /** 邮箱 */
-  email: string;
+  email?:
+    | string
+    | undefined;
+  /** 0全部，1启用，2禁用 */
+  enabled?:
+    | number
+    | undefined;
   /** 角色ID */
-  roleIds: number[];
+  roleIds?: number[] | undefined;
 }
 
 export interface RespAdminUserListData {
-  total: number;
-  pageNum: number;
-  pageSize: number;
-  list: AdminUserListItem[];
+  total?: number | undefined;
+  pageNum?: number | undefined;
+  pageSize?: number | undefined;
+  list?: AdminUserListItem[] | undefined;
 }
 
 /** 账号详情 */
 export interface ReqAdminUserInfo {
   /** 管理员ID */
-  adminId: number;
+  adminId?: number | undefined;
 }
 
 export interface RespAdminUserInfoData {
-  data: AdminUserModel | undefined;
+  data?: AdminUserModel | undefined;
 }
 
 /** 添加账号 */
 export interface ReqAdminUserAdd {
   /** 账号 */
-  username: string;
+  username?:
+    | string
+    | undefined;
   /** 昵称 */
-  nickname: string;
+  nickname?:
+    | string
+    | undefined;
   /** 密码 */
-  password: string;
+  password?:
+    | string
+    | undefined;
   /** 确认密码 */
-  confirmPassword: string;
+  confirmPassword?:
+    | string
+    | undefined;
   /** 账号启用状态 */
-  enabled: boolean;
+  enabled?:
+    | boolean
+    | undefined;
   /** 邮箱 */
-  email: string;
+  email?:
+    | string
+    | undefined;
   /** 头像地址 */
-  avatar: string;
+  avatar?: string | undefined;
 }
 
 export interface RespAdminUserAddData {
@@ -67,17 +89,27 @@ export interface RespAdminUserAddData {
 /** 账号编辑 */
 export interface ReqAdminUserEdit {
   /** 管理员ID */
-  adminId: number;
+  adminId?:
+    | number
+    | undefined;
   /** 账号 */
-  username: string;
+  username?:
+    | string
+    | undefined;
   /** 昵称 */
-  nickname: string;
+  nickname?:
+    | string
+    | undefined;
   /** 账号启用状态 */
-  enabled: boolean;
+  enabled?:
+    | boolean
+    | undefined;
   /** 邮箱 */
-  email: string;
+  email?:
+    | string
+    | undefined;
   /** 头像地址 */
-  avatar: string;
+  avatar?: string | undefined;
 }
 
 export interface RespAdminUserEditData {
@@ -86,11 +118,15 @@ export interface RespAdminUserEditData {
 /** 账号编辑 */
 export interface ReqAdminUserEditPassword {
   /** 管理员ID */
-  adminId: number;
+  adminId?:
+    | number
+    | undefined;
   /** 密码 */
-  password: string;
+  password?:
+    | string
+    | undefined;
   /** 确认密码 */
-  confirmPassword: string;
+  confirmPassword?: string | undefined;
 }
 
 export interface RespAdminUserEditPasswordData {
@@ -99,9 +135,11 @@ export interface RespAdminUserEditPasswordData {
 /** 账号状态更改 */
 export interface ReqAdminUserEnabled {
   /** 管理员ID */
-  adminId: number;
+  adminId?:
+    | number
+    | undefined;
   /** 账号启用状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespAdminUserEnabledData {
@@ -110,7 +148,7 @@ export interface RespAdminUserEnabledData {
 /** 删除账号 */
 export interface ReqAdminUserDelete {
   /** 管理员ID */
-  adminId: number;
+  adminId?: number | undefined;
 }
 
 export interface RespAdminUserDeleteData {
@@ -119,16 +157,18 @@ export interface RespAdminUserDeleteData {
 /** 账号绑定角色 */
 export interface ReqAdminUserBindRoles {
   /** 管理员ID */
-  adminId: number;
+  adminId?:
+    | number
+    | undefined;
   /** 角色ID列表 */
-  roleIds: number[];
+  roleIds?: number[] | undefined;
 }
 
 export interface RespAdminUserBindRolesData {
 }
 
 function createBaseReqAdminUserList(): ReqAdminUserList {
-  return { base: undefined, username: "", nickname: "", email: "", roleIds: [] };
+  return { base: undefined, username: "", nickname: "", email: "", enabled: 0, roleIds: [] };
 }
 
 export const ReqAdminUserList: MessageFns<ReqAdminUserList> = {
@@ -136,20 +176,25 @@ export const ReqAdminUserList: MessageFns<ReqAdminUserList> = {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       writer.uint32(18).string(message.username);
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       writer.uint32(26).string(message.nickname);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       writer.uint32(34).string(message.email);
     }
-    writer.uint32(42).fork();
-    for (const v of message.roleIds) {
-      writer.int32(v);
+    if (message.enabled !== undefined && message.enabled !== 0) {
+      writer.uint32(40).int32(message.enabled);
     }
-    writer.join();
+    if (message.roleIds !== undefined && message.roleIds.length !== 0) {
+      writer.uint32(50).fork();
+      for (const v of message.roleIds) {
+        writer.int32(v);
+      }
+      writer.join();
+    }
     return writer;
   },
 
@@ -193,16 +238,24 @@ export const ReqAdminUserList: MessageFns<ReqAdminUserList> = {
           continue;
         }
         case 5: {
-          if (tag === 40) {
-            message.roleIds.push(reader.int32());
+          if (tag !== 40) {
+            break;
+          }
+
+          message.enabled = reader.int32();
+          continue;
+        }
+        case 6: {
+          if (tag === 48) {
+            message.roleIds!.push(reader.int32());
 
             continue;
           }
 
-          if (tag === 42) {
+          if (tag === 50) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.roleIds.push(reader.int32());
+              message.roleIds!.push(reader.int32());
             }
 
             continue;
@@ -225,6 +278,7 @@ export const ReqAdminUserList: MessageFns<ReqAdminUserList> = {
       username: isSet(object.username) ? globalThis.String(object.username) : "",
       nickname: isSet(object.nickname) ? globalThis.String(object.nickname) : "",
       email: isSet(object.email) ? globalThis.String(object.email) : "",
+      enabled: isSet(object.enabled) ? globalThis.Number(object.enabled) : 0,
       roleIds: globalThis.Array.isArray(object?.roleIds) ? object.roleIds.map((e: any) => globalThis.Number(e)) : [],
     };
   },
@@ -234,14 +288,17 @@ export const ReqAdminUserList: MessageFns<ReqAdminUserList> = {
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       obj.username = message.username;
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       obj.nickname = message.nickname;
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       obj.email = message.email;
+    }
+    if (message.enabled !== undefined && message.enabled !== 0) {
+      obj.enabled = Math.round(message.enabled);
     }
     if (message.roleIds?.length) {
       obj.roleIds = message.roleIds.map((e) => Math.round(e));
@@ -260,6 +317,7 @@ export const ReqAdminUserList: MessageFns<ReqAdminUserList> = {
     message.username = object.username ?? "";
     message.nickname = object.nickname ?? "";
     message.email = object.email ?? "";
+    message.enabled = object.enabled ?? 0;
     message.roleIds = object.roleIds?.map((e) => e) || [];
     return message;
   },
@@ -271,17 +329,19 @@ function createBaseRespAdminUserListData(): RespAdminUserListData {
 
 export const RespAdminUserListData: MessageFns<RespAdminUserListData> = {
   encode(message: RespAdminUserListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
-    if (message.pageNum !== 0) {
+    if (message.pageNum !== undefined && message.pageNum !== 0) {
       writer.uint32(16).int32(message.pageNum);
     }
-    if (message.pageSize !== 0) {
+    if (message.pageSize !== undefined && message.pageSize !== 0) {
       writer.uint32(24).int32(message.pageSize);
     }
-    for (const v of message.list) {
-      AdminUserListItem.encode(v!, writer.uint32(34).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        AdminUserListItem.encode(v!, writer.uint32(34).fork()).join();
+      }
     }
     return writer;
   },
@@ -322,7 +382,10 @@ export const RespAdminUserListData: MessageFns<RespAdminUserListData> = {
             break;
           }
 
-          message.list.push(AdminUserListItem.decode(reader, reader.uint32()));
+          const el = AdminUserListItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -345,13 +408,13 @@ export const RespAdminUserListData: MessageFns<RespAdminUserListData> = {
 
   toJSON(message: RespAdminUserListData): unknown {
     const obj: any = {};
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
     }
-    if (message.pageNum !== 0) {
+    if (message.pageNum !== undefined && message.pageNum !== 0) {
       obj.pageNum = Math.round(message.pageNum);
     }
-    if (message.pageSize !== 0) {
+    if (message.pageSize !== undefined && message.pageSize !== 0) {
       obj.pageSize = Math.round(message.pageSize);
     }
     if (message.list?.length) {
@@ -379,7 +442,7 @@ function createBaseReqAdminUserInfo(): ReqAdminUserInfo {
 
 export const ReqAdminUserInfo: MessageFns<ReqAdminUserInfo> = {
   encode(message: ReqAdminUserInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
     return writer;
@@ -415,7 +478,7 @@ export const ReqAdminUserInfo: MessageFns<ReqAdminUserInfo> = {
 
   toJSON(message: ReqAdminUserInfo): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
     return obj;
@@ -497,25 +560,25 @@ function createBaseReqAdminUserAdd(): ReqAdminUserAdd {
 
 export const ReqAdminUserAdd: MessageFns<ReqAdminUserAdd> = {
   encode(message: ReqAdminUserAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       writer.uint32(10).string(message.username);
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       writer.uint32(18).string(message.nickname);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       writer.uint32(26).string(message.password);
     }
-    if (message.confirmPassword !== "") {
+    if (message.confirmPassword !== undefined && message.confirmPassword !== "") {
       writer.uint32(34).string(message.confirmPassword);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(40).bool(message.enabled);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       writer.uint32(50).string(message.email);
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       writer.uint32(58).string(message.avatar);
     }
     return writer;
@@ -607,25 +670,25 @@ export const ReqAdminUserAdd: MessageFns<ReqAdminUserAdd> = {
 
   toJSON(message: ReqAdminUserAdd): unknown {
     const obj: any = {};
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       obj.username = message.username;
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       obj.nickname = message.nickname;
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       obj.password = message.password;
     }
-    if (message.confirmPassword !== "") {
+    if (message.confirmPassword !== undefined && message.confirmPassword !== "") {
       obj.confirmPassword = message.confirmPassword;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       obj.email = message.email;
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       obj.avatar = message.avatar;
     }
     return obj;
@@ -696,22 +759,22 @@ function createBaseReqAdminUserEdit(): ReqAdminUserEdit {
 
 export const ReqAdminUserEdit: MessageFns<ReqAdminUserEdit> = {
   encode(message: ReqAdminUserEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       writer.uint32(18).string(message.username);
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       writer.uint32(26).string(message.nickname);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(32).bool(message.enabled);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       writer.uint32(42).string(message.email);
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       writer.uint32(50).string(message.avatar);
     }
     return writer;
@@ -794,22 +857,22 @@ export const ReqAdminUserEdit: MessageFns<ReqAdminUserEdit> = {
 
   toJSON(message: ReqAdminUserEdit): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       obj.username = message.username;
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       obj.nickname = message.nickname;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       obj.email = message.email;
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       obj.avatar = message.avatar;
     }
     return obj;
@@ -879,13 +942,13 @@ function createBaseReqAdminUserEditPassword(): ReqAdminUserEditPassword {
 
 export const ReqAdminUserEditPassword: MessageFns<ReqAdminUserEditPassword> = {
   encode(message: ReqAdminUserEditPassword, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       writer.uint32(18).string(message.password);
     }
-    if (message.confirmPassword !== "") {
+    if (message.confirmPassword !== undefined && message.confirmPassword !== "") {
       writer.uint32(26).string(message.confirmPassword);
     }
     return writer;
@@ -941,13 +1004,13 @@ export const ReqAdminUserEditPassword: MessageFns<ReqAdminUserEditPassword> = {
 
   toJSON(message: ReqAdminUserEditPassword): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       obj.password = message.password;
     }
-    if (message.confirmPassword !== "") {
+    if (message.confirmPassword !== undefined && message.confirmPassword !== "") {
       obj.confirmPassword = message.confirmPassword;
     }
     return obj;
@@ -1014,10 +1077,10 @@ function createBaseReqAdminUserEnabled(): ReqAdminUserEnabled {
 
 export const ReqAdminUserEnabled: MessageFns<ReqAdminUserEnabled> = {
   encode(message: ReqAdminUserEnabled, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(16).bool(message.enabled);
     }
     return writer;
@@ -1064,10 +1127,10 @@ export const ReqAdminUserEnabled: MessageFns<ReqAdminUserEnabled> = {
 
   toJSON(message: ReqAdminUserEnabled): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -1133,7 +1196,7 @@ function createBaseReqAdminUserDelete(): ReqAdminUserDelete {
 
 export const ReqAdminUserDelete: MessageFns<ReqAdminUserDelete> = {
   encode(message: ReqAdminUserDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
     return writer;
@@ -1169,7 +1232,7 @@ export const ReqAdminUserDelete: MessageFns<ReqAdminUserDelete> = {
 
   toJSON(message: ReqAdminUserDelete): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
     return obj;
@@ -1234,14 +1297,16 @@ function createBaseReqAdminUserBindRoles(): ReqAdminUserBindRoles {
 
 export const ReqAdminUserBindRoles: MessageFns<ReqAdminUserBindRoles> = {
   encode(message: ReqAdminUserBindRoles, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
-    writer.uint32(18).fork();
-    for (const v of message.roleIds) {
-      writer.int32(v);
+    if (message.roleIds !== undefined && message.roleIds.length !== 0) {
+      writer.uint32(18).fork();
+      for (const v of message.roleIds) {
+        writer.int32(v);
+      }
+      writer.join();
     }
-    writer.join();
     return writer;
   },
 
@@ -1262,7 +1327,7 @@ export const ReqAdminUserBindRoles: MessageFns<ReqAdminUserBindRoles> = {
         }
         case 2: {
           if (tag === 16) {
-            message.roleIds.push(reader.int32());
+            message.roleIds!.push(reader.int32());
 
             continue;
           }
@@ -1270,7 +1335,7 @@ export const ReqAdminUserBindRoles: MessageFns<ReqAdminUserBindRoles> = {
           if (tag === 18) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.roleIds.push(reader.int32());
+              message.roleIds!.push(reader.int32());
             }
 
             continue;
@@ -1296,7 +1361,7 @@ export const ReqAdminUserBindRoles: MessageFns<ReqAdminUserBindRoles> = {
 
   toJSON(message: ReqAdminUserBindRoles): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
     if (message.roleIds?.length) {

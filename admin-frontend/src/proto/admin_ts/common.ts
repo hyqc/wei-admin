@@ -10,73 +10,105 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 export const protobufPackage = "admin";
 
 export interface RespCode {
-  code: number;
-  msg: string;
-  reason: string;
+  code?: number | undefined;
+  msg?: string | undefined;
+  reason?: string | undefined;
 }
 
 export interface ReqListBase {
   /** 分页偏移量 */
-  pageSize: number;
+  pageSize?:
+    | number
+    | undefined;
   /** 页码 */
-  pageNum: number;
+  pageNum?:
+    | number
+    | undefined;
   /** 排序字段 */
-  sortField: string;
+  sortField?:
+    | string
+    | undefined;
   /** 排序值 */
-  sortType: string;
+  sortType?:
+    | string
+    | undefined;
   /** 0：全部 1：启用 2：禁用 */
-  enabled: number;
+  enabled?:
+    | number
+    | undefined;
   /** 查询开始时间戳秒 */
-  createStartTime: number;
+  createStartTime?:
+    | number
+    | undefined;
   /** 查询结束时间戳秒 */
-  createEndTime: number;
+  createEndTime?: number | undefined;
 }
 
 /** 接口列表返回结构 */
 export interface ApiItem {
-  id: number;
-  path: string;
-  key: string;
-  name: string;
-  enabled: boolean;
-  permissionId: number;
-  createdAt: string;
-  updatedAt: string;
+  id?: number | undefined;
+  path?: string | undefined;
+  key?: string | undefined;
+  name?: string | undefined;
+  enabled?: boolean | undefined;
+  permissionId?: number | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 /** 账号列表返回结构 */
 export interface AdminUserListItem {
   /** 管理员ID */
-  adminId: number;
+  adminId?:
+    | number
+    | undefined;
   /** 账号名称 */
-  username: string;
+  username?:
+    | string
+    | undefined;
   /** 昵称 */
-  nickname: string;
+  nickname?:
+    | string
+    | undefined;
   /** 邮箱 */
-  email: string;
+  email?:
+    | string
+    | undefined;
   /** 头像 */
-  avatar: string;
+  avatar?:
+    | string
+    | undefined;
   /** 登录次数 */
-  loginTotal: number;
+  loginTotal?:
+    | number
+    | undefined;
   /** 上次登录IP */
-  lastLoginIp: string;
+  lastLoginIp?:
+    | string
+    | undefined;
   /** 上次登录时间 */
-  lastLoginTime: string;
+  lastLoginTime?:
+    | string
+    | undefined;
   /** 是否启用 */
-  isEnabled: boolean;
+  isEnabled?:
+    | boolean
+    | undefined;
   /** 创建时间 */
-  createdAt: string;
+  createdAt?:
+    | string
+    | undefined;
   /** 更新时间 */
-  updatedAt: string;
-  roles: AdminUserRoleItem[];
-  isEnabledButtonDisabled: boolean;
+  updatedAt?: string | undefined;
+  roles?: AdminUserRoleItem[] | undefined;
+  isEnabledButtonDisabled?: boolean | undefined;
 }
 
 /** 账号角色列表 */
 export interface AdminUserRoleItem {
   /** 角色ID */
-  roleId: number;
-  roleName: string;
+  roleId?: number | undefined;
+  roleName?: string | undefined;
 }
 
 function createBaseRespCode(): RespCode {
@@ -85,13 +117,13 @@ function createBaseRespCode(): RespCode {
 
 export const RespCode: MessageFns<RespCode> = {
   encode(message: RespCode, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.code !== 0) {
+    if (message.code !== undefined && message.code !== 0) {
       writer.uint32(8).int32(message.code);
     }
-    if (message.msg !== "") {
+    if (message.msg !== undefined && message.msg !== "") {
       writer.uint32(18).string(message.msg);
     }
-    if (message.reason !== "") {
+    if (message.reason !== undefined && message.reason !== "") {
       writer.uint32(26).string(message.reason);
     }
     return writer;
@@ -147,13 +179,13 @@ export const RespCode: MessageFns<RespCode> = {
 
   toJSON(message: RespCode): unknown {
     const obj: any = {};
-    if (message.code !== 0) {
+    if (message.code !== undefined && message.code !== 0) {
       obj.code = Math.round(message.code);
     }
-    if (message.msg !== "") {
+    if (message.msg !== undefined && message.msg !== "") {
       obj.msg = message.msg;
     }
-    if (message.reason !== "") {
+    if (message.reason !== undefined && message.reason !== "") {
       obj.reason = message.reason;
     }
     return obj;
@@ -177,25 +209,25 @@ function createBaseReqListBase(): ReqListBase {
 
 export const ReqListBase: MessageFns<ReqListBase> = {
   encode(message: ReqListBase, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.pageSize !== 0) {
+    if (message.pageSize !== undefined && message.pageSize !== 0) {
       writer.uint32(8).int32(message.pageSize);
     }
-    if (message.pageNum !== 0) {
+    if (message.pageNum !== undefined && message.pageNum !== 0) {
       writer.uint32(16).int32(message.pageNum);
     }
-    if (message.sortField !== "") {
+    if (message.sortField !== undefined && message.sortField !== "") {
       writer.uint32(26).string(message.sortField);
     }
-    if (message.sortType !== "") {
+    if (message.sortType !== undefined && message.sortType !== "") {
       writer.uint32(34).string(message.sortType);
     }
-    if (message.enabled !== 0) {
+    if (message.enabled !== undefined && message.enabled !== 0) {
       writer.uint32(40).int32(message.enabled);
     }
-    if (message.createStartTime !== 0) {
+    if (message.createStartTime !== undefined && message.createStartTime !== 0) {
       writer.uint32(48).int64(message.createStartTime);
     }
-    if (message.createEndTime !== 0) {
+    if (message.createEndTime !== undefined && message.createEndTime !== 0) {
       writer.uint32(56).int64(message.createEndTime);
     }
     return writer;
@@ -287,25 +319,25 @@ export const ReqListBase: MessageFns<ReqListBase> = {
 
   toJSON(message: ReqListBase): unknown {
     const obj: any = {};
-    if (message.pageSize !== 0) {
+    if (message.pageSize !== undefined && message.pageSize !== 0) {
       obj.pageSize = Math.round(message.pageSize);
     }
-    if (message.pageNum !== 0) {
+    if (message.pageNum !== undefined && message.pageNum !== 0) {
       obj.pageNum = Math.round(message.pageNum);
     }
-    if (message.sortField !== "") {
+    if (message.sortField !== undefined && message.sortField !== "") {
       obj.sortField = message.sortField;
     }
-    if (message.sortType !== "") {
+    if (message.sortType !== undefined && message.sortType !== "") {
       obj.sortType = message.sortType;
     }
-    if (message.enabled !== 0) {
+    if (message.enabled !== undefined && message.enabled !== 0) {
       obj.enabled = Math.round(message.enabled);
     }
-    if (message.createStartTime !== 0) {
+    if (message.createStartTime !== undefined && message.createStartTime !== 0) {
       obj.createStartTime = Math.round(message.createStartTime);
     }
-    if (message.createEndTime !== 0) {
+    if (message.createEndTime !== undefined && message.createEndTime !== 0) {
       obj.createEndTime = Math.round(message.createEndTime);
     }
     return obj;
@@ -333,28 +365,28 @@ function createBaseApiItem(): ApiItem {
 
 export const ApiItem: MessageFns<ApiItem> = {
   encode(message: ApiItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(18).string(message.path);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(40).bool(message.enabled);
     }
-    if (message.permissionId !== 0) {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
       writer.uint32(48).int32(message.permissionId);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(58).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(66).string(message.updatedAt);
     }
     return writer;
@@ -455,28 +487,28 @@ export const ApiItem: MessageFns<ApiItem> = {
 
   toJSON(message: ApiItem): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.permissionId !== 0) {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
       obj.permissionId = Math.round(message.permissionId);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;
@@ -519,43 +551,45 @@ function createBaseAdminUserListItem(): AdminUserListItem {
 
 export const AdminUserListItem: MessageFns<AdminUserListItem> = {
   encode(message: AdminUserListItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       writer.uint32(18).string(message.username);
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       writer.uint32(26).string(message.nickname);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       writer.uint32(34).string(message.email);
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       writer.uint32(42).string(message.avatar);
     }
-    if (message.loginTotal !== 0) {
+    if (message.loginTotal !== undefined && message.loginTotal !== 0) {
       writer.uint32(48).int32(message.loginTotal);
     }
-    if (message.lastLoginIp !== "") {
+    if (message.lastLoginIp !== undefined && message.lastLoginIp !== "") {
       writer.uint32(58).string(message.lastLoginIp);
     }
-    if (message.lastLoginTime !== "") {
+    if (message.lastLoginTime !== undefined && message.lastLoginTime !== "") {
       writer.uint32(66).string(message.lastLoginTime);
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       writer.uint32(72).bool(message.isEnabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(82).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(90).string(message.updatedAt);
     }
-    for (const v of message.roles) {
-      AdminUserRoleItem.encode(v!, writer.uint32(98).fork()).join();
+    if (message.roles !== undefined && message.roles.length !== 0) {
+      for (const v of message.roles) {
+        AdminUserRoleItem.encode(v!, writer.uint32(98).fork()).join();
+      }
     }
-    if (message.isEnabledButtonDisabled !== false) {
+    if (message.isEnabledButtonDisabled !== undefined && message.isEnabledButtonDisabled !== false) {
       writer.uint32(104).bool(message.isEnabledButtonDisabled);
     }
     return writer;
@@ -661,7 +695,10 @@ export const AdminUserListItem: MessageFns<AdminUserListItem> = {
             break;
           }
 
-          message.roles.push(AdminUserRoleItem.decode(reader, reader.uint32()));
+          const el = AdminUserRoleItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.roles!.push(el);
+          }
           continue;
         }
         case 13: {
@@ -703,43 +740,43 @@ export const AdminUserListItem: MessageFns<AdminUserListItem> = {
 
   toJSON(message: AdminUserListItem): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       obj.username = message.username;
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       obj.nickname = message.nickname;
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       obj.email = message.email;
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       obj.avatar = message.avatar;
     }
-    if (message.loginTotal !== 0) {
+    if (message.loginTotal !== undefined && message.loginTotal !== 0) {
       obj.loginTotal = Math.round(message.loginTotal);
     }
-    if (message.lastLoginIp !== "") {
+    if (message.lastLoginIp !== undefined && message.lastLoginIp !== "") {
       obj.lastLoginIp = message.lastLoginIp;
     }
-    if (message.lastLoginTime !== "") {
+    if (message.lastLoginTime !== undefined && message.lastLoginTime !== "") {
       obj.lastLoginTime = message.lastLoginTime;
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       obj.isEnabled = message.isEnabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     if (message.roles?.length) {
       obj.roles = message.roles.map((e) => AdminUserRoleItem.toJSON(e));
     }
-    if (message.isEnabledButtonDisabled !== false) {
+    if (message.isEnabledButtonDisabled !== undefined && message.isEnabledButtonDisabled !== false) {
       obj.isEnabledButtonDisabled = message.isEnabledButtonDisabled;
     }
     return obj;
@@ -773,10 +810,10 @@ function createBaseAdminUserRoleItem(): AdminUserRoleItem {
 
 export const AdminUserRoleItem: MessageFns<AdminUserRoleItem> = {
   encode(message: AdminUserRoleItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.roleId !== 0) {
+    if (message.roleId !== undefined && message.roleId !== 0) {
       writer.uint32(8).int32(message.roleId);
     }
-    if (message.roleName !== "") {
+    if (message.roleName !== undefined && message.roleName !== "") {
       writer.uint32(18).string(message.roleName);
     }
     return writer;
@@ -823,10 +860,10 @@ export const AdminUserRoleItem: MessageFns<AdminUserRoleItem> = {
 
   toJSON(message: AdminUserRoleItem): unknown {
     const obj: any = {};
-    if (message.roleId !== 0) {
+    if (message.roleId !== undefined && message.roleId !== 0) {
       obj.roleId = Math.round(message.roleId);
     }
-    if (message.roleName !== "") {
+    if (message.roleName !== undefined && message.roleName !== "") {
       obj.roleName = message.roleName;
     }
     return obj;

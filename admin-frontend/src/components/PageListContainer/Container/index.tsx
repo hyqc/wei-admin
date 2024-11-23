@@ -6,13 +6,13 @@ import { useModel } from 'umi';
 export type ContentType = {
   wrapperStyle?: React.CSSProperties;
   cardStyle?: React.CSSProperties;
+  children?: React.ReactNode;
 };
 
 const Content: React.FC<ContentType> = (props: any) => {
   const { wrapperStyle } = props;
   const { initialState } = useModel('@@initialState');
   const menuMap = initialState?.menuData || {};
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const pathname = path(location.pathname);
   let canAccessLocalMenu = true
   if(menuMap[pathname]!==undefined){

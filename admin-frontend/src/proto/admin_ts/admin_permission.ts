@@ -12,40 +12,58 @@ export const protobufPackage = "admin";
 
 /** 权限列表 */
 export interface ReqPermissionList {
-  base:
+  base?:
     | ReqListBase
     | undefined;
   /** 菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 权限唯一标识符 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 权限名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 权限类型 */
-  type: string;
+  type?: string | undefined;
 }
 
 export interface RespPermissionListData {
-  total: number;
-  list: PermissionListItem[];
+  total?: number | undefined;
+  list?: PermissionListItem[] | undefined;
 }
 
 /** 创建权限 */
 export interface ReqPermissionAdd {
   /** 权限对应的菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 权限唯一标识符 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 权限名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 权限描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 权限类型 */
-  type: string;
+  type?:
+    | string
+    | undefined;
   /** 重定向地址 */
-  redirect: string;
+  redirect?:
+    | string
+    | undefined;
   /** 是否启用 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespPermissionAddData {
@@ -54,31 +72,45 @@ export interface RespPermissionAddData {
 /** 权限详情 */
 export interface ReqPermissionInfo {
   /** 权限ID */
-  id: number;
+  id?: number | undefined;
 }
 
 export interface RespPermissionInfoData {
-  data: PermissionInfo | undefined;
+  data?: PermissionInfo | undefined;
 }
 
 /** 编辑权限 */
 export interface ReqPermissionEdit {
   /** 权限ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 权限对应的菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 权限唯一标识符 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 权限名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 权限描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 权限类型 */
-  type: string;
+  type?:
+    | string
+    | undefined;
   /** 重定向地址 */
-  redirect: string;
+  redirect?:
+    | string
+    | undefined;
   /** 是否启用 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespPermissionEditData {
@@ -87,9 +119,11 @@ export interface RespPermissionEditData {
 /** 启用禁用权限 */
 export interface ReqPermissionEnable {
   /** 权限ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespPermissionEnableData {
@@ -98,7 +132,7 @@ export interface RespPermissionEnableData {
 /** 删除权限 */
 export interface ReqPermissionDelete {
   /** 权限ID */
-  id: number;
+  id?: number | undefined;
 }
 
 export interface RespPermissionDeleteData {
@@ -107,9 +141,11 @@ export interface RespPermissionDeleteData {
 /** 权限绑定接口 */
 export interface ReqPermissionBindApis {
   /** 权限ID */
-  permissionId: number;
+  permissionId?:
+    | number
+    | undefined;
   /** 接口ID列表 */
-  apiIds: number[];
+  apiIds?: number[] | undefined;
 }
 
 export interface RespPermissionBindApisData {
@@ -118,9 +154,11 @@ export interface RespPermissionBindApisData {
 /** 绑定权限菜单 */
 export interface ReqPermissionBindMenu {
   /** 菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 菜单对应的权限ID列表 */
-  permissions: ReqPermissionAdd[];
+  permissions?: ReqPermissionAdd[] | undefined;
 }
 
 export interface RespPermissionBindMenuData {
@@ -132,81 +170,139 @@ export interface RespPermissionBindMenuData {
  */
 export interface PermissionListItem {
   /** 权限ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 权限对应的菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 菜单名称 */
-  menuName: string;
+  menuName?:
+    | string
+    | undefined;
   /** 菜单路由 */
-  menuPath: string;
+  menuPath?:
+    | string
+    | undefined;
   /** 接口列表 */
-  apis: ApiItem[];
+  apis?:
+    | ApiItem[]
+    | undefined;
   /** 权限唯一标识符 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 权限名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 权限描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 权限类型 */
-  type: string;
+  type?:
+    | string
+    | undefined;
   /** 权限类型 */
-  typeText: string;
+  typeText?:
+    | string
+    | undefined;
   /** 是否启用 */
-  enabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  enabled?: boolean | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 /** 权限接口列表 */
 export interface PermissionApiItem {
   /** 权限ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 权限键名 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 权限类型 */
-  type: string;
+  type?:
+    | string
+    | undefined;
   /** 权限类型 */
-  typeText: string;
+  typeText?:
+    | string
+    | undefined;
   /** 权限名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 接口列表 */
-  apis: ApiItem[];
+  apis?:
+    | ApiItem[]
+    | undefined;
   /** 是否启用 */
-  enabled: boolean;
+  enabled?:
+    | boolean
+    | undefined;
   /** 权限描述 */
-  describe: string;
+  describe?: string | undefined;
 }
 
 /** 权限详情 */
 export interface PermissionInfo {
   /** 权限ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 权限对应的菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 菜单名称 */
-  menuName: string;
+  menuName?:
+    | string
+    | undefined;
   /** 菜单路由 */
-  menuPath: string;
+  menuPath?:
+    | string
+    | undefined;
   /** 接口列表 */
-  apis: ApiItem[];
+  apis?:
+    | ApiItem[]
+    | undefined;
   /** 权限唯一标识符 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 权限名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 权限描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 权限类型 */
-  type: string;
+  type?:
+    | string
+    | undefined;
   /** 权限类型 */
-  typeText: string;
+  typeText?:
+    | string
+    | undefined;
   /** 重定向地址 */
-  redirect: string;
+  redirect?:
+    | string
+    | undefined;
   /** 是否启用 */
-  enabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  enabled?: boolean | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 function createBaseReqPermissionList(): ReqPermissionList {
@@ -218,16 +314,16 @@ export const ReqPermissionList: MessageFns<ReqPermissionList> = {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(16).int32(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       writer.uint32(42).string(message.type);
     }
     return writer;
@@ -304,16 +400,16 @@ export const ReqPermissionList: MessageFns<ReqPermissionList> = {
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       obj.type = message.type;
     }
     return obj;
@@ -341,11 +437,13 @@ function createBaseRespPermissionListData(): RespPermissionListData {
 
 export const RespPermissionListData: MessageFns<RespPermissionListData> = {
   encode(message: RespPermissionListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
-    for (const v of message.list) {
-      PermissionListItem.encode(v!, writer.uint32(18).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        PermissionListItem.encode(v!, writer.uint32(18).fork()).join();
+      }
     }
     return writer;
   },
@@ -370,7 +468,10 @@ export const RespPermissionListData: MessageFns<RespPermissionListData> = {
             break;
           }
 
-          message.list.push(PermissionListItem.decode(reader, reader.uint32()));
+          const el = PermissionListItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -391,7 +492,7 @@ export const RespPermissionListData: MessageFns<RespPermissionListData> = {
 
   toJSON(message: RespPermissionListData): unknown {
     const obj: any = {};
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
     }
     if (message.list?.length) {
@@ -417,25 +518,25 @@ function createBaseReqPermissionAdd(): ReqPermissionAdd {
 
 export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
   encode(message: ReqPermissionAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(16).int32(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(42).string(message.describe);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       writer.uint32(50).string(message.type);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(58).string(message.redirect);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(64).bool(message.enabled);
     }
     return writer;
@@ -527,25 +628,25 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
 
   toJSON(message: ReqPermissionAdd): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       obj.type = message.type;
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -616,7 +717,7 @@ function createBaseReqPermissionInfo(): ReqPermissionInfo {
 
 export const ReqPermissionInfo: MessageFns<ReqPermissionInfo> = {
   encode(message: ReqPermissionInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
@@ -652,7 +753,7 @@ export const ReqPermissionInfo: MessageFns<ReqPermissionInfo> = {
 
   toJSON(message: ReqPermissionInfo): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     return obj;
@@ -734,28 +835,28 @@ function createBaseReqPermissionEdit(): ReqPermissionEdit {
 
 export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
   encode(message: ReqPermissionEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(16).int32(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(42).string(message.describe);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       writer.uint32(50).string(message.type);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(58).string(message.redirect);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(64).bool(message.enabled);
     }
     return writer;
@@ -856,28 +957,28 @@ export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
 
   toJSON(message: ReqPermissionEdit): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       obj.type = message.type;
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -949,10 +1050,10 @@ function createBaseReqPermissionEnable(): ReqPermissionEnable {
 
 export const ReqPermissionEnable: MessageFns<ReqPermissionEnable> = {
   encode(message: ReqPermissionEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(16).bool(message.enabled);
     }
     return writer;
@@ -999,10 +1100,10 @@ export const ReqPermissionEnable: MessageFns<ReqPermissionEnable> = {
 
   toJSON(message: ReqPermissionEnable): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -1068,7 +1169,7 @@ function createBaseReqPermissionDelete(): ReqPermissionDelete {
 
 export const ReqPermissionDelete: MessageFns<ReqPermissionDelete> = {
   encode(message: ReqPermissionDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
@@ -1104,7 +1205,7 @@ export const ReqPermissionDelete: MessageFns<ReqPermissionDelete> = {
 
   toJSON(message: ReqPermissionDelete): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     return obj;
@@ -1169,14 +1270,16 @@ function createBaseReqPermissionBindApis(): ReqPermissionBindApis {
 
 export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
   encode(message: ReqPermissionBindApis, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.permissionId !== 0) {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
       writer.uint32(8).int32(message.permissionId);
     }
-    writer.uint32(18).fork();
-    for (const v of message.apiIds) {
-      writer.int32(v);
+    if (message.apiIds !== undefined && message.apiIds.length !== 0) {
+      writer.uint32(18).fork();
+      for (const v of message.apiIds) {
+        writer.int32(v);
+      }
+      writer.join();
     }
-    writer.join();
     return writer;
   },
 
@@ -1197,7 +1300,7 @@ export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
         }
         case 2: {
           if (tag === 16) {
-            message.apiIds.push(reader.int32());
+            message.apiIds!.push(reader.int32());
 
             continue;
           }
@@ -1205,7 +1308,7 @@ export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
           if (tag === 18) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.apiIds.push(reader.int32());
+              message.apiIds!.push(reader.int32());
             }
 
             continue;
@@ -1231,7 +1334,7 @@ export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
 
   toJSON(message: ReqPermissionBindApis): unknown {
     const obj: any = {};
-    if (message.permissionId !== 0) {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
       obj.permissionId = Math.round(message.permissionId);
     }
     if (message.apiIds?.length) {
@@ -1300,11 +1403,13 @@ function createBaseReqPermissionBindMenu(): ReqPermissionBindMenu {
 
 export const ReqPermissionBindMenu: MessageFns<ReqPermissionBindMenu> = {
   encode(message: ReqPermissionBindMenu, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
-    for (const v of message.permissions) {
-      ReqPermissionAdd.encode(v!, writer.uint32(18).fork()).join();
+    if (message.permissions !== undefined && message.permissions.length !== 0) {
+      for (const v of message.permissions) {
+        ReqPermissionAdd.encode(v!, writer.uint32(18).fork()).join();
+      }
     }
     return writer;
   },
@@ -1329,7 +1434,10 @@ export const ReqPermissionBindMenu: MessageFns<ReqPermissionBindMenu> = {
             break;
           }
 
-          message.permissions.push(ReqPermissionAdd.decode(reader, reader.uint32()));
+          const el = ReqPermissionAdd.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.permissions!.push(el);
+          }
           continue;
         }
       }
@@ -1352,7 +1460,7 @@ export const ReqPermissionBindMenu: MessageFns<ReqPermissionBindMenu> = {
 
   toJSON(message: ReqPermissionBindMenu): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
     if (message.permissions?.length) {
@@ -1435,43 +1543,45 @@ function createBasePermissionListItem(): PermissionListItem {
 
 export const PermissionListItem: MessageFns<PermissionListItem> = {
   encode(message: PermissionListItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(16).int32(message.menuId);
     }
-    if (message.menuName !== "") {
+    if (message.menuName !== undefined && message.menuName !== "") {
       writer.uint32(26).string(message.menuName);
     }
-    if (message.menuPath !== "") {
+    if (message.menuPath !== undefined && message.menuPath !== "") {
       writer.uint32(34).string(message.menuPath);
     }
-    for (const v of message.apis) {
-      ApiItem.encode(v!, writer.uint32(42).fork()).join();
+    if (message.apis !== undefined && message.apis.length !== 0) {
+      for (const v of message.apis) {
+        ApiItem.encode(v!, writer.uint32(42).fork()).join();
+      }
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(50).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(58).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(66).string(message.describe);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       writer.uint32(74).string(message.type);
     }
-    if (message.typeText !== "") {
+    if (message.typeText !== undefined && message.typeText !== "") {
       writer.uint32(82).string(message.typeText);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(88).bool(message.enabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(98).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(106).string(message.updatedAt);
     }
     return writer;
@@ -1521,7 +1631,10 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
             break;
           }
 
-          message.apis.push(ApiItem.decode(reader, reader.uint32()));
+          const el = ApiItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.apis!.push(el);
+          }
           continue;
         }
         case 6: {
@@ -1617,43 +1730,43 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
 
   toJSON(message: PermissionListItem): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.menuName !== "") {
+    if (message.menuName !== undefined && message.menuName !== "") {
       obj.menuName = message.menuName;
     }
-    if (message.menuPath !== "") {
+    if (message.menuPath !== undefined && message.menuPath !== "") {
       obj.menuPath = message.menuPath;
     }
     if (message.apis?.length) {
       obj.apis = message.apis.map((e) => ApiItem.toJSON(e));
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       obj.type = message.type;
     }
-    if (message.typeText !== "") {
+    if (message.typeText !== undefined && message.typeText !== "") {
       obj.typeText = message.typeText;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;
@@ -1687,31 +1800,33 @@ function createBasePermissionApiItem(): PermissionApiItem {
 
 export const PermissionApiItem: MessageFns<PermissionApiItem> = {
   encode(message: PermissionApiItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(16).int32(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       writer.uint32(34).string(message.type);
     }
-    if (message.typeText !== "") {
+    if (message.typeText !== undefined && message.typeText !== "") {
       writer.uint32(42).string(message.typeText);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(50).string(message.name);
     }
-    for (const v of message.apis) {
-      ApiItem.encode(v!, writer.uint32(58).fork()).join();
+    if (message.apis !== undefined && message.apis.length !== 0) {
+      for (const v of message.apis) {
+        ApiItem.encode(v!, writer.uint32(58).fork()).join();
+      }
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(64).bool(message.enabled);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(74).string(message.describe);
     }
     return writer;
@@ -1777,7 +1892,10 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
             break;
           }
 
-          message.apis.push(ApiItem.decode(reader, reader.uint32()));
+          const el = ApiItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.apis!.push(el);
+          }
           continue;
         }
         case 8: {
@@ -1821,31 +1939,31 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
 
   toJSON(message: PermissionApiItem): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       obj.type = message.type;
     }
-    if (message.typeText !== "") {
+    if (message.typeText !== undefined && message.typeText !== "") {
       obj.typeText = message.typeText;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
     if (message.apis?.length) {
       obj.apis = message.apis.map((e) => ApiItem.toJSON(e));
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
     return obj;
@@ -1890,46 +2008,48 @@ function createBasePermissionInfo(): PermissionInfo {
 
 export const PermissionInfo: MessageFns<PermissionInfo> = {
   encode(message: PermissionInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(16).int32(message.menuId);
     }
-    if (message.menuName !== "") {
+    if (message.menuName !== undefined && message.menuName !== "") {
       writer.uint32(26).string(message.menuName);
     }
-    if (message.menuPath !== "") {
+    if (message.menuPath !== undefined && message.menuPath !== "") {
       writer.uint32(34).string(message.menuPath);
     }
-    for (const v of message.apis) {
-      ApiItem.encode(v!, writer.uint32(42).fork()).join();
+    if (message.apis !== undefined && message.apis.length !== 0) {
+      for (const v of message.apis) {
+        ApiItem.encode(v!, writer.uint32(42).fork()).join();
+      }
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(50).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(58).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(66).string(message.describe);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       writer.uint32(74).string(message.type);
     }
-    if (message.typeText !== "") {
+    if (message.typeText !== undefined && message.typeText !== "") {
       writer.uint32(82).string(message.typeText);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(90).string(message.redirect);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(96).bool(message.enabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(106).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(114).string(message.updatedAt);
     }
     return writer;
@@ -1979,7 +2099,10 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
             break;
           }
 
-          message.apis.push(ApiItem.decode(reader, reader.uint32()));
+          const el = ApiItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.apis!.push(el);
+          }
           continue;
         }
         case 6: {
@@ -2084,46 +2207,46 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
 
   toJSON(message: PermissionInfo): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.menuName !== "") {
+    if (message.menuName !== undefined && message.menuName !== "") {
       obj.menuName = message.menuName;
     }
-    if (message.menuPath !== "") {
+    if (message.menuPath !== undefined && message.menuPath !== "") {
       obj.menuPath = message.menuPath;
     }
     if (message.apis?.length) {
       obj.apis = message.apis.map((e) => ApiItem.toJSON(e));
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.type !== "") {
+    if (message.type !== undefined && message.type !== "") {
       obj.type = message.type;
     }
-    if (message.typeText !== "") {
+    if (message.typeText !== undefined && message.typeText !== "") {
       obj.typeText = message.typeText;
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;

@@ -10,4 +10,4 @@ cp -f ../admin-backend/third_party/google/*/* ./src/proto/admin_proto/google/pro
 
 cd ./src/proto/admin_proto
 
-protoc  --plugin=`where protoc-gen-ts_proto | grep proto$` --ts_proto_out=../admin_ts *.proto  
+protoc  --plugin=`where protoc-gen-ts_proto | grep proto$` --ts_proto_opt=useOptionals=all --ts_proto_out=../admin_ts *.proto  

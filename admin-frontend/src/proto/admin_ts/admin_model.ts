@@ -10,57 +10,57 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 export const protobufPackage = "admin";
 
 export interface AdminRoleModel {
-  id: number;
-  name: string;
-  describe: string;
-  modifyAdminId: number;
-  createAdminId: number;
-  isEnabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  id?: number | undefined;
+  name?: string | undefined;
+  describe?: string | undefined;
+  modifyAdminId?: number | undefined;
+  createAdminId?: number | undefined;
+  isEnabled?: boolean | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 export interface AdminMenuModel {
-  id: number;
-  parentId: number;
-  path: string;
-  name: string;
-  key: string;
-  describe: string;
-  icon: string;
-  sort: number;
-  redirect: string;
-  component: string;
-  isHideInMenu: boolean;
-  isHideChildrenInMenu: boolean;
-  isEnabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  id?: number | undefined;
+  parentId?: number | undefined;
+  path?: string | undefined;
+  name?: string | undefined;
+  key?: string | undefined;
+  describe?: string | undefined;
+  icon?: string | undefined;
+  sort?: number | undefined;
+  redirect?: string | undefined;
+  component?: string | undefined;
+  isHideInMenu?: boolean | undefined;
+  isHideChildrenInMenu?: boolean | undefined;
+  isEnabled?: boolean | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 export interface AdminApiModel {
-  id: number;
-  path: string;
-  key: string;
-  name: string;
-  describe: string;
-  isEnabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  id?: number | undefined;
+  path?: string | undefined;
+  key?: string | undefined;
+  name?: string | undefined;
+  describe?: string | undefined;
+  isEnabled?: boolean | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 export interface AdminUserModel {
-  id: number;
-  username: string;
-  nickname: string;
-  email: string;
-  avatar: string;
-  loginTotal: number;
-  lastLoginIp: string;
-  lastLoginTime: string;
-  isEnabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  id?: number | undefined;
+  username?: string | undefined;
+  nickname?: string | undefined;
+  email?: string | undefined;
+  avatar?: string | undefined;
+  loginTotal?: number | undefined;
+  lastLoginIp?: string | undefined;
+  lastLoginTime?: string | undefined;
+  isEnabled?: boolean | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 function createBaseAdminRoleModel(): AdminRoleModel {
@@ -78,28 +78,28 @@ function createBaseAdminRoleModel(): AdminRoleModel {
 
 export const AdminRoleModel: MessageFns<AdminRoleModel> = {
   encode(message: AdminRoleModel, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(26).string(message.describe);
     }
-    if (message.modifyAdminId !== 0) {
+    if (message.modifyAdminId !== undefined && message.modifyAdminId !== 0) {
       writer.uint32(32).int32(message.modifyAdminId);
     }
-    if (message.createAdminId !== 0) {
+    if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       writer.uint32(40).int32(message.createAdminId);
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       writer.uint32(48).bool(message.isEnabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(58).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(66).string(message.updatedAt);
     }
     return writer;
@@ -200,28 +200,28 @@ export const AdminRoleModel: MessageFns<AdminRoleModel> = {
 
   toJSON(message: AdminRoleModel): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.modifyAdminId !== 0) {
+    if (message.modifyAdminId !== undefined && message.modifyAdminId !== 0) {
       obj.modifyAdminId = Math.round(message.modifyAdminId);
     }
-    if (message.createAdminId !== 0) {
+    if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       obj.createAdminId = Math.round(message.createAdminId);
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       obj.isEnabled = message.isEnabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;
@@ -266,49 +266,49 @@ function createBaseAdminMenuModel(): AdminMenuModel {
 
 export const AdminMenuModel: MessageFns<AdminMenuModel> = {
   encode(message: AdminMenuModel, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       writer.uint32(16).int32(message.parentId);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(26).string(message.path);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(42).string(message.key);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(50).string(message.describe);
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       writer.uint32(58).string(message.icon);
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       writer.uint32(64).int32(message.sort);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(74).string(message.redirect);
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       writer.uint32(82).string(message.component);
     }
-    if (message.isHideInMenu !== false) {
+    if (message.isHideInMenu !== undefined && message.isHideInMenu !== false) {
       writer.uint32(88).bool(message.isHideInMenu);
     }
-    if (message.isHideChildrenInMenu !== false) {
+    if (message.isHideChildrenInMenu !== undefined && message.isHideChildrenInMenu !== false) {
       writer.uint32(96).bool(message.isHideChildrenInMenu);
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       writer.uint32(104).bool(message.isEnabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(114).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(122).string(message.updatedAt);
     }
     return writer;
@@ -474,49 +474,49 @@ export const AdminMenuModel: MessageFns<AdminMenuModel> = {
 
   toJSON(message: AdminMenuModel): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       obj.parentId = Math.round(message.parentId);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       obj.icon = message.icon;
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       obj.sort = Math.round(message.sort);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       obj.component = message.component;
     }
-    if (message.isHideInMenu !== false) {
+    if (message.isHideInMenu !== undefined && message.isHideInMenu !== false) {
       obj.isHideInMenu = message.isHideInMenu;
     }
-    if (message.isHideChildrenInMenu !== false) {
+    if (message.isHideChildrenInMenu !== undefined && message.isHideChildrenInMenu !== false) {
       obj.isHideChildrenInMenu = message.isHideChildrenInMenu;
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       obj.isEnabled = message.isEnabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;
@@ -552,28 +552,28 @@ function createBaseAdminApiModel(): AdminApiModel {
 
 export const AdminApiModel: MessageFns<AdminApiModel> = {
   encode(message: AdminApiModel, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(18).string(message.path);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(42).string(message.describe);
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       writer.uint32(48).bool(message.isEnabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(58).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(66).string(message.updatedAt);
     }
     return writer;
@@ -674,28 +674,28 @@ export const AdminApiModel: MessageFns<AdminApiModel> = {
 
   toJSON(message: AdminApiModel): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       obj.isEnabled = message.isEnabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;
@@ -736,37 +736,37 @@ function createBaseAdminUserModel(): AdminUserModel {
 
 export const AdminUserModel: MessageFns<AdminUserModel> = {
   encode(message: AdminUserModel, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       writer.uint32(18).string(message.username);
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       writer.uint32(26).string(message.nickname);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       writer.uint32(34).string(message.email);
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       writer.uint32(42).string(message.avatar);
     }
-    if (message.loginTotal !== 0) {
+    if (message.loginTotal !== undefined && message.loginTotal !== 0) {
       writer.uint32(48).int32(message.loginTotal);
     }
-    if (message.lastLoginIp !== "") {
+    if (message.lastLoginIp !== undefined && message.lastLoginIp !== "") {
       writer.uint32(58).string(message.lastLoginIp);
     }
-    if (message.lastLoginTime !== "") {
+    if (message.lastLoginTime !== undefined && message.lastLoginTime !== "") {
       writer.uint32(66).string(message.lastLoginTime);
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       writer.uint32(72).bool(message.isEnabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(82).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(90).string(message.updatedAt);
     }
     return writer;
@@ -894,37 +894,37 @@ export const AdminUserModel: MessageFns<AdminUserModel> = {
 
   toJSON(message: AdminUserModel): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       obj.username = message.username;
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       obj.nickname = message.nickname;
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       obj.email = message.email;
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       obj.avatar = message.avatar;
     }
-    if (message.loginTotal !== 0) {
+    if (message.loginTotal !== undefined && message.loginTotal !== 0) {
       obj.loginTotal = Math.round(message.loginTotal);
     }
-    if (message.lastLoginIp !== "") {
+    if (message.lastLoginIp !== undefined && message.lastLoginIp !== "") {
       obj.lastLoginIp = message.lastLoginIp;
     }
-    if (message.lastLoginTime !== "") {
+    if (message.lastLoginTime !== undefined && message.lastLoginTime !== "") {
       obj.lastLoginTime = message.lastLoginTime;
     }
-    if (message.isEnabled !== false) {
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
       obj.isEnabled = message.isEnabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;

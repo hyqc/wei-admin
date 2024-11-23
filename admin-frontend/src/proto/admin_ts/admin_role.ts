@@ -12,30 +12,38 @@ export const protobufPackage = "admin";
 
 /** 角色列表 */
 export interface ReqRoleList {
-  base:
+  base?:
     | ReqListBase
     | undefined;
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 角色名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 启用状态，0：全部，1：启用，2：禁用 */
-  enabled: number;
+  enabled?: number | undefined;
 }
 
 export interface RespRoleListData {
-  total: number;
-  list: RoleItem[];
+  total?: number | undefined;
+  list?: RoleItem[] | undefined;
 }
 
 /** 有效角色列表 */
 export interface ReqRoleAll {
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 角色名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 启用状态，0：全部，1：启用，2：禁用 */
-  enabled: number;
+  enabled?: number | undefined;
 }
 
 export interface RespRoleAll {
@@ -44,11 +52,15 @@ export interface RespRoleAll {
 /** 创建角色 */
 export interface ReqRoleAdd {
   /** 角色名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 角色描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 启用状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RoleAddResp {
@@ -57,42 +69,66 @@ export interface RoleAddResp {
 /** 角色详情 */
 export interface ReqRoleInfo {
   /** 角色ID */
-  id: number;
+  id?: number | undefined;
 }
 
 export interface RespRoleInfoData {
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 角色名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 角色描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 启用状态 */
-  enabled: boolean;
+  enabled?:
+    | boolean
+    | undefined;
   /** 创建人ID */
-  createAdminId: number;
+  createAdminId?:
+    | number
+    | undefined;
   /** 创建人名称 */
-  createAdminName: string;
+  createAdminName?:
+    | string
+    | undefined;
   /** 修改人ID */
-  modifyAdminId: number;
+  modifyAdminId?:
+    | number
+    | undefined;
   /** 修改人名称 */
-  modifyAdminName: string;
+  modifyAdminName?:
+    | string
+    | undefined;
   /** 创建时间 */
-  createdAt: string;
+  createdAt?:
+    | string
+    | undefined;
   /** 更新时间 */
-  updatedAt: string;
+  updatedAt?: string | undefined;
 }
 
 /** 编辑角色 */
 export interface ReqRoleEdit {
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 角色名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 角色描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 启用状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespRoleEditData {
@@ -101,9 +137,11 @@ export interface RespRoleEditData {
 /** 启用禁用角色 */
 export interface ReqRoleEnable {
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 启用状态 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespRoleEnableData {
@@ -112,9 +150,11 @@ export interface RespRoleEnableData {
 /** 删除角色 */
 export interface ReqRoleDelete {
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 权限ID集合 */
-  permissionIds: number[];
+  permissionIds?: number[] | undefined;
 }
 
 export interface RespRoleDeleteData {
@@ -123,9 +163,11 @@ export interface RespRoleDeleteData {
 /** 角色绑定权限 */
 export interface ReqRoleBindPermissions {
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 权限ID集合 */
-  permissionIds: number[];
+  permissionIds?: number[] | undefined;
 }
 
 export interface RespRoleBindPermissionsData {
@@ -134,11 +176,11 @@ export interface RespRoleBindPermissionsData {
 /** 角色权限列表 */
 export interface ReqRolePermissions {
   /** 角色ID */
-  id: number;
+  id?: number | undefined;
 }
 
 export interface RespRolePermissionsData {
-  list: RolePermissionItem[];
+  list?: RolePermissionItem[] | undefined;
 }
 
 /**
@@ -147,35 +189,55 @@ export interface RespRolePermissionsData {
  */
 export interface RoleItem {
   /** 角色ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 角色名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 角色名称 */
-  roleName: string;
+  roleName?:
+    | string
+    | undefined;
   /** 创建人ID */
-  createAdminId: number;
+  createAdminId?:
+    | number
+    | undefined;
   /** 创建人名称 */
-  createAdminName: string;
+  createAdminName?:
+    | string
+    | undefined;
   /** 是否启用 */
-  enabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  enabled?: boolean | undefined;
+  createdAt?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 /** 角色权限 */
 export interface RolePermissionItem {
   /** 权限ID */
-  roleId: number;
+  roleId?:
+    | number
+    | undefined;
   /** 权限ID */
-  permissionId: number;
+  permissionId?:
+    | number
+    | undefined;
   /** 权限名称 */
-  permissionName: string;
+  permissionName?:
+    | string
+    | undefined;
   /** 权限键名 */
-  permissionKey: string;
+  permissionKey?:
+    | string
+    | undefined;
   /** 权限类型 */
-  permissionType: string;
+  permissionType?:
+    | string
+    | undefined;
   /** 权限类型 */
-  permissionTypeText: string;
+  permissionTypeText?: string | undefined;
 }
 
 function createBaseReqRoleList(): ReqRoleList {
@@ -187,13 +249,13 @@ export const ReqRoleList: MessageFns<ReqRoleList> = {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(16).int32(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.enabled !== 0) {
+    if (message.enabled !== undefined && message.enabled !== 0) {
       writer.uint32(32).int32(message.enabled);
     }
     return writer;
@@ -261,13 +323,13 @@ export const ReqRoleList: MessageFns<ReqRoleList> = {
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
     }
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.enabled !== 0) {
+    if (message.enabled !== undefined && message.enabled !== 0) {
       obj.enabled = Math.round(message.enabled);
     }
     return obj;
@@ -294,11 +356,13 @@ function createBaseRespRoleListData(): RespRoleListData {
 
 export const RespRoleListData: MessageFns<RespRoleListData> = {
   encode(message: RespRoleListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
-    for (const v of message.list) {
-      RoleItem.encode(v!, writer.uint32(18).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        RoleItem.encode(v!, writer.uint32(18).fork()).join();
+      }
     }
     return writer;
   },
@@ -323,7 +387,10 @@ export const RespRoleListData: MessageFns<RespRoleListData> = {
             break;
           }
 
-          message.list.push(RoleItem.decode(reader, reader.uint32()));
+          const el = RoleItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -344,7 +411,7 @@ export const RespRoleListData: MessageFns<RespRoleListData> = {
 
   toJSON(message: RespRoleListData): unknown {
     const obj: any = {};
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
     }
     if (message.list?.length) {
@@ -370,13 +437,13 @@ function createBaseReqRoleAll(): ReqRoleAll {
 
 export const ReqRoleAll: MessageFns<ReqRoleAll> = {
   encode(message: ReqRoleAll, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.enabled !== 0) {
+    if (message.enabled !== undefined && message.enabled !== 0) {
       writer.uint32(24).int32(message.enabled);
     }
     return writer;
@@ -432,13 +499,13 @@ export const ReqRoleAll: MessageFns<ReqRoleAll> = {
 
   toJSON(message: ReqRoleAll): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.enabled !== 0) {
+    if (message.enabled !== undefined && message.enabled !== 0) {
       obj.enabled = Math.round(message.enabled);
     }
     return obj;
@@ -505,13 +572,13 @@ function createBaseReqRoleAdd(): ReqRoleAdd {
 
 export const ReqRoleAdd: MessageFns<ReqRoleAdd> = {
   encode(message: ReqRoleAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(18).string(message.describe);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(24).bool(message.enabled);
     }
     return writer;
@@ -567,13 +634,13 @@ export const ReqRoleAdd: MessageFns<ReqRoleAdd> = {
 
   toJSON(message: ReqRoleAdd): unknown {
     const obj: any = {};
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -640,7 +707,7 @@ function createBaseReqRoleInfo(): ReqRoleInfo {
 
 export const ReqRoleInfo: MessageFns<ReqRoleInfo> = {
   encode(message: ReqRoleInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
@@ -676,7 +743,7 @@ export const ReqRoleInfo: MessageFns<ReqRoleInfo> = {
 
   toJSON(message: ReqRoleInfo): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     return obj;
@@ -709,34 +776,34 @@ function createBaseRespRoleInfoData(): RespRoleInfoData {
 
 export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
   encode(message: RespRoleInfoData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(26).string(message.describe);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(32).bool(message.enabled);
     }
-    if (message.createAdminId !== 0) {
+    if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       writer.uint32(40).int32(message.createAdminId);
     }
-    if (message.createAdminName !== "") {
+    if (message.createAdminName !== undefined && message.createAdminName !== "") {
       writer.uint32(50).string(message.createAdminName);
     }
-    if (message.modifyAdminId !== 0) {
+    if (message.modifyAdminId !== undefined && message.modifyAdminId !== 0) {
       writer.uint32(56).int32(message.modifyAdminId);
     }
-    if (message.modifyAdminName !== "") {
+    if (message.modifyAdminName !== undefined && message.modifyAdminName !== "") {
       writer.uint32(66).string(message.modifyAdminName);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(74).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(82).string(message.updatedAt);
     }
     return writer;
@@ -855,34 +922,34 @@ export const RespRoleInfoData: MessageFns<RespRoleInfoData> = {
 
   toJSON(message: RespRoleInfoData): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.createAdminId !== 0) {
+    if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       obj.createAdminId = Math.round(message.createAdminId);
     }
-    if (message.createAdminName !== "") {
+    if (message.createAdminName !== undefined && message.createAdminName !== "") {
       obj.createAdminName = message.createAdminName;
     }
-    if (message.modifyAdminId !== 0) {
+    if (message.modifyAdminId !== undefined && message.modifyAdminId !== 0) {
       obj.modifyAdminId = Math.round(message.modifyAdminId);
     }
-    if (message.modifyAdminName !== "") {
+    if (message.modifyAdminName !== undefined && message.modifyAdminName !== "") {
       obj.modifyAdminName = message.modifyAdminName;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;
@@ -913,16 +980,16 @@ function createBaseReqRoleEdit(): ReqRoleEdit {
 
 export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
   encode(message: ReqRoleEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(26).string(message.describe);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(32).bool(message.enabled);
     }
     return writer;
@@ -987,16 +1054,16 @@ export const ReqRoleEdit: MessageFns<ReqRoleEdit> = {
 
   toJSON(message: ReqRoleEdit): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -1064,10 +1131,10 @@ function createBaseReqRoleEnable(): ReqRoleEnable {
 
 export const ReqRoleEnable: MessageFns<ReqRoleEnable> = {
   encode(message: ReqRoleEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(16).bool(message.enabled);
     }
     return writer;
@@ -1114,10 +1181,10 @@ export const ReqRoleEnable: MessageFns<ReqRoleEnable> = {
 
   toJSON(message: ReqRoleEnable): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -1183,14 +1250,16 @@ function createBaseReqRoleDelete(): ReqRoleDelete {
 
 export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
   encode(message: ReqRoleDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    writer.uint32(18).fork();
-    for (const v of message.permissionIds) {
-      writer.int32(v);
+    if (message.permissionIds !== undefined && message.permissionIds.length !== 0) {
+      writer.uint32(18).fork();
+      for (const v of message.permissionIds) {
+        writer.int32(v);
+      }
+      writer.join();
     }
-    writer.join();
     return writer;
   },
 
@@ -1211,7 +1280,7 @@ export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
         }
         case 2: {
           if (tag === 16) {
-            message.permissionIds.push(reader.int32());
+            message.permissionIds!.push(reader.int32());
 
             continue;
           }
@@ -1219,7 +1288,7 @@ export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
           if (tag === 18) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.permissionIds.push(reader.int32());
+              message.permissionIds!.push(reader.int32());
             }
 
             continue;
@@ -1247,7 +1316,7 @@ export const ReqRoleDelete: MessageFns<ReqRoleDelete> = {
 
   toJSON(message: ReqRoleDelete): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     if (message.permissionIds?.length) {
@@ -1316,14 +1385,16 @@ function createBaseReqRoleBindPermissions(): ReqRoleBindPermissions {
 
 export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
   encode(message: ReqRoleBindPermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    writer.uint32(18).fork();
-    for (const v of message.permissionIds) {
-      writer.int32(v);
+    if (message.permissionIds !== undefined && message.permissionIds.length !== 0) {
+      writer.uint32(18).fork();
+      for (const v of message.permissionIds) {
+        writer.int32(v);
+      }
+      writer.join();
     }
-    writer.join();
     return writer;
   },
 
@@ -1344,7 +1415,7 @@ export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
         }
         case 2: {
           if (tag === 16) {
-            message.permissionIds.push(reader.int32());
+            message.permissionIds!.push(reader.int32());
 
             continue;
           }
@@ -1352,7 +1423,7 @@ export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
           if (tag === 18) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.permissionIds.push(reader.int32());
+              message.permissionIds!.push(reader.int32());
             }
 
             continue;
@@ -1380,7 +1451,7 @@ export const ReqRoleBindPermissions: MessageFns<ReqRoleBindPermissions> = {
 
   toJSON(message: ReqRoleBindPermissions): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     if (message.permissionIds?.length) {
@@ -1449,7 +1520,7 @@ function createBaseReqRolePermissions(): ReqRolePermissions {
 
 export const ReqRolePermissions: MessageFns<ReqRolePermissions> = {
   encode(message: ReqRolePermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
@@ -1485,7 +1556,7 @@ export const ReqRolePermissions: MessageFns<ReqRolePermissions> = {
 
   toJSON(message: ReqRolePermissions): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
     return obj;
@@ -1507,8 +1578,10 @@ function createBaseRespRolePermissionsData(): RespRolePermissionsData {
 
 export const RespRolePermissionsData: MessageFns<RespRolePermissionsData> = {
   encode(message: RespRolePermissionsData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.list) {
-      RolePermissionItem.encode(v!, writer.uint32(10).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        RolePermissionItem.encode(v!, writer.uint32(10).fork()).join();
+      }
     }
     return writer;
   },
@@ -1525,7 +1598,10 @@ export const RespRolePermissionsData: MessageFns<RespRolePermissionsData> = {
             break;
           }
 
-          message.list.push(RolePermissionItem.decode(reader, reader.uint32()));
+          const el = RolePermissionItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -1576,28 +1652,28 @@ function createBaseRoleItem(): RoleItem {
 
 export const RoleItem: MessageFns<RoleItem> = {
   encode(message: RoleItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.roleName !== "") {
+    if (message.roleName !== undefined && message.roleName !== "") {
       writer.uint32(26).string(message.roleName);
     }
-    if (message.createAdminId !== 0) {
+    if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       writer.uint32(32).int32(message.createAdminId);
     }
-    if (message.createAdminName !== "") {
+    if (message.createAdminName !== undefined && message.createAdminName !== "") {
       writer.uint32(42).string(message.createAdminName);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(48).bool(message.enabled);
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(58).string(message.createdAt);
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(66).string(message.updatedAt);
     }
     return writer;
@@ -1698,28 +1774,28 @@ export const RoleItem: MessageFns<RoleItem> = {
 
   toJSON(message: RoleItem): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.roleName !== "") {
+    if (message.roleName !== undefined && message.roleName !== "") {
       obj.roleName = message.roleName;
     }
-    if (message.createAdminId !== 0) {
+    if (message.createAdminId !== undefined && message.createAdminId !== 0) {
       obj.createAdminId = Math.round(message.createAdminId);
     }
-    if (message.createAdminName !== "") {
+    if (message.createAdminName !== undefined && message.createAdminName !== "") {
       obj.createAdminName = message.createAdminName;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.createdAt !== "") {
+    if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== "") {
+    if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
     return obj;
@@ -1755,22 +1831,22 @@ function createBaseRolePermissionItem(): RolePermissionItem {
 
 export const RolePermissionItem: MessageFns<RolePermissionItem> = {
   encode(message: RolePermissionItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.roleId !== 0) {
+    if (message.roleId !== undefined && message.roleId !== 0) {
       writer.uint32(8).int32(message.roleId);
     }
-    if (message.permissionId !== 0) {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
       writer.uint32(16).int32(message.permissionId);
     }
-    if (message.permissionName !== "") {
+    if (message.permissionName !== undefined && message.permissionName !== "") {
       writer.uint32(26).string(message.permissionName);
     }
-    if (message.permissionKey !== "") {
+    if (message.permissionKey !== undefined && message.permissionKey !== "") {
       writer.uint32(34).string(message.permissionKey);
     }
-    if (message.permissionType !== "") {
+    if (message.permissionType !== undefined && message.permissionType !== "") {
       writer.uint32(42).string(message.permissionType);
     }
-    if (message.permissionTypeText !== "") {
+    if (message.permissionTypeText !== undefined && message.permissionTypeText !== "") {
       writer.uint32(50).string(message.permissionTypeText);
     }
     return writer;
@@ -1853,22 +1929,22 @@ export const RolePermissionItem: MessageFns<RolePermissionItem> = {
 
   toJSON(message: RolePermissionItem): unknown {
     const obj: any = {};
-    if (message.roleId !== 0) {
+    if (message.roleId !== undefined && message.roleId !== 0) {
       obj.roleId = Math.round(message.roleId);
     }
-    if (message.permissionId !== 0) {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
       obj.permissionId = Math.round(message.permissionId);
     }
-    if (message.permissionName !== "") {
+    if (message.permissionName !== undefined && message.permissionName !== "") {
       obj.permissionName = message.permissionName;
     }
-    if (message.permissionKey !== "") {
+    if (message.permissionKey !== undefined && message.permissionKey !== "") {
       obj.permissionKey = message.permissionKey;
     }
-    if (message.permissionType !== "") {
+    if (message.permissionType !== undefined && message.permissionType !== "") {
       obj.permissionType = message.permissionType;
     }
-    if (message.permissionTypeText !== "") {
+    if (message.permissionTypeText !== undefined && message.permissionTypeText !== "") {
       obj.permissionTypeText = message.permissionTypeText;
     }
     return obj;

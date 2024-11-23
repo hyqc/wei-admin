@@ -14,33 +14,39 @@ export const protobufPackage = "admin";
 /** 登录 */
 export interface ReqLogin {
   /** 用户名 */
-  username: string;
+  username?:
+    | string
+    | undefined;
   /** 密码 */
-  password: string;
+  password?: string | undefined;
 }
 
 export interface RespLoginData {
-  data: AdminInfo | undefined;
+  data?: AdminInfo | undefined;
 }
 
 /** 账号详情 */
 export interface ReqAccountInfo {
   /** 刷新token */
-  refreshToken: boolean;
+  refreshToken?: boolean | undefined;
 }
 
 export interface RespAccountInfoData {
-  data: AdminInfo | undefined;
+  data?: AdminInfo | undefined;
 }
 
 /** 账号编辑 */
 export interface ReqAccountEdit {
   /** 名称 */
-  nickname: string;
+  nickname?:
+    | string
+    | undefined;
   /** 头像 */
-  avatar: string;
+  avatar?:
+    | string
+    | undefined;
   /** 邮箱 */
-  email: string;
+  email?: string | undefined;
 }
 
 export interface RespAccountEditData {
@@ -49,11 +55,15 @@ export interface RespAccountEditData {
 /** 修改密码 */
 export interface ReqAccountPasswordEdit {
   /** 旧密码 */
-  oldPassword: string;
+  oldPassword?:
+    | string
+    | undefined;
   /** 新密码 */
-  password: string;
+  password?:
+    | string
+    | undefined;
   /** 确认密码 */
-  confirmPassword: string;
+  confirmPassword?: string | undefined;
 }
 
 export interface RespAccountPasswordEditData {
@@ -62,7 +72,7 @@ export interface RespAccountPasswordEditData {
 /** 个人权限 */
 export interface ReqAccountPermission {
   /** 菜单ID */
-  menuId: number;
+  menuId?: number | undefined;
 }
 
 export interface RespAccountPermissionData {
@@ -70,27 +80,27 @@ export interface RespAccountPermissionData {
 
 /** 管理员账号详情 */
 export interface AdminInfo {
-  adminId: number;
-  username: string;
-  nickname: string;
-  avatar: string;
-  email: string;
-  createTime: string;
-  modifyTime: string;
-  lastLoginTime: string;
-  lastLoginIp: string;
-  loginTotal: number;
-  enabled: boolean;
-  token: string;
-  expire: number;
-  menus: { [key: string]: MenuItem };
-  permissions: { [key: string]: string };
-  roles: AdminUserRoleItem[];
+  adminId?: number | undefined;
+  username?: string | undefined;
+  nickname?: string | undefined;
+  avatar?: string | undefined;
+  email?: string | undefined;
+  createTime?: string | undefined;
+  modifyTime?: string | undefined;
+  lastLoginTime?: string | undefined;
+  lastLoginIp?: string | undefined;
+  loginTotal?: number | undefined;
+  enabled?: boolean | undefined;
+  token?: string | undefined;
+  expire?: number | undefined;
+  menus?: { [key: string]: MenuItem } | undefined;
+  permissions?: { [key: string]: string } | undefined;
+  roles?: AdminUserRoleItem[] | undefined;
 }
 
 export interface AdminInfo_MenusEntry {
   key: string;
-  value: MenuItem | undefined;
+  value?: MenuItem | undefined;
 }
 
 export interface AdminInfo_PermissionsEntry {
@@ -104,10 +114,10 @@ function createBaseReqLogin(): ReqLogin {
 
 export const ReqLogin: MessageFns<ReqLogin> = {
   encode(message: ReqLogin, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       writer.uint32(10).string(message.username);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       writer.uint32(18).string(message.password);
     }
     return writer;
@@ -154,10 +164,10 @@ export const ReqLogin: MessageFns<ReqLogin> = {
 
   toJSON(message: ReqLogin): unknown {
     const obj: any = {};
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       obj.username = message.username;
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       obj.password = message.password;
     }
     return obj;
@@ -238,7 +248,7 @@ function createBaseReqAccountInfo(): ReqAccountInfo {
 
 export const ReqAccountInfo: MessageFns<ReqAccountInfo> = {
   encode(message: ReqAccountInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.refreshToken !== false) {
+    if (message.refreshToken !== undefined && message.refreshToken !== false) {
       writer.uint32(8).bool(message.refreshToken);
     }
     return writer;
@@ -274,7 +284,7 @@ export const ReqAccountInfo: MessageFns<ReqAccountInfo> = {
 
   toJSON(message: ReqAccountInfo): unknown {
     const obj: any = {};
-    if (message.refreshToken !== false) {
+    if (message.refreshToken !== undefined && message.refreshToken !== false) {
       obj.refreshToken = message.refreshToken;
     }
     return obj;
@@ -354,13 +364,13 @@ function createBaseReqAccountEdit(): ReqAccountEdit {
 
 export const ReqAccountEdit: MessageFns<ReqAccountEdit> = {
   encode(message: ReqAccountEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       writer.uint32(10).string(message.nickname);
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       writer.uint32(18).string(message.avatar);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       writer.uint32(26).string(message.email);
     }
     return writer;
@@ -416,13 +426,13 @@ export const ReqAccountEdit: MessageFns<ReqAccountEdit> = {
 
   toJSON(message: ReqAccountEdit): unknown {
     const obj: any = {};
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       obj.nickname = message.nickname;
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       obj.avatar = message.avatar;
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       obj.email = message.email;
     }
     return obj;
@@ -489,13 +499,13 @@ function createBaseReqAccountPasswordEdit(): ReqAccountPasswordEdit {
 
 export const ReqAccountPasswordEdit: MessageFns<ReqAccountPasswordEdit> = {
   encode(message: ReqAccountPasswordEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.oldPassword !== "") {
+    if (message.oldPassword !== undefined && message.oldPassword !== "") {
       writer.uint32(10).string(message.oldPassword);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       writer.uint32(18).string(message.password);
     }
-    if (message.confirmPassword !== "") {
+    if (message.confirmPassword !== undefined && message.confirmPassword !== "") {
       writer.uint32(26).string(message.confirmPassword);
     }
     return writer;
@@ -551,13 +561,13 @@ export const ReqAccountPasswordEdit: MessageFns<ReqAccountPasswordEdit> = {
 
   toJSON(message: ReqAccountPasswordEdit): unknown {
     const obj: any = {};
-    if (message.oldPassword !== "") {
+    if (message.oldPassword !== undefined && message.oldPassword !== "") {
       obj.oldPassword = message.oldPassword;
     }
-    if (message.password !== "") {
+    if (message.password !== undefined && message.password !== "") {
       obj.password = message.password;
     }
-    if (message.confirmPassword !== "") {
+    if (message.confirmPassword !== undefined && message.confirmPassword !== "") {
       obj.confirmPassword = message.confirmPassword;
     }
     return obj;
@@ -624,7 +634,7 @@ function createBaseReqAccountPermission(): ReqAccountPermission {
 
 export const ReqAccountPermission: MessageFns<ReqAccountPermission> = {
   encode(message: ReqAccountPermission, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
     return writer;
@@ -660,7 +670,7 @@ export const ReqAccountPermission: MessageFns<ReqAccountPermission> = {
 
   toJSON(message: ReqAccountPermission): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
     return obj;
@@ -742,53 +752,55 @@ function createBaseAdminInfo(): AdminInfo {
 
 export const AdminInfo: MessageFns<AdminInfo> = {
   encode(message: AdminInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       writer.uint32(8).int32(message.adminId);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       writer.uint32(18).string(message.username);
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       writer.uint32(26).string(message.nickname);
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       writer.uint32(34).string(message.avatar);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       writer.uint32(42).string(message.email);
     }
-    if (message.createTime !== "") {
+    if (message.createTime !== undefined && message.createTime !== "") {
       writer.uint32(50).string(message.createTime);
     }
-    if (message.modifyTime !== "") {
+    if (message.modifyTime !== undefined && message.modifyTime !== "") {
       writer.uint32(58).string(message.modifyTime);
     }
-    if (message.lastLoginTime !== "") {
+    if (message.lastLoginTime !== undefined && message.lastLoginTime !== "") {
       writer.uint32(66).string(message.lastLoginTime);
     }
-    if (message.lastLoginIp !== "") {
+    if (message.lastLoginIp !== undefined && message.lastLoginIp !== "") {
       writer.uint32(74).string(message.lastLoginIp);
     }
-    if (message.loginTotal !== 0) {
+    if (message.loginTotal !== undefined && message.loginTotal !== 0) {
       writer.uint32(80).int32(message.loginTotal);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(88).bool(message.enabled);
     }
-    if (message.token !== "") {
+    if (message.token !== undefined && message.token !== "") {
       writer.uint32(98).string(message.token);
     }
-    if (message.expire !== 0) {
+    if (message.expire !== undefined && message.expire !== 0) {
       writer.uint32(104).int64(message.expire);
     }
-    Object.entries(message.menus).forEach(([key, value]) => {
+    Object.entries(message.menus || {}).forEach(([key, value]) => {
       AdminInfo_MenusEntry.encode({ key: key as any, value }, writer.uint32(114).fork()).join();
     });
-    Object.entries(message.permissions).forEach(([key, value]) => {
+    Object.entries(message.permissions || {}).forEach(([key, value]) => {
       AdminInfo_PermissionsEntry.encode({ key: key as any, value }, writer.uint32(122).fork()).join();
     });
-    for (const v of message.roles) {
-      AdminUserRoleItem.encode(v!, writer.uint32(130).fork()).join();
+    if (message.roles !== undefined && message.roles.length !== 0) {
+      for (const v of message.roles) {
+        AdminUserRoleItem.encode(v!, writer.uint32(130).fork()).join();
+      }
     }
     return writer;
   },
@@ -911,7 +923,7 @@ export const AdminInfo: MessageFns<AdminInfo> = {
 
           const entry14 = AdminInfo_MenusEntry.decode(reader, reader.uint32());
           if (entry14.value !== undefined) {
-            message.menus[entry14.key] = entry14.value;
+            message.menus![entry14.key] = entry14.value;
           }
           continue;
         }
@@ -922,7 +934,7 @@ export const AdminInfo: MessageFns<AdminInfo> = {
 
           const entry15 = AdminInfo_PermissionsEntry.decode(reader, reader.uint32());
           if (entry15.value !== undefined) {
-            message.permissions[entry15.key] = entry15.value;
+            message.permissions![entry15.key] = entry15.value;
           }
           continue;
         }
@@ -931,7 +943,10 @@ export const AdminInfo: MessageFns<AdminInfo> = {
             break;
           }
 
-          message.roles.push(AdminUserRoleItem.decode(reader, reader.uint32()));
+          const el = AdminUserRoleItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.roles!.push(el);
+          }
           continue;
         }
       }
@@ -976,43 +991,43 @@ export const AdminInfo: MessageFns<AdminInfo> = {
 
   toJSON(message: AdminInfo): unknown {
     const obj: any = {};
-    if (message.adminId !== 0) {
+    if (message.adminId !== undefined && message.adminId !== 0) {
       obj.adminId = Math.round(message.adminId);
     }
-    if (message.username !== "") {
+    if (message.username !== undefined && message.username !== "") {
       obj.username = message.username;
     }
-    if (message.nickname !== "") {
+    if (message.nickname !== undefined && message.nickname !== "") {
       obj.nickname = message.nickname;
     }
-    if (message.avatar !== "") {
+    if (message.avatar !== undefined && message.avatar !== "") {
       obj.avatar = message.avatar;
     }
-    if (message.email !== "") {
+    if (message.email !== undefined && message.email !== "") {
       obj.email = message.email;
     }
-    if (message.createTime !== "") {
+    if (message.createTime !== undefined && message.createTime !== "") {
       obj.createTime = message.createTime;
     }
-    if (message.modifyTime !== "") {
+    if (message.modifyTime !== undefined && message.modifyTime !== "") {
       obj.modifyTime = message.modifyTime;
     }
-    if (message.lastLoginTime !== "") {
+    if (message.lastLoginTime !== undefined && message.lastLoginTime !== "") {
       obj.lastLoginTime = message.lastLoginTime;
     }
-    if (message.lastLoginIp !== "") {
+    if (message.lastLoginIp !== undefined && message.lastLoginIp !== "") {
       obj.lastLoginIp = message.lastLoginIp;
     }
-    if (message.loginTotal !== 0) {
+    if (message.loginTotal !== undefined && message.loginTotal !== 0) {
       obj.loginTotal = Math.round(message.loginTotal);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.token !== "") {
+    if (message.token !== undefined && message.token !== "") {
       obj.token = message.token;
     }
-    if (message.expire !== 0) {
+    if (message.expire !== undefined && message.expire !== 0) {
       obj.expire = Math.round(message.expire);
     }
     if (message.menus) {

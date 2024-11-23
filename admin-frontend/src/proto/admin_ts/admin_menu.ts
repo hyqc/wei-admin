@@ -13,50 +13,78 @@ export const protobufPackage = "admin";
 
 /** 菜单列表 */
 export interface ReqMenuList {
-  base:
+  base?:
     | ReqListBase
     | undefined;
   /** 菜单键名 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 菜单路由 */
-  path: string;
+  path?:
+    | string
+    | undefined;
   /** 菜单名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 父级菜单 */
-  parentId: number;
+  parentId?: number | undefined;
 }
 
 export interface RespMenuListData {
-  total: number;
-  list: MenuItem[];
+  total?: number | undefined;
+  list?: MenuItem[] | undefined;
 }
 
 /** 创建菜单 */
 export interface ReqMenuAdd {
   /** 菜单键名 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 菜单路由 */
-  path: string;
+  path?:
+    | string
+    | undefined;
   /** 菜单名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 父级菜单 */
-  parentId: number;
+  parentId?:
+    | number
+    | undefined;
   /** 菜单描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 菜单重定向路由 */
-  redirect: string;
+  redirect?:
+    | string
+    | undefined;
   /** 菜单图标 */
-  icon: string;
+  icon?:
+    | string
+    | undefined;
   /** 是否隐藏子菜单 */
-  hideChildrenInMenu: boolean;
+  hideChildrenInMenu?:
+    | boolean
+    | undefined;
   /** 是否隐藏菜单 */
-  hideInMenu: boolean;
+  hideInMenu?:
+    | boolean
+    | undefined;
   /** 是否启用菜单 */
-  enabled: boolean;
+  enabled?:
+    | boolean
+    | undefined;
   /** 菜单排序值 */
-  sort: number;
+  sort?:
+    | number
+    | undefined;
   /** 菜单组件 */
-  component: string;
+  component?: string | undefined;
 }
 
 export interface RespMenuAddData {
@@ -65,41 +93,65 @@ export interface RespMenuAddData {
 /** 菜单想去 */
 export interface ReqMenuInfo {
   /** 菜单ID */
-  menuId: number;
+  menuId?: number | undefined;
 }
 
 export interface RespMenuInfoData {
-  data: MenuItem | undefined;
+  data?: MenuItem | undefined;
 }
 
 /** 便捷菜单 */
 export interface ReqMenuEdit {
   /** 菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 菜单键名 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 菜单路由 */
-  path: string;
+  path?:
+    | string
+    | undefined;
   /** 菜单名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 父级菜单 */
-  parentId: number;
+  parentId?:
+    | number
+    | undefined;
   /** 菜单描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 菜单重定向路由 */
-  redirect: string;
+  redirect?:
+    | string
+    | undefined;
   /** 菜单图标 */
-  icon: string;
+  icon?:
+    | string
+    | undefined;
   /** 是否隐藏子菜单 */
-  hideChildrenInMenu: boolean;
+  hideChildrenInMenu?:
+    | boolean
+    | undefined;
   /** 是否隐藏菜单 */
-  hideInMenu: boolean;
+  hideInMenu?:
+    | boolean
+    | undefined;
   /** 是否启用菜单 */
-  enabled: boolean;
+  enabled?:
+    | boolean
+    | undefined;
   /** 菜单排序值 */
-  sort: number;
+  sort?:
+    | number
+    | undefined;
   /** 菜单组件 */
-  component: string;
+  component?: string | undefined;
 }
 
 export interface RespMenuEditData {
@@ -108,9 +160,11 @@ export interface RespMenuEditData {
 /** 启用禁用菜单 */
 export interface ReqMenuEnable {
   /** 菜单ID */
-  menuId: number;
+  menuId?:
+    | number
+    | undefined;
   /** 是否启用菜单 */
-  enabled: boolean;
+  enabled?: boolean | undefined;
 }
 
 export interface RespMenuEnableData {
@@ -119,7 +173,7 @@ export interface RespMenuEnableData {
 /** 删除菜单 */
 export interface ReqMenuDelete {
   /** 菜单ID */
-  menuId: number;
+  menuId?: number | undefined;
 }
 
 export interface RespMenuDeleteData {
@@ -128,17 +182,17 @@ export interface RespMenuDeleteData {
 /** 菜单权限列表 */
 export interface ReqMenuPermissions {
   /** 菜单ID */
-  menuId: number;
+  menuId?: number | undefined;
 }
 
 export interface RespMenuPermissionsData {
-  list: MenuPermissions[];
+  list?: MenuPermissions[] | undefined;
 }
 
 /** 页面菜单列表 */
 export interface ReqMenuPages {
   /** 是否顶部插入全部 */
-  all: boolean;
+  all?: boolean | undefined;
 }
 
 /** 页面模块权限列表 */
@@ -151,59 +205,91 @@ export interface ReqMenuMode {
  */
 export interface MenuItem {
   /** 菜单唯一键 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 菜单路由 */
-  path: string;
+  path?:
+    | string
+    | undefined;
   /** 菜单名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 菜单图标 */
-  icon: string;
-  component: string;
-  authority: string;
-  hideInMenu: boolean;
-  hideChildrenInMenu: boolean;
-  routes: MenuItem[];
+  icon?: string | undefined;
+  component?: string | undefined;
+  authority?: string | undefined;
+  hideInMenu?: boolean | undefined;
+  hideChildrenInMenu?: boolean | undefined;
+  routes?: MenuItem[] | undefined;
 }
 
 /** 有效菜单树 */
 export interface MenuTreeItem {
   /** 菜单层级 */
-  level: number;
+  level?:
+    | number
+    | undefined;
   /** 菜单自增ID */
-  id: number;
+  id?:
+    | number
+    | undefined;
   /** 菜单唯一键 */
-  key: string;
+  key?:
+    | string
+    | undefined;
   /** 菜单名称 */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** 父级菜单ID */
-  parentId: number;
+  parentId?:
+    | number
+    | undefined;
   /** 菜单描述 */
-  describe: string;
+  describe?:
+    | string
+    | undefined;
   /** 菜单路径 */
-  path: string;
+  path?:
+    | string
+    | undefined;
   /** 重定向地址 */
-  redirect: string;
+  redirect?:
+    | string
+    | undefined;
   /** 组件名称 */
-  component: string;
+  component?:
+    | string
+    | undefined;
   /** 菜单排序 */
-  sort: number;
+  sort?:
+    | number
+    | undefined;
   /** 菜单图标 */
-  icon: string;
+  icon?:
+    | string
+    | undefined;
   /** 是否在菜单中隐藏子菜单 */
-  hideChildrenInMenu: boolean;
+  hideChildrenInMenu?:
+    | boolean
+    | undefined;
   /** 是否隐藏菜单 */
-  hideInMenu: boolean;
+  hideInMenu?:
+    | boolean
+    | undefined;
   /** 是否启用 */
-  enabled: boolean;
-  createTime: number;
-  modifyTime: number;
-  children: MenuTreeItem[];
+  enabled?: boolean | undefined;
+  createTime?: number | undefined;
+  modifyTime?: number | undefined;
+  children?: MenuTreeItem[] | undefined;
 }
 
 /** 菜单权限 */
 export interface MenuPermissions {
-  menu: MenuTreeItem | undefined;
-  permissions: PermissionApiItem[];
+  menu?: MenuTreeItem | undefined;
+  permissions?: PermissionApiItem[] | undefined;
 }
 
 function createBaseReqMenuList(): ReqMenuList {
@@ -215,16 +301,16 @@ export const ReqMenuList: MessageFns<ReqMenuList> = {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(18).string(message.key);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(26).string(message.path);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       writer.uint32(40).int32(message.parentId);
     }
     return writer;
@@ -301,16 +387,16 @@ export const ReqMenuList: MessageFns<ReqMenuList> = {
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       obj.parentId = Math.round(message.parentId);
     }
     return obj;
@@ -338,11 +424,13 @@ function createBaseRespMenuListData(): RespMenuListData {
 
 export const RespMenuListData: MessageFns<RespMenuListData> = {
   encode(message: RespMenuListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
-    for (const v of message.list) {
-      MenuItem.encode(v!, writer.uint32(18).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        MenuItem.encode(v!, writer.uint32(18).fork()).join();
+      }
     }
     return writer;
   },
@@ -367,7 +455,10 @@ export const RespMenuListData: MessageFns<RespMenuListData> = {
             break;
           }
 
-          message.list.push(MenuItem.decode(reader, reader.uint32()));
+          const el = MenuItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -388,7 +479,7 @@ export const RespMenuListData: MessageFns<RespMenuListData> = {
 
   toJSON(message: RespMenuListData): unknown {
     const obj: any = {};
-    if (message.total !== 0) {
+    if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
     }
     if (message.list?.length) {
@@ -427,40 +518,40 @@ function createBaseReqMenuAdd(): ReqMenuAdd {
 
 export const ReqMenuAdd: MessageFns<ReqMenuAdd> = {
   encode(message: ReqMenuAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(10).string(message.key);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(18).string(message.path);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       writer.uint32(32).int32(message.parentId);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(42).string(message.describe);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(50).string(message.redirect);
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       writer.uint32(58).string(message.icon);
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       writer.uint32(64).bool(message.hideChildrenInMenu);
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       writer.uint32(72).bool(message.hideInMenu);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(80).bool(message.enabled);
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       writer.uint32(88).int32(message.sort);
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       writer.uint32(98).string(message.component);
     }
     return writer;
@@ -597,40 +688,40 @@ export const ReqMenuAdd: MessageFns<ReqMenuAdd> = {
 
   toJSON(message: ReqMenuAdd): unknown {
     const obj: any = {};
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       obj.parentId = Math.round(message.parentId);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       obj.icon = message.icon;
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       obj.hideChildrenInMenu = message.hideChildrenInMenu;
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       obj.hideInMenu = message.hideInMenu;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       obj.sort = Math.round(message.sort);
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       obj.component = message.component;
     }
     return obj;
@@ -706,7 +797,7 @@ function createBaseReqMenuInfo(): ReqMenuInfo {
 
 export const ReqMenuInfo: MessageFns<ReqMenuInfo> = {
   encode(message: ReqMenuInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
     return writer;
@@ -742,7 +833,7 @@ export const ReqMenuInfo: MessageFns<ReqMenuInfo> = {
 
   toJSON(message: ReqMenuInfo): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
     return obj;
@@ -836,43 +927,43 @@ function createBaseReqMenuEdit(): ReqMenuEdit {
 
 export const ReqMenuEdit: MessageFns<ReqMenuEdit> = {
   encode(message: ReqMenuEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(18).string(message.key);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(26).string(message.path);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       writer.uint32(40).int32(message.parentId);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(50).string(message.describe);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(58).string(message.redirect);
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       writer.uint32(66).string(message.icon);
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       writer.uint32(72).bool(message.hideChildrenInMenu);
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       writer.uint32(80).bool(message.hideInMenu);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(88).bool(message.enabled);
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       writer.uint32(96).int32(message.sort);
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       writer.uint32(106).string(message.component);
     }
     return writer;
@@ -1018,43 +1109,43 @@ export const ReqMenuEdit: MessageFns<ReqMenuEdit> = {
 
   toJSON(message: ReqMenuEdit): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       obj.parentId = Math.round(message.parentId);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       obj.icon = message.icon;
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       obj.hideChildrenInMenu = message.hideChildrenInMenu;
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       obj.hideInMenu = message.hideInMenu;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       obj.sort = Math.round(message.sort);
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       obj.component = message.component;
     }
     return obj;
@@ -1131,10 +1222,10 @@ function createBaseReqMenuEnable(): ReqMenuEnable {
 
 export const ReqMenuEnable: MessageFns<ReqMenuEnable> = {
   encode(message: ReqMenuEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(16).bool(message.enabled);
     }
     return writer;
@@ -1181,10 +1272,10 @@ export const ReqMenuEnable: MessageFns<ReqMenuEnable> = {
 
   toJSON(message: ReqMenuEnable): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
     return obj;
@@ -1250,7 +1341,7 @@ function createBaseReqMenuDelete(): ReqMenuDelete {
 
 export const ReqMenuDelete: MessageFns<ReqMenuDelete> = {
   encode(message: ReqMenuDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
     return writer;
@@ -1286,7 +1377,7 @@ export const ReqMenuDelete: MessageFns<ReqMenuDelete> = {
 
   toJSON(message: ReqMenuDelete): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
     return obj;
@@ -1351,7 +1442,7 @@ function createBaseReqMenuPermissions(): ReqMenuPermissions {
 
 export const ReqMenuPermissions: MessageFns<ReqMenuPermissions> = {
   encode(message: ReqMenuPermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
     return writer;
@@ -1387,7 +1478,7 @@ export const ReqMenuPermissions: MessageFns<ReqMenuPermissions> = {
 
   toJSON(message: ReqMenuPermissions): unknown {
     const obj: any = {};
-    if (message.menuId !== 0) {
+    if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
     return obj;
@@ -1409,8 +1500,10 @@ function createBaseRespMenuPermissionsData(): RespMenuPermissionsData {
 
 export const RespMenuPermissionsData: MessageFns<RespMenuPermissionsData> = {
   encode(message: RespMenuPermissionsData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.list) {
-      MenuPermissions.encode(v!, writer.uint32(10).fork()).join();
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        MenuPermissions.encode(v!, writer.uint32(10).fork()).join();
+      }
     }
     return writer;
   },
@@ -1427,7 +1520,10 @@ export const RespMenuPermissionsData: MessageFns<RespMenuPermissionsData> = {
             break;
           }
 
-          message.list.push(MenuPermissions.decode(reader, reader.uint32()));
+          const el = MenuPermissions.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
           continue;
         }
       }
@@ -1469,7 +1565,7 @@ function createBaseReqMenuPages(): ReqMenuPages {
 
 export const ReqMenuPages: MessageFns<ReqMenuPages> = {
   encode(message: ReqMenuPages, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.all !== false) {
+    if (message.all !== undefined && message.all !== false) {
       writer.uint32(8).bool(message.all);
     }
     return writer;
@@ -1505,7 +1601,7 @@ export const ReqMenuPages: MessageFns<ReqMenuPages> = {
 
   toJSON(message: ReqMenuPages): unknown {
     const obj: any = {};
-    if (message.all !== false) {
+    if (message.all !== undefined && message.all !== false) {
       obj.all = message.all;
     }
     return obj;
@@ -1580,32 +1676,34 @@ function createBaseMenuItem(): MenuItem {
 
 export const MenuItem: MessageFns<MenuItem> = {
   encode(message: MenuItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(10).string(message.key);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(18).string(message.path);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       writer.uint32(34).string(message.icon);
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       writer.uint32(42).string(message.component);
     }
-    if (message.authority !== "") {
+    if (message.authority !== undefined && message.authority !== "") {
       writer.uint32(50).string(message.authority);
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       writer.uint32(56).bool(message.hideInMenu);
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       writer.uint32(64).bool(message.hideChildrenInMenu);
     }
-    for (const v of message.routes) {
-      MenuItem.encode(v!, writer.uint32(74).fork()).join();
+    if (message.routes !== undefined && message.routes.length !== 0) {
+      for (const v of message.routes) {
+        MenuItem.encode(v!, writer.uint32(74).fork()).join();
+      }
     }
     return writer;
   },
@@ -1686,7 +1784,10 @@ export const MenuItem: MessageFns<MenuItem> = {
             break;
           }
 
-          message.routes.push(MenuItem.decode(reader, reader.uint32()));
+          const el = MenuItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.routes!.push(el);
+          }
           continue;
         }
       }
@@ -1714,28 +1815,28 @@ export const MenuItem: MessageFns<MenuItem> = {
 
   toJSON(message: MenuItem): unknown {
     const obj: any = {};
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       obj.icon = message.icon;
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       obj.component = message.component;
     }
-    if (message.authority !== "") {
+    if (message.authority !== undefined && message.authority !== "") {
       obj.authority = message.authority;
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       obj.hideInMenu = message.hideInMenu;
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       obj.hideChildrenInMenu = message.hideChildrenInMenu;
     }
     if (message.routes?.length) {
@@ -1786,56 +1887,58 @@ function createBaseMenuTreeItem(): MenuTreeItem {
 
 export const MenuTreeItem: MessageFns<MenuTreeItem> = {
   encode(message: MenuTreeItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.level !== 0) {
+    if (message.level !== undefined && message.level !== 0) {
       writer.uint32(8).int32(message.level);
     }
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       writer.uint32(16).int32(message.id);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       writer.uint32(26).string(message.key);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       writer.uint32(40).int32(message.parentId);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       writer.uint32(50).string(message.describe);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       writer.uint32(58).string(message.path);
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(66).string(message.redirect);
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       writer.uint32(74).string(message.component);
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       writer.uint32(80).int32(message.sort);
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       writer.uint32(90).string(message.icon);
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       writer.uint32(96).bool(message.hideChildrenInMenu);
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       writer.uint32(104).bool(message.hideInMenu);
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       writer.uint32(112).bool(message.enabled);
     }
-    if (message.createTime !== 0) {
+    if (message.createTime !== undefined && message.createTime !== 0) {
       writer.uint32(120).int64(message.createTime);
     }
-    if (message.modifyTime !== 0) {
+    if (message.modifyTime !== undefined && message.modifyTime !== 0) {
       writer.uint32(128).int64(message.modifyTime);
     }
-    for (const v of message.children) {
-      MenuTreeItem.encode(v!, writer.uint32(138).fork()).join();
+    if (message.children !== undefined && message.children.length !== 0) {
+      for (const v of message.children) {
+        MenuTreeItem.encode(v!, writer.uint32(138).fork()).join();
+      }
     }
     return writer;
   },
@@ -1980,7 +2083,10 @@ export const MenuTreeItem: MessageFns<MenuTreeItem> = {
             break;
           }
 
-          message.children.push(MenuTreeItem.decode(reader, reader.uint32()));
+          const el = MenuTreeItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.children!.push(el);
+          }
           continue;
         }
       }
@@ -2018,52 +2124,52 @@ export const MenuTreeItem: MessageFns<MenuTreeItem> = {
 
   toJSON(message: MenuTreeItem): unknown {
     const obj: any = {};
-    if (message.level !== 0) {
+    if (message.level !== undefined && message.level !== 0) {
       obj.level = Math.round(message.level);
     }
-    if (message.id !== 0) {
+    if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
     }
-    if (message.name !== "") {
+    if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.parentId !== 0) {
+    if (message.parentId !== undefined && message.parentId !== 0) {
       obj.parentId = Math.round(message.parentId);
     }
-    if (message.describe !== "") {
+    if (message.describe !== undefined && message.describe !== "") {
       obj.describe = message.describe;
     }
-    if (message.path !== "") {
+    if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
     }
-    if (message.redirect !== "") {
+    if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.component !== "") {
+    if (message.component !== undefined && message.component !== "") {
       obj.component = message.component;
     }
-    if (message.sort !== 0) {
+    if (message.sort !== undefined && message.sort !== 0) {
       obj.sort = Math.round(message.sort);
     }
-    if (message.icon !== "") {
+    if (message.icon !== undefined && message.icon !== "") {
       obj.icon = message.icon;
     }
-    if (message.hideChildrenInMenu !== false) {
+    if (message.hideChildrenInMenu !== undefined && message.hideChildrenInMenu !== false) {
       obj.hideChildrenInMenu = message.hideChildrenInMenu;
     }
-    if (message.hideInMenu !== false) {
+    if (message.hideInMenu !== undefined && message.hideInMenu !== false) {
       obj.hideInMenu = message.hideInMenu;
     }
-    if (message.enabled !== false) {
+    if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
     }
-    if (message.createTime !== 0) {
+    if (message.createTime !== undefined && message.createTime !== 0) {
       obj.createTime = Math.round(message.createTime);
     }
-    if (message.modifyTime !== 0) {
+    if (message.modifyTime !== undefined && message.modifyTime !== 0) {
       obj.modifyTime = Math.round(message.modifyTime);
     }
     if (message.children?.length) {
@@ -2107,8 +2213,10 @@ export const MenuPermissions: MessageFns<MenuPermissions> = {
     if (message.menu !== undefined) {
       MenuTreeItem.encode(message.menu, writer.uint32(10).fork()).join();
     }
-    for (const v of message.permissions) {
-      PermissionApiItem.encode(v!, writer.uint32(18).fork()).join();
+    if (message.permissions !== undefined && message.permissions.length !== 0) {
+      for (const v of message.permissions) {
+        PermissionApiItem.encode(v!, writer.uint32(18).fork()).join();
+      }
     }
     return writer;
   },
@@ -2133,7 +2241,10 @@ export const MenuPermissions: MessageFns<MenuPermissions> = {
             break;
           }
 
-          message.permissions.push(PermissionApiItem.decode(reader, reader.uint32()));
+          const el = PermissionApiItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.permissions!.push(el);
+          }
           continue;
         }
       }
