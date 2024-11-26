@@ -3,13 +3,6 @@ import { APICommon } from '@/services/apis/admin/api';
 import { Form, Input, message, Modal, Switch, Upload } from 'antd';
 import { useState } from 'react';
 import { CloudUploadOutlined } from '@ant-design/icons';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
 import ImgCrop from 'antd-img-crop';
 import { AdminUserFormRules } from './common';
 import { ReqAdminUserAdd } from '@/proto/admin_ts/admin_user';
@@ -123,7 +116,7 @@ const AddModal: React.FC<AddModalPropsType> = (props) => {
           <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} />
         </Form.Item>
         <Form.Item label="头像" name="avatar" initialValue={''}>
-          <ImgCrop rotate>
+          <ImgCrop>
             <Upload
               maxCount={1}
               accept={UploadImageAccept}
