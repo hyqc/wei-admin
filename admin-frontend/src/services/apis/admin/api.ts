@@ -151,7 +151,7 @@ export const APIAdminMenus = {
     method: POST,
   },
   mode: {
-    url: '/admin/menu/mode',
+    url: '/admin/menu/modes',
     method: POST,
   },
 };

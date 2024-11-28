@@ -60,7 +60,7 @@ const DetailModal: React.FC<DetailModalPropsType> = (props) => {
           <BindPermissions
             disabled
             datasource={menuPageData}
-            permissionIds={detailData?.permissionIds}
+            permissionIds={detailData?.permissions}
           />
         </Form.Item>
       </Form>

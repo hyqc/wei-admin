@@ -4,7 +4,6 @@ import { APIAdminMenus } from './api';
 import type { ResponseBodyType } from '../types';
 import {
   ResponseAdminMenuPermissionsItemType,
-  ResponseAdminPermissionListItemType,
 } from './permission';
 
 /************************************************************/

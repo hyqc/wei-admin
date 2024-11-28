@@ -42,6 +42,7 @@ import FetchButton from '@/components/FetchButton';
 import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
 import { ReqAdminUserEnabled, ReqAdminUserList, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
 import { handlePagination } from '@/services/common/utils';
+import { DefaultPagination } from '@/components/PageContainer/Pagination';
 
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
@@ -476,11 +477,6 @@ const Admin: React.FC = () => {
             current: pageInfo.pageNum,
             pageSize: pageInfo.pageSize,
             total: pageInfo.total,
-            // showQuickJumper: true,
-            // showSizeChanger: true,
-            // pageSizeOptions: DefaultPageArray,
-            // position: ['bottomRight'],
-            // showTotal: (total) => `共 ${total} 条数据`,
             onShowSizeChange,
             ...DefaultPagination,
           }}

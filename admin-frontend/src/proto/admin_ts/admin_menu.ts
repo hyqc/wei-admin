@@ -199,6 +199,10 @@ export interface ReqMenuPages {
 export interface ReqMenuMode {
 }
 
+export interface RespMenuModeData {
+  modes?: MenuModeItem[] | undefined;
+}
+
 /**
  * ////////////////////////////////
  * 菜单
@@ -290,6 +294,52 @@ export interface MenuTreeItem {
 export interface MenuPermissions {
   menu?: MenuTreeItem | undefined;
   permissions?: PermissionApiItem[] | undefined;
+}
+
+/** 菜单模块 */
+export interface MenuModeItem {
+  /** 模块菜单ID */
+  modelId?:
+    | number
+    | undefined;
+  /** 模块菜单名称 */
+  modelName?:
+    | string
+    | undefined;
+  /** 模块下面的页面列表 */
+  pages?: MenuPageItem[] | undefined;
+}
+
+/** 模块页面 */
+export interface MenuPageItem {
+  /** 页面菜单ID */
+  pageId?:
+    | number
+    | undefined;
+  /** 页面菜单名称 */
+  pageName?:
+    | string
+    | undefined;
+  /** 页面菜单权限 */
+  permissions?: MenuPagePermissions[] | undefined;
+}
+
+/** 模块页面权限 */
+export interface MenuPagePermissions {
+  /** 权限ID */
+  permissionId?:
+    | number
+    | undefined;
+  /** 权限名称 */
+  permissionName?:
+    | string
+    | undefined;
+  /** 权限类型 */
+  permissionType?:
+    | string
+    | undefined;
+  /** 权限类型名称 */
+  permissionTypeName?: string | undefined;
 }
 
 function createBaseReqMenuList(): ReqMenuList {
@@ -1660,6 +1710,71 @@ export const ReqMenuMode: MessageFns<ReqMenuMode> = {
   },
 };
 
+function createBaseRespMenuModeData(): RespMenuModeData {
+  return { modes: [] };
+}
+
+export const RespMenuModeData: MessageFns<RespMenuModeData> = {
+  encode(message: RespMenuModeData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.modes !== undefined && message.modes.length !== 0) {
+      for (const v of message.modes) {
+        MenuModeItem.encode(v!, writer.uint32(10).fork()).join();
+      }
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RespMenuModeData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRespMenuModeData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          const el = MenuModeItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.modes!.push(el);
+          }
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RespMenuModeData {
+    return {
+      modes: globalThis.Array.isArray(object?.modes) ? object.modes.map((e: any) => MenuModeItem.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: RespMenuModeData): unknown {
+    const obj: any = {};
+    if (message.modes?.length) {
+      obj.modes = message.modes.map((e) => MenuModeItem.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RespMenuModeData>, I>>(base?: I): RespMenuModeData {
+    return RespMenuModeData.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RespMenuModeData>, I>>(object: I): RespMenuModeData {
+    const message = createBaseRespMenuModeData();
+    message.modes = object.modes?.map((e) => MenuModeItem.fromPartial(e)) || [];
+    return message;
+  },
+};
+
 function createBaseMenuItem(): MenuItem {
   return {
     key: "",
@@ -2285,6 +2400,310 @@ export const MenuPermissions: MessageFns<MenuPermissions> = {
       ? MenuTreeItem.fromPartial(object.menu)
       : undefined;
     message.permissions = object.permissions?.map((e) => PermissionApiItem.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseMenuModeItem(): MenuModeItem {
+  return { modelId: 0, modelName: "", pages: [] };
+}
+
+export const MenuModeItem: MessageFns<MenuModeItem> = {
+  encode(message: MenuModeItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.modelId !== undefined && message.modelId !== 0) {
+      writer.uint32(8).int32(message.modelId);
+    }
+    if (message.modelName !== undefined && message.modelName !== "") {
+      writer.uint32(18).string(message.modelName);
+    }
+    if (message.pages !== undefined && message.pages.length !== 0) {
+      for (const v of message.pages) {
+        MenuPageItem.encode(v!, writer.uint32(26).fork()).join();
+      }
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MenuModeItem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMenuModeItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.modelId = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.modelName = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          const el = MenuPageItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.pages!.push(el);
+          }
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MenuModeItem {
+    return {
+      modelId: isSet(object.modelId) ? globalThis.Number(object.modelId) : 0,
+      modelName: isSet(object.modelName) ? globalThis.String(object.modelName) : "",
+      pages: globalThis.Array.isArray(object?.pages) ? object.pages.map((e: any) => MenuPageItem.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: MenuModeItem): unknown {
+    const obj: any = {};
+    if (message.modelId !== undefined && message.modelId !== 0) {
+      obj.modelId = Math.round(message.modelId);
+    }
+    if (message.modelName !== undefined && message.modelName !== "") {
+      obj.modelName = message.modelName;
+    }
+    if (message.pages?.length) {
+      obj.pages = message.pages.map((e) => MenuPageItem.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MenuModeItem>, I>>(base?: I): MenuModeItem {
+    return MenuModeItem.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MenuModeItem>, I>>(object: I): MenuModeItem {
+    const message = createBaseMenuModeItem();
+    message.modelId = object.modelId ?? 0;
+    message.modelName = object.modelName ?? "";
+    message.pages = object.pages?.map((e) => MenuPageItem.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseMenuPageItem(): MenuPageItem {
+  return { pageId: 0, pageName: "", permissions: [] };
+}
+
+export const MenuPageItem: MessageFns<MenuPageItem> = {
+  encode(message: MenuPageItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.pageId !== undefined && message.pageId !== 0) {
+      writer.uint32(8).int32(message.pageId);
+    }
+    if (message.pageName !== undefined && message.pageName !== "") {
+      writer.uint32(18).string(message.pageName);
+    }
+    if (message.permissions !== undefined && message.permissions.length !== 0) {
+      for (const v of message.permissions) {
+        MenuPagePermissions.encode(v!, writer.uint32(26).fork()).join();
+      }
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MenuPageItem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMenuPageItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.pageId = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pageName = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          const el = MenuPagePermissions.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.permissions!.push(el);
+          }
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MenuPageItem {
+    return {
+      pageId: isSet(object.pageId) ? globalThis.Number(object.pageId) : 0,
+      pageName: isSet(object.pageName) ? globalThis.String(object.pageName) : "",
+      permissions: globalThis.Array.isArray(object?.permissions)
+        ? object.permissions.map((e: any) => MenuPagePermissions.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: MenuPageItem): unknown {
+    const obj: any = {};
+    if (message.pageId !== undefined && message.pageId !== 0) {
+      obj.pageId = Math.round(message.pageId);
+    }
+    if (message.pageName !== undefined && message.pageName !== "") {
+      obj.pageName = message.pageName;
+    }
+    if (message.permissions?.length) {
+      obj.permissions = message.permissions.map((e) => MenuPagePermissions.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MenuPageItem>, I>>(base?: I): MenuPageItem {
+    return MenuPageItem.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MenuPageItem>, I>>(object: I): MenuPageItem {
+    const message = createBaseMenuPageItem();
+    message.pageId = object.pageId ?? 0;
+    message.pageName = object.pageName ?? "";
+    message.permissions = object.permissions?.map((e) => MenuPagePermissions.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseMenuPagePermissions(): MenuPagePermissions {
+  return { permissionId: 0, permissionName: "", permissionType: "", permissionTypeName: "" };
+}
+
+export const MenuPagePermissions: MessageFns<MenuPagePermissions> = {
+  encode(message: MenuPagePermissions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
+      writer.uint32(8).int32(message.permissionId);
+    }
+    if (message.permissionName !== undefined && message.permissionName !== "") {
+      writer.uint32(18).string(message.permissionName);
+    }
+    if (message.permissionType !== undefined && message.permissionType !== "") {
+      writer.uint32(26).string(message.permissionType);
+    }
+    if (message.permissionTypeName !== undefined && message.permissionTypeName !== "") {
+      writer.uint32(34).string(message.permissionTypeName);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MenuPagePermissions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMenuPagePermissions();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.permissionId = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.permissionName = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.permissionType = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.permissionTypeName = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MenuPagePermissions {
+    return {
+      permissionId: isSet(object.permissionId) ? globalThis.Number(object.permissionId) : 0,
+      permissionName: isSet(object.permissionName) ? globalThis.String(object.permissionName) : "",
+      permissionType: isSet(object.permissionType) ? globalThis.String(object.permissionType) : "",
+      permissionTypeName: isSet(object.permissionTypeName) ? globalThis.String(object.permissionTypeName) : "",
+    };
+  },
+
+  toJSON(message: MenuPagePermissions): unknown {
+    const obj: any = {};
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
+      obj.permissionId = Math.round(message.permissionId);
+    }
+    if (message.permissionName !== undefined && message.permissionName !== "") {
+      obj.permissionName = message.permissionName;
+    }
+    if (message.permissionType !== undefined && message.permissionType !== "") {
+      obj.permissionType = message.permissionType;
+    }
+    if (message.permissionTypeName !== undefined && message.permissionTypeName !== "") {
+      obj.permissionTypeName = message.permissionTypeName;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MenuPagePermissions>, I>>(base?: I): MenuPagePermissions {
+    return MenuPagePermissions.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MenuPagePermissions>, I>>(object: I): MenuPagePermissions {
+    const message = createBaseMenuPagePermissions();
+    message.permissionId = object.permissionId ?? 0;
+    message.permissionName = object.permissionName ?? "";
+    message.permissionType = object.permissionType ?? "";
+    message.permissionTypeName = object.permissionTypeName ?? "";
     return message;
   },
 };

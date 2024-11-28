@@ -163,12 +163,5 @@ export default defineConfig({
     DefaultDrawerWidth: 600, // drawer default width 600px
     DefaultPageArray: [1, 5, 10, 50, 100],
     AdminId: 1, // 超管ID
-    DefaultPagination: {
-      showQuickJumper: true,
-      showSizeChanger: true,
-      pageSizeOptions: [1, 5, 10, 50, 100],
-      position: ['bottomRight'],
-      showTotal: (total: number, range: [number, number]) => (`共 ${total} 条`),
-    }
   },
 });

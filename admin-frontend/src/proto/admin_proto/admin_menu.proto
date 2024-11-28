@@ -92,6 +92,9 @@ message ReqMenuPages{
 
 // 页面模块权限列表
 message ReqMenuMode{}
+message RespMenuModeData{
+  repeated MenuModeItem modes=1;
+}
 
 //////////////////////////////////
 //菜单
@@ -151,4 +154,24 @@ message MenuTreeItem{
 message MenuPermissions{
   MenuTreeItem menu=1;
   repeated PermissionApiItem permissions=2;
+}
+
+//菜单模块
+message MenuModeItem{
+  int32 modelId=1;//模块菜单ID
+  string modelName=2;//模块菜单名称
+  repeated MenuPageItem pages=3;//模块下面的页面列表
+}
+//模块页面
+message MenuPageItem{
+  int32 pageId=1;//页面菜单ID
+  string pageName=2;//页面菜单名称
+  repeated MenuPagePermissions permissions=3;//页面菜单权限
+}
+//模块页面权限
+message MenuPagePermissions{
+  int32 permissionId=1;//权限ID
+  string permissionName=2; //权限名称
+  string permissionType=3; //权限类型
+  string permissionTypeName=4;//权限类型名称
 }

@@ -1,7 +1,5 @@
 import {
   adminRoleBind,
-  RequestAdminRoleBindPermissionsParamsType,
-  ResponseAdminRoleDetailType,
 } from '@/services/apis/admin/role';
 import { Button, Drawer, Form, Input, message, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
@@ -15,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { INPUT_STYLE } from '@/services/apis/config';
 import BindPermissions from './components/BindPermissions';
 import { ResponseAdminMenuModeTypeData } from '@/services/apis/admin/menu';
+import { RespAdminRoleInfoData } from '@/proto/admin_ts/admin_role';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -22,7 +21,7 @@ export type NoticeModalPropsType = {
 
 export type BindModalPropsType = {
   modalStatus: boolean;
-  detailData: ResponseAdminRoleDetailType;
+  detailData: RespAdminRoleInfoData;
   menuPageData: ResponseAdminMenuModeTypeData[];
   noticeModal: (data: NoticeModalPropsType) => void;
 };

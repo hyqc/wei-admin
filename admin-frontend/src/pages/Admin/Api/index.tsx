@@ -33,6 +33,7 @@ import AdminAPIAddModal, { NoticeModalPropsType } from './add';
 import AdminAPIEditModal from './edit';
 import AdminAPIDetailModal from './detail';
 import FetchButton from '@/components/FetchButton';
+import { DefaultPagination } from '@/components/PageContainer/Pagination';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -332,10 +333,8 @@ const Admin: React.FC = () => {
             current: pageInfo.pageNum,
             pageSize: pageInfo.pageSize,
             total: pageInfo.total,
-            showQuickJumper: true,
-            position: ['bottomRight'],
-            showTotal: (total) => `共 ${total} 条数据`,
             onShowSizeChange,
+            ...DefaultPagination,
           }}
         />
       </Content>

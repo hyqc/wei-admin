@@ -93,6 +93,7 @@ export interface AdminInfo {
   enabled?: boolean | undefined;
   token?: string | undefined;
   expire?: number | undefined;
+  expireDataTime?: string | undefined;
   menus?: { [key: string]: MenuItem } | undefined;
   permissions?: { [key: string]: string } | undefined;
   roles?: AdminUserRoleItem[] | undefined;
@@ -744,6 +745,7 @@ function createBaseAdminInfo(): AdminInfo {
     enabled: false,
     token: "",
     expire: 0,
+    expireDataTime: "",
     menus: {},
     permissions: {},
     roles: [],
@@ -791,15 +793,18 @@ export const AdminInfo: MessageFns<AdminInfo> = {
     if (message.expire !== undefined && message.expire !== 0) {
       writer.uint32(104).int64(message.expire);
     }
+    if (message.expireDataTime !== undefined && message.expireDataTime !== "") {
+      writer.uint32(114).string(message.expireDataTime);
+    }
     Object.entries(message.menus || {}).forEach(([key, value]) => {
-      AdminInfo_MenusEntry.encode({ key: key as any, value }, writer.uint32(114).fork()).join();
+      AdminInfo_MenusEntry.encode({ key: key as any, value }, writer.uint32(122).fork()).join();
     });
     Object.entries(message.permissions || {}).forEach(([key, value]) => {
-      AdminInfo_PermissionsEntry.encode({ key: key as any, value }, writer.uint32(122).fork()).join();
+      AdminInfo_PermissionsEntry.encode({ key: key as any, value }, writer.uint32(130).fork()).join();
     });
     if (message.roles !== undefined && message.roles.length !== 0) {
       for (const v of message.roles) {
-        AdminUserRoleItem.encode(v!, writer.uint32(130).fork()).join();
+        AdminUserRoleItem.encode(v!, writer.uint32(138).fork()).join();
       }
     }
     return writer;
@@ -921,10 +926,7 @@ export const AdminInfo: MessageFns<AdminInfo> = {
             break;
           }
 
-          const entry14 = AdminInfo_MenusEntry.decode(reader, reader.uint32());
-          if (entry14.value !== undefined) {
-            message.menus![entry14.key] = entry14.value;
-          }
+          message.expireDataTime = reader.string();
           continue;
         }
         case 15: {
@@ -932,14 +934,25 @@ export const AdminInfo: MessageFns<AdminInfo> = {
             break;
           }
 
-          const entry15 = AdminInfo_PermissionsEntry.decode(reader, reader.uint32());
+          const entry15 = AdminInfo_MenusEntry.decode(reader, reader.uint32());
           if (entry15.value !== undefined) {
-            message.permissions![entry15.key] = entry15.value;
+            message.menus![entry15.key] = entry15.value;
           }
           continue;
         }
         case 16: {
           if (tag !== 130) {
+            break;
+          }
+
+          const entry16 = AdminInfo_PermissionsEntry.decode(reader, reader.uint32());
+          if (entry16.value !== undefined) {
+            message.permissions![entry16.key] = entry16.value;
+          }
+          continue;
+        }
+        case 17: {
+          if (tag !== 138) {
             break;
           }
 
@@ -973,6 +986,7 @@ export const AdminInfo: MessageFns<AdminInfo> = {
       enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
       token: isSet(object.token) ? globalThis.String(object.token) : "",
       expire: isSet(object.expire) ? globalThis.Number(object.expire) : 0,
+      expireDataTime: isSet(object.expireDataTime) ? globalThis.String(object.expireDataTime) : "",
       menus: isObject(object.menus)
         ? Object.entries(object.menus).reduce<{ [key: string]: MenuItem }>((acc, [key, value]) => {
           acc[key] = MenuItem.fromJSON(value);
@@ -1030,6 +1044,9 @@ export const AdminInfo: MessageFns<AdminInfo> = {
     if (message.expire !== undefined && message.expire !== 0) {
       obj.expire = Math.round(message.expire);
     }
+    if (message.expireDataTime !== undefined && message.expireDataTime !== "") {
+      obj.expireDataTime = message.expireDataTime;
+    }
     if (message.menus) {
       const entries = Object.entries(message.menus);
       if (entries.length > 0) {
@@ -1072,6 +1089,7 @@ export const AdminInfo: MessageFns<AdminInfo> = {
     message.enabled = object.enabled ?? false;
     message.token = object.token ?? "";
     message.expire = object.expire ?? 0;
+    message.expireDataTime = object.expireDataTime ?? "";
     message.menus = Object.entries(object.menus ?? {}).reduce<{ [key: string]: MenuItem }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = MenuItem.fromPartial(value);
