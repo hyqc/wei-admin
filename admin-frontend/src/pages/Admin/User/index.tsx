@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Content, Search, Container } from '@/components/PageListContainer';
+import { Content, Search, Container } from '@/components/PageContainer';
 import { RowEnabledButton } from '@/components/CustomButton/enabled'
 import {
   Form,
@@ -476,12 +476,13 @@ const Admin: React.FC = () => {
             current: pageInfo.pageNum,
             pageSize: pageInfo.pageSize,
             total: pageInfo.total,
-            showQuickJumper: true,
-            showSizeChanger: true,
-            pageSizeOptions: DefaultPageArray,
-            position: ['bottomRight'],
-            showTotal: (total) => `共 ${total} 条数据`,
+            // showQuickJumper: true,
+            // showSizeChanger: true,
+            // pageSizeOptions: DefaultPageArray,
+            // position: ['bottomRight'],
+            // showTotal: (total) => `共 ${total} 条数据`,
             onShowSizeChange,
+            ...DefaultPagination,
           }}
         />
       </Content>

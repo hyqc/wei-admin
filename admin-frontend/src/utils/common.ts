@@ -40,7 +40,7 @@ export const HandleRemoteMenuIntoLocal = (
 };
 
 /**
- * 用于组件./src/components/PageListContainer/Container中判断菜单的访问权限，
+ * 用于组件./src/components/PageContainer/Container中判断菜单的访问权限，
  * config.ts中启用access，远程菜单设置access 不生效，暂未找到官方解决方案，暂用在页面容器组件中
  * 根据当前访问的路由来判断是否拥有访问权限
  */

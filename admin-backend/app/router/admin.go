@@ -47,6 +47,8 @@ func admins(g *gin.RouterGroup) {
 	{
 		menuAPI := adminCtl.MenuController{}
 		menu.POST("/list", menuAPI.List)
+		menu.POST("/modes", menuAPI.Modes)
+		menu.POST("/pages", menuAPI.Pages)
 		menu.POST("/tree", menuAPI.Tree)
 		menu.POST("/info", menuAPI.Info)
 		menu.POST("/add", menuAPI.Add)

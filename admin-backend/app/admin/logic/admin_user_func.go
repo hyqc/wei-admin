@@ -39,7 +39,9 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 			return nil, err
 		}
 		resp.Token = token
-		resp.Expire = time.Now().Unix() + seconds
+		expireDate := time.Now().Add(time.Second * time.Duration(seconds))
+		resp.Expire = expireDate.Unix()
+		resp.ExpireDataTime = utils.HandleTime2String(expireDate)
 	}
 
 	// 菜单
@@ -80,7 +82,7 @@ func createToken(adminId int32, username string, seconds int64) (string, error) 
 	}
 	token, err := core.JWTCreate(core.CustomClaimsOption{
 		AccountId:     adminId,
-		ExpireSeconds: time.Duration(seconds),
+		ExpireSeconds: seconds,
 		UUID:          jti,
 		Secret:        config.AppConfig.Server.JWT.Secret,
 	})

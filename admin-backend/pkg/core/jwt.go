@@ -13,16 +13,16 @@ type CustomClaims struct {
 }
 
 type CustomClaimsOption struct {
-	AccountId     int32         // 账号ID
-	ExpireSeconds time.Duration // 过期秒数
-	UUID          uint64        // 唯一ID
-	Secret        string        // 加密密钥
+	AccountId     int32  // 账号ID
+	ExpireSeconds int64  // 过期秒数
+	UUID          uint64 // 唯一ID
+	Secret        string // 加密密钥
 }
 
 func newCustomClaims(option CustomClaimsOption) *CustomClaims {
 	return &CustomClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(option.ExpireSeconds * time.Second)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(option.ExpireSeconds) * time.Second)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			ID:        strconv.FormatUint(option.UUID, 10),
 		},

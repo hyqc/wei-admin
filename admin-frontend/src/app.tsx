@@ -61,6 +61,7 @@ export async function getInitialState(): Promise<{
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
+    contentStyle: { minHeight: 'calc(100vh - 60px)' },
     actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
     avatarProps: {
       src: initialState?.currentUser?.avatar,
@@ -70,14 +71,14 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       },
     },
     waterMarkProps: {
-      content: initialState?.currentUser?.name,
+      content: initialState?.currentUser?.username,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
       // 如果没有登录，重定向到 login
-      if (location.pathname !== LoginPath && !IsLogin(initialState)) {
+      if (location.pathname !== LoginPath && !IsLogin()) {
         return Logout();
       }
     },
@@ -116,7 +117,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       // 支持二级菜单显示icon
       const styleSpan = { display: 'inline-block', marginRight: '2px' };
       return (
-        <Link to={menuItemProps.path}>
+        <Link to={{pathname: menuItemProps.path}}>
           <span style={styleSpan}>
             {menuItemProps.pro_layout_parentKeys &&
               menuItemProps.pro_layout_parentKeys.length > 0 &&

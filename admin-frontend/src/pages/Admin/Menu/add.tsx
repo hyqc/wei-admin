@@ -15,7 +15,7 @@ import {
 } from '@/services/apis/admin/menu';
 import MenuTreeSelect from './components/MenuTreeSelect';
 import { FORM_RULES, makeMenuSpreadTreeData, path2UpperCamelCase } from './components/common';
-import { Container, Content } from '@/components/PageListContainer';
+import { Container, Content } from '@/components/PageContainer';
 import { Gutter } from 'antd/lib/grid/row';
 import { history } from 'umi';
 

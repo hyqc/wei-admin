@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Content, Search } from '@/components/PageListContainer';
+import { Container, Content, Search } from '@/components/PageContainer';
 import {
   Form,
   Input,

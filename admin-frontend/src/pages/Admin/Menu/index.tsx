@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Content } from '@/components/PageListContainer';
+import { Container, Content } from '@/components/PageContainer';
 import { Form, Button, Space, Table, message, Popconfirm, Switch } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { ResponseBodyType } from '@/services/apis/types';

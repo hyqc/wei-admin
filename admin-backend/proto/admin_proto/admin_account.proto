@@ -64,7 +64,8 @@ message AdminInfo{
   bool enabled = 11;
   string token = 12;
   int64 expire = 13;
-  map<string, MenuItem> menus = 14;
-  map<string, string> permissions = 15;
-  repeated AdminUserRoleItem roles = 16;
+  string expireDataTime = 14;
+  map<string, MenuItem> menus = 15;
+  map<string, string> permissions = 16;
+  repeated AdminUserRoleItem roles = 17;
 }

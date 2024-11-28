@@ -6,11 +6,13 @@ import (
 	"admin/app/common"
 	"admin/code"
 	"admin/pkg/utils"
+	"admin/pkg/utils/array"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"sort"
 )
 
 type AdminMenuLogic struct {
@@ -26,6 +28,7 @@ type IAdminMenuLogic interface {
 	Delete(ctx *gin.Context, params *admin_proto.ReqMenuDelete) error
 	Permissions(ctx *gin.Context, params *admin_proto.ReqMenuPermissions) (*admin_proto.MenuPermissions, error)
 	Pages(ctx *gin.Context, params *admin_proto.ReqMenuPages) (list []*admin_proto.MenuTreeItem, err error)
+	AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeData, error)
 }
 
 func newAdminMenuLogic() IAdminMenuLogic {
@@ -232,4 +235,108 @@ func (a *AdminMenuLogic) handleItemData(item *model.AdminMenu) (data *admin_prot
 		return nil, err
 	}
 	return data, nil
+}
+
+func (a *AdminMenuLogic) AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeData, error) {
+	//获取全部权限
+	permissionList, err := dao.H.AdminPermission.FindAdministerPermissions(ctx)
+	if err != nil {
+		return nil, err
+	}
+	//获取权限对应的页面
+	pagesMap := make(map[int32]*admin_proto.MenuPageItem)
+	pageIds := make([]int32, 0, len(permissionList))
+	for _, item := range permissionList {
+		pageIds = append(pageIds, item.MenuID)
+		if _, ok := pagesMap[item.MenuID]; !ok {
+			pagesMap[item.MenuID] = &admin_proto.MenuPageItem{
+				PageId:      item.MenuID,
+				PageName:    "",
+				Permissions: make([]*admin_proto.MenuPagePermissions, 0),
+			}
+		}
+		typeName, err := common.GetPermissionTypeName(item.Type)
+		if err != nil {
+			return nil, err
+		}
+		pagesMap[item.MenuID].Permissions = append(pagesMap[item.MenuID].Permissions, &admin_proto.MenuPagePermissions{
+			PermissionId:       item.ID,
+			PermissionName:     item.Name,
+			PermissionType:     item.Type,
+			PermissionTypeName: typeName,
+		})
+	}
+	pageIds = array.Deduplicate(pageIds, true, true)
+
+	//获取所有页面信息
+	menuList, err := dao.H.AdminMenu.FindAllValid(ctx)
+	if err != nil {
+		return nil, err
+	}
+	menuMap := make(map[int32]*model.AdminMenu)
+	for _, item := range menuList {
+		menuMap[item.ID] = item
+	}
+	for _, page := range pagesMap {
+		if menu, ok := menuMap[page.PageId]; ok {
+			page.PageName = menu.Name
+		}
+	}
+	result := &admin_proto.RespMenuModeData{
+		Modes: make([]*admin_proto.MenuModeItem, 0),
+	}
+	//获取所有顶级页面
+	menuModeList := getAllTopMenusByPageIds(menuList, pageIds, pagesMap)
+	if len(menuModeList) == 0 {
+		return result, nil
+	}
+	// 获取页面的权限
+	menuModeMap := make(map[int32]*admin_proto.MenuModeItem)
+	// 合并模块
+	for _, item := range menuModeList {
+		if _, ok := menuModeMap[item.ModelId]; !ok {
+			menuModeMap[item.ModelId] = item
+		}
+		menuModeMap[item.ModelId].Pages = append(menuModeMap[item.ModelId].Pages, item.Pages...)
+	}
+	for _, item := range menuModeMap {
+		sort.Slice(item.Pages, func(i, j int) bool {
+			return item.Pages[i].PageId < item.Pages[j].PageId
+		})
+		result.Modes = append(result.Modes, item)
+	}
+	return result, nil
+}
+
+func getAllTopMenusByPageIds(menus []*model.AdminMenu, pageIds []int32, pagesMap map[int32]*admin_proto.MenuPageItem) (list []*admin_proto.MenuModeItem) {
+	for _, pageId := range pageIds {
+		item := getTopMenuByPageId(menus, pageId, pagesMap[pageId])
+		if item != nil {
+			list = append(list, item)
+		}
+	}
+	return list
+}
+
+// 根据子菜单ID获取全部的祖先菜单
+// menus 所有的菜单
+// pageId 页面菜单ID
+func getTopMenuByPageId(menus []*model.AdminMenu, pageId int32, page *admin_proto.MenuPageItem) *admin_proto.MenuModeItem {
+	for _, item := range menus {
+		if item.ID == pageId {
+			if item.ParentID == 0 {
+				rest := &admin_proto.MenuModeItem{
+					ModelId:   item.ID,
+					ModelName: item.Name,
+					Pages:     make([]*admin_proto.MenuPageItem, 0, 1),
+				}
+				if page != nil {
+					rest.Pages = append(rest.Pages, page)
+				}
+				return rest
+			}
+			return getTopMenuByPageId(menus, item.ParentID, page)
+		}
+	}
+	return nil
 }

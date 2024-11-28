@@ -1,6 +1,9 @@
 package common
 
-import "admin/proto/admin_proto"
+import (
+	"admin/proto/admin_proto"
+	"fmt"
+)
 
 // AdminPermissionEnum 管理后台权限枚举
 type AdminPermissionEnum struct {
@@ -51,4 +54,11 @@ func AdminPermissionEnumList(menuId int32, key string) (list []*admin_proto.Perm
 		})
 	}
 	return list
+}
+
+func GetPermissionTypeName(t string) (string, error) {
+	if val, ok := AdminPermissionEnumMap[t]; ok {
+		return val.Name, nil
+	}
+	return "", fmt.Errorf("未知权限类型:%v", t)
 }

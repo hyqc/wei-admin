@@ -202,7 +202,17 @@ func (MenuController) Pages(ctx *gin.Context) {
 	return
 }
 
-// Mode 页面模块权限列表
-func (MenuController) Mode(ctx *gin.Context) {
-
+// Modes 页面模块权限列表
+func (MenuController) Modes(ctx *gin.Context) {
+	msg := "MenuController.Mode"
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	data, err := logic.H.AdminMenu.AllMode(ctx)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	result.SetData(data)
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
 }

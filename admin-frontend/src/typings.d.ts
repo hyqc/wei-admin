@@ -29,3 +29,4 @@ declare const DefaultPageArray: Array<number>;
 declare const AccessAllow: string;
 declare const AccessForbidden: string;
 declare const AdminId: number;
+declare const DefaultPagination: any;

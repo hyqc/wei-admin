@@ -1,4 +1,4 @@
-import { Container, Content } from '@/components/PageListContainer';
+import { Container, Content } from '@/components/PageContainer';
 import { Tabs } from 'antd';
 import React from 'react';
 
