@@ -112,6 +112,7 @@ export interface RespAdminRoleInfoData {
   /** 更新时间 */
   updatedAt?: string | undefined;
   permissions?: RolePermissionItem[] | undefined;
+  permissionIds?: number[] | undefined;
 }
 
 /** 编辑角色 */
@@ -773,6 +774,7 @@ function createBaseRespAdminRoleInfoData(): RespAdminRoleInfoData {
     createdAt: "",
     updatedAt: "",
     permissions: [],
+    permissionIds: [],
   };
 }
 
@@ -812,6 +814,13 @@ export const RespAdminRoleInfoData: MessageFns<RespAdminRoleInfoData> = {
       for (const v of message.permissions) {
         RolePermissionItem.encode(v!, writer.uint32(90).fork()).join();
       }
+    }
+    if (message.permissionIds !== undefined && message.permissionIds.length !== 0) {
+      writer.uint32(98).fork();
+      for (const v of message.permissionIds) {
+        writer.int32(v);
+      }
+      writer.join();
     }
     return writer;
   },
@@ -914,6 +923,24 @@ export const RespAdminRoleInfoData: MessageFns<RespAdminRoleInfoData> = {
           }
           continue;
         }
+        case 12: {
+          if (tag === 96) {
+            message.permissionIds!.push(reader.int32());
+
+            continue;
+          }
+
+          if (tag === 98) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.permissionIds!.push(reader.int32());
+            }
+
+            continue;
+          }
+
+          break;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -937,6 +964,9 @@ export const RespAdminRoleInfoData: MessageFns<RespAdminRoleInfoData> = {
       updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
       permissions: globalThis.Array.isArray(object?.permissions)
         ? object.permissions.map((e: any) => RolePermissionItem.fromJSON(e))
+        : [],
+      permissionIds: globalThis.Array.isArray(object?.permissionIds)
+        ? object.permissionIds.map((e: any) => globalThis.Number(e))
         : [],
     };
   },
@@ -976,6 +1006,9 @@ export const RespAdminRoleInfoData: MessageFns<RespAdminRoleInfoData> = {
     if (message.permissions?.length) {
       obj.permissions = message.permissions.map((e) => RolePermissionItem.toJSON(e));
     }
+    if (message.permissionIds?.length) {
+      obj.permissionIds = message.permissionIds.map((e) => Math.round(e));
+    }
     return obj;
   },
 
@@ -995,6 +1028,7 @@ export const RespAdminRoleInfoData: MessageFns<RespAdminRoleInfoData> = {
     message.createdAt = object.createdAt ?? "";
     message.updatedAt = object.updatedAt ?? "";
     message.permissions = object.permissions?.map((e) => RolePermissionItem.fromPartial(e)) || [];
+    message.permissionIds = object.permissionIds?.map((e) => e) || [];
     return message;
   },
 };

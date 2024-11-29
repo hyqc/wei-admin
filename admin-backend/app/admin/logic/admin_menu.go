@@ -266,6 +266,7 @@ func (a *AdminMenuLogic) AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeDat
 			PermissionTypeName: typeName,
 		})
 	}
+
 	pageIds = array.Deduplicate(pageIds, true, true)
 
 	//获取所有页面信息
@@ -278,6 +279,9 @@ func (a *AdminMenuLogic) AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeDat
 		menuMap[item.ID] = item
 	}
 	for _, page := range pagesMap {
+		sort.Slice(page.Permissions, func(i, j int) bool {
+			return page.Permissions[i].PermissionType > page.Permissions[j].PermissionType
+		})
 		if menu, ok := menuMap[page.PageId]; ok {
 			page.PageName = menu.Name
 		}
@@ -296,8 +300,9 @@ func (a *AdminMenuLogic) AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeDat
 	for _, item := range menuModeList {
 		if _, ok := menuModeMap[item.ModelId]; !ok {
 			menuModeMap[item.ModelId] = item
+		} else {
+			menuModeMap[item.ModelId].Pages = append(menuModeMap[item.ModelId].Pages, item.Pages...)
 		}
-		menuModeMap[item.ModelId].Pages = append(menuModeMap[item.ModelId].Pages, item.Pages...)
 	}
 	for _, item := range menuModeMap {
 		sort.Slice(item.Pages, func(i, j int) bool {

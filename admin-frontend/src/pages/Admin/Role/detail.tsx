@@ -4,6 +4,7 @@ import { INPUT_STYLE } from '@/services/apis/config';
 import { ResponseAdminMenuModeTypeData } from '@/services/apis/admin/menu';
 import BindPermissions from './components/BindPermissions';
 import { RespAdminRoleInfoData } from '@/proto/admin_ts/admin_role';
+import { MenuModeItem } from '@/proto/admin_ts/admin_menu';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -12,7 +13,7 @@ export type NoticeModalPropsType = {
 export type DetailModalPropsType = {
   modalStatus: boolean;
   detailData: RespAdminRoleInfoData;
-  menuPageData: ResponseAdminMenuModeTypeData[];
+  menuPageData: MenuModeItem[];
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 const inputStyle = INPUT_STYLE;
@@ -60,7 +61,7 @@ const DetailModal: React.FC<DetailModalPropsType> = (props) => {
           <BindPermissions
             disabled
             datasource={menuPageData}
-            permissionIds={detailData?.permissions}
+            permissionIds={detailData?.permissionIds}
           />
         </Form.Item>
       </Form>

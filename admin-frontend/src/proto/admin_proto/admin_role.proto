@@ -48,6 +48,7 @@ message RespAdminRoleInfoData{
   string createdAt=9;//创建时间
   string updatedAt=10;//更新时间
   repeated RolePermissionItem permissions=11;
+  repeated int32 permissionIds=12;
 }
 
 //编辑角色

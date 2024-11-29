@@ -3,17 +3,10 @@ import {
 } from '@/services/apis/admin/role';
 import { Button, Drawer, Form, Input, message, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
 import { INPUT_STYLE } from '@/services/apis/config';
 import BindPermissions from './components/BindPermissions';
 import { ResponseAdminMenuModeTypeData } from '@/services/apis/admin/menu';
-import { RespAdminRoleInfoData } from '@/proto/admin_ts/admin_role';
+import { ReqAdminRoleBindPermissions, RespAdminRoleInfoData } from '@/proto/admin_ts/admin_role';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -43,13 +36,13 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminRoleBindPermissionsParamsType = {
+        const data: ReqAdminRoleBindPermissions = {
           permissionIds: form.getFieldValue('permissionIds'),
           id: detailData.id,
         };
         console.log('value', values);
         adminRoleBind(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
             form.resetFields();
           });
@@ -82,14 +75,14 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
     >
       <Form form={form} labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
         <Form.Item label="ID" name="id" hidden>
-          <Input disabled rootStyle={inputStyle} />
+          <Input disabled style={inputStyle} />
         </Form.Item>
         <Form.Item label="名称">{detailData.name}</Form.Item>
         <Form.Item label="权限" name="permissionIds">
           <BindPermissions datasource={menuPageData} permissionIds={detailData?.permissionIds} />
         </Form.Item>
-        <Form.Item rootStyle={{ marginTop: '8rem', marginLeft: '4rem' }}>
-          <Button onClick={onClose} rootStyle={ButtonStyles}>
+        <Form.Item style={{ marginTop: '8rem', marginLeft: '4rem' }}>
+          <Button onClick={onClose} style={ButtonStyles}>
             取消
           </Button>
           <Popconfirm
@@ -98,7 +91,7 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
             cancelText="取消"
             onConfirm={handleOk}
           >
-            <Button loading={saveBtnLoading} type="primary" rootStyle={ButtonStyles}>
+            <Button loading={saveBtnLoading} type="primary" style={ButtonStyles}>
               保存
             </Button>
           </Popconfirm>

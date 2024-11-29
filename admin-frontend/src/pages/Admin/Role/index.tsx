@@ -34,6 +34,7 @@ import { RowEnabledButton } from '@/components';
 import { handlePagination } from '@/services/common/utils';
 import { ReqAdminRoleEnable, ReqAdminRoleList, RespAdminRoleListData, RoleItem } from '@/proto/admin_ts/admin_role';
 import { DefaultPagination } from '@/components/PageContainer/Pagination';
+import { MenuModeItem } from '@/proto/admin_ts/admin_menu';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
@@ -48,7 +49,7 @@ const Admin: React.FC = () => {
   const [editModalStatus, setEditModalStatus] = useState<boolean>(false);
   const [addModalStatus, setAddModalStatus] = useState<boolean>(false);
   const [bindPermissionsModalStatus, setBindPermissionsModalStatus] = useState<boolean>(false);
-  const [modelPageData, setModelPageData] = useState<ResponseAdminMenuModeTypeData[]>([]);
+  const [modelPageData, setModelPageData] = useState<MenuModeItem[]>([]);
   const columns: ColumnsType<any> = [
     {
       title: 'ID',
@@ -276,7 +277,7 @@ const Admin: React.FC = () => {
 
   function getAdminMenuModeData() {
     adminMenuMode().then((res) => {
-      setModelPageData(res.data || []);
+      setModelPageData(res.data?.modes || []);
     });
   }
 

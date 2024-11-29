@@ -224,30 +224,6 @@ export async function adminMenuPages(params?: RequestAdminMenuPagesParamsType) {
 }
 
 /************************************************************/
-/**
- * 菜单页面权限列表
- */
-
-export type ResponseAdminMenuModeTypeData = {
-  modelId: number; // 模块ID，父级菜单ID
-  modelName: string; // 父级菜单名称
-  pages: AdminMenuModePagesItemType[]; // 页面列表
-};
-
-export type AdminMenuModePagesItemType = {
-  pageId: number;
-  pageName: string;
-  permissions: AdminMenuModePagesPermissionsItemType[];
-};
-
-export type AdminMenuModePagesPermissionsItemType = {
-  ukid?: string;
-  permissionId: number;
-  permissionName: string;
-  permission: string;
-  permissionText: string;
-};
-
 export async function adminMenuMode() {
   return request<ResponseBodyType>(APIAdminMenus.mode.url, {
     method: APIAdminMenus.mode.method,

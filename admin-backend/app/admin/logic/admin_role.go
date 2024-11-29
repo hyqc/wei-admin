@@ -106,12 +106,14 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminRole
 		CreatedAt:       adminInfo.CreatedAt.Format(time.DateTime),
 		UpdatedAt:       adminInfo.UpdatedAt.Format(time.DateTime),
 		Permissions:     make([]*admin_proto.RolePermissionItem, 0),
+		PermissionIds:   make([]int32, 0),
 	}
 	for _, item := range permissionsList {
 		enumItem, ok := common.AdminPermissionEnumMap[item.PermissionType]
 		if !ok {
 			return nil, fmt.Errorf("配置错误")
 		}
+		rest.PermissionIds = append(rest.PermissionIds, item.PermissionID)
 		rest.Permissions = append(rest.Permissions, &admin_proto.RolePermissionItem{
 			RoleId:             adminInfo.ID,
 			PermissionId:       item.PermissionID,
@@ -121,6 +123,7 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminRole
 			PermissionTypeText: enumItem.Name,
 		})
 	}
+	rest.PermissionIds = array.Deduplicate(rest.PermissionIds, true, true)
 	return rest, nil
 }
 
