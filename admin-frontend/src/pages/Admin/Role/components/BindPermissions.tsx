@@ -25,8 +25,8 @@ const BindPermissions: React.FC<MenuPagePermissionsType> = (props) => {
   const [checkedIds, setCheckedIds] = useState<number[]>([]);
 
   const [modeCheckedIds, setModeCheckedIds] = useState<Set<number>>(new Set());
-  const [pageCheckedIds, setPageCheckedIds] = useState<Map<number, number[]>>(new Map());
-  const [permissionCheckedIds, setPermissionCheckedIds] = useState<Map<number, number[]>>(new Map());
+  const [pageCheckedIds, setPageCheckedIds] = useState<Map<number, Set<number>>>(new Map());//modeId=> pageIds
+  const [permissionCheckedIds, setPermissionCheckedIds] = useState<Map<number, Set<number>>>(new Map()); //pageId=> permissionIds
 
   const triggerChange = (ids: number[]) => {
     onChange?.(ids);
@@ -110,10 +110,17 @@ const BindPermissions: React.FC<MenuPagePermissionsType> = (props) => {
       case typePermission:
         setPermissionCheckedIds((old) => {
           const nv = new Map(old)
+          const pageId = target.pageId
           if (target.checked) {
-            nv.set(target['data-pageId'], target.value);
+            //添加
+            if(nv.has(pageId)){
+              nv.get(pageId)?.add(target.value)
+            }else{
+              nv.set(pageId, new Set([target.value]))
+            }
           } else {
-            nv.delete(target.value);
+            //删除
+            nv.get(pageId)?.delete(target.value)
           }
           return nv
         });
