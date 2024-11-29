@@ -2,7 +2,6 @@ import { Checkbox, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import './index.less';
 import { MenuModeItem, MenuPageItem, MenuPagePermissions } from '@/proto/admin_ts/admin_menu';
-import permission from 'mock/admin/permission';
 
 export type MenuPagePermissionsType = {
   disabled?: boolean;
@@ -11,164 +10,207 @@ export type MenuPagePermissionsType = {
   onChange?: (values: number[]) => void;
 };
 
-
-const modeStyle = { width: '20rem' };
-const pageStyle = { width: '20rem' };
-const permissionStyle = { width: '30rem' };
-
 const BindPermissions: React.FC<MenuPagePermissionsType> = (props) => {
   const { disabled, datasource, permissionIds, onChange } = props;
-  const modeAllMap: Map<number, Map<number, number[]>> = new Map();
-  const pageAllMap: Map<number, number[]> = new Map();
+  const dataMap: Map<number, Map<number, Set<number>>> = new Map(); //key=modeId,value=pageAllMap
+  const initMap: Map<number, Map<number, Set<number>>> = new Map(); //key=modeId,value=pageAllMap
+  const permissionSetIds = new Set(permissionIds)
 
-  const [menuPageData, setMenuPageData] = useState<MenuModeItem[]>([...datasource]);
-  const [checkedIds, setCheckedIds] = useState<number[]>([]);
+  const [menuPageData] = useState<MenuModeItem[]>([...datasource]);
+  
 
-  const [modeCheckedIds, setModeCheckedIds] = useState<Set<number>>(new Set());
-  const [pageCheckedIds, setPageCheckedIds] = useState<Map<number, Set<number>>>(new Map());//modeId=> pageIds
-  const [permissionCheckedIds, setPermissionCheckedIds] = useState<Map<number, Set<number>>>(new Map()); //pageId=> permissionIds
+  const typeMode = 'mode'
+  const typePage = 'page'
+  const typePermission = 'permission'
+
+
+
+  datasource?.forEach((mode) => {
+    const modeId = mode.modelId ?? 0
+    const pageMap = new Map<number, Set<number>>()
+    mode?.pages?.forEach(page => {
+      const pageId = page.pageId ?? 0
+      const pids = new Set<number>()
+      page?.permissions?.forEach(p => {
+        const pid = p.permissionId ?? 0
+        if (pid) {
+          pids.add(pid)
+          if(permissionSetIds.has(pid)){
+            if(!initMap.has(modeId)){
+              initMap.set(modeId,new Map())
+            }
+            if(!initMap.get(modeId)?.has(pageId)){
+              initMap.get(modeId)?.set(pageId,new Set())
+            }
+            initMap.get(modeId)?.get(pageId)?.add(pid)
+          }
+        }
+      })
+      if (pageId) {
+        pageMap.set(pageId, pids)
+      }
+    })
+    if (modeId) {
+      dataMap.set(modeId, pageMap)
+    }
+  });
+
+  const [checkedIds, setCheckedIds] = useState<Map<number, Map<number, Set<number>>>>(initMap);
+
 
   const triggerChange = (ids: number[]) => {
     onChange?.(ids);
   };
 
   useEffect(() => {
-    triggerChange(checkedIds);
+    const ids: number[] = []
+    checkedIds?.forEach(pages => {
+      pages?.forEach(pids => {
+        pids.forEach(id=>{
+          if(id){
+            ids.push(id)
+          }
+        })
+      })
+    }
+    )
+    triggerChange(ids);
   }, [checkedIds]);
 
-  const typeMode = 'mode'
-  const typePage = 'page'
-  const typePermission = 'permission'
-
-  const isIndeterminate = (type: string, id: number, nv: Set<number>): boolean => {
-    switch (type) {
-      case typeMode:
-        return false
-      case typePage:
-        return modeAllMap.get(id)?.size == nv.size
-      case typePermission:
-        return pageAllMap.get(id)?.length === nv.size
-      default:
-        return false
-    }
-  }
-
-  const checkboxChangedDataCall = (type: string, e: any, old: Map<number, number[]>) => {
-    const nv = new Set(old);
-    if (e.checked) {
-      nv.add(e.value);
-    } else {
-      nv.delete(e.value);
-    }
-    const pageId = e.pageId ?? 0
-    const modeId = e.modelId ?? 0
-    // 触发操作
-    switch (type) {
-      case typePermission:
-        //触发页面操作
-        pageAllMap.get(pageId)?.forEach(permissionId => {
-
-        })
-        break;
-      case typePage:
-        pageAllMap.get(e.value)?.forEach(permissionId => {
-
-        })
-        break;
-      case typeMode:
-        modeAllMap.get(e.value)?.forEach(pageId => {
-
-        })
-        break;
-    }
-    return nv
-  }
+  useEffect(() => {
+  }, [datasource]);
 
   const setChange = (type: string, target: any) => {
     switch (type) {
       case typeMode:
-        setModeCheckedIds((old) => {
-          const nv = new Set(old);
-          if (target.checked) {
-            nv.add(target.value);
-          } else {
-            nv.delete(target.value);
-          }
-          return nv
-        });
+        if (target.checked) {
+          //全选
+          setCheckedIds((ov) => {
+            let modeId = target.value ?? 0
+            const nv = new Map(ov)
+            if (modeId && dataMap.has(modeId)) {
+              const pageMap: Map<number, Set<number>> = dataMap.get(modeId) ?? new Map()
+              nv.set(modeId, pageMap)
+            }
+            return nv
+          });
+        } else {
+          //全不选
+          setCheckedIds((ov) => {
+            let modeId = target.value ?? 0
+            const nv = new Map(ov)
+            nv.delete(modeId)
+            return nv
+          });
+        }
         break;
       case typePage:
-        setPageCheckedIds((old) => {
-          const nv = new Map(old)
-          if (target.checked) {
-            nv.set(target.value, target['data-permissionIds']);
-          } else {
-            nv.delete(target.value);
-          }
-          return nv
-        });
-      case typePermission:
-        setPermissionCheckedIds((old) => {
-          const nv = new Map(old)
-          const pageId = target.pageId
-          if (target.checked) {
-            //添加
-            if(nv.has(pageId)){
-              nv.get(pageId)?.add(target.value)
-            }else{
-              nv.set(pageId, new Set([target.value]))
+        if (target.checked) {
+          //全选
+          setCheckedIds((ov) => {
+            let modeId = target.modeId ?? 0
+            const nv = new Map(ov)
+            if (modeId && dataMap.has(modeId)) {
+              let pageId = target.value ?? 0
+              const pageMap: Map<number, Set<number>> = dataMap.get(modeId) ?? new Map()
+              if (pageId && pageMap.has(pageId)) {
+                const pidsMap: Set<number> = pageMap.get(pageId) ?? new Set()
+                if (nv.has(modeId)) {
+                  nv.get(modeId)?.set(pageId, pidsMap)
+                } else {
+                  const tmpPage = new Map()
+                  tmpPage.set(pageId, pidsMap)
+                  nv.set(modeId, tmpPage)
+                }
+              }
             }
-          } else {
-            //删除
-            nv.get(pageId)?.delete(target.value)
-          }
-          return nv
-        });
+            return nv
+          });
+        } else {
+          //全不选
+          setCheckedIds((ov) => {
+            let modeId = target.modeId ?? 0
+            let pageId = target.value ?? 0
+            const nv = new Map(ov)
+            nv.get(modeId)?.delete(pageId)
+            if(nv.get(modeId)?.size ===0){
+              nv.delete(modeId)
+            }
+            return nv
+          });
+        }
+        break;
+      case typePermission:
+        if (target.checked) {
+          //天加
+          setCheckedIds((ov) => {
+            let modeId = target.modeId ?? 0
+            let pageId = target.pageId ?? 0
+            let pid = target.value ?? 0
+            const nv = new Map(ov)
+            if (nv.has(modeId)) {
+              if (nv.get(modeId)?.has(pageId)) {
+                nv.get(modeId)?.get(pageId)?.add(target.value)
+              } else {
+                const pm: Map<number, Set<number>> = nv.get(modeId) ?? new Map()
+                const idm = pm.get(pageId) ?? new Set()
+                idm.add(pid)
+                pm.set(pageId, idm)
+                nv.set(modeId, pm)
+              }
+            } else {
+              const pm: Map<number, Set<number>> = new Map()
+              const im: Set<number> = new Set()
+              im.add(pid)
+              pm.set(pageId, im)
+              nv.set(modeId, pm)
+            }
+            return nv
+          });
+        } else {
+          //删除
+          setCheckedIds((ov) => {
+            let modeId = target.modeId ?? 0
+            let pageId = target.pageId ?? 0
+            const nv = new Map(ov)
+            nv.get(modeId)?.get(pageId)?.delete(target.value)
+            if (nv.get(modeId)?.get(pageId)?.size === 0) {
+              nv.get(modeId)?.delete(pageId)
+              if (nv.get(modeId)?.size === 0) {
+                nv.delete(modeId)
+              }
+            }
+            return nv
+          });
+        }
         break;
     }
   };
 
-  useEffect(() => {
-    // permissionIds?.forEach((id) => {
-    //   setChange(id, typePermission, true);
-    // });
-  }, [permissionIds]);
-
-  useEffect(() => {
-    datasource?.forEach((mode) => {
-      const pageMap = new Map();
-      mode?.pages?.map((page: MenuPageItem) => {
-        let permissionIds = page?.permissions?.map((item) => item.permissionId ?? 0).filter((item) => item > 0) || [];
-        if (page.pageId) {
-          pageAllMap.set(page.pageId, permissionIds);
-          pageMap.set(page.pageId, permissionIds);
-        }
-        return page;
-      }) || [];
-      if (mode.modelId) {
-        modeAllMap.set(mode.modelId, pageMap);
-      }
-    });
-
-  }, [datasource]);
 
   const modeChanged = (e: any) => {
-    console.log('模块点击target：', e.target.checked)
-    console.log('模块点击e：', e.target)
     setChange(typeMode, { value: e.target.value, checked: e.target.checked, pageIds: e.target['data-pageIds'] })
   };
 
   const pageChanged = (e: any) => {
-    console.log('模块点击target：', e.target.checked)
-    console.log('模块点击e：', e.target)
     setChange(typePage, { value: e.target.value, checked: e.target.checked, modeId: e.target['data-modeId'], permissionIds: e.target['data-permissionIds'] })
   };
 
   const permissionChanged = (e: any) => {
-    console.log('模块点击target：', e.target.checked)
-    console.log('模块点击e：', e.target)
     setChange(typePermission, { value: e.target.value, checked: e.target.checked, modeId: e.target['data-modeId'], pageId: e.target['data-pageId'] })
   };
+
+  const modeIndeterminate = (modeId: number): boolean => {
+    const check = checkedIds.get(modeId)?.size ?? 0
+    const length = dataMap.get(modeId)?.size ?? 0
+    return check !== length && check !== 0
+  }
+
+  const pageIndeterminate = (modeId: number, pageId: number): boolean => {
+    const check = checkedIds.get(modeId)?.get(pageId)?.size ?? 0
+    const length = dataMap.get(modeId)?.get(pageId)?.size ?? 0
+    return check !== length && check !== 0
+  }
 
   return (
     <div className="menu-page-permissions">
@@ -186,9 +228,8 @@ const BindPermissions: React.FC<MenuPagePermissionsType> = (props) => {
                   disabled={disabled}
                   onChange={modeChanged}
                   value={mode.modelId}
-                  checked={modeCheckedIds.has(mode.modelId || 0)}
-                  data-pageIds={modeAllMap.get(mode.modelId || 0)}
-                // indeterminate={modeAllMap.get(mode.modelId || 0)?.length === pageCheckedIds.size}
+                  checked={checkedIds.has(mode.modelId || 0)}
+                  indeterminate={modeIndeterminate(mode.modelId || 0)}
                 >
                   {mode.modelName}
                 </Checkbox>
@@ -197,16 +238,15 @@ const BindPermissions: React.FC<MenuPagePermissionsType> = (props) => {
                 {
                   mode.pages?.map((page: MenuPageItem, index: number) => {
                     return (
-                      <Row style={index % 2 === 0 ? { backgroundColor: "#fafafa" } : {}}>
+                      <Row key={page.pageId} style={index % 2 === 0 ? { backgroundColor: "#fafafa" } : {}}>
                         <Col span={10}>
                           <Checkbox
                             onChange={pageChanged}
                             disabled={disabled}
                             value={page.pageId}
                             data-modeId={mode.modelId}
-                            data-permissionIds={pageAllMap.get(page.pageId || 0)}
-                            checked={pageCheckedIds.has(page.pageId || 0)}
-                            indeterminate={pageAllMap.get(page.pageId || 0)?.length === permissionCheckedIds.size}
+                            checked={checkedIds.get(mode.modelId || 0)?.has(page.pageId || 0)}
+                            indeterminate={pageIndeterminate(mode.modelId || 0, page.pageId || 0)}
                           >
                             {page.pageName}
                           </Checkbox>
@@ -216,9 +256,10 @@ const BindPermissions: React.FC<MenuPagePermissionsType> = (props) => {
                             page?.permissions?.map((permission: MenuPagePermissions) => {
                               return (
                                 <Checkbox
+                                  key={permission.permissionId}
                                   onChange={permissionChanged}
                                   disabled={disabled}
-                                  checked={permissionCheckedIds.has(permission.permissionId || 0)}
+                                  checked={checkedIds.get(mode.modelId || 0)?.get(page.pageId || 0)?.has(permission.permissionId || 0)}
                                   value={permission.permissionId}
                                   data-modeId={mode.modelId}
                                   data-pageId={page.pageId}
