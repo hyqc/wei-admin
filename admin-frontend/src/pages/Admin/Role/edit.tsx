@@ -1,6 +1,6 @@
 import { RespAdminRoleInfoData } from '@/proto/admin_ts/admin_role';
 import { adminRoleEdit } from '@/services/apis/admin/role';
-import { Form, Input, message, Modal, Switch } from 'antd';
+import { App, Form, Input, Modal, Switch } from 'antd';
 import { useEffect, useState } from 'react';
 
 
@@ -15,6 +15,7 @@ export type EditModalPropsType = {
 };
 
 const EditModal: React.FC<EditModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);

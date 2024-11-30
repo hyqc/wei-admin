@@ -192,8 +192,8 @@ func (a *AdminUserLogic) HandleItemData(item *model2.AdminUser) (data *admin_pro
 		return nil, err
 	}
 	data.AdminId = item.ID
-	data.CreatedAt = item.CreatedAt.Format(time.DateTime)
-	data.UpdatedAt = item.UpdatedAt.Format(time.DateTime)
+	data.CreatedAt = utils.HandleTime2String(item.CreatedAt)
+	data.UpdatedAt = utils.HandleTime2String(item.UpdatedAt)
 	return data, nil
 }
 

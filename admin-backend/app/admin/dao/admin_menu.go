@@ -4,8 +4,10 @@ import (
 	"admin/app/admin/gen/model"
 	query2 "admin/app/admin/gen/query"
 	"admin/app/common"
+	"admin/pkg/utils"
 	"admin/proto/admin_proto"
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
 	"time"
@@ -17,12 +19,13 @@ type IAdminMenu interface {
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
 	FindMyMenus(ctx context.Context, adminId, menuId int) ([]*model.AdminMenu, error) // 根据管理员名称查询详情
-	FindList(ctx *gin.Context, params *admin_proto.ReqMenuList) (total int64, list []*model.AdminMenu, err error)
+	FindList(ctx *gin.Context, params *admin_proto.ReqAdminMenuList) (total int64, list []*model.AdminMenu, err error)
 	FindAll(ctx *gin.Context) ([]*model.AdminMenu, error)         // 全部的菜单，包括禁用的
 	FindAllValid(ctx context.Context) ([]*model.AdminMenu, error) // 获取全部有效菜单
 	FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error)
 	FindPages(ctx *gin.Context) ([]*model.AdminMenu, error)
-	FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminMenu, error) // 查找与权限直接关联的菜单
+	FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminMenu, error)
+	Show(ctx *gin.Context, menuId int32, field string, show bool) error
 }
 
 type AdminMenu struct {
@@ -43,6 +46,13 @@ func (a *AdminMenu) Update(ctx *gin.Context, data *model.AdminMenu) error {
 func (a *AdminMenu) Enable(ctx *gin.Context, id int32, enabled bool) error {
 	db := query2.AdminMenu
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
+	return err
+}
+func (a *AdminMenu) Show(ctx *gin.Context, menuId int32, f string, show bool) error {
+	db := query2.AdminMenu
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(menuId)).Updates(map[string]interface{}{
+		fmt.Sprintf("is_%s", utils.CamelToSnake(f)): show,
+	})
 	return err
 }
 
@@ -68,7 +78,7 @@ func (a *AdminMenu) FindAll(ctx *gin.Context) ([]*model.AdminMenu, error) {
 	return menu.WithContext(ctx).Order(menu.Sort, menu.ParentID, menu.ID).Find()
 }
 
-func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.ReqMenuList) (total int64, list []*model.AdminMenu, err error) {
+func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.ReqAdminMenuList) (total int64, list []*model.AdminMenu, err error) {
 	DB := query2.AdminMenu
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
@@ -115,7 +125,7 @@ func (a *AdminMenu) handleListReqSortField(sortField, sortType string) field.Exp
 	return res
 }
 
-func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.ReqMenuList) (q query2.IAdminMenuDo) {
+func (a *AdminMenu) handleListReq(ctx context.Context, params *admin_proto.ReqAdminMenuList) (q query2.IAdminMenuDo) {
 	DB := query2.AdminMenu
 	q = DB.WithContext(ctx)
 

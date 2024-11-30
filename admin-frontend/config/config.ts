@@ -106,7 +106,10 @@ export default defineConfig({
    * @description 内置了 babel import 插件
    * @doc https://umijs.org/docs/max/antd#antd
    */
-  antd: {},
+  antd: {
+    configProvider: {},
+    appConfig: {},
+  },
   /**
    * @name 网络请求配置
    * @description 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
@@ -159,7 +162,7 @@ export default defineConfig({
     BaseAPI: '/api', // 请求接口的前缀
     MessageDuritain: 2, // message 等消息提示框关闭的默认时间秒
     UploadImageAccept: '.png, .jpg, .jpeg,.ico', // 上传图片允许的类型
-    DefaultModalWidth: 600, // modal default width 800px
+    DefaultModalWidth: 800, // modal default width 800px
     DefaultDrawerWidth: 600, // drawer default width 600px
     DefaultPageArray: [1, 5, 10, 50, 100],
     AdminId: 1, // 超管ID

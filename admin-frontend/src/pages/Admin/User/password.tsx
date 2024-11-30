@@ -1,15 +1,8 @@
 import {
   adminUserEditPwd,
 } from '@/services/apis/admin/user';
-import { Form, Input, message, Modal } from 'antd';
+import { App, Form, Input, message, Modal } from 'antd';
 import { useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
 import { AdminUserFormRules } from './common';
 import { ReqAdminUserEditPassword } from '@/proto/admin_ts/admin_user';
 import { AdminUserListItem } from '@/proto/admin_ts/common';
@@ -25,6 +18,7 @@ export type AdminUserEditPasswordModalPropsType = {
 };
 
 const Password: React.FC<AdminUserEditPasswordModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -82,7 +76,7 @@ const Password: React.FC<AdminUserEditPasswordModalPropsType> = (props) => {
         <Form.Item label="账号" name="username">
           <Input disabled />
         </Form.Item>
-        <Form.Item label="密码" name="password" initialValue={''} rules={rules.password}>
+        <Form.Item label="新密码" name="password" initialValue={''} rules={rules.password}>
           <Input.Password />
         </Form.Item>
         <Form.Item

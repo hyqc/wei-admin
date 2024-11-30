@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { RowEnabledButton } from '@/components';
+import Authorization from '@/components/Autuorization';
+import FetchButton from '@/components/FetchButton';
 import { Container, Content, Search } from '@/components/PageContainer';
+import { DefaultPagination } from '@/components/PageContainer/Pagination';
+import { MenuModeItem } from '@/proto/admin_ts/admin_menu';
 import {
-  Form,
-  Input,
-  Button,
-  Select,
-  Row,
-  Col,
-  Space,
-  Table,
-  message,
-  Popconfirm,
-} from 'antd';
-import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
-import type { Gutter } from 'antd/lib/grid/row';
-import { PageInfoType } from '@/services/apis/types';
+  ReqAdminRoleEnable,
+  ReqAdminRoleList,
+  RespAdminRoleListData,
+  RoleItem,
+} from '@/proto/admin_ts/admin_role';
+import { adminMenuMode } from '@/services/apis/admin/menu';
 import {
   adminRoleDelete,
   adminRoleDetail,
@@ -22,24 +18,23 @@ import {
   adminRoleList,
 } from '@/services/apis/admin/role';
 import { DEFAULT_PAGE_INFO } from '@/services/apis/config';
-import { ColumnsType } from 'antd/lib/table';
-import Authorization from '@/components/Autuorization';
-import AdminRoleAddModal, { NoticeModalPropsType } from './add';
-import AdminRoleEditModal from './edit';
-import AdminRoleDetailModal from './detail';
-import AdminBindModal from './bind';
-import { adminMenuMode, ResponseAdminMenuModeTypeData } from '@/services/apis/admin/menu';
-import FetchButton from '@/components/FetchButton';
-import { RowEnabledButton } from '@/components';
+import { PageInfoType } from '@/services/apis/types';
 import { handlePagination } from '@/services/common/utils';
-import { ReqAdminRoleEnable, ReqAdminRoleList, RespAdminRoleListData, RoleItem } from '@/proto/admin_ts/admin_role';
-import { DefaultPagination } from '@/components/PageContainer/Pagination';
-import { MenuModeItem } from '@/proto/admin_ts/admin_menu';
+import { PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { App, Button, Col, Form, Input, Popconfirm, Row, Select, Space, Table } from 'antd';
+import type { Gutter } from 'antd/lib/grid/row';
+import { ColumnsType } from 'antd/lib/table';
+import React, { useEffect, useState } from 'react';
+import AdminRoleAddModal, { NoticeModalPropsType } from './add';
+import AdminBindModal from './bind';
+import AdminRoleDetailModal from './detail';
+import AdminRoleEditModal from './edit';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
 
 const Admin: React.FC = () => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
@@ -50,103 +45,6 @@ const Admin: React.FC = () => {
   const [addModalStatus, setAddModalStatus] = useState<boolean>(false);
   const [bindPermissionsModalStatus, setBindPermissionsModalStatus] = useState<boolean>(false);
   const [modelPageData, setModelPageData] = useState<MenuModeItem[]>([]);
-  const columns: ColumnsType<any> = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: '6rem',
-      align: 'center',
-      sorter: true,
-    },
-    {
-      title: '名称',
-      align: 'center',
-      width: '12rem',
-      dataIndex: 'name',
-    },
-    {
-      title: '名称',
-      align: 'center',
-      width: '12rem',
-      dataIndex: 'describe',
-    },
-    {
-      title: '创建时间',
-      align: 'center',
-      dataIndex: 'createdAt',
-      width: '10rem',
-      sorter: true,
-    },
-    {
-      title: '更新时间',
-      align: 'center',
-      dataIndex: 'updatedAt',
-      width: '10rem',
-      sorter: true,
-    },
-    {
-      title: '状态',
-      width: '6rem',
-      align: 'center',
-      dataIndex: 'isEnabled',
-      render(isEnabled: boolean, record: RoleItem) {
-        return (
-          <Authorization
-            name="AdminRoleEdit"
-            forbidden={
-              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
-            }
-          >
-            <Popconfirm
-              title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
-              okText="确定"
-              cancelText="取消"
-              onConfirm={() => updateEnabled(record)}
-            >
-              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
-            </Popconfirm>
-          </Authorization>
-        );
-      },
-    },
-    {
-      title: '操作',
-      align: 'left',
-      width: '2rem',
-      render(text, record: RoleItem) {
-        return (
-          <Space>
-            <Authorization name="AdminRoleView">
-              <FetchButton onClick={() => openDetailModal(record)}>详情</FetchButton>
-            </Authorization>
-            <Authorization name="AdminRoleEdit">
-              <FetchButton onClick={() => openEditModal(record)}>编辑</FetchButton>
-            </Authorization>
-
-            <Authorization name="AdminRoleEdit">
-              <FetchButton onClick={() => openBindPermissionsModal(record)}>分配权限</FetchButton>
-            </Authorization>
-
-            {/* 禁用的才能删除 */}
-            <Authorization name="AdminRoleDelete">
-              {!record.isEnabled ? (
-                <Popconfirm
-                  title="确定要删除该角色吗？"
-                  okText="确定"
-                  cancelText="取消"
-                  onConfirm={() => onDelete(record)}
-                >
-                  <FetchButton danger>删除</FetchButton>
-                </Popconfirm>
-              ) : (
-                ''
-              )}
-            </Authorization>
-          </Space>
-        );
-      },
-    },
-  ];
 
   // 获取角色列表
   function getRows(data?: ReqAdminRoleList) {
@@ -155,9 +53,9 @@ const Admin: React.FC = () => {
       .then((res) => {
         const data: RespAdminRoleListData = res.data;
         const rows = data?.list || [];
-        const total = data.total ?? 0
+        const total = data.total ?? 0;
         setRowsData(rows);
-        setPageInfo((pageInfo)=>({...pageInfo,total}))
+        setPageInfo((pageInfo) => ({ ...pageInfo, total }));
       })
       .catch((err) => {
         console.log('error', err);
@@ -232,43 +130,43 @@ const Admin: React.FC = () => {
     }
   }
 
-  function noticeBindModal(data: NoticeModalPropsType) {
+  function noticeBindModal() {
     setDetailData(undefined);
     setBindPermissionsModalStatus(false);
   }
 
   // 删除角色
   function onDelete(record: RoleItem) {
-    adminRoleDelete({ id: record.roleId }).then((res) => {
+    adminRoleDelete({ id: record.id }).then((res) => {
       message.success(res.msg, MessageDuritain, () => {
-        const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
-          getRows({ base, ...form.getFieldsValue() });
+        const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize);
+        getRows({ base, ...form.getFieldsValue() });
       });
     });
   }
 
   // 列表搜索
   function onSearchFinish(values: ReqAdminRoleList) {
-    const base = handlePagination(1, pageInfo.pageSize)
+    const base = handlePagination(1, pageInfo.pageSize);
     getRows({ ...values, base });
   }
 
   // 搜索重置
   function onSearchReset() {
     form.resetFields();
-    const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+    const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize);
     getRows({ base });
   }
 
   function onShowSizeChange(current: number, size: number) {
-    const page = {...pageInfo, pageSize: size, pageNum: current }
-    setPageInfo(()=>({...page}));
+    const page = { ...pageInfo, pageSize: size, pageNum: current };
+    setPageInfo(() => ({ ...page }));
   }
 
   function tableChange(pagination: any, filters: any, sorter: any) {
-    const page = handlePagination(pagination.current, pagination.pageSize)
+    const page = handlePagination(pagination.current, pagination.pageSize);
     setPageInfo({ ...pageInfo, ...page });
-    const base = { ...page, sortField: sorter.field, sortType: sorter.order, }
+    const base = { ...page, sortField: sorter.field, sortType: sorter.order };
     getRows({
       ...form.getFieldsValue(),
       base,
@@ -285,6 +183,102 @@ const Admin: React.FC = () => {
     onSearchReset();
     getAdminMenuModeData();
   }, []);
+
+  const columns: ColumnsType<any> = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      width: '6rem',
+      align: 'center',
+      sorter: true,
+    },
+    {
+      title: '名称',
+      align: 'center',
+      width: '12rem',
+      dataIndex: 'name',
+    },
+    {
+      title: '名称',
+      align: 'center',
+      width: '12rem',
+      dataIndex: 'describe',
+    },
+    {
+      title: '创建时间',
+      align: 'center',
+      dataIndex: 'createdAt',
+      width: '10rem',
+      sorter: true,
+    },
+    {
+      title: '更新时间',
+      align: 'center',
+      dataIndex: 'updatedAt',
+      width: '10rem',
+      sorter: true,
+    },
+    {
+      title: '状态',
+      width: '6rem',
+      align: 'center',
+      dataIndex: 'isEnabled',
+      render(isEnabled: boolean, record: RoleItem) {
+        return (
+          <Authorization
+            name="AdminRoleEdit"
+            forbidden={<RowEnabledButton isEnabled={isEnabled} disabled={false} />}
+          >
+            <Popconfirm
+              title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
+              okText="确定"
+              cancelText="取消"
+              onConfirm={() => updateEnabled(record)}
+            >
+              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
+            </Popconfirm>
+          </Authorization>
+        );
+      },
+    },
+    {
+      title: '操作',
+      align: 'left',
+      width: '2rem',
+      render(text, record: RoleItem) {
+        return (
+          <Space>
+            <Authorization name="AdminRoleView">
+              <FetchButton onClick={() => openDetailModal(record)}>详情</FetchButton>
+            </Authorization>
+            <Authorization name="AdminRoleEdit">
+              <FetchButton onClick={() => openEditModal(record)}>编辑</FetchButton>
+            </Authorization>
+
+            <Authorization name="AdminRoleEdit">
+              <FetchButton onClick={() => openBindPermissionsModal(record)}>分配权限</FetchButton>
+            </Authorization>
+
+            {/* 禁用的才能删除 */}
+            <Authorization name="AdminRoleDelete">
+              {!record.isEnabled ? (
+                <Popconfirm
+                  title="确定要删除该角色吗？"
+                  okText="确定"
+                  cancelText="取消"
+                  onConfirm={() => onDelete(record)}
+                >
+                  <FetchButton danger>删除</FetchButton>
+                </Popconfirm>
+              ) : (
+                ''
+              )}
+            </Authorization>
+          </Space>
+        );
+      },
+    },
+  ];
 
   return (
     <Container>

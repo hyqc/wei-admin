@@ -35,3 +35,13 @@ func TestBeanCopy(t *testing.T) {
 func TestGetConfigEnv(t *testing.T) {
 	fmt.Println(GetConfigEnv("mode"))
 }
+
+func TestCamelToSnake(t *testing.T) {
+	arr := []string{
+		"abcAbc",
+		"hideInMenu",
+	}
+	for _, v := range arr {
+		fmt.Println(CamelToSnake(v))
+	}
+}

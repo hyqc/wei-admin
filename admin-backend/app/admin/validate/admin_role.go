@@ -20,7 +20,7 @@ func (a *AdminRoleReqValidator) ListReq(data interface{}) url.Values {
 func (a *AdminRoleReqValidator) AddReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("describe"): []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
+		validator.GetValidateJsonOmitemptyTag("describe"): []string{fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
 	}
 	messages := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required:角色名称不能为空", PatternTrimBlankStringMsg},
@@ -53,12 +53,12 @@ func (a *AdminRoleReqValidator) EditReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required", "min:1"},
 		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("describe"): []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
+		validator.GetValidateJsonOmitemptyTag("describe"): []string{fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
 	}
 	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required:ID不能为空", "min:ID无效"},
 		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required:角色名称不能为空", PatternTrimBlankStringMsg},
 		validator.GetValidateJsonOmitemptyTag("describe"): []string{PatternTrimBlankStringMsg},
-		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required:ID不能为空", "min:ID无效"},
 	}
 	opts := govalidator.Options{
 		Data:     data,

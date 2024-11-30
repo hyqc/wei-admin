@@ -1,13 +1,7 @@
-import { Form, Input, message, Modal, Switch } from 'antd';
+import { App, Form, Input, Modal, Switch } from 'antd';
 import { useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
-import { adminRoleAdd, RequestAdminRoleAddParamsType } from '@/services/apis/admin/role';
+import { adminRoleAdd } from '@/services/apis/admin/role';
+import { ReqAdminRoleAdd } from '@/proto/admin_ts/admin_role';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -19,6 +13,7 @@ export type AddModalPropsType = {
 };
 
 const AddModal: React.FC<AddModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -31,11 +26,11 @@ const AddModal: React.FC<AddModalPropsType> = (props) => {
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminRoleAddParamsType = {
+        const data: ReqAdminRoleAdd = {
           ...values,
         };
         adminRoleAdd(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
             form.resetFields();
           });

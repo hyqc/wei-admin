@@ -17,6 +17,6 @@ const (
 	PatternAdminApiPathRule = "^/[a-zA-z]+(/\\w{0,}){0,}"
 	PatternAdminApiPathMsg  = "不是有效路由"
 
-	PatternAdminApiKeyRule = "^\\w+::\\w+"
+	PatternAdminApiKeyRule = "^\\w+(::\\w){0,}"
 	PatternAdminApiKeyMsg  = "不是有效路由键名"
 )

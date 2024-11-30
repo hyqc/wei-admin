@@ -6,32 +6,154 @@ import { ResponseBodyType } from '@/services/apis/types';
 import {
   adminMenuDelete,
   adminMenuDetail,
-  adminMenuEdit,
   adminMenuEnable,
   adminMenuPermissions,
+  adminMenuShow,
   adminMenuTree,
-  RequestAdminMenuEditParamsType,
-  RequestAdminMenuTreeParamsType,
-  ResponseAdminMenuListItemType,
-  ResponseAdminMenuPermissionsType,
 } from '@/services/apis/admin/menu';
 import { ColumnsType } from 'antd/lib/table';
 import Authorization from '@/components/Autuorization';
 import AdminMenuDetailModal, { NoticeModalPropsType } from './detail';
-import { history } from 'umi';
+import AdminMenuSaveModal from './edit';
 import SavePermissionsModal from './components/PermissionsSave';
 import FetchButton from '@/components/FetchButton';
+import { RowEnabledButton } from '@/components';
+import { MenuTreeItem, ReqAdminMenuShow } from '@/proto/admin_ts/admin_menu';
+import { AdminMenuModel } from '@/proto/admin_ts/admin_model';
 
 const Admin: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
-  const [detailData, setDetailData] = useState<any>();
-  const [rowsData, setRowsData] = useState<ResponseAdminMenuListItemType[]>([]);
+  const [detailData, setDetailData] = useState<AdminMenuModel>();
+  const [rowsData, setRowsData] = useState<MenuTreeItem[]>([]);
   const [detailModalStatus, setDetailModalStatus] = useState<boolean>(false);
+  const [saveModalStatus, setSaveModalStatus] = useState<boolean>(false);
   const [savePermissionsModalStatus, setSaveMenuPermissionsModalStatus] = useState<boolean>(false);
-  const [menuPermissionsDetail, setMenuPermissionsDetail] = useState<
-    ResponseAdminMenuPermissionsType | undefined
-  >(undefined);
+  const [menuPermissionsDetail, setMenuPermissionsDetail] = useState();
+
+
+  // 获取菜单列表
+  function getRows(data?: object) {
+    console.log('data:', data)
+    setLoading(true);
+    adminMenuTree()
+      .then((res: ResponseBodyType) => {
+        const resData: MenuTreeItem[] = res.data;
+        setRowsData(resData);
+      })
+      .catch((err) => {
+        console.log('error', err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  function tableChange() {
+    getRows();
+  }
+
+  // 菜单状态更新
+  function updateMenuStatus(record: MenuTreeItem, field: string) {
+    const updateData: ReqAdminMenuShow = {
+      menuId: record.id,
+      field: field,
+      show: !record[field]
+    };
+
+    adminMenuShow(updateData).then((res) => {
+      message.success(res.msg, MessageDuritain, () => {
+        getRows();
+      });
+    });
+  }
+
+  function updateMenuEnabled(record: MenuTreeItem) {
+    adminMenuEnable({
+      menuId: record.id,
+      enabled: !record.enabled,
+    }).then((res) => {
+      message.success(res.msg, MessageDuritain, () => {
+        getRows();
+      });
+    });
+  }
+
+  // 菜单详情
+  function openDetailModal(record: MenuTreeItem) {
+    adminMenuDetail({ menuId: record.id }).then((res) => {
+      setDetailData(res.data.data);
+      setDetailModalStatus(true);
+    });
+  }
+
+  // 菜单编辑
+  function openEditModal(record: MenuTreeItem) {
+    adminMenuDetail({ menuId: record.id }).then((res) => {
+      setDetailData(res.data.data)
+      setSaveModalStatus(true)
+    });
+  }
+
+  // 菜单添加
+  function openAddModal(record: MenuTreeItem) {
+    setDetailData({
+      parentId: record?.id ?? 0
+    })
+    setSaveModalStatus(true)
+  }
+
+  /**
+   * 保存菜单权限
+   * @param record
+   */
+  function openSavePermissionsModal(record: MenuTreeItem) {
+    adminMenuPermissions({ menuId: record.id }).then((res) => {
+      setMenuPermissionsDetail(res.data || { menuId: record.id });
+      setSaveMenuPermissionsModalStatus(true);
+    });
+  }
+
+  function noticeDetailModal(data: NoticeModalPropsType) {
+    setDetailData({});
+    setDetailModalStatus(false);
+    if (data.reload) {
+      getRows();
+    }
+  }
+
+  function noticeSaveModal(data: NoticeSaveModalPropsType) {
+    setDetailData({});
+    setSaveModalStatus(false);
+    if (data.reload) {
+      getRows();
+    }
+  }
+
+  function noticeAddPermissionModal(data: NoticeModalPropsType) {
+    setDetailData({});
+    setMenuPermissionsDetail(undefined);
+    setSaveMenuPermissionsModalStatus(false);
+    if (data.reload) {
+      getRows({ ...form.getFieldsValue() });
+    }
+  }
+
+  // 删除菜单
+  function onDelete(record: MenuTreeItem) {
+    adminMenuDelete({ menuId: record.id }).then((res) => {
+      message.success(res.msg, MessageDuritain);
+      getRows({ ...form.getFieldsValue() });
+    });
+  }
+
+  useEffect(() => {
+    getRows();
+  }, []);
+
+
+  const showTrueText = '隐藏'
+  const showFalseText = '显示'
 
   const columns: ColumnsType<any> = [
     {
@@ -48,31 +170,24 @@ const Admin: React.FC = () => {
       title: '菜单',
       align: 'left',
       dataIndex: 'hideInMenu',
-      render(enabled: boolean, record: ResponseAdminMenuListItemType) {
-        if (record.path == '/') {
+      render(hideInMenu: boolean, record: MenuTreeItem) {
+        if (record.path === '/') {
           return <></>;
         }
         return (
           <Authorization
-            name="AdminMenuEdit"
+            name="AdminUserEdit"
             forbidden={
-              <>
-                <Switch
-                  disabled
-                  checkedChildren={'隐藏'}
-                  unCheckedChildren={'显示'}
-                  checked={enabled}
-                />
-              </>
+              <RowEnabledButton danger={!!hideInMenu} isEnabled={hideInMenu} trueText={showTrueText} falseText={showFalseText} />
             }
           >
             <Popconfirm
-              title={`确定在菜单中${record.hideInMenu ? '显示' : '隐藏'}该项吗？`}
+              title={`确定在菜单中${record.hideInMenu ? '隐藏' : '显示'}该项吗？`}
               okText="确定"
               cancelText="取消"
               onConfirm={() => updateMenuStatus(record, 'hideInMenu')}
             >
-              <Switch checkedChildren={'隐藏'} unCheckedChildren={'显示'} checked={enabled} />
+              <RowEnabledButton danger={!!hideInMenu} isEnabled={hideInMenu} trueText={showTrueText} falseText={showFalseText} />
             </Popconfirm>
           </Authorization>
         );
@@ -82,31 +197,24 @@ const Admin: React.FC = () => {
       title: '子菜单',
       align: 'left',
       dataIndex: 'hideChildrenInMenu',
-      render(enabled: boolean, record: ResponseAdminMenuListItemType) {
-        if (record.path == '/') {
+      render(hideChildrenInMenu: boolean, record: MenuTreeItem) {
+        if (record.path === '/') {
           return <></>;
         }
         return (
           <Authorization
-            name="AdminMenuEdit"
+            name="AdminUserEdit"
             forbidden={
-              <>
-                <Switch
-                  disabled
-                  checkedChildren={'隐藏'}
-                  unCheckedChildren={'显示'}
-                  checked={enabled}
-                />
-              </>
+              <RowEnabledButton danger={!!hideChildrenInMenu} isEnabled={hideChildrenInMenu} trueText={showTrueText} falseText={showFalseText} />
             }
           >
             <Popconfirm
-              title={`确定在菜单中${record.hideInMenu ? '显示' : '隐藏'}其子菜单项吗？`}
+              title={`确定在菜单中${record.hideChildrenInMenu ? '隐藏' : '显示'}该项吗？`}
               okText="确定"
               cancelText="取消"
               onConfirm={() => updateMenuStatus(record, 'hideChildrenInMenu')}
             >
-              <Switch checkedChildren={'隐藏'} unCheckedChildren={'显示'} checked={enabled} />
+              <RowEnabledButton danger={!!hideChildrenInMenu} isEnabled={hideChildrenInMenu} trueText={showTrueText} falseText={showFalseText} />
             </Popconfirm>
           </Authorization>
         );
@@ -117,31 +225,24 @@ const Admin: React.FC = () => {
       width: '6rem',
       align: 'center',
       dataIndex: 'enabled',
-      render(enabled: boolean, record: ResponseAdminMenuListItemType) {
-        if (record.path == '/') {
+      render(enabled: boolean, record: MenuTreeItem) {
+        if (record.path === '/') {
           return <></>;
         }
         return (
           <Authorization
-            name="AdminMenuEdit"
+            name="AdminUserEdit"
             forbidden={
-              <>
-                <Switch
-                  disabled
-                  checkedChildren={'启用'}
-                  unCheckedChildren={'禁用'}
-                  checked={enabled}
-                />
-              </>
+              <RowEnabledButton isEnabled={enabled} />
             }
           >
             <Popconfirm
-              title={`确定要${record.enabled ? '禁用' : '启用'}该菜单吗？`}
+              title={`确定${record.enabled ? '禁用' : '启用'}该项吗？`}
               okText="确定"
               cancelText="取消"
               onConfirm={() => updateMenuEnabled(record)}
             >
-              <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} checked={enabled} />
+              <RowEnabledButton isEnabled={enabled} />
             </Popconfirm>
           </Authorization>
         );
@@ -151,8 +252,8 @@ const Admin: React.FC = () => {
       title: '操作',
       align: 'left',
       width: '10rem',
-      render(text, record: ResponseAdminMenuListItemType) {
-        if (record.path == '/') {
+      render(text, record: MenuTreeItem) {
+        if (record.path === '/') {
           return <></>;
         }
         return (
@@ -165,9 +266,9 @@ const Admin: React.FC = () => {
             </Authorization>
             <Authorization name="AdminMenuEdit">
               {record.hideInMenu ||
-              (record.children !== undefined &&
-                record?.children.length > 0 &&
-                !record.hideChildrenInMenu) ? (
+                (record.children !== undefined &&
+                  record?.children.length > 0 &&
+                  !record.hideChildrenInMenu) ? (
                 ''
               ) : (
                 <FetchButton onClick={() => openSavePermissionsModal(record)}>创建权限</FetchButton>
@@ -197,115 +298,6 @@ const Admin: React.FC = () => {
       },
     },
   ];
-
-  // 获取菜单列表
-  function getRows(data?: RequestAdminMenuTreeParamsType) {
-    setLoading(true);
-    adminMenuTree(data)
-      .then((res: ResponseBodyType) => {
-        const resData: ResponseAdminMenuListItemType[] = res.data;
-        setRowsData(resData);
-      })
-      .catch((err) => {
-        console.log('error', err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function tableChange(pagination: any, filters: any, sorter: any) {
-    getRows({
-      ...form.getFieldsValue(),
-    });
-  }
-
-  // 菜单状态更新
-  function updateMenuStatus(record: ResponseAdminMenuListItemType, field: string) {
-    const updateData: RequestAdminMenuEditParamsType = {
-      id: record.id,
-    };
-    updateData[field] = !record[field];
-    adminMenuEdit(updateData).then((res) => {
-      message.success(res.message, MessageDuritain, () => {
-        getRows({ ...form.getFieldsValue() });
-      });
-    });
-  }
-
-  function updateMenuEnabled(record: ResponseAdminMenuListItemType) {
-    adminMenuEnable({
-      menuId: record.id,
-      enabled: !record.enabled,
-    }).then((res) => {
-      message.success(res.message, MessageDuritain, () => {
-        getRows({ ...form.getFieldsValue() });
-      });
-    });
-  }
-
-  // 菜单详情
-  function openDetailModal(record: ResponseAdminMenuListItemType) {
-    adminMenuDetail({ menuId: record.id }).then((res) => {
-      setDetailData(res.data);
-      setDetailModalStatus(true);
-    });
-  }
-
-  // 菜单编辑
-  function openEditModal(record: ResponseAdminMenuListItemType) {
-    adminMenuDetail({ menuId: record.id }).then((res) => {
-      history.push(`/admin/menu/edit?menuId=${record.id}`);
-    });
-  }
-
-  // 菜单添加
-  function openAddModal(record?: ResponseAdminMenuListItemType) {
-    if (record?.id) {
-      history.push(`/admin/menu/add?menuId=${record.id}`);
-      return;
-    }
-    history.push('/admin/menu/add');
-  }
-
-  /**
-   * 保存菜单权限
-   * @param record
-   */
-  function openSavePermissionsModal(record: ResponseAdminMenuListItemType) {
-    adminMenuPermissions({ menuId: record.id }).then((res) => {
-      setMenuPermissionsDetail(res.data || { menuId: record.id });
-      setSaveMenuPermissionsModalStatus(true);
-    });
-  }
-
-  function noticeDetailModal(data: NoticeModalPropsType) {
-    setDetailData(undefined);
-    setDetailModalStatus(false);
-    if (data.reload) {
-      getRows({ ...form.getFieldsValue() });
-    }
-  }
-  function noticeAddPermissionModal(data: NoticeModalPropsType) {
-    setDetailData(undefined);
-    setMenuPermissionsDetail(undefined);
-    setSaveMenuPermissionsModalStatus(false);
-    if (data.reload) {
-      getRows({ ...form.getFieldsValue() });
-    }
-  }
-
-  // 删除菜单
-  function onDelete(record: ResponseAdminMenuListItemType) {
-    adminMenuDelete({ menuId: record.id, enabled: record.enabled }).then((res) => {
-      message.success(res.message, MessageDuritain);
-      getRows({ ...form.getFieldsValue() });
-    });
-  }
-
-  useEffect(() => {
-    getRows();
-  }, []);
 
   return (
     <Container>
@@ -351,7 +343,13 @@ const Admin: React.FC = () => {
         noticeModal={noticeDetailModal}
       />
 
-      {menuPermissionsDetail && menuPermissionsDetail.menu && menuPermissionsDetail.menu?.id > 0 ? (
+      <AdminMenuSaveModal
+        modalStatus={saveModalStatus}
+        detailData={detailData}
+        noticeModal={noticeSaveModal}
+      />
+
+      {/* {menuPermissionsDetail && menuPermissionsDetail.menu && menuPermissionsDetail.menu?.id > 0 ? (
         <SavePermissionsModal
           modalStatus={savePermissionsModalStatus}
           detailData={menuPermissionsDetail}
@@ -359,7 +357,7 @@ const Admin: React.FC = () => {
         />
       ) : (
         ''
-      )}
+      )} */}
     </Container>
   );
 };

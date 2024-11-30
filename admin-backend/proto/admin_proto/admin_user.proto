@@ -25,7 +25,7 @@ message ReqAdminUserInfo{
   int32 adminId = 1;//管理员ID
 }
 message RespAdminUserInfoData{
-  AdminUserModel data = 1;
+  AdminMenuModel data = 1;
 }
 
 

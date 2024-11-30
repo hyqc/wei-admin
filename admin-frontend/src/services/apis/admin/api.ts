@@ -104,7 +104,7 @@ export const APIAdminRoles = {
     method: POST,
   },
   bindPermissions: {
-    url: '/admin/role/bindPermissions',
+    url: '/admin/role/bind_permissions',
     method: POST,
   },
 };
@@ -136,6 +136,10 @@ export const APIAdminMenus = {
   },
   enable: {
     url: '/admin/menu/enable',
+    method: POST,
+  },
+  show: {
+    url: '/admin/menu/show',
     method: POST,
   },
   all: {

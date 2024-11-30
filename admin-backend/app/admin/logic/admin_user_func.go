@@ -20,8 +20,8 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 		Nickname:      data.Nickname,
 		Avatar:        data.Avatar,
 		Email:         data.Email,
-		CreateTime:    utils.HandleTime2String(data.CreatedAt),
-		ModifyTime:    utils.HandleTime2String(data.UpdatedAt),
+		CreatedAt:     utils.HandleTime2String(data.CreatedAt),
+		UpdatedAt:     utils.HandleTime2String(data.UpdatedAt),
 		LastLoginTime: utils.HandleTimePointer2String(data.LastLoginTime),
 		LoginTotal:    data.LoginTotal,
 		Enabled:       data.IsEnabled,
@@ -32,7 +32,7 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 	if err != nil {
 		return nil, err
 	}
-	resp.LastLoginTime = lastLoginIp
+	resp.LastLoginIp = lastLoginIp
 	if refreshToken {
 		token, err := createToken(data.ID, data.Username, seconds)
 		if err != nil {

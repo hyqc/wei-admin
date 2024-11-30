@@ -1,31 +1,24 @@
-import { Form, Input, message, Modal, Space, Switch } from 'antd';
-import { useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
 import {
   adminAddMenuPermission,
   RequestAdminPermissionAddForMenuParamsType,
   ResponseAdminMenuPermissionsItemType,
 } from '@/services/apis/admin/permission';
+import { App, Form, Input, Modal, Space, Switch } from 'antd';
+import { useEffect, useState } from 'react';
 import { PERMIDDION_RULES } from '../../Permission/components/common';
-import { ResponseAdminMenuPermissionsType } from '@/services/apis/admin/menu';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
 };
 
 export type AddModalPropsType = {
-  detailData: ResponseAdminMenuPermissionsType;
+  detailData: any;
   modalStatus: boolean;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
 const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
+  const {message} = App.useApp()
   const [form] = Form.useForm();
   const { detailData, modalStatus, noticeModal } = props;
   const { menu, permissions } = detailData;
@@ -43,7 +36,7 @@ const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
           permissions: handleFormValues(values),
         };
         adminAddMenuPermission(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
             form.resetFields();
           });
@@ -77,7 +70,7 @@ const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
   }, [detailData]);
 
   return (
-    (<Modal
+    <Modal
       forceRender
       title="添加菜单操作权限"
       width={900}
@@ -134,7 +127,7 @@ const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
           })}
         </Form.Item>
       </Form>
-    </Modal>)
+    </Modal>
   );
 };
 

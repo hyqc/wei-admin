@@ -4,6 +4,7 @@ import (
 	"admin/app/admin/dao"
 	model2 "admin/app/admin/gen/model"
 	"admin/code"
+	"admin/pkg/utils"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"errors"
@@ -105,8 +106,8 @@ func (a *AdminPermissionLogic) handleListItemData(item *model2.AdminPermission, 
 		Type:      item.Type,
 		TypeText:  dao.GetAdminPermissionTypeText(dao.AdminPermissionType(item.Type)),
 		Enabled:   item.IsEnabled,
-		CreatedAt: item.CreatedAt.Format(time.DateTime),
-		UpdatedAt: item.UpdatedAt.Format(time.DateTime),
+		CreatedAt: utils.HandleTime2String(item.CreatedAt),
+		UpdatedAt: utils.HandleTime2String(item.UpdatedAt),
 	}
 	if _, ok := menusMap[item.MenuID]; ok {
 		tmp.MenuName = menusMap[item.MenuID].Name

@@ -10,10 +10,10 @@ import {
   Col,
   Table,
   Avatar,
-  message,
   Tag,
   Popconfirm,
   Space,
+  App,
 } from 'antd';
 import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
 import type { Gutter } from 'antd/lib/grid/row';
@@ -36,19 +36,21 @@ import AdminUserEditModal from './edit';
 import AdminUserDetailModal from './detail';
 import AdminUserBindRolesModal from './bind';
 import AdminUserEditPasswordModal from './password';
-import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admin/role';
+import { adminRoleAll } from '@/services/apis/admin/role';
 import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
 import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
 import { ReqAdminUserEnabled, ReqAdminUserList, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
 import { handlePagination } from '@/services/common/utils';
 import { DefaultPagination } from '@/components/PageContainer/Pagination';
+import { RoleItem } from '@/proto/admin_ts/admin_role';
 
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
 
 const Admin: React.FC = () => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
@@ -59,156 +61,7 @@ const Admin: React.FC = () => {
   const [addModalStatus, setAddModalStatus] = useState<boolean>(false);
   const [bindModalStatus, setBindRolesModalStatus] = useState<boolean>(false);
   const [editPasswordModalStatus, setEditPasswordModalStatus] = useState<boolean>(false);
-  const [roleOptions, setRoleOptions] = useState<ResponseAdminRoleAllItemType[]>([]);
-
-  const columns: ColumnsType<any> = [
-    {
-      title: '账号',
-      align: 'left',
-      dataIndex: 'username',
-      width: '8rem',
-      sorter: true,
-      fixed: 'left',
-    },
-    {
-      title: '昵称',
-      align: 'left',
-      dataIndex: 'nickname',
-      width: '8rem',
-    },
-    {
-      title: '头像',
-      align: 'center',
-      dataIndex: 'avatar',
-      width: '3rem',
-      render: (avatar, record) => {
-        return <Avatar src={avatar} />;
-      },
-    },
-    {
-      title: '邮箱',
-      align: 'center',
-      width: '12rem',
-      dataIndex: 'email',
-    },
-    {
-      title: '角色',
-      width: '8rem',
-      dataIndex: 'roles',
-      render: (roles, record: AdminUserListItem) => {
-        if (record.adminId === AdminId) {
-          return (
-            <Tag color="geekblue" style={{ cursor: 'default' }}>
-              超管
-            </Tag>
-          );
-        }
-        return roles?.map((item: AdminUserRoleItem) => {
-          return (
-            <Tag color="geekblue" style={{ cursor: 'default' }} key={item.roleId}>
-              {item.roleName}
-            </Tag>
-          );
-        });
-      },
-    },
-    {
-      title: '登录次数',
-      align: 'center',
-      width: '7rem',
-      dataIndex: 'loginTotal',
-      sorter: true,
-      render(loginTotal: number, record: AdminUserListItem) {
-        return <>{loginTotal ?? 0}</>
-      },
-    },
-    {
-      title: '更新时间',
-      align: 'center',
-      width: '12rem',
-      dataIndex: 'updatedAt',
-      sorter: true,
-    },
-    {
-      title: '状态',
-      width: '6rem',
-      align: 'center',
-      dataIndex: 'isEnabled',
-      render(isEnabled: boolean, record: AdminUserListItem) {
-        if (record.adminId === AdminId) {
-          return (
-            <RowEnabledButton isEnabled={isEnabled} disabled={true} />
-          );
-        }
-        return (
-          <Authorization
-            name="AdminUserEdit"
-            forbidden={
-              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
-            }
-          >
-            <Popconfirm
-              title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
-              okText="确定"
-              cancelText="取消"
-              onConfirm={() => updateEnabled(record)}
-            >
-              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
-            </Popconfirm>
-          </Authorization>
-        );
-      },
-    },
-    {
-      title: '操作',
-      align: 'left',
-      width: '1rem',
-      fixed: 'right',
-      render(text, record: AdminUserListItem) {
-        return (
-          <Space>
-            <Authorization name="AdminUserView">
-              <FetchButton onClick={() => openDetailModal(record)} >详情</FetchButton>
-            </Authorization>
-            {record.adminId === AdminId ? (
-              <></>
-            ) : (
-              <>
-                <Authorization name="AdminUserEdit">
-                  <FetchButton onClick={() => openBindRolesModal(record)}>分配角色</FetchButton>
-                </Authorization>
-
-                <Authorization name="AdminUserEdit">
-                  <FetchButton onClick={() => openEditModal(record)}>编辑</FetchButton>
-                </Authorization>
-
-                <Authorization name="AdminUserEdit">
-                  {/* 非超管修改密码 */}
-                  <FetchButton onClick={() => openEditPasswordModal(record)}>修改密码</FetchButton>
-                </Authorization>
-
-                {/* 禁用的才能删除 */}
-                <Authorization name="AdminUserDelete">
-                  {!record.isEnabled ? (
-                    <Popconfirm
-                      title="确定要删除该账号吗？"
-                      okText="确定"
-                      cancelText="取消"
-                      onConfirm={() => onDelete(record)}
-                    >
-                      <FetchButton danger>删除</FetchButton>
-                    </Popconfirm>
-                  ) : (
-                    ''
-                  )}
-                </Authorization>
-              </>
-            )}
-          </Space>
-        );
-      },
-    },
-  ];
+  const [roleOptions, setRoleOptions] = useState<RoleItem[]>([]);
 
   // 获取账号列表
   function getRows(data?: ReqAdminUserList) {
@@ -385,6 +238,157 @@ const Admin: React.FC = () => {
     console.log('pageInfo: ', pageInfo)
   }, [pageInfo]);
 
+
+  const columns: ColumnsType<any> = [
+    {
+      title: '账号',
+      align: 'left',
+      dataIndex: 'username',
+      width: '8rem',
+      sorter: true,
+      fixed: 'left',
+    },
+    {
+      title: '昵称',
+      align: 'left',
+      dataIndex: 'nickname',
+      width: '8rem',
+    },
+    {
+      title: '头像',
+      align: 'center',
+      dataIndex: 'avatar',
+      width: '3rem',
+      render: (avatar) => {
+        return <Avatar src={avatar} />;
+      },
+    },
+    {
+      title: '邮箱',
+      align: 'center',
+      width: '12rem',
+      dataIndex: 'email',
+    },
+    {
+      title: '角色',
+      width: '8rem',
+      dataIndex: 'roles',
+      render: (roles, record: AdminUserListItem) => {
+        if (record.adminId === AdminId) {
+          return (
+            <Tag color="geekblue" style={{ cursor: 'default' }}>
+              超管
+            </Tag>
+          );
+        }
+        return roles?.map((item: AdminUserRoleItem) => {
+          return (
+            <Tag color="geekblue" style={{ cursor: 'default' }} key={item.roleId}>
+              {item.roleName}
+            </Tag>
+          );
+        });
+      },
+    },
+    {
+      title: '登录次数',
+      align: 'center',
+      width: '7rem',
+      dataIndex: 'loginTotal',
+      sorter: true,
+      render(loginTotal: number) {
+        return <>{loginTotal ?? 0}</>
+      },
+    },
+    {
+      title: '更新时间',
+      align: 'center',
+      width: '12rem',
+      dataIndex: 'updatedAt',
+      sorter: true,
+    },
+    {
+      title: '状态',
+      width: '6rem',
+      align: 'center',
+      dataIndex: 'isEnabled',
+      render(isEnabled: boolean, record: AdminUserListItem) {
+        if (record.adminId === AdminId) {
+          return (
+            <RowEnabledButton isEnabled={isEnabled} disabled={true} />
+          );
+        }
+        return (
+          <Authorization
+            name="AdminUserEdit"
+            forbidden={
+              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
+            }
+          >
+            <Popconfirm
+              title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
+              okText="确定"
+              cancelText="取消"
+              onConfirm={() => updateEnabled(record)}
+            >
+              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
+            </Popconfirm>
+          </Authorization>
+        );
+      },
+    },
+    {
+      title: '操作',
+      align: 'left',
+      width: '1rem',
+      fixed: 'right',
+      render(text, record: AdminUserListItem) {
+        return (
+          <Space>
+            <Authorization name="AdminUserView">
+              <FetchButton onClick={() => openDetailModal(record)} >详情</FetchButton>
+            </Authorization>
+            {record.adminId === AdminId ? (
+              <></>
+            ) : (
+              <>
+                <Authorization name="AdminUserEdit">
+                  <FetchButton onClick={() => openBindRolesModal(record)}>分配角色</FetchButton>
+                </Authorization>
+
+                <Authorization name="AdminUserEdit">
+                  <FetchButton onClick={() => openEditModal(record)}>编辑</FetchButton>
+                </Authorization>
+
+                <Authorization name="AdminUserEdit">
+                  {/* 非超管修改密码 */}
+                  <FetchButton onClick={() => openEditPasswordModal(record)}>修改密码</FetchButton>
+                </Authorization>
+
+                {/* 禁用的才能删除 */}
+                <Authorization name="AdminUserDelete">
+                  {!record.isEnabled ? (
+                    <Popconfirm
+                      title="确定要删除该账号吗？"
+                      okText="确定"
+                      cancelText="取消"
+                      onConfirm={() => onDelete(record)}
+                    >
+                      <FetchButton danger>删除</FetchButton>
+                    </Popconfirm>
+                  ) : (
+                    ''
+                  )}
+                </Authorization>
+              </>
+            )}
+          </Space>
+        );
+      },
+    },
+  ];
+
+
   return (
     <Container>
       <Search>
@@ -418,8 +422,8 @@ const Admin: React.FC = () => {
                 >
                   {roleOptions?.map((item) => {
                     return (
-                      <Select.Option key={item.roleId} value={item.roleId}>
-                        {item.roleName}
+                      <Select.Option key={item.id} value={item.id}>
+                        {item.name}
                       </Select.Option>
                     );
                   })}

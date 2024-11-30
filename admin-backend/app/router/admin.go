@@ -54,6 +54,7 @@ func admins(g *gin.RouterGroup) {
 		menu.POST("/add", menuAPI.Add)
 		menu.POST("/edit", menuAPI.Edit)
 		menu.POST("/enable", menuAPI.Enable)
+		menu.POST("/show", menuAPI.Show)
 		menu.POST("/delete", menuAPI.Delete)
 	}
 
@@ -80,6 +81,6 @@ func admins(g *gin.RouterGroup) {
 		role.POST("/edit", roleAPI.Edit)
 		role.POST("/enable", roleAPI.Enable)
 		role.POST("/delete", roleAPI.Delete)
-		role.POST("/bind_roles", roleAPI.BindPermissions)
+		role.POST("/bind_permissions", roleAPI.BindPermissions)
 	}
 }

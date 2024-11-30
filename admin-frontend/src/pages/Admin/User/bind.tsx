@@ -1,17 +1,9 @@
 import {
   adminUserBindRoles,
-  RequestAdminUserAssignRolesParamsType,
 } from '@/services/apis/admin/user';
-import { Form, Input, message, Modal, Select } from 'antd';
+import { App, Form, Input, Modal, Select } from 'antd';
 import { useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
-import { adminRoleAll, ResponseAdminRoleAllItemType } from '@/services/apis/admin/role';
+import { adminRoleAll } from '@/services/apis/admin/role';
 import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
 import { RoleItem } from '@/proto/admin_ts/admin_role';
 import { ReqAdminUserBindRoles } from '@/proto/admin_ts/admin_user';
@@ -27,15 +19,15 @@ export type BindModalPropsType = {
 };
 
 const BindModal: React.FC<BindModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [roleOptions, setRoleOptions] = useState<RoleItem[]>([]);
 
-  const roleIdsValue: number[] =
-    detailData?.roles?.map((item: AdminUserRoleItem) => {
-      return item.roleId;
-    }) || [];
+  const roleIdsValue: number[] = detailData?.roles?.map((item: AdminUserRoleItem) => {
+    return item.roleId ?? 0;
+  }).filter(roleId => roleId > 0) ?? [];
 
   function handleOk() {
     setConfirmLoading(true);
@@ -81,7 +73,7 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
       fetchAdminRoles();
       form.setFieldsValue({ username: detailData?.username, roleIds: roleIdsValue });
     }
-    return () => {};
+    return () => { };
   }, [detailData]);
 
   return (

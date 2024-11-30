@@ -1,12 +1,12 @@
 import {
-  adminRoleBind,
+  adminRoleBindPermissions,
 } from '@/services/apis/admin/role';
-import { Button, Drawer, Form, Input, message, Popconfirm } from 'antd';
+import { App, Button, Drawer, Form, Input, message, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
 import { INPUT_STYLE } from '@/services/apis/config';
 import BindPermissions from './components/BindPermissions';
-import { ResponseAdminMenuModeTypeData } from '@/services/apis/admin/menu';
 import { ReqAdminRoleBindPermissions, RespAdminRoleInfoData } from '@/proto/admin_ts/admin_role';
+import { MenuModeItem } from '@/proto/admin_ts/admin_menu';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -15,12 +15,14 @@ export type NoticeModalPropsType = {
 export type BindModalPropsType = {
   modalStatus: boolean;
   detailData: RespAdminRoleInfoData;
-  menuPageData: ResponseAdminMenuModeTypeData[];
+  menuPageData: MenuModeItem[];
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 const inputStyle = INPUT_STYLE;
 const ButtonStyles = { marginRight: '2rem' };
+
 const BindModal: React.FC<BindModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, detailData, menuPageData, noticeModal } = props;
   const [saveBtnLoading, setSaveBtnLoading] = useState<boolean>(false);
@@ -41,7 +43,7 @@ const BindModal: React.FC<BindModalPropsType> = (props) => {
           id: detailData.id,
         };
         console.log('value', values);
-        adminRoleBind(data).then((res) => {
+        adminRoleBindPermissions(data).then((res) => {
           message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
             form.resetFields();

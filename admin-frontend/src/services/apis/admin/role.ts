@@ -61,7 +61,7 @@ export async function adminRoleEnable(params: ReqAdminRoleEnable) {
 }
 
 //角色分配权限
-export async function adminRoleBind(params: ReqAdminRoleBindPermissions) {
+export async function adminRoleBindPermissions(params: ReqAdminRoleBindPermissions) {
   return request<ResponseBodyType>(APIAdminRoles.bindPermissions.url, {
     method: APIAdminRoles.bindPermissions.method,
     data: params,

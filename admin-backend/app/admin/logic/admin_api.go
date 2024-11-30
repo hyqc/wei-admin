@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strings"
-	"time"
 )
 
 type AdminAPILogic struct {
@@ -59,8 +58,8 @@ func (a *AdminAPILogic) HandleItemData(item *model.AdminAPI) (data *admin_proto.
 	if err != nil {
 		return nil, err
 	}
-	data.CreatedAt = item.CreatedAt.Format(time.DateTime)
-	data.UpdatedAt = item.UpdatedAt.Format(time.DateTime)
+	data.CreatedAt = utils.HandleTime2String(item.CreatedAt)
+	data.UpdatedAt = utils.HandleTime2String(item.UpdatedAt)
 	return data, nil
 }
 

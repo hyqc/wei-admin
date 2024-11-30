@@ -56,8 +56,8 @@ message AdminInfo{
   string nickname = 3;
   string avatar = 4;
   string email = 5;
-  string createTime = 6;
-  string modifyTime = 7;
+  string createdAt = 6;
+  string updatedAt = 7;
   string lastLoginTime = 8;
   string lastLoginIp = 9;
   int32 loginTotal = 10;

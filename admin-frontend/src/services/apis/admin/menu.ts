@@ -2,23 +2,16 @@
 import { request } from 'umi';
 import { APIAdminMenus } from './api';
 import type { ResponseBodyType } from '../types';
-import {
-  ResponseAdminMenuPermissionsItemType,
-} from './permission';
+import { ReqAdminMenuAdd, ReqAdminMenuDelete, ReqAdminMenuEdit, ReqAdminMenuEnable, ReqAdminMenuInfo, ReqAdminMenuList, ReqAdminMenuPages, ReqAdminMenuPermissions, ReqAdminMenuShow, ReqMenuList } from '@/proto/admin_ts/admin_menu';
 
 /************************************************************/
 /**
  * 树形菜单列表全
  */
-export type RequestAdminMenuTreeParamsType = {
-  menuId?: number;
-  name?: string;
-};
-
-export async function adminMenuTree(params?: RequestAdminMenuTreeParamsType) {
+export async function adminMenuTree() {
   return request<ResponseBodyType>(APIAdminMenus.tree.url, {
     method: APIAdminMenus.tree.method,
-    data: params,
+    data: {},
   });
 }
 
@@ -26,38 +19,7 @@ export async function adminMenuTree(params?: RequestAdminMenuTreeParamsType) {
 /**
  * 列表
  */
-
-export type RequestAdminMenuListParamsType = {
-  name?: string; // 菜单名称
-  enabled?: boolean; // 菜单状态，true：启用，false：禁用
-  pageNum?: number;
-  pageSize?: number;
-  sortField?: string;
-  sortType?: string;
-};
-
-export type ResponseAdminMenuListItemType = {
-  id: number; // 菜单ID，唯一键
-  parentId: number; // 父菜单ID
-  name: string; // 菜单名称，唯一键
-  path: string; // 菜单路由
-  redirect: string; // 重定向路由
-  hideInMenu: boolean; // 是否在菜单中隐藏
-  hideChildrenInMenu: boolean;
-  enabled: boolean; // 菜单状态, true：启用，false：禁用，
-  enabledText: string; //
-  createTime: string; // 创建时间 "2021-12-01 12:23:21"
-  modifyTime: string; // 最后更新时间
-  level?: number; // 菜单层级，/ 为0
-  describe?: string; // 描述
-  authority?: string; // 数据库中不设置
-  children?: ResponseAdminMenuListItemType[];
-  icon?: string;
-  locale?: string;
-  [key: string]: any;
-};
-
-export async function adminMenuList(params?: RequestAdminMenuListParamsType) {
+export async function adminMenuList(params?: ReqAdminMenuList) {
   return request<ResponseBodyType>(APIAdminMenus.list.url, {
     method: APIAdminMenus.list.method,
     data: params,
@@ -68,22 +30,7 @@ export async function adminMenuList(params?: RequestAdminMenuListParamsType) {
 /**
  * 新增
  */
-export type RequestAdminMenuAddParamsType = {
-  parentId: number; // 父菜单ID
-  name: string; // 菜单名称，唯一键
-  path: string; // 菜单路由
-  redirect: string; // 重定向路由
-  hideInMenu: boolean; // 是否在菜单中隐藏
-  authority: string; // 数据库中不设置
-  hideChildrenInMenu?: boolean;
-  icon?: string;
-  locale?: string;
-  enabled: boolean; // 菜单状态, true：启用，false：禁用，
-  enabledText: string; //
-  [key: string]: any;
-};
-
-export async function adminMenuAdd(params: RequestAdminMenuAddParamsType) {
+export async function adminMenuAdd(params: ReqAdminMenuAdd) {
   return request<ResponseBodyType>(APIAdminMenus.add.url, {
     method: APIAdminMenus.add.method,
     data: params,
@@ -94,33 +41,9 @@ export async function adminMenuAdd(params: RequestAdminMenuAddParamsType) {
 /**
  * 详情
  */
-
-export type RequestAdminMenuDetailParamsType = {
-  menuId: number;
-};
-
-export type ResponseAdminMenuDetailType = {
-  menuId: number; // 菜单ID，唯一键
-  parentId: number; // 父菜单ID
-  name: string; // 菜单名称，唯一键
-  path: string; // 菜单路由
-  redirect: string; // 重定向路由
-  authority: string; // 数据库中不设置
-  hideInMenu: boolean; // 是否在菜单中隐藏
-  hideChildrenInMenu?: boolean;
-  enabled: boolean; // 菜单状态, true：启用，false：禁用，
-  enabledText: string; //
-  createTime: string; // 创建时间 "2021-12-01 12:23:21"
-  modifyTime: string; // 最后更新时间
-  icon?: string;
-  locale?: string;
-  permissions?: PermissionsItemType[];
-  [key: string]: any;
-};
-
-export async function adminMenuDetail(params: RequestAdminMenuDetailParamsType) {
-  return request<ResponseBodyType>(APIAdminMenus.detail.url, {
-    method: APIAdminMenus.detail.method,
+export async function adminMenuDetail(params: ReqAdminMenuInfo) {
+  return request<ResponseBodyType>(APIAdminMenus.info.url, {
+    method: APIAdminMenus.info.method,
     data: params,
   });
 }
@@ -128,21 +51,7 @@ export async function adminMenuDetail(params: RequestAdminMenuDetailParamsType) 
 /**
  * 编辑
  */
-export type RequestAdminMenuEditParamsType = {
-  id: number;
-  parentId?: number; // 父菜单ID
-  name?: string; // 菜单名称，唯一键
-  path?: string; // 菜单路由
-  redirect?: string; // 重定向路由
-  hideInMenu?: boolean; // 是否在菜单中隐藏
-  hideChildrenInMenu?: boolean;
-  icon?: string;
-  locale?: string;
-  enabled?: boolean;
-  [key: string]: any;
-};
-
-export async function adminMenuEdit(params: RequestAdminMenuEditParamsType) {
+export async function adminMenuEdit(params: ReqAdminMenuEdit) {
   return request<ResponseBodyType>(APIAdminMenus.edit.url, {
     method: APIAdminMenus.edit.method,
     data: params,
@@ -153,12 +62,7 @@ export async function adminMenuEdit(params: RequestAdminMenuEditParamsType) {
 /**
  * 删除
  */
-export type RequestAdminMenuDeleteParamsType = {
-  menuId: number;
-  enabled: boolean;
-};
-
-export async function adminMenuDelete(params: RequestAdminMenuDeleteParamsType) {
+export async function adminMenuDelete(params: ReqAdminMenuDelete) {
   return request<ResponseBodyType>(APIAdminMenus.delete.url, {
     method: APIAdminMenus.delete.method,
     data: params,
@@ -169,14 +73,21 @@ export async function adminMenuDelete(params: RequestAdminMenuDeleteParamsType) 
 /**
  * 启用禁用
  */
-export type RequestAdminMenuEnableParamsType = {
-  menuId: number;
-  enabled: boolean;
-};
-
-export async function adminMenuEnable(params: RequestAdminMenuEnableParamsType) {
+export async function adminMenuEnable(params: ReqAdminMenuEnable) {
   return request<ResponseBodyType>(APIAdminMenus.enable.url, {
     method: APIAdminMenus.enable.method,
+    data: params,
+  });
+}
+
+/************************************************************/
+/**
+ * 菜单显示隐藏
+ * @returns 
+ */
+export async function adminMenuShow(params: ReqAdminMenuShow) {
+  return request<ResponseBodyType>(APIAdminMenus.show.url, {
+    method: APIAdminMenus.show.method,
     data: params,
   });
 }
@@ -186,21 +97,7 @@ export async function adminMenuEnable(params: RequestAdminMenuEnableParamsType) 
  * 菜单的权限列表
  */
 
-export type RequestAdminMenuPermissionsParamsType = {
-  menuId: number;
-};
-
-export type ResponseAdminMenuPermissionsType = {
-  menu: {
-    id: number;
-    name: string;
-    path: string;
-    key: string;
-  };
-  permissions: ResponseAdminMenuPermissionsItemType[];
-};
-
-export async function adminMenuPermissions(params: RequestAdminMenuPermissionsParamsType) {
+export async function adminMenuPermissions(params: ReqAdminMenuPermissions) {
   return request<ResponseBodyType>(APIAdminMenus.permissions.url, {
     method: APIAdminMenus.permissions.method,
     data: params,
@@ -211,10 +108,7 @@ export async function adminMenuPermissions(params: RequestAdminMenuPermissionsPa
 /**
  * 权限的菜单列表
  */
-export type RequestAdminMenuPagesParamsType = {
-  all?: boolean;
-};
-export async function adminMenuPages(params?: RequestAdminMenuPagesParamsType) {
+export async function adminMenuPages(params?: ReqAdminMenuPages) {
   return request<ResponseBodyType>(APIAdminMenus.pages.url, {
     method: APIAdminMenus.pages.method,
     data: {
@@ -224,6 +118,10 @@ export async function adminMenuPages(params?: RequestAdminMenuPagesParamsType) {
 }
 
 /************************************************************/
+/**
+ * 菜单模块
+ * @returns 
+ */
 export async function adminMenuMode() {
   return request<ResponseBodyType>(APIAdminMenus.mode.url, {
     method: APIAdminMenus.mode.method,

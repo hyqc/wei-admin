@@ -19,28 +19,29 @@ type AdminMenuLogic struct {
 }
 
 type IAdminMenuLogic interface {
-	List(ctx *gin.Context, params *admin_proto.ReqMenuList) (data *admin_proto.RespMenuListData, err error)
+	List(ctx *gin.Context, params *admin_proto.ReqAdminMenuList) (data *admin_proto.RespAdminMenuListData, err error)
 	Tree(ctx *gin.Context) ([]*admin_proto.MenuTreeItem, error)
-	Add(ctx *gin.Context, params *admin_proto.ReqMenuAdd) error
-	Info(ctx *gin.Context, params *admin_proto.ReqMenuInfo) (*admin_proto.MenuItem, error)
-	Edit(ctx *gin.Context, params *admin_proto.ReqMenuEdit) error
-	Enable(ctx *gin.Context, params *admin_proto.ReqMenuEnable) error
-	Delete(ctx *gin.Context, params *admin_proto.ReqMenuDelete) error
-	Permissions(ctx *gin.Context, params *admin_proto.ReqMenuPermissions) (*admin_proto.MenuPermissions, error)
-	Pages(ctx *gin.Context, params *admin_proto.ReqMenuPages) (list []*admin_proto.MenuTreeItem, err error)
-	AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeData, error)
+	Add(ctx *gin.Context, params *admin_proto.ReqAdminMenuAdd) error
+	Info(ctx *gin.Context, params *admin_proto.ReqAdminMenuInfo) (*admin_proto.RespAdminMenuInfoData, error)
+	Edit(ctx *gin.Context, params *admin_proto.ReqAdminMenuEdit) error
+	Enable(ctx *gin.Context, params *admin_proto.ReqAdminMenuEnable) error
+	Show(ctx *gin.Context, params *admin_proto.ReqAdminMenuShow) error
+	Delete(ctx *gin.Context, params *admin_proto.ReqAdminMenuDelete) error
+	Permissions(ctx *gin.Context, params *admin_proto.ReqAdminMenuPermissions) (*admin_proto.MenuPermissions, error)
+	Pages(ctx *gin.Context, params *admin_proto.ReqAdminMenuPages) (list []*admin_proto.MenuTreeItem, err error)
+	AllMode(ctx *gin.Context) (*admin_proto.RespAdminMenuModeData, error)
 }
 
 func newAdminMenuLogic() IAdminMenuLogic {
 	return &AdminMenuLogic{}
 }
 
-func (a *AdminMenuLogic) List(ctx *gin.Context, params *admin_proto.ReqMenuList) (data *admin_proto.RespMenuListData, err error) {
+func (a *AdminMenuLogic) List(ctx *gin.Context, params *admin_proto.ReqAdminMenuList) (data *admin_proto.RespAdminMenuListData, err error) {
 	total, rows, err := dao.H.AdminMenu.FindList(ctx, params)
 	if err != nil {
 		return nil, err
 	}
-	data = &admin_proto.RespMenuListData{}
+	data = &admin_proto.RespAdminMenuListData{}
 	data.Total = total
 	data.List, err = a.handleListData(rows)
 	return data, err
@@ -72,7 +73,7 @@ func (a *AdminMenuLogic) Tree(ctx *gin.Context) ([]*admin_proto.MenuTreeItem, er
 	return common.GetMenuTreeWithTop(data), nil
 }
 
-func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.ReqMenuAdd) error {
+func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminMenuAdd) error {
 	data := &model.AdminMenu{
 		ParentID:             params.ParentId,
 		Path:                 params.Path,
@@ -90,7 +91,7 @@ func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.ReqMenuAdd) e
 	return dao.H.AdminMenu.Create(ctx, data)
 }
 
-func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.ReqMenuInfo) (*admin_proto.MenuItem, error) {
+func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminMenuInfo) (*admin_proto.RespAdminMenuInfoData, error) {
 	data, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -98,11 +99,32 @@ func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.ReqMenuInfo)
 		}
 		return nil, err
 	}
-	return a.handleItemData(data)
+	rest := &admin_proto.RespAdminMenuInfoData{
+		Data: &admin_proto.AdminMenuModel{},
+	}
+	if err = utils.BeanCopy(rest.Data, data); err != nil {
+		return nil, err
+	}
+	rest.Data.Id = data.ID
+	rest.Data.Name = data.Name
+	rest.Data.ParentId = data.ParentID
+	rest.Data.Path = data.Path
+	rest.Data.Key = data.Key
+	rest.Data.Describe = data.Describe
+	rest.Data.Component = data.Component
+	rest.Data.IsHideInMenu = data.IsHideInMenu
+	rest.Data.IsHideChildrenInMenu = data.IsHideChildrenInMenu
+	rest.Data.IsEnabled = data.IsEnabled
+	rest.Data.Sort = data.Sort
+	rest.Data.Redirect = data.Redirect
+	rest.Data.Icon = data.Icon
+	rest.Data.CreatedAt = utils.HandleTime2String(data.CreatedAt)
+	rest.Data.UpdatedAt = utils.HandleTime2String(data.UpdatedAt)
+	return rest, nil
 }
 
-func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.ReqMenuEdit) error {
-	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
+func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminMenuEdit) error {
+	info, err := dao.H.AdminMenu.FindById(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
@@ -117,13 +139,13 @@ func (a *AdminMenuLogic) Edit(ctx *gin.Context, params *admin_proto.ReqMenuEdit)
 	info.Icon = params.Icon
 	info.Sort = params.Sort
 	info.Redirect = params.Redirect
-	info.IsHideInMenu = params.HideInMenu
-	info.IsHideChildrenInMenu = params.HideChildrenInMenu
-	info.IsEnabled = params.Enabled
+	info.IsHideInMenu = params.IsHideInMenu
+	info.IsHideChildrenInMenu = params.IsHideChildrenInMenu
+	info.IsEnabled = params.IsEnabled
 	return dao.H.AdminMenu.Update(ctx, info)
 }
 
-func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.ReqMenuEnable) error {
+func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.ReqAdminMenuEnable) error {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -136,8 +158,18 @@ func (a *AdminMenuLogic) Enable(ctx *gin.Context, params *admin_proto.ReqMenuEna
 	}
 	return dao.H.AdminMenu.Enable(ctx, params.MenuId, params.Enabled)
 }
+func (a *AdminMenuLogic) Show(ctx *gin.Context, params *admin_proto.ReqAdminMenuShow) error {
+	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
+		}
+		return err
+	}
+	return dao.H.AdminMenu.Show(ctx, info.ID, params.Field, params.Show)
+}
 
-func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.ReqMenuDelete) error {
+func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminMenuDelete) error {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -151,7 +183,7 @@ func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.ReqMenuDel
 	return dao.H.AdminMenu.Delete(ctx, params.MenuId)
 }
 
-func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqMenuPermissions) (*admin_proto.MenuPermissions, error) {
+func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAdminMenuPermissions) (*admin_proto.MenuPermissions, error) {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -201,7 +233,7 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqMe
 	return data, nil
 }
 
-func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.ReqMenuPages) (list []*admin_proto.MenuTreeItem, err error) {
+func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.ReqAdminMenuPages) (list []*admin_proto.MenuTreeItem, err error) {
 	//data, err := dao.H.AdminMenu.FindPages(ctx)
 	//if err != nil {
 	//	return nil, err
@@ -237,7 +269,7 @@ func (a *AdminMenuLogic) handleItemData(item *model.AdminMenu) (data *admin_prot
 	return data, nil
 }
 
-func (a *AdminMenuLogic) AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeData, error) {
+func (a *AdminMenuLogic) AllMode(ctx *gin.Context) (*admin_proto.RespAdminMenuModeData, error) {
 	//获取全部权限
 	permissionList, err := dao.H.AdminPermission.FindAdministerPermissions(ctx)
 	if err != nil {
@@ -286,7 +318,7 @@ func (a *AdminMenuLogic) AllMode(ctx *gin.Context) (*admin_proto.RespMenuModeDat
 			page.PageName = menu.Name
 		}
 	}
-	result := &admin_proto.RespMenuModeData{
+	result := &admin_proto.RespAdminMenuModeData{
 		Modes: make([]*admin_proto.MenuModeItem, 0),
 	}
 	//获取所有顶级页面

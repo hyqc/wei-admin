@@ -1,6 +1,6 @@
 import { adminUserAdd } from '@/services/apis/admin/user';
 import { APICommon } from '@/services/apis/admin/api';
-import { Form, Input, message, Modal, Switch, Upload } from 'antd';
+import { App, Form, Input,  Modal, Switch, Upload } from 'antd';
 import { useState } from 'react';
 import { CloudUploadOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
@@ -17,6 +17,7 @@ export type AddModalPropsType = {
 };
 
 const AddModal: React.FC<AddModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);

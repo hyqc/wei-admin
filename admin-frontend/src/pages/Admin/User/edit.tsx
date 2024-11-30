@@ -1,21 +1,14 @@
 import {
   adminUserEdit,
-  RequestAdminUserEditParamsType,
-  ResponseAdminUserDetailType,
 } from '@/services/apis/admin/user';
 import { APICommon } from '@/services/apis/admin/api';
-import { Form, Input, message, Modal, Switch, Upload } from 'antd';
+import { App, Form, Input, Modal, Switch, Upload } from 'antd';
 import { useEffect, useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 import { CloudUploadOutlined } from '@ant-design/icons';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
 import { AdminUserFormRules } from './common';
+import { AdminInfo } from '@/proto/admin_ts/admin_account';
+import { ReqAdminUserEdit } from '@/proto/admin_ts/admin_user';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -23,11 +16,12 @@ export type NoticeModalPropsType = {
 
 export type EditModalPropsType = {
   modalStatus: boolean;
-  detailData: ResponseAdminUserDetailType;
+  detailData: AdminInfo;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
 const EditModal: React.FC<EditModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -41,7 +35,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminUserEditParamsType = {
+        const data: ReqAdminUserEdit = {
           ...values,
           avatar,
         };
@@ -131,7 +125,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
           <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} />
         </Form.Item>
         <Form.Item label="头像" name="avatar" initialValue={true}>
-          <ImgCrop rotate>
+          <ImgCrop>
             <Upload
               maxCount={1}
               accept={UploadImageAccept}

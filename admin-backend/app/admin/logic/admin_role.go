@@ -14,7 +14,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"time"
 )
 
 type AdminRoleLogic struct {
@@ -65,8 +64,8 @@ func (a *AdminRoleLogic) HandleItemData(item *model.AdminRole) (data *admin_prot
 		return nil, err
 	}
 	data.Id = item.ID
-	data.CreatedAt = item.CreatedAt.Format(time.DateTime)
-	data.UpdatedAt = item.UpdatedAt.Format(time.DateTime)
+	data.CreatedAt = utils.HandleTime2String(item.CreatedAt)
+	data.UpdatedAt = utils.HandleTime2String(item.UpdatedAt)
 	return data, nil
 }
 
@@ -103,8 +102,8 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminRole
 		CreateAdminName: adminInfo.CreateAdminName,
 		ModifyAdminId:   adminInfo.ModifyAdminId,
 		ModifyAdminName: adminInfo.ModifyAdminName,
-		CreatedAt:       adminInfo.CreatedAt.Format(time.DateTime),
-		UpdatedAt:       adminInfo.UpdatedAt.Format(time.DateTime),
+		CreatedAt:       utils.HandleTime2String(adminInfo.CreatedAt),
+		UpdatedAt:       utils.HandleTime2String(adminInfo.UpdatedAt),
 		Permissions:     make([]*admin_proto.RolePermissionItem, 0),
 		PermissionIds:   make([]int32, 0),
 	}
@@ -137,7 +136,7 @@ func (a *AdminRoleLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminRole
 	}
 	adminInfo.Name = params.Name
 	adminInfo.Describe = params.Describe
-	adminInfo.IsEnabled = params.Enabled
+	adminInfo.IsEnabled = params.IsEnabled
 	return dao.H.AdminRole.Update(ctx, adminInfo)
 }
 

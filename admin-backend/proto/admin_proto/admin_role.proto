@@ -56,7 +56,7 @@ message ReqAdminRoleEdit{
   int32 id=1;//角色ID
   string name=2;//角色名称
   string describe=3;//角色描述
-  bool enabled=4;//启用状态
+  bool isEnabled=4;//启用状态
 }
 message RespAdminRoleEditData{}
 

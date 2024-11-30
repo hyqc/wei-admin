@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 	"time"
+	"unicode"
 )
 
 // GetOutBoundIP 获取对外IP
@@ -53,11 +54,13 @@ func BeanCopy(dst, src interface{}) error {
 	return nil
 }
 
+// GetConfigEnv 获取环境变量
 func GetConfigEnv(env string) string {
 	viper.AutomaticEnv()
 	return viper.GetString(env)
 }
 
+// HandleTime2Local 将时间转换为本地时间
 func HandleTime2Local(data ...*time.Time) {
 	if data == nil || len(data) == 0 {
 		return
@@ -70,6 +73,7 @@ func HandleTime2Local(data ...*time.Time) {
 	}
 }
 
+// HandleTime2String 将时间转换为字符串
 func HandleTime2String(data time.Time) string {
 	if data.IsZero() {
 		return ""
@@ -77,9 +81,26 @@ func HandleTime2String(data time.Time) string {
 	return data.Format(time.RFC3339)
 }
 
+// HandleTimePointer2String 将指针指向的时间转换为字符串
 func HandleTimePointer2String(data *time.Time) string {
 	if data == nil || data.IsZero() {
 		return ""
 	}
 	return data.Format(time.RFC3339)
+}
+
+// CamelToSnake 将小驼峰命名风格的字符串转换为下划线命名风格。
+func CamelToSnake(s string) string {
+	var result []rune
+	for i, r := range s {
+		if unicode.IsUpper(r) {
+			if i > 0 {
+				result = append(result, '_')
+			}
+			result = append(result, unicode.ToLower(r))
+		} else {
+			result = append(result, r)
+		}
+	}
+	return string(result)
 }
