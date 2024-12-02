@@ -248,7 +248,7 @@ func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admi
 		}
 		return err
 	}
-	data := make([]*model2.AdminPermission, 0, len(params.Permissions))
+	saveData := make([]*model2.AdminPermission, 0, len(params.Permissions))
 	for _, item := range params.Permissions {
 		if item.Key == "" {
 			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionKeyNeed, nil)
@@ -259,7 +259,8 @@ func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admi
 		if dao.GetAdminPermissionTypeText(dao.AdminPermissionType(item.Type)) == "" {
 			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionTypeInvalid, nil)
 		}
-		data = append(data, &model2.AdminPermission{
+		saveData = append(saveData, &model2.AdminPermission{
+			ID:        item.Id,
 			MenuID:    params.MenuId,
 			Key:       item.Key,
 			Name:      item.Name,
@@ -268,5 +269,5 @@ func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admi
 			IsEnabled: item.Enabled,
 		})
 	}
-	return dao.H.AdminPermission.BatchAddPermissions(ctx, data)
+	return dao.H.AdminPermission.BatchAddPermissions(ctx, saveData)
 }

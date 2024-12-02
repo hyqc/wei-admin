@@ -19,14 +19,14 @@ func (a *AdminMenuReqValidator) ListReq(data interface{}) url.Values {
 
 func (a *AdminMenuReqValidator) AddReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"required", "min:0"},
+		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"min:0"},
 		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiPathRule)},
 		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiKeyRule)},
 		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("describe"): []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
+		validator.GetValidateJsonOmitemptyTag("describe"): []string{fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"required:父菜单不能为空", "min:父菜单ID无效"},
+		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"min:父菜单ID无效"},
 		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required:接口路由不能为空", PatternAdminApiPathMsg},
 		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required:接口路由键名不能为空", PatternAdminApiKeyMsg},
 		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required:接口名称不能为空", PatternTrimBlankStringMsg},

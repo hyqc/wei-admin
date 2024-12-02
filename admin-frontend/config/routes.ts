@@ -70,20 +70,6 @@ export default [
             component: './Admin/Menu',
             hideInMenu: true,
           },
-          {
-            key: 'AdminMenuAdd',
-            path: '/admin/menu/add',
-            name: 'add',
-            component: './Admin/Menu/add',
-            hideInMenu: true,
-          },
-          {
-            key: 'AdminMenuEdit',
-            path: '/admin/menu/edit',
-            name: 'edit',
-            component: './Admin/Menu/edit',
-            hideInMenu: true,
-          },
         ],
       },
       {

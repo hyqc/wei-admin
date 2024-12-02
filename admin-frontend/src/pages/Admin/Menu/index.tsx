@@ -14,11 +14,11 @@ import {
 import { ColumnsType } from 'antd/lib/table';
 import Authorization from '@/components/Autuorization';
 import AdminMenuDetailModal, { NoticeModalPropsType } from './detail';
-import AdminMenuSaveModal from './edit';
+import AdminMenuSaveModal from './save';
 import SavePermissionsModal from './components/PermissionsSave';
 import FetchButton from '@/components/FetchButton';
 import { RowEnabledButton } from '@/components';
-import { MenuTreeItem, ReqAdminMenuShow } from '@/proto/admin_ts/admin_menu';
+import { MenuTreeItem, ReqAdminMenuShow, RespAdminMenuPermissionsData } from '@/proto/admin_ts/admin_menu';
 import { AdminMenuModel } from '@/proto/admin_ts/admin_model';
 
 const Admin: React.FC = () => {
@@ -29,7 +29,7 @@ const Admin: React.FC = () => {
   const [detailModalStatus, setDetailModalStatus] = useState<boolean>(false);
   const [saveModalStatus, setSaveModalStatus] = useState<boolean>(false);
   const [savePermissionsModalStatus, setSaveMenuPermissionsModalStatus] = useState<boolean>(false);
-  const [menuPermissionsDetail, setMenuPermissionsDetail] = useState();
+  const [menuPermissionsDetail, setMenuPermissionsDetail] = useState<RespAdminMenuPermissionsData>({menuInfo: {}, permissions: []});
 
 
   // 获取菜单列表
@@ -96,7 +96,7 @@ const Admin: React.FC = () => {
   }
 
   // 菜单添加
-  function openAddModal(record: MenuTreeItem) {
+  function openAddModal(record?: MenuTreeItem) {
     setDetailData({
       parentId: record?.id ?? 0
     })
@@ -109,7 +109,12 @@ const Admin: React.FC = () => {
    */
   function openSavePermissionsModal(record: MenuTreeItem) {
     adminMenuPermissions({ menuId: record.id }).then((res) => {
-      setMenuPermissionsDetail(res.data || { menuId: record.id });
+      const data = res.data || {menuInfo: { }, permissions: []};
+      setMenuPermissionsDetail((old)=>{
+        const nv = {menuInfo: {...data.menuInfo}, permissions: [...data.permissions]}
+        console.log('=============', nv, old)
+        return nv
+      });
       setSaveMenuPermissionsModalStatus(true);
     });
   }
@@ -122,7 +127,7 @@ const Admin: React.FC = () => {
     }
   }
 
-  function noticeSaveModal(data: NoticeSaveModalPropsType) {
+  function noticeSaveModal(data: NoticeModalPropsType) {
     setDetailData({});
     setSaveModalStatus(false);
     if (data.reload) {
@@ -132,10 +137,10 @@ const Admin: React.FC = () => {
 
   function noticeAddPermissionModal(data: NoticeModalPropsType) {
     setDetailData({});
-    setMenuPermissionsDetail(undefined);
+    setMenuPermissionsDetail({menuInfo: {}, permissions: []});
     setSaveMenuPermissionsModalStatus(false);
     if (data.reload) {
-      getRows({ ...form.getFieldsValue() });
+      getRows();
     }
   }
 
@@ -143,13 +148,15 @@ const Admin: React.FC = () => {
   function onDelete(record: MenuTreeItem) {
     adminMenuDelete({ menuId: record.id }).then((res) => {
       message.success(res.msg, MessageDuritain);
-      getRows({ ...form.getFieldsValue() });
+      getRows();
     });
   }
 
   useEffect(() => {
     getRows();
   }, []);
+
+  useEffect(()=>{},[menuPermissionsDetail])
 
 
   const showTrueText = '隐藏'
@@ -271,7 +278,7 @@ const Admin: React.FC = () => {
                   !record.hideChildrenInMenu) ? (
                 ''
               ) : (
-                <FetchButton onClick={() => openSavePermissionsModal(record)}>创建权限</FetchButton>
+                <FetchButton onClick={() => openSavePermissionsModal(record)}>权限</FetchButton>
               )}
             </Authorization>
             <Authorization name="AdminMenuEdit">
@@ -349,15 +356,12 @@ const Admin: React.FC = () => {
         noticeModal={noticeSaveModal}
       />
 
-      {/* {menuPermissionsDetail && menuPermissionsDetail.menu && menuPermissionsDetail.menu?.id > 0 ? (
-        <SavePermissionsModal
-          modalStatus={savePermissionsModalStatus}
-          detailData={menuPermissionsDetail}
-          noticeModal={noticeAddPermissionModal}
-        />
-      ) : (
-        ''
-      )} */}
+      <SavePermissionsModal
+        modalStatus={savePermissionsModalStatus}
+        menuInfo={menuPermissionsDetail.menuInfo || {}}
+        permissions={menuPermissionsDetail.permissions || []}
+        noticeModal={noticeAddPermissionModal}
+      />
     </Container>
   );
 };

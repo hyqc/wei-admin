@@ -174,7 +174,7 @@ export const APIAdminPermissions = {
     method: POST,
   },
   addMenuPermissions: {
-    url: '/admin/permission/addMenuPermissions',
+    url: '/admin/permission/add_menu_permissions',
     method: POST,
   },
   delete: {

@@ -1,38 +1,69 @@
 import {
   adminAddMenuPermission,
-  RequestAdminPermissionAddForMenuParamsType,
-  ResponseAdminMenuPermissionsItemType,
 } from '@/services/apis/admin/permission';
 import { App, Form, Input, Modal, Space, Switch } from 'antd';
 import { useEffect, useState } from 'react';
 import { PERMIDDION_RULES } from '../../Permission/components/common';
+import { MenuPermissionItem, RespAdminMenuPermissionsData } from '@/proto/admin_ts/admin_menu';
+import { ReqPermissionBindMenu } from '@/proto/admin_ts/admin_permission';
+import { AdminMenuModel } from '@/proto/admin_ts/admin_model';
+import { set } from 'lodash';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
 };
 
-export type AddModalPropsType = {
-  detailData: any;
+export type ModalPropsType = {
+  menuInfo: AdminMenuModel;
+  permissions: MenuPermissionItem[];
   modalStatus: boolean;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
-const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
-  const {message} = App.useApp()
+const AddPermissionsModal: React.FC<ModalPropsType> = (props) => {
+  const { message } = App.useApp()
   const [form] = Form.useForm();
-  const { detailData, modalStatus, noticeModal } = props;
-  const { menu, permissions } = detailData;
+  const { menuInfo, permissions, modalStatus, noticeModal } = props;
+
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-  const [savePermissions] = useState<ResponseAdminMenuPermissionsItemType[]>(permissions);
+  const [savePermissions, setSavePermissions] = useState<MenuPermissionItem[]>([]);
   const rules = PERMIDDION_RULES;
+
+  useEffect(() => {
+    setSavePermissions([...permissions])
+
+    const formData: { [key: string]: any } = {}
+    permissions.map((item, index) => {
+      formData[`name[${index}]`] = item.name ?? ''
+      formData[`key[${index}]`] = item.key ?? ''
+      formData[`enabled[${index}]`] = item.enabled ?? false
+    })
+    form.setFieldsValue(formData)
+
+  }, [menuInfo, permissions])
+
+
+  function handleFormValues(values: any) {
+    return savePermissions?.map((item: MenuPermissionItem, index: number) => {
+      let tmp: MenuPermissionItem = { ...item };
+      tmp.name = values[`name[${index}]`];
+      tmp.key = values[`key[${index}]`];
+      tmp.enabled = values[`enabled[${index}]`];
+      return tmp;
+    });
+  }
+
+  function handleCancel() {
+    form.resetFields();
+    noticeModal({ reload: false });
+  }
 
   function handleOk() {
     setConfirmLoading(true);
-    form
-      .validateFields()
+    form.validateFields()
       .then((values) => {
-        const data: RequestAdminPermissionAddForMenuParamsType = {
-          menuId: detailData.menu.id,
+        const data: ReqPermissionBindMenu = {
+          menuId: menuInfo?.id,
           permissions: handleFormValues(values),
         };
         adminAddMenuPermission(data).then((res) => {
@@ -49,25 +80,6 @@ const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
         setConfirmLoading(false);
       });
   }
-
-  function handleFormValues(values: any) {
-    return permissions.map((item: ResponseAdminMenuPermissionsItemType, index: number) => {
-      let tmp: ResponseAdminMenuPermissionsItemType = { ...item };
-      tmp.name = values[`name[${index}]`];
-      tmp.key = values[`key[${index}]`];
-      tmp.enabled = values[`enabled[${index}]`];
-      return tmp;
-    });
-  }
-
-  function handleCancel() {
-    form.resetFields();
-    noticeModal({ reload: false });
-  }
-
-  useEffect(() => {
-    console.log('detailData', detailData);
-  }, [detailData]);
 
   return (
     <Modal
@@ -86,18 +98,18 @@ const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
     >
       <Form form={form} labelCol={{ span: 3 }} wrapperCol={{ span: 20 }}>
         <Form.Item label="菜单">
-          <Input disabled value={menu?.name} style={{ width: 260 }} />
+          <Input disabled value={menuInfo?.name} style={{ width: 260 }} />
         </Form.Item>
         <Form.Item label="权限">
-          {savePermissions.map((item, index) => {
+          {[...permissions].map((nv, index) => {
+            const item = { ...nv }
             return (
-              <Form.Item label={item.typeText} name={index} key={index}>
+              <Form.Item label={item.typeName} key={index}>
                 <Space>
                   <Form.Item
                     label="名称"
                     name={`name[${index}]`}
                     rules={rules.view.name}
-                    initialValue={item.name}
                   >
                     <Input />
                   </Form.Item>
@@ -105,14 +117,12 @@ const AddPermissionsModal: React.FC<AddModalPropsType> = (props) => {
                     label="唯一键"
                     name={`key[${index}]`}
                     rules={rules.view.key}
-                    initialValue={item.key}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label="状态"
                     name={`enabled[${index}]`}
-                    initialValue={item.enabled}
                     valuePropName="checked"
                   >
                     <Switch

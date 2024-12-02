@@ -27,7 +27,7 @@ type IAdminMenuLogic interface {
 	Enable(ctx *gin.Context, params *admin_proto.ReqAdminMenuEnable) error
 	Show(ctx *gin.Context, params *admin_proto.ReqAdminMenuShow) error
 	Delete(ctx *gin.Context, params *admin_proto.ReqAdminMenuDelete) error
-	Permissions(ctx *gin.Context, params *admin_proto.ReqAdminMenuPermissions) (*admin_proto.MenuPermissions, error)
+	Permissions(ctx *gin.Context, params *admin_proto.ReqAdminMenuPermissions) (*admin_proto.RespAdminMenuPermissionsData, error)
 	Pages(ctx *gin.Context, params *admin_proto.ReqAdminMenuPages) (list []*admin_proto.MenuTreeItem, err error)
 	AllMode(ctx *gin.Context) (*admin_proto.RespAdminMenuModeData, error)
 }
@@ -183,7 +183,7 @@ func (a *AdminMenuLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminMe
 	return dao.H.AdminMenu.Delete(ctx, params.MenuId)
 }
 
-func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAdminMenuPermissions) (*admin_proto.MenuPermissions, error) {
+func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAdminMenuPermissions) (*admin_proto.RespAdminMenuPermissionsData, error) {
 	info, err := dao.H.AdminMenu.FindById(ctx, params.MenuId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -191,11 +191,13 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAd
 		}
 		return nil, err
 	}
-	data := &admin_proto.MenuPermissions{
-		Menu:        &admin_proto.MenuTreeItem{},
-		Permissions: make([]*admin_proto.PermissionApiItem, 0),
+	data := &admin_proto.RespAdminMenuPermissionsData{
+		MenuInfo:    &admin_proto.AdminMenuModel{},
+		Permissions: make([]*admin_proto.MenuPermissionItem, 0),
 	}
-	_ = utils.BeanCopy(data.Menu, info)
+	_ = utils.BeanCopy(data.MenuInfo, info)
+	data.MenuInfo.Id = info.ID
+
 	permissions, err := dao.H.AdminPermission.FindPermissionsByMenuId(ctx, info.ID)
 	if err != nil {
 		return nil, err
@@ -203,31 +205,17 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAd
 	if len(permissions) == 0 {
 		data.Permissions = common.AdminPermissionEnumList(info.ID, info.Key)
 		return data, nil
-	}
-	// TODO
-	permissionIdsMap := make(map[int32]struct{})
-	permissionIds := make([]int32, 0, len(permissions))
-	for _, item := range permissions {
-		if _, ok := permissionIdsMap[item.ID]; !ok {
-			permissionIdsMap[item.ID] = struct{}{}
-			permissionIds = append(permissionIds, item.ID)
-		}
-
-	}
-	apiList, err := dao.H.AdminAPI.FindByPermissionIds(ctx, permissionIds)
-	if err != nil {
-		return nil, err
-	}
-	apiMap := make(map[int32][]*admin_proto.ApiItem)
-	for _, item := range apiList {
-		if _, ok := apiMap[item.PermissionId]; !ok {
-			apiMap[item.PermissionId] = make([]*admin_proto.ApiItem, 0, len(apiList))
-		}
-		apiMap[item.PermissionId] = append(apiMap[item.PermissionId], item)
-	}
-	for _, item := range data.Permissions {
-		if val, ok := apiMap[item.Id]; ok {
-			item.Apis = val
+	} else {
+		for _, item := range permissions {
+			data.Permissions = append(data.Permissions, &admin_proto.MenuPermissionItem{
+				MenuId:   item.MenuID,
+				Id:       item.ID,
+				Type:     item.Type,
+				Key:      item.Key,
+				Name:     item.Name,
+				Describe: item.Describe,
+				Enabled:  item.IsEnabled,
+			})
 		}
 	}
 	return data, nil

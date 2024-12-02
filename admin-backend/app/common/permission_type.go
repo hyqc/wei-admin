@@ -42,9 +42,9 @@ var (
 	}
 )
 
-func AdminPermissionEnumList(menuId int32, key string) (list []*admin_proto.PermissionApiItem) {
+func AdminPermissionEnumList(menuId int32, key string) (list []*admin_proto.MenuPermissionItem) {
 	for _, item := range AdminPermissionEnumItems {
-		list = append(list, &admin_proto.PermissionApiItem{
+		list = append(list, &admin_proto.MenuPermissionItem{
 			MenuId:   menuId,
 			Type:     item.Type,
 			Key:      key + item.Key,

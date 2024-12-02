@@ -78,7 +78,11 @@ func (a *AdminAPI) Info(ctx *gin.Context, id int32) (*model.AdminAPI, error) {
 func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error) {
 	api := query2.AdminAPI
 	per := query2.AdminPermissionAPI
-	per.WithContext(ctx).Join(api, api.ID.EqCol(per.APIID)).Where(per.PermissionID.In(ids...)).Scan(&data).Error()
+	data = make([]*admin_proto.ApiItem, 0)
+	per.WithContext(ctx).
+		Join(api, api.ID.EqCol(per.APIID)).
+		Where(per.PermissionID.In(ids...)).
+		Scan(&data).Error()
 	return data, err
 }
 

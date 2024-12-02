@@ -3,6 +3,7 @@ import { request } from 'umi';
 import { APIAdminPermissions } from './api';
 import type { ResponseBodyType, ResponseListType } from '../types';
 import { ResponseAdminAPIAllItemType } from './resource';
+import { ReqPermissionBindMenu } from '@/proto/admin_ts/admin_permission';
 
 /************************************************************/
 /**
@@ -75,7 +76,7 @@ export type RequestAdminPermissionAddForMenuParamsType = {
   permissions: ResponseAdminMenuPermissionsItemType[];
 };
 
-export async function adminAddMenuPermission(params: RequestAdminPermissionAddForMenuParamsType) {
+export async function adminAddMenuPermission(params: ReqPermissionBindMenu) {
   return request<ResponseBodyType>(APIAdminPermissions.addMenuPermissions.url, {
     method: APIAdminPermissions.addMenuPermissions.method,
     data: params,
