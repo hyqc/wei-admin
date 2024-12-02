@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { ApiItem, ReqListBase } from "./common";
+import { AdminApiItem, ReqListBase } from "./common";
 
 export const protobufPackage = "admin";
 
@@ -38,6 +38,10 @@ export interface RespPermissionListData {
 
 /** 创建权限 */
 export interface ReqPermissionAdd {
+  /** 权限ID */
+  id?:
+    | number
+    | undefined;
   /** 权限对应的菜单ID */
   menuId?:
     | number
@@ -187,7 +191,7 @@ export interface PermissionListItem {
     | undefined;
   /** 接口列表 */
   apis?:
-    | ApiItem[]
+    | AdminApiItem[]
     | undefined;
   /** 权限唯一标识符 */
   key?:
@@ -243,7 +247,7 @@ export interface PermissionApiItem {
     | undefined;
   /** 接口列表 */
   apis?:
-    | ApiItem[]
+    | AdminApiItem[]
     | undefined;
   /** 是否启用 */
   enabled?:
@@ -273,7 +277,7 @@ export interface PermissionInfo {
     | undefined;
   /** 接口列表 */
   apis?:
-    | ApiItem[]
+    | AdminApiItem[]
     | undefined;
   /** 权限唯一标识符 */
   key?:
@@ -513,11 +517,14 @@ export const RespPermissionListData: MessageFns<RespPermissionListData> = {
 };
 
 function createBaseReqPermissionAdd(): ReqPermissionAdd {
-  return { menuId: 0, key: "", name: "", describe: "", type: "", redirect: "", enabled: false };
+  return { id: 0, menuId: 0, key: "", name: "", describe: "", type: "", redirect: "", enabled: false };
 }
 
 export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
   encode(message: ReqPermissionAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== undefined && message.id !== 0) {
+      writer.uint32(8).int32(message.id);
+    }
     if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(16).int32(message.menuId);
     }
@@ -549,6 +556,14 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = reader.int32();
+          continue;
+        }
         case 2: {
           if (tag !== 16) {
             break;
@@ -616,6 +631,7 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
 
   fromJSON(object: any): ReqPermissionAdd {
     return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
@@ -628,6 +644,9 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
 
   toJSON(message: ReqPermissionAdd): unknown {
     const obj: any = {};
+    if (message.id !== undefined && message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
     if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
@@ -657,6 +676,7 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
   },
   fromPartial<I extends Exact<DeepPartial<ReqPermissionAdd>, I>>(object: I): ReqPermissionAdd {
     const message = createBaseReqPermissionAdd();
+    message.id = object.id ?? 0;
     message.menuId = object.menuId ?? 0;
     message.key = object.key ?? "";
     message.name = object.name ?? "";
@@ -1557,7 +1577,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
     }
     if (message.apis !== undefined && message.apis.length !== 0) {
       for (const v of message.apis) {
-        ApiItem.encode(v!, writer.uint32(42).fork()).join();
+        AdminApiItem.encode(v!, writer.uint32(42).fork()).join();
       }
     }
     if (message.key !== undefined && message.key !== "") {
@@ -1631,7 +1651,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
             break;
           }
 
-          const el = ApiItem.decode(reader, reader.uint32());
+          const el = AdminApiItem.decode(reader, reader.uint32());
           if (el !== undefined) {
             message.apis!.push(el);
           }
@@ -1716,7 +1736,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
       menuName: isSet(object.menuName) ? globalThis.String(object.menuName) : "",
       menuPath: isSet(object.menuPath) ? globalThis.String(object.menuPath) : "",
-      apis: globalThis.Array.isArray(object?.apis) ? object.apis.map((e: any) => ApiItem.fromJSON(e)) : [],
+      apis: globalThis.Array.isArray(object?.apis) ? object.apis.map((e: any) => AdminApiItem.fromJSON(e)) : [],
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
@@ -1743,7 +1763,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
       obj.menuPath = message.menuPath;
     }
     if (message.apis?.length) {
-      obj.apis = message.apis.map((e) => ApiItem.toJSON(e));
+      obj.apis = message.apis.map((e) => AdminApiItem.toJSON(e));
     }
     if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
@@ -1781,7 +1801,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
     message.menuId = object.menuId ?? 0;
     message.menuName = object.menuName ?? "";
     message.menuPath = object.menuPath ?? "";
-    message.apis = object.apis?.map((e) => ApiItem.fromPartial(e)) || [];
+    message.apis = object.apis?.map((e) => AdminApiItem.fromPartial(e)) || [];
     message.key = object.key ?? "";
     message.name = object.name ?? "";
     message.describe = object.describe ?? "";
@@ -1820,7 +1840,7 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
     }
     if (message.apis !== undefined && message.apis.length !== 0) {
       for (const v of message.apis) {
-        ApiItem.encode(v!, writer.uint32(58).fork()).join();
+        AdminApiItem.encode(v!, writer.uint32(58).fork()).join();
       }
     }
     if (message.enabled !== undefined && message.enabled !== false) {
@@ -1892,7 +1912,7 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
             break;
           }
 
-          const el = ApiItem.decode(reader, reader.uint32());
+          const el = AdminApiItem.decode(reader, reader.uint32());
           if (el !== undefined) {
             message.apis!.push(el);
           }
@@ -1931,7 +1951,7 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
       type: isSet(object.type) ? globalThis.String(object.type) : "",
       typeText: isSet(object.typeText) ? globalThis.String(object.typeText) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      apis: globalThis.Array.isArray(object?.apis) ? object.apis.map((e: any) => ApiItem.fromJSON(e)) : [],
+      apis: globalThis.Array.isArray(object?.apis) ? object.apis.map((e: any) => AdminApiItem.fromJSON(e)) : [],
       enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
       describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
     };
@@ -1958,7 +1978,7 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
       obj.name = message.name;
     }
     if (message.apis?.length) {
-      obj.apis = message.apis.map((e) => ApiItem.toJSON(e));
+      obj.apis = message.apis.map((e) => AdminApiItem.toJSON(e));
     }
     if (message.enabled !== undefined && message.enabled !== false) {
       obj.enabled = message.enabled;
@@ -1980,7 +2000,7 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
     message.type = object.type ?? "";
     message.typeText = object.typeText ?? "";
     message.name = object.name ?? "";
-    message.apis = object.apis?.map((e) => ApiItem.fromPartial(e)) || [];
+    message.apis = object.apis?.map((e) => AdminApiItem.fromPartial(e)) || [];
     message.enabled = object.enabled ?? false;
     message.describe = object.describe ?? "";
     return message;
@@ -2022,7 +2042,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     }
     if (message.apis !== undefined && message.apis.length !== 0) {
       for (const v of message.apis) {
-        ApiItem.encode(v!, writer.uint32(42).fork()).join();
+        AdminApiItem.encode(v!, writer.uint32(42).fork()).join();
       }
     }
     if (message.key !== undefined && message.key !== "") {
@@ -2099,7 +2119,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
             break;
           }
 
-          const el = ApiItem.decode(reader, reader.uint32());
+          const el = AdminApiItem.decode(reader, reader.uint32());
           if (el !== undefined) {
             message.apis!.push(el);
           }
@@ -2192,7 +2212,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
       menuName: isSet(object.menuName) ? globalThis.String(object.menuName) : "",
       menuPath: isSet(object.menuPath) ? globalThis.String(object.menuPath) : "",
-      apis: globalThis.Array.isArray(object?.apis) ? object.apis.map((e: any) => ApiItem.fromJSON(e)) : [],
+      apis: globalThis.Array.isArray(object?.apis) ? object.apis.map((e: any) => AdminApiItem.fromJSON(e)) : [],
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
@@ -2220,7 +2240,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
       obj.menuPath = message.menuPath;
     }
     if (message.apis?.length) {
-      obj.apis = message.apis.map((e) => ApiItem.toJSON(e));
+      obj.apis = message.apis.map((e) => AdminApiItem.toJSON(e));
     }
     if (message.key !== undefined && message.key !== "") {
       obj.key = message.key;
@@ -2261,7 +2281,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     message.menuId = object.menuId ?? 0;
     message.menuName = object.menuName ?? "";
     message.menuPath = object.menuPath ?? "";
-    message.apis = object.apis?.map((e) => ApiItem.fromPartial(e)) || [];
+    message.apis = object.apis?.map((e) => AdminApiItem.fromPartial(e)) || [];
     message.key = object.key ?? "";
     message.name = object.name ?? "";
     message.describe = object.describe ?? "";

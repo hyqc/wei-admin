@@ -12,19 +12,15 @@ import {
   message,
   Popconfirm,
   Switch,
+  App,
 } from 'antd';
 import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
 import type { Gutter } from 'antd/lib/grid/row';
-import { PageInfoType, ResponseListDataType, ResponseListType } from '@/services/apis/types';
 import {
   adminAPIDelete,
   adminAPIDetail,
   adminAPIEnable,
   adminAPIList,
-  RequestAdminAPIEnableParamsType,
-  RequestAdminAPIListParamsType,
-  ResponseAdminAPIDetailType,
-  ResponseAdminAPIListItemType,
 } from '@/services/apis/admin/resource';
 import { DEFAULT_PAGE_INFO } from '@/services/apis/config';
 import { ColumnsType } from 'antd/lib/table';
@@ -34,16 +30,22 @@ import AdminAPIEditModal from './edit';
 import AdminAPIDetailModal from './detail';
 import FetchButton from '@/components/FetchButton';
 import { DefaultPagination } from '@/components/PageContainer/Pagination';
+import { ReqAdminApiEnable, ReqAdminApiList, RespAdminApiListData } from '@/proto/admin_ts/admin_api';
+import { AdminApiItem } from '@/proto/admin_ts/common';
+import { PageInfoType } from '@/services/apis/types';
+import { handlePagination } from '@/services/common/utils';
+import { RowEnabledButton } from '@/components';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
 
 const Admin: React.FC = () => {
+  const { message } = App.useApp()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
-  const [detailData, setDetailData] = useState<ResponseAdminAPIDetailType>();
-  const [rowsData, setRowsData] = useState<ResponseAdminAPIListItemType[]>([]);
+  const [detailData, setDetailData] = useState<AdminApiItem>();
+  const [rowsData, setRowsData] = useState<AdminApiItem[]>([]);
   const [detailModalStatus, setDetailModalStatus] = useState<boolean>(false);
   const [editModalStatus, setEditModalStatus] = useState<boolean>(false);
   const [addModalStatus, setAddModalStatus] = useState<boolean>(false);
@@ -73,39 +75,39 @@ const Admin: React.FC = () => {
       sorter: true,
     },
     {
+      title: '创建时间',
+      align: 'center',
+      width: '15rem',
+      dataIndex: 'createdAt',
+      sorter: true,
+    },
+    {
       title: '更新时间',
       align: 'center',
-      width: '10rem',
-      dataIndex: 'modifyTime',
+      width: '15rem',
+      dataIndex: 'updatedAt',
       sorter: true,
     },
     {
       title: '状态',
       width: '6rem',
       align: 'center',
-      dataIndex: 'enabled',
-      render(enabled: boolean, record: ResponseAdminAPIListItemType) {
+      dataIndex: 'isEnabled',
+      render(isEnabled: boolean, record: AdminApiItem) {
         return (
           <Authorization
             name="AdminApiEdit"
             forbidden={
-              <>
-                <Switch
-                  disabled
-                  checkedChildren={'启用'}
-                  unCheckedChildren={'禁用'}
-                  checked={enabled}
-                />
-              </>
+              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
             }
           >
             <Popconfirm
-              title={`确定要${record.enabled ? '禁用' : '启用'}该接口资源吗？`}
+              title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
               okText="确定"
               cancelText="取消"
               onConfirm={() => updateEnabled(record)}
             >
-              <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} checked={enabled} />
+              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
             </Popconfirm>
           </Authorization>
         );
@@ -115,7 +117,7 @@ const Admin: React.FC = () => {
       title: '操作',
       align: 'left',
       width: '10rem',
-      render(text, record: ResponseAdminAPIListItemType) {
+      render(text, record: AdminApiItem) {
         return (
           <Space>
             <Authorization name="AdminApiView">
@@ -127,7 +129,7 @@ const Admin: React.FC = () => {
 
             {/* 禁用的才能删除 */}
             <Authorization name="AdminApiDelete">
-              {!record.enabled ? (
+              {!record.isEnabled ? (
                 <Popconfirm
                   title="确定要删除该接口资源吗？"
                   okText="确定"
@@ -147,15 +149,15 @@ const Admin: React.FC = () => {
   ];
 
   // 获取接口资源列表
-  function getRows(data?: RequestAdminAPIListParamsType) {
+  function getRows(data?: ReqAdminApiList) {
     setLoading(true);
     adminAPIList(data)
-      .then((res: ResponseListType) => {
-        const data: ResponseListDataType = res.data;
+      .then((res) => {
+        const data: RespAdminApiListData = res.data;
         const rows = data?.list || [];
-        const page = { total: data.total, pageSize: data.pageSize, pageNum: data.pageNum };
-        setPageInfo(page);
+        const total = data.total ?? 0
         setRowsData(rows);
+        setPageInfo((pageInfo) => ({ ...pageInfo, total }))
       })
       .catch((err) => {
         console.log('error', err);
@@ -166,13 +168,13 @@ const Admin: React.FC = () => {
   }
 
   // 接口资源状态更新
-  function updateEnabled(record: ResponseAdminAPIListItemType) {
-    const updateData: RequestAdminAPIEnableParamsType = {
+  function updateEnabled(record: AdminApiItem) {
+    const updateData: ReqAdminApiEnable = {
       id: record.id,
-      enabled: !record.enabled,
+      enabled: !record.isEnabled,
     };
     adminAPIEnable(updateData).then((res) => {
-      message.success(res.message, MessageDuritain, () => {
+      message.success(res.msg, MessageDuritain, () => {
         getRows({ ...form.getFieldsValue() });
       });
     });
@@ -184,7 +186,7 @@ const Admin: React.FC = () => {
   }
 
   // 接口资源详情
-  function openDetailModal(record: ResponseAdminAPIListItemType) {
+  function openDetailModal(record: AdminApiItem) {
     adminAPIDetail({ id: record.id }).then((res) => {
       setDetailData(res.data);
       setDetailModalStatus(true);
@@ -192,7 +194,7 @@ const Admin: React.FC = () => {
   }
 
   // 接口资源编辑
-  function openEditModal(record: ResponseAdminAPIListItemType) {
+  function openEditModal(record: AdminApiItem) {
     adminAPIDetail({ id: record.id }).then((res) => {
       setDetailData(res.data);
       setEditModalStatus(true);
@@ -223,38 +225,37 @@ const Admin: React.FC = () => {
   }
 
   // 删除接口资源
-  function onDelete(record: ResponseAdminAPIListItemType) {
-    adminAPIDelete({ id: record.id, enabled: record.enabled }).then((res) => {
-      message.success(res.message, MessageDuritain);
+  function onDelete(record: AdminApiItem) {
+    adminAPIDelete({ id: record.id }).then((res) => {
+      message.success(res.msg, MessageDuritain);
       getRows({ ...form.getFieldsValue() });
     });
   }
-
-  // 管理员列表搜索
-  function onSearchFinish(values: RequestAdminAPIListParamsType) {
-    const page = { ...pageInfo, pageNum: 1 };
-    getRows({ ...values, ...page });
+  // 列表搜索
+  function onSearchFinish(values: ReqAdminApiList) {
+    const base = handlePagination(1, pageInfo.pageSize)
+    getRows({ ...values, base });
   }
 
-  // 管理员搜索重置
+  // 搜索重置
   function onSearchReset() {
     form.resetFields();
-    getRows({ pageNum: 1, pageSize: pageInfo.pageSize });
+    const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+    getRows({ base });
   }
 
   function onShowSizeChange(current: number, size: number) {
-    const page = { pageSize: size, pageNum: current };
-    setPageInfo({ ...pageInfo, ...page });
+    const page = { ...pageInfo, pageSize: size, pageNum: current }
+    setPageInfo(() => ({ ...page }));
   }
 
   function tableChange(pagination: any, filters: any, sorter: any) {
-    const page = { pageSize: pagination.pageSize, pageNum: pagination.current };
+    const page = handlePagination(pagination.current, pagination.pageSize)
     setPageInfo({ ...pageInfo, ...page });
+    const base = { ...page, sortField: sorter.field, sortType: sorter.order, }
     getRows({
       ...form.getFieldsValue(),
-      ...page,
-      sortField: sorter.field,
-      sortType: sorter.order,
+      base,
     });
   }
 

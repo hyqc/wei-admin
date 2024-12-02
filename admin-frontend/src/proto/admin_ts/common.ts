@@ -45,15 +45,16 @@ export interface ReqListBase {
 }
 
 /** 接口列表返回结构 */
-export interface ApiItem {
+export interface AdminApiItem {
   id?: number | undefined;
   path?: string | undefined;
   key?: string | undefined;
   name?: string | undefined;
-  enabled?: boolean | undefined;
+  isEnabled?: boolean | undefined;
   permissionId?: number | undefined;
   createdAt?: string | undefined;
   updatedAt?: string | undefined;
+  describe?: string | undefined;
 }
 
 /** 账号列表返回结构 */
@@ -359,12 +360,22 @@ export const ReqListBase: MessageFns<ReqListBase> = {
   },
 };
 
-function createBaseApiItem(): ApiItem {
-  return { id: 0, path: "", key: "", name: "", enabled: false, permissionId: 0, createdAt: "", updatedAt: "" };
+function createBaseAdminApiItem(): AdminApiItem {
+  return {
+    id: 0,
+    path: "",
+    key: "",
+    name: "",
+    isEnabled: false,
+    permissionId: 0,
+    createdAt: "",
+    updatedAt: "",
+    describe: "",
+  };
 }
 
-export const ApiItem: MessageFns<ApiItem> = {
-  encode(message: ApiItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const AdminApiItem: MessageFns<AdminApiItem> = {
+  encode(message: AdminApiItem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -377,8 +388,8 @@ export const ApiItem: MessageFns<ApiItem> = {
     if (message.name !== undefined && message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      writer.uint32(40).bool(message.enabled);
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      writer.uint32(40).bool(message.isEnabled);
     }
     if (message.permissionId !== undefined && message.permissionId !== 0) {
       writer.uint32(48).int32(message.permissionId);
@@ -389,13 +400,16 @@ export const ApiItem: MessageFns<ApiItem> = {
     if (message.updatedAt !== undefined && message.updatedAt !== "") {
       writer.uint32(66).string(message.updatedAt);
     }
+    if (message.describe !== undefined && message.describe !== "") {
+      writer.uint32(74).string(message.describe);
+    }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ApiItem {
+  decode(input: BinaryReader | Uint8Array, length?: number): AdminApiItem {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseApiItem();
+    const message = createBaseAdminApiItem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -436,7 +450,7 @@ export const ApiItem: MessageFns<ApiItem> = {
             break;
           }
 
-          message.enabled = reader.bool();
+          message.isEnabled = reader.bool();
           continue;
         }
         case 6: {
@@ -463,6 +477,14 @@ export const ApiItem: MessageFns<ApiItem> = {
           message.updatedAt = reader.string();
           continue;
         }
+        case 9: {
+          if (tag !== 74) {
+            break;
+          }
+
+          message.describe = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -472,20 +494,21 @@ export const ApiItem: MessageFns<ApiItem> = {
     return message;
   },
 
-  fromJSON(object: any): ApiItem {
+  fromJSON(object: any): AdminApiItem {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       path: isSet(object.path) ? globalThis.String(object.path) : "",
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
+      isEnabled: isSet(object.isEnabled) ? globalThis.Boolean(object.isEnabled) : false,
       permissionId: isSet(object.permissionId) ? globalThis.Number(object.permissionId) : 0,
       createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
       updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
+      describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
     };
   },
 
-  toJSON(message: ApiItem): unknown {
+  toJSON(message: AdminApiItem): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -499,8 +522,8 @@ export const ApiItem: MessageFns<ApiItem> = {
     if (message.name !== undefined && message.name !== "") {
       obj.name = message.name;
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      obj.enabled = message.enabled;
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      obj.isEnabled = message.isEnabled;
     }
     if (message.permissionId !== undefined && message.permissionId !== 0) {
       obj.permissionId = Math.round(message.permissionId);
@@ -511,22 +534,26 @@ export const ApiItem: MessageFns<ApiItem> = {
     if (message.updatedAt !== undefined && message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
+    if (message.describe !== undefined && message.describe !== "") {
+      obj.describe = message.describe;
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ApiItem>, I>>(base?: I): ApiItem {
-    return ApiItem.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<AdminApiItem>, I>>(base?: I): AdminApiItem {
+    return AdminApiItem.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ApiItem>, I>>(object: I): ApiItem {
-    const message = createBaseApiItem();
+  fromPartial<I extends Exact<DeepPartial<AdminApiItem>, I>>(object: I): AdminApiItem {
+    const message = createBaseAdminApiItem();
     message.id = object.id ?? 0;
     message.path = object.path ?? "";
     message.key = object.key ?? "";
     message.name = object.name ?? "";
-    message.enabled = object.enabled ?? false;
+    message.isEnabled = object.isEnabled ?? false;
     message.permissionId = object.permissionId ?? 0;
     message.createdAt = object.createdAt ?? "";
     message.updatedAt = object.updatedAt ?? "";
+    message.describe = object.describe ?? "";
     return message;
   },
 };

@@ -112,7 +112,6 @@ const Admin: React.FC = () => {
       const data = res.data || {menuInfo: { }, permissions: []};
       setMenuPermissionsDetail((old)=>{
         const nv = {menuInfo: {...data.menuInfo}, permissions: [...data.permissions]}
-        console.log('=============', nv, old)
         return nv
       });
       setSaveMenuPermissionsModalStatus(true);
@@ -287,7 +286,7 @@ const Admin: React.FC = () => {
 
             {/* 禁用的才能删除 */}
             <Authorization name="AdminMenuDelete">
-              {!record.enabled ? (
+              {!record.enabled && (record.children === undefined || record.children.length === 0) ?  (
                 <Popconfirm
                   title="确定要删除该菜单吗？"
                   okText="确定"

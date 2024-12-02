@@ -17,31 +17,31 @@ type AdminAPILogic struct {
 }
 
 type IAdminAPILogic interface {
-	List(ctx *gin.Context, params *admin_proto.ReqApiList) (data *admin_proto.RespApiListData, err error)
-	AllValid(ctx *gin.Context) (list []*admin_proto.ApiItem, err error)
-	Add(ctx *gin.Context, params *admin_proto.ReqApiAdd) (err error)
-	Info(ctx *gin.Context, params *admin_proto.ReqApiInfo) (*admin_proto.ApiItem, error)
-	Edit(ctx *gin.Context, params *admin_proto.ReqApiEdit) error
-	Enable(ctx *gin.Context, params *admin_proto.ReqApiEnable) error
-	Delete(ctx *gin.Context, params *admin_proto.ReqApiDelete) error
+	List(ctx *gin.Context, params *admin_proto.ReqAdminApiList) (data *admin_proto.RespAdminApiListData, err error)
+	AllValid(ctx *gin.Context) (list []*admin_proto.AdminApiItem, err error)
+	Add(ctx *gin.Context, params *admin_proto.ReqAdminApiAdd) (err error)
+	Info(ctx *gin.Context, params *admin_proto.ReqAdminApiInfo) (*admin_proto.AdminApiItem, error)
+	Edit(ctx *gin.Context, params *admin_proto.ReqAdminApiEdit) error
+	Enable(ctx *gin.Context, params *admin_proto.ReqAdminApiEnable) error
+	Delete(ctx *gin.Context, params *admin_proto.ReqAdminApiDelete) error
 }
 
 func newAdminAPILogic() IAdminAPILogic {
 	return &AdminAPILogic{}
 }
 
-func (a *AdminAPILogic) List(ctx *gin.Context, params *admin_proto.ReqApiList) (data *admin_proto.RespApiListData, err error) {
+func (a *AdminAPILogic) List(ctx *gin.Context, params *admin_proto.ReqAdminApiList) (data *admin_proto.RespAdminApiListData, err error) {
 	total, rows, err := dao.H.AdminAPI.List(ctx, params)
 	if err != nil {
 		return nil, err
 	}
-	data = &admin_proto.RespApiListData{}
+	data = &admin_proto.RespAdminApiListData{}
 	data.Total = total
 	data.List, err = a.HandleListData(rows)
 	return data, err
 }
 
-func (a *AdminAPILogic) HandleListData(rows []*model.AdminAPI) (list []*admin_proto.ApiItem, err error) {
+func (a *AdminAPILogic) HandleListData(rows []*model.AdminAPI) (list []*admin_proto.AdminApiItem, err error) {
 	for _, item := range rows {
 		data, err := a.HandleItemData(item)
 		if err != nil {
@@ -52,18 +52,19 @@ func (a *AdminAPILogic) HandleListData(rows []*model.AdminAPI) (list []*admin_pr
 	return list, nil
 }
 
-func (a *AdminAPILogic) HandleItemData(item *model.AdminAPI) (data *admin_proto.ApiItem, err error) {
-	data = &admin_proto.ApiItem{}
+func (a *AdminAPILogic) HandleItemData(item *model.AdminAPI) (data *admin_proto.AdminApiItem, err error) {
+	data = &admin_proto.AdminApiItem{}
 	err = utils.BeanCopy(data, item)
 	if err != nil {
 		return nil, err
 	}
+	data.Id = item.ID
 	data.CreatedAt = utils.HandleTime2String(item.CreatedAt)
 	data.UpdatedAt = utils.HandleTime2String(item.UpdatedAt)
 	return data, nil
 }
 
-func (a *AdminAPILogic) AllValid(ctx *gin.Context) (list []*admin_proto.ApiItem, err error) {
+func (a *AdminAPILogic) AllValid(ctx *gin.Context) (list []*admin_proto.AdminApiItem, err error) {
 	data, err := dao.H.AdminAPI.FindAllValid(ctx)
 	if err != nil {
 		return nil, err
@@ -72,7 +73,7 @@ func (a *AdminAPILogic) AllValid(ctx *gin.Context) (list []*admin_proto.ApiItem,
 	return list, err
 }
 
-func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ReqApiAdd) (err error) {
+func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminApiAdd) (err error) {
 	data := &model.AdminAPI{
 		Path:      params.Path,
 		Key:       params.Key,
@@ -96,7 +97,7 @@ func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ReqApiAdd) (er
 	return nil
 }
 
-func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ReqApiInfo) (*admin_proto.ApiItem, error) {
+func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminApiInfo) (*admin_proto.AdminApiItem, error) {
 	data, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -107,7 +108,7 @@ func (a *AdminAPILogic) Info(ctx *gin.Context, params *admin_proto.ReqApiInfo) (
 	return a.HandleItemData(data)
 }
 
-func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ReqApiEdit) error {
+func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminApiEdit) error {
 	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -123,7 +124,7 @@ func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ReqApiEdit) e
 	return dao.H.AdminAPI.Update(ctx, info)
 }
 
-func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ReqApiEnable) error {
+func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ReqAdminApiEnable) error {
 	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -137,7 +138,7 @@ func (a *AdminAPILogic) Enable(ctx *gin.Context, params *admin_proto.ReqApiEnabl
 	return dao.H.AdminAPI.Enable(ctx, params.Id, params.Enabled)
 }
 
-func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ReqApiDelete) error {
+func (a *AdminAPILogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminApiDelete) error {
 	info, err := dao.H.AdminAPI.Info(ctx, params.Id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

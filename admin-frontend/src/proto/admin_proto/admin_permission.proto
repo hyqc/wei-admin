@@ -18,6 +18,7 @@ message RespPermissionListData{
 
 // 创建权限
 message ReqPermissionAdd{
+  int32 id = 1; //权限ID
   int32 menuId = 2;//权限对应的菜单ID
   string key = 3;//权限唯一标识符
   string name = 4;//权限名称
@@ -96,7 +97,7 @@ message PermissionListItem{
   int32 menuId = 2;//权限对应的菜单ID
   string menuName = 3;//菜单名称
   string menuPath = 4;//菜单路由
-  repeated ApiItem apis = 5; //接口列表
+  repeated AdminApiItem apis = 5; //接口列表
   string key = 6;//权限唯一标识符
   string name = 7;//权限名称
   string describe = 8;//权限描述
@@ -115,7 +116,7 @@ message PermissionApiItem{
   string type = 4;//权限类型
   string typeText = 5;//权限类型
   string name = 6;//权限名称
-  repeated ApiItem apis = 7;//接口列表
+  repeated AdminApiItem apis = 7;//接口列表
   bool enabled = 8;//是否启用
   string describe = 9;//权限描述
 }
@@ -126,7 +127,7 @@ message PermissionInfo{
   int32 menuId = 2;//权限对应的菜单ID
   string menuName = 3;//菜单名称
   string menuPath = 4;//菜单路由
-  repeated ApiItem apis = 5; //接口列表
+  repeated AdminApiItem apis = 5; //接口列表
   string key = 6;//权限唯一标识符
   string name = 7;//权限名称
   string describe = 8;//权限描述

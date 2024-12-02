@@ -21,7 +21,7 @@ const (
 )
 
 // 接口列表请求参数
-type ReqApiList struct {
+type ReqAdminApiList struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -32,20 +32,20 @@ type ReqApiList struct {
 	Path string       `protobuf:"bytes,4,opt,name=path,proto3" json:"path,omitempty"` //接口路由
 }
 
-func (x *ReqApiList) Reset() {
-	*x = ReqApiList{}
+func (x *ReqAdminApiList) Reset() {
+	*x = ReqAdminApiList{}
 	mi := &file_admin_api_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReqApiList) String() string {
+func (x *ReqAdminApiList) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReqApiList) ProtoMessage() {}
+func (*ReqAdminApiList) ProtoMessage() {}
 
-func (x *ReqApiList) ProtoReflect() protoreflect.Message {
+func (x *ReqAdminApiList) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -57,62 +57,62 @@ func (x *ReqApiList) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReqApiList.ProtoReflect.Descriptor instead.
-func (*ReqApiList) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReqAdminApiList.ProtoReflect.Descriptor instead.
+func (*ReqAdminApiList) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ReqApiList) GetBase() *ReqListBase {
+func (x *ReqAdminApiList) GetBase() *ReqListBase {
 	if x != nil {
 		return x.Base
 	}
 	return nil
 }
 
-func (x *ReqApiList) GetKey() string {
+func (x *ReqAdminApiList) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *ReqApiList) GetName() string {
+func (x *ReqAdminApiList) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *ReqApiList) GetPath() string {
+func (x *ReqAdminApiList) GetPath() string {
 	if x != nil {
 		return x.Path
 	}
 	return ""
 }
 
-type RespApiListData struct {
+type RespAdminApiListData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Total int64      `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	List  []*ApiItem `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+	Total int64           `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	List  []*AdminApiItem `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
 }
 
-func (x *RespApiListData) Reset() {
-	*x = RespApiListData{}
+func (x *RespAdminApiListData) Reset() {
+	*x = RespAdminApiListData{}
 	mi := &file_admin_api_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RespApiListData) String() string {
+func (x *RespAdminApiListData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RespApiListData) ProtoMessage() {}
+func (*RespAdminApiListData) ProtoMessage() {}
 
-func (x *RespApiListData) ProtoReflect() protoreflect.Message {
+func (x *RespAdminApiListData) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -124,19 +124,19 @@ func (x *RespApiListData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RespApiListData.ProtoReflect.Descriptor instead.
-func (*RespApiListData) Descriptor() ([]byte, []int) {
+// Deprecated: Use RespAdminApiListData.ProtoReflect.Descriptor instead.
+func (*RespAdminApiListData) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *RespApiListData) GetTotal() int64 {
+func (x *RespAdminApiListData) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
 	return 0
 }
 
-func (x *RespApiListData) GetList() []*ApiItem {
+func (x *RespAdminApiListData) GetList() []*AdminApiItem {
 	if x != nil {
 		return x.List
 	}
@@ -144,26 +144,26 @@ func (x *RespApiListData) GetList() []*ApiItem {
 }
 
 // 全部接口列表
-type ReqApiAll struct {
+type ReqAdminApiAll struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *ReqApiAll) Reset() {
-	*x = ReqApiAll{}
+func (x *ReqAdminApiAll) Reset() {
+	*x = ReqAdminApiAll{}
 	mi := &file_admin_api_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReqApiAll) String() string {
+func (x *ReqAdminApiAll) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReqApiAll) ProtoMessage() {}
+func (*ReqAdminApiAll) ProtoMessage() {}
 
-func (x *ReqApiAll) ProtoReflect() protoreflect.Message {
+func (x *ReqAdminApiAll) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -175,33 +175,33 @@ func (x *ReqApiAll) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReqApiAll.ProtoReflect.Descriptor instead.
-func (*ReqApiAll) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReqAdminApiAll.ProtoReflect.Descriptor instead.
+func (*ReqAdminApiAll) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{2}
 }
 
-type RespApiAllData struct {
+type RespAdminApiAllData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	List []*ApiItem `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
+	List []*AdminApiItem `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
 }
 
-func (x *RespApiAllData) Reset() {
-	*x = RespApiAllData{}
+func (x *RespAdminApiAllData) Reset() {
+	*x = RespAdminApiAllData{}
 	mi := &file_admin_api_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RespApiAllData) String() string {
+func (x *RespAdminApiAllData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RespApiAllData) ProtoMessage() {}
+func (*RespAdminApiAllData) ProtoMessage() {}
 
-func (x *RespApiAllData) ProtoReflect() protoreflect.Message {
+func (x *RespAdminApiAllData) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -213,12 +213,12 @@ func (x *RespApiAllData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RespApiAllData.ProtoReflect.Descriptor instead.
-func (*RespApiAllData) Descriptor() ([]byte, []int) {
+// Deprecated: Use RespAdminApiAllData.ProtoReflect.Descriptor instead.
+func (*RespAdminApiAllData) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *RespApiAllData) GetList() []*ApiItem {
+func (x *RespAdminApiAllData) GetList() []*AdminApiItem {
 	if x != nil {
 		return x.List
 	}
@@ -226,7 +226,7 @@ func (x *RespApiAllData) GetList() []*ApiItem {
 }
 
 // 创建接口
-type ReqApiAdd struct {
+type ReqAdminApiAdd struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -238,20 +238,20 @@ type ReqApiAdd struct {
 	Enabled  bool   `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty"`  //启用状态
 }
 
-func (x *ReqApiAdd) Reset() {
-	*x = ReqApiAdd{}
+func (x *ReqAdminApiAdd) Reset() {
+	*x = ReqAdminApiAdd{}
 	mi := &file_admin_api_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReqApiAdd) String() string {
+func (x *ReqAdminApiAdd) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReqApiAdd) ProtoMessage() {}
+func (*ReqAdminApiAdd) ProtoMessage() {}
 
-func (x *ReqApiAdd) ProtoReflect() protoreflect.Message {
+func (x *ReqAdminApiAdd) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -263,66 +263,66 @@ func (x *ReqApiAdd) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReqApiAdd.ProtoReflect.Descriptor instead.
-func (*ReqApiAdd) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReqAdminApiAdd.ProtoReflect.Descriptor instead.
+func (*ReqAdminApiAdd) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ReqApiAdd) GetPath() string {
+func (x *ReqAdminApiAdd) GetPath() string {
 	if x != nil {
 		return x.Path
 	}
 	return ""
 }
 
-func (x *ReqApiAdd) GetKey() string {
+func (x *ReqAdminApiAdd) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *ReqApiAdd) GetName() string {
+func (x *ReqAdminApiAdd) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *ReqApiAdd) GetDescribe() string {
+func (x *ReqAdminApiAdd) GetDescribe() string {
 	if x != nil {
 		return x.Describe
 	}
 	return ""
 }
 
-func (x *ReqApiAdd) GetEnabled() bool {
+func (x *ReqAdminApiAdd) GetEnabled() bool {
 	if x != nil {
 		return x.Enabled
 	}
 	return false
 }
 
-type RespApiAddData struct {
+type RespAdminApiAddData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *RespApiAddData) Reset() {
-	*x = RespApiAddData{}
+func (x *RespAdminApiAddData) Reset() {
+	*x = RespAdminApiAddData{}
 	mi := &file_admin_api_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RespApiAddData) String() string {
+func (x *RespAdminApiAddData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RespApiAddData) ProtoMessage() {}
+func (*RespAdminApiAddData) ProtoMessage() {}
 
-func (x *RespApiAddData) ProtoReflect() protoreflect.Message {
+func (x *RespAdminApiAddData) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -334,13 +334,13 @@ func (x *RespApiAddData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RespApiAddData.ProtoReflect.Descriptor instead.
-func (*RespApiAddData) Descriptor() ([]byte, []int) {
+// Deprecated: Use RespAdminApiAddData.ProtoReflect.Descriptor instead.
+func (*RespAdminApiAddData) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{5}
 }
 
 // 接口详情
-type ReqApiInfo struct {
+type ReqAdminApiInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -348,20 +348,20 @@ type ReqApiInfo struct {
 	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //接口ID
 }
 
-func (x *ReqApiInfo) Reset() {
-	*x = ReqApiInfo{}
+func (x *ReqAdminApiInfo) Reset() {
+	*x = ReqAdminApiInfo{}
 	mi := &file_admin_api_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReqApiInfo) String() string {
+func (x *ReqAdminApiInfo) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReqApiInfo) ProtoMessage() {}
+func (*ReqAdminApiInfo) ProtoMessage() {}
 
-func (x *ReqApiInfo) ProtoReflect() protoreflect.Message {
+func (x *ReqAdminApiInfo) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -373,40 +373,40 @@ func (x *ReqApiInfo) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReqApiInfo.ProtoReflect.Descriptor instead.
-func (*ReqApiInfo) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReqAdminApiInfo.ProtoReflect.Descriptor instead.
+func (*ReqAdminApiInfo) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ReqApiInfo) GetId() int32 {
+func (x *ReqAdminApiInfo) GetId() int32 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-type RespApiInfoData struct {
+type RespAdminApiInfoData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *ApiItem `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Data *AdminApiItem `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *RespApiInfoData) Reset() {
-	*x = RespApiInfoData{}
+func (x *RespAdminApiInfoData) Reset() {
+	*x = RespAdminApiInfoData{}
 	mi := &file_admin_api_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RespApiInfoData) String() string {
+func (x *RespAdminApiInfoData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RespApiInfoData) ProtoMessage() {}
+func (*RespAdminApiInfoData) ProtoMessage() {}
 
-func (x *RespApiInfoData) ProtoReflect() protoreflect.Message {
+func (x *RespAdminApiInfoData) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -418,12 +418,12 @@ func (x *RespApiInfoData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RespApiInfoData.ProtoReflect.Descriptor instead.
-func (*RespApiInfoData) Descriptor() ([]byte, []int) {
+// Deprecated: Use RespAdminApiInfoData.ProtoReflect.Descriptor instead.
+func (*RespAdminApiInfoData) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *RespApiInfoData) GetData() *ApiItem {
+func (x *RespAdminApiInfoData) GetData() *AdminApiItem {
 	if x != nil {
 		return x.Data
 	}
@@ -431,7 +431,7 @@ func (x *RespApiInfoData) GetData() *ApiItem {
 }
 
 // 接口编辑
-type ReqApiEdit struct {
+type ReqAdminApiEdit struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -444,20 +444,20 @@ type ReqApiEdit struct {
 	Enabled  bool   `protobuf:"varint,6,opt,name=enabled,proto3" json:"enabled,omitempty"`  //接口状态
 }
 
-func (x *ReqApiEdit) Reset() {
-	*x = ReqApiEdit{}
+func (x *ReqAdminApiEdit) Reset() {
+	*x = ReqAdminApiEdit{}
 	mi := &file_admin_api_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReqApiEdit) String() string {
+func (x *ReqAdminApiEdit) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReqApiEdit) ProtoMessage() {}
+func (*ReqAdminApiEdit) ProtoMessage() {}
 
-func (x *ReqApiEdit) ProtoReflect() protoreflect.Message {
+func (x *ReqAdminApiEdit) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -469,73 +469,73 @@ func (x *ReqApiEdit) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReqApiEdit.ProtoReflect.Descriptor instead.
-func (*ReqApiEdit) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReqAdminApiEdit.ProtoReflect.Descriptor instead.
+func (*ReqAdminApiEdit) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *ReqApiEdit) GetId() int32 {
+func (x *ReqAdminApiEdit) GetId() int32 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *ReqApiEdit) GetPath() string {
+func (x *ReqAdminApiEdit) GetPath() string {
 	if x != nil {
 		return x.Path
 	}
 	return ""
 }
 
-func (x *ReqApiEdit) GetKey() string {
+func (x *ReqAdminApiEdit) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *ReqApiEdit) GetName() string {
+func (x *ReqAdminApiEdit) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *ReqApiEdit) GetDescribe() string {
+func (x *ReqAdminApiEdit) GetDescribe() string {
 	if x != nil {
 		return x.Describe
 	}
 	return ""
 }
 
-func (x *ReqApiEdit) GetEnabled() bool {
+func (x *ReqAdminApiEdit) GetEnabled() bool {
 	if x != nil {
 		return x.Enabled
 	}
 	return false
 }
 
-type RespApiEditData struct {
+type RespAdminApiEditData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *RespApiEditData) Reset() {
-	*x = RespApiEditData{}
+func (x *RespAdminApiEditData) Reset() {
+	*x = RespAdminApiEditData{}
 	mi := &file_admin_api_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RespApiEditData) String() string {
+func (x *RespAdminApiEditData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RespApiEditData) ProtoMessage() {}
+func (*RespAdminApiEditData) ProtoMessage() {}
 
-func (x *RespApiEditData) ProtoReflect() protoreflect.Message {
+func (x *RespAdminApiEditData) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -547,13 +547,13 @@ func (x *RespApiEditData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RespApiEditData.ProtoReflect.Descriptor instead.
-func (*RespApiEditData) Descriptor() ([]byte, []int) {
+// Deprecated: Use RespAdminApiEditData.ProtoReflect.Descriptor instead.
+func (*RespAdminApiEditData) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{9}
 }
 
 // 接口禁用启用
-type ReqApiEnable struct {
+type ReqAdminApiEnable struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -562,20 +562,20 @@ type ReqApiEnable struct {
 	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"` //接口状态
 }
 
-func (x *ReqApiEnable) Reset() {
-	*x = ReqApiEnable{}
+func (x *ReqAdminApiEnable) Reset() {
+	*x = ReqAdminApiEnable{}
 	mi := &file_admin_api_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReqApiEnable) String() string {
+func (x *ReqAdminApiEnable) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReqApiEnable) ProtoMessage() {}
+func (*ReqAdminApiEnable) ProtoMessage() {}
 
-func (x *ReqApiEnable) ProtoReflect() protoreflect.Message {
+func (x *ReqAdminApiEnable) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -587,45 +587,45 @@ func (x *ReqApiEnable) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReqApiEnable.ProtoReflect.Descriptor instead.
-func (*ReqApiEnable) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReqAdminApiEnable.ProtoReflect.Descriptor instead.
+func (*ReqAdminApiEnable) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *ReqApiEnable) GetId() int32 {
+func (x *ReqAdminApiEnable) GetId() int32 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *ReqApiEnable) GetEnabled() bool {
+func (x *ReqAdminApiEnable) GetEnabled() bool {
 	if x != nil {
 		return x.Enabled
 	}
 	return false
 }
 
-type RespApiEnableData struct {
+type RespAdminApiEnableData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *RespApiEnableData) Reset() {
-	*x = RespApiEnableData{}
+func (x *RespAdminApiEnableData) Reset() {
+	*x = RespAdminApiEnableData{}
 	mi := &file_admin_api_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RespApiEnableData) String() string {
+func (x *RespAdminApiEnableData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RespApiEnableData) ProtoMessage() {}
+func (*RespAdminApiEnableData) ProtoMessage() {}
 
-func (x *RespApiEnableData) ProtoReflect() protoreflect.Message {
+func (x *RespAdminApiEnableData) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -637,13 +637,13 @@ func (x *RespApiEnableData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RespApiEnableData.ProtoReflect.Descriptor instead.
-func (*RespApiEnableData) Descriptor() ([]byte, []int) {
+// Deprecated: Use RespAdminApiEnableData.ProtoReflect.Descriptor instead.
+func (*RespAdminApiEnableData) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{11}
 }
 
 // 删除接口
-type ReqApiDelete struct {
+type ReqAdminApiDelete struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -651,20 +651,20 @@ type ReqApiDelete struct {
 	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //接口ID
 }
 
-func (x *ReqApiDelete) Reset() {
-	*x = ReqApiDelete{}
+func (x *ReqAdminApiDelete) Reset() {
+	*x = ReqAdminApiDelete{}
 	mi := &file_admin_api_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReqApiDelete) String() string {
+func (x *ReqAdminApiDelete) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReqApiDelete) ProtoMessage() {}
+func (*ReqAdminApiDelete) ProtoMessage() {}
 
-func (x *ReqApiDelete) ProtoReflect() protoreflect.Message {
+func (x *ReqAdminApiDelete) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -676,38 +676,38 @@ func (x *ReqApiDelete) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReqApiDelete.ProtoReflect.Descriptor instead.
-func (*ReqApiDelete) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReqAdminApiDelete.ProtoReflect.Descriptor instead.
+func (*ReqAdminApiDelete) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *ReqApiDelete) GetId() int32 {
+func (x *ReqAdminApiDelete) GetId() int32 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-type RespApiDeleteData struct {
+type RespAdminApiDeleteData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *RespApiDeleteData) Reset() {
-	*x = RespApiDeleteData{}
+func (x *RespAdminApiDeleteData) Reset() {
+	*x = RespAdminApiDeleteData{}
 	mi := &file_admin_api_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RespApiDeleteData) String() string {
+func (x *RespAdminApiDeleteData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RespApiDeleteData) ProtoMessage() {}
+func (*RespAdminApiDeleteData) ProtoMessage() {}
 
-func (x *RespApiDeleteData) ProtoReflect() protoreflect.Message {
+func (x *RespAdminApiDeleteData) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_api_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -719,8 +719,8 @@ func (x *RespApiDeleteData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RespApiDeleteData.ProtoReflect.Descriptor instead.
-func (*RespApiDeleteData) Descriptor() ([]byte, []int) {
+// Deprecated: Use RespAdminApiDeleteData.ProtoReflect.Descriptor instead.
+func (*RespAdminApiDeleteData) Descriptor() ([]byte, []int) {
 	return file_admin_api_proto_rawDescGZIP(), []int{13}
 }
 
@@ -729,58 +729,63 @@ var File_admin_api_proto protoreflect.FileDescriptor
 var file_admin_api_proto_rawDesc = []byte{
 	0x0a, 0x0f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x12, 0x05, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x1a, 0x0c, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x6e, 0x0a, 0x0a, 0x52, 0x65, 0x71, 0x41, 0x70, 0x69,
-	0x4c, 0x69, 0x73, 0x74, 0x12, 0x26, 0x0a, 0x04, 0x62, 0x61, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x12, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x52, 0x65, 0x71, 0x4c, 0x69,
-	0x73, 0x74, 0x42, 0x61, 0x73, 0x65, 0x52, 0x04, 0x62, 0x61, 0x73, 0x65, 0x12, 0x10, 0x0a, 0x03,
-	0x6b, 0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x12,
-	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
-	0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x22, 0x4b, 0x0a, 0x0f, 0x52, 0x65, 0x73, 0x70, 0x41, 0x70,
-	0x69, 0x4c, 0x69, 0x73, 0x74, 0x44, 0x61, 0x74, 0x61, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x74,
-	0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x12,
-	0x22, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e,
-	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x6c,
-	0x69, 0x73, 0x74, 0x22, 0x0b, 0x0a, 0x09, 0x52, 0x65, 0x71, 0x41, 0x70, 0x69, 0x41, 0x6c, 0x6c,
-	0x22, 0x34, 0x0a, 0x0e, 0x52, 0x65, 0x73, 0x70, 0x41, 0x70, 0x69, 0x41, 0x6c, 0x6c, 0x44, 0x61,
-	0x74, 0x61, 0x12, 0x22, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x0e, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65, 0x6d,
-	0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x22, 0x7b, 0x0a, 0x09, 0x52, 0x65, 0x71, 0x41, 0x70, 0x69,
-	0x41, 0x64, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a,
-	0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61,
-	0x62, 0x6c, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62,
-	0x6c, 0x65, 0x64, 0x22, 0x10, 0x0a, 0x0e, 0x52, 0x65, 0x73, 0x70, 0x41, 0x70, 0x69, 0x41, 0x64,
-	0x64, 0x44, 0x61, 0x74, 0x61, 0x22, 0x1c, 0x0a, 0x0a, 0x52, 0x65, 0x71, 0x41, 0x70, 0x69, 0x49,
-	0x6e, 0x66, 0x6f, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
-	0x02, 0x69, 0x64, 0x22, 0x35, 0x0a, 0x0f, 0x52, 0x65, 0x73, 0x70, 0x41, 0x70, 0x69, 0x49, 0x6e,
-	0x66, 0x6f, 0x44, 0x61, 0x74, 0x61, 0x12, 0x22, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x41, 0x70, 0x69,
-	0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x8c, 0x01, 0x0a, 0x0a, 0x52,
-	0x65, 0x71, 0x41, 0x70, 0x69, 0x45, 0x64, 0x69, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74,
-	0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12, 0x10, 0x0a,
-	0x03, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12,
-	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
-	0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x18,
-	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x12,
-	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x08,
-	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x11, 0x0a, 0x0f, 0x52, 0x65, 0x73,
-	0x70, 0x41, 0x70, 0x69, 0x45, 0x64, 0x69, 0x74, 0x44, 0x61, 0x74, 0x61, 0x22, 0x38, 0x0a, 0x0c,
-	0x52, 0x65, 0x71, 0x41, 0x70, 0x69, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x12, 0x0e, 0x0a, 0x02,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x18, 0x0a, 0x07,
-	0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65,
-	0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x13, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x70, 0x41, 0x70,
-	0x69, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x44, 0x61, 0x74, 0x61, 0x22, 0x1e, 0x0a, 0x0c, 0x52,
-	0x65, 0x71, 0x41, 0x70, 0x69, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69,
-	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x22, 0x13, 0x0a, 0x11, 0x52,
-	0x65, 0x73, 0x70, 0x41, 0x70, 0x69, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x61, 0x74, 0x61,
-	0x42, 0x1b, 0x5a, 0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x73, 0x0a, 0x0f, 0x52, 0x65, 0x71, 0x41, 0x64, 0x6d,
+	0x69, 0x6e, 0x41, 0x70, 0x69, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x26, 0x0a, 0x04, 0x62, 0x61, 0x73,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e,
+	0x52, 0x65, 0x71, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x61, 0x73, 0x65, 0x52, 0x04, 0x62, 0x61, 0x73,
+	0x65, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
+	0x6b, 0x65, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x22, 0x55, 0x0a, 0x14, 0x52,
+	0x65, 0x73, 0x70, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x4c, 0x69, 0x73, 0x74, 0x44,
+	0x61, 0x74, 0x61, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x27, 0x0a, 0x04, 0x6c, 0x69, 0x73,
+	0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e,
+	0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x6c, 0x69,
+	0x73, 0x74, 0x22, 0x10, 0x0a, 0x0e, 0x52, 0x65, 0x71, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70,
+	0x69, 0x41, 0x6c, 0x6c, 0x22, 0x3e, 0x0a, 0x13, 0x52, 0x65, 0x73, 0x70, 0x41, 0x64, 0x6d, 0x69,
+	0x6e, 0x41, 0x70, 0x69, 0x41, 0x6c, 0x6c, 0x44, 0x61, 0x74, 0x61, 0x12, 0x27, 0x0a, 0x04, 0x6c,
+	0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x61, 0x64, 0x6d, 0x69,
+	0x6e, 0x2e, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04,
+	0x6c, 0x69, 0x73, 0x74, 0x22, 0x80, 0x01, 0x0a, 0x0e, 0x52, 0x65, 0x71, 0x41, 0x64, 0x6d, 0x69,
+	0x6e, 0x41, 0x70, 0x69, 0x41, 0x64, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12, 0x10, 0x0a, 0x03, 0x6b,
+	0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x12, 0x0a,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x12, 0x18, 0x0a,
+	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07,
+	0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x15, 0x0a, 0x13, 0x52, 0x65, 0x73, 0x70, 0x41,
+	0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x41, 0x64, 0x64, 0x44, 0x61, 0x74, 0x61, 0x22, 0x21,
+	0x0a, 0x0f, 0x52, 0x65, 0x71, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x49, 0x6e, 0x66,
+	0x6f, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69,
+	0x64, 0x22, 0x3f, 0x0a, 0x14, 0x52, 0x65, 0x73, 0x70, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70,
+	0x69, 0x49, 0x6e, 0x66, 0x6f, 0x44, 0x61, 0x74, 0x61, 0x12, 0x27, 0x0a, 0x04, 0x64, 0x61, 0x74,
+	0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e,
+	0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x22, 0x91, 0x01, 0x0a, 0x0f, 0x52, 0x65, 0x71, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41,
+	0x70, 0x69, 0x45, 0x64, 0x69, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65,
+	0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x12, 0x0a, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x18, 0x05, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x12, 0x18, 0x0a, 0x07,
+	0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65,
+	0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x16, 0x0a, 0x14, 0x52, 0x65, 0x73, 0x70, 0x41, 0x64,
+	0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x45, 0x64, 0x69, 0x74, 0x44, 0x61, 0x74, 0x61, 0x22, 0x3d,
+	0x0a, 0x11, 0x52, 0x65, 0x71, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x45, 0x6e, 0x61,
+	0x62, 0x6c, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x02, 0x69, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x18, 0x0a,
+	0x16, 0x52, 0x65, 0x73, 0x70, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x45, 0x6e, 0x61,
+	0x62, 0x6c, 0x65, 0x44, 0x61, 0x74, 0x61, 0x22, 0x23, 0x0a, 0x11, 0x52, 0x65, 0x71, 0x41, 0x64,
+	0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x22, 0x18, 0x0a, 0x16,
+	0x52, 0x65, 0x73, 0x70, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x41, 0x70, 0x69, 0x44, 0x65, 0x6c, 0x65,
+	0x74, 0x65, 0x44, 0x61, 0x74, 0x61, 0x42, 0x1b, 0x5a, 0x19, 0x2e, 0x2f, 0x61, 0x64, 0x6d, 0x69,
+	0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -797,28 +802,28 @@ func file_admin_api_proto_rawDescGZIP() []byte {
 
 var file_admin_api_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_admin_api_proto_goTypes = []any{
-	(*ReqApiList)(nil),        // 0: admin.ReqApiList
-	(*RespApiListData)(nil),   // 1: admin.RespApiListData
-	(*ReqApiAll)(nil),         // 2: admin.ReqApiAll
-	(*RespApiAllData)(nil),    // 3: admin.RespApiAllData
-	(*ReqApiAdd)(nil),         // 4: admin.ReqApiAdd
-	(*RespApiAddData)(nil),    // 5: admin.RespApiAddData
-	(*ReqApiInfo)(nil),        // 6: admin.ReqApiInfo
-	(*RespApiInfoData)(nil),   // 7: admin.RespApiInfoData
-	(*ReqApiEdit)(nil),        // 8: admin.ReqApiEdit
-	(*RespApiEditData)(nil),   // 9: admin.RespApiEditData
-	(*ReqApiEnable)(nil),      // 10: admin.ReqApiEnable
-	(*RespApiEnableData)(nil), // 11: admin.RespApiEnableData
-	(*ReqApiDelete)(nil),      // 12: admin.ReqApiDelete
-	(*RespApiDeleteData)(nil), // 13: admin.RespApiDeleteData
-	(*ReqListBase)(nil),       // 14: admin.ReqListBase
-	(*ApiItem)(nil),           // 15: admin.ApiItem
+	(*ReqAdminApiList)(nil),        // 0: admin.ReqAdminApiList
+	(*RespAdminApiListData)(nil),   // 1: admin.RespAdminApiListData
+	(*ReqAdminApiAll)(nil),         // 2: admin.ReqAdminApiAll
+	(*RespAdminApiAllData)(nil),    // 3: admin.RespAdminApiAllData
+	(*ReqAdminApiAdd)(nil),         // 4: admin.ReqAdminApiAdd
+	(*RespAdminApiAddData)(nil),    // 5: admin.RespAdminApiAddData
+	(*ReqAdminApiInfo)(nil),        // 6: admin.ReqAdminApiInfo
+	(*RespAdminApiInfoData)(nil),   // 7: admin.RespAdminApiInfoData
+	(*ReqAdminApiEdit)(nil),        // 8: admin.ReqAdminApiEdit
+	(*RespAdminApiEditData)(nil),   // 9: admin.RespAdminApiEditData
+	(*ReqAdminApiEnable)(nil),      // 10: admin.ReqAdminApiEnable
+	(*RespAdminApiEnableData)(nil), // 11: admin.RespAdminApiEnableData
+	(*ReqAdminApiDelete)(nil),      // 12: admin.ReqAdminApiDelete
+	(*RespAdminApiDeleteData)(nil), // 13: admin.RespAdminApiDeleteData
+	(*ReqListBase)(nil),            // 14: admin.ReqListBase
+	(*AdminApiItem)(nil),           // 15: admin.AdminApiItem
 }
 var file_admin_api_proto_depIdxs = []int32{
-	14, // 0: admin.ReqApiList.base:type_name -> admin.ReqListBase
-	15, // 1: admin.RespApiListData.list:type_name -> admin.ApiItem
-	15, // 2: admin.RespApiAllData.list:type_name -> admin.ApiItem
-	15, // 3: admin.RespApiInfoData.data:type_name -> admin.ApiItem
+	14, // 0: admin.ReqAdminApiList.base:type_name -> admin.ReqListBase
+	15, // 1: admin.RespAdminApiListData.list:type_name -> admin.AdminApiItem
+	15, // 2: admin.RespAdminApiAllData.list:type_name -> admin.AdminApiItem
+	15, // 3: admin.RespAdminApiInfoData.data:type_name -> admin.AdminApiItem
 	4,  // [4:4] is the sub-list for method output_type
 	4,  // [4:4] is the sub-list for method input_type
 	4,  // [4:4] is the sub-list for extension type_name

@@ -57,7 +57,7 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.ReqPer
 				menuIdsMap[item.MenuID] = struct{}{}
 			}
 		}
-		apisMap := make(map[int32][]*admin_proto.ApiItem)
+		apisMap := make(map[int32][]*admin_proto.AdminApiItem)
 		if len(permissionIds) > 0 {
 			// 根据权限id获取api列表
 			apiList, err := dao.H.AdminAPI.FindByPermissionIds(ctx, permissionIds)
@@ -67,7 +67,7 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.ReqPer
 
 			for _, item := range apiList {
 				if _, ok := apisMap[item.PermissionId]; !ok {
-					apisMap[item.PermissionId] = make([]*admin_proto.ApiItem, 0)
+					apisMap[item.PermissionId] = make([]*admin_proto.AdminApiItem, 0)
 				}
 				apisMap[item.PermissionId] = append(apisMap[item.PermissionId], item)
 			}
@@ -89,14 +89,14 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.ReqPer
 	return data, err
 }
 
-func (a *AdminPermissionLogic) handleListData(list []*model2.AdminPermission, apisMap map[int32][]*admin_proto.ApiItem, menusMap map[int32]*model2.AdminMenu) (data []*admin_proto.PermissionListItem) {
+func (a *AdminPermissionLogic) handleListData(list []*model2.AdminPermission, apisMap map[int32][]*admin_proto.AdminApiItem, menusMap map[int32]*model2.AdminMenu) (data []*admin_proto.PermissionListItem) {
 	for _, item := range list {
 		data = append(data, a.handleListItemData(item, apisMap, menusMap))
 	}
 	return data
 }
 
-func (a *AdminPermissionLogic) handleListItemData(item *model2.AdminPermission, apisMap map[int32][]*admin_proto.ApiItem, menusMap map[int32]*model2.AdminMenu) *admin_proto.PermissionListItem {
+func (a *AdminPermissionLogic) handleListItemData(item *model2.AdminPermission, apisMap map[int32][]*admin_proto.AdminApiItem, menusMap map[int32]*model2.AdminMenu) *admin_proto.PermissionListItem {
 	tmp := &admin_proto.PermissionListItem{
 		Id:        item.ID,
 		MenuId:    item.MenuID,

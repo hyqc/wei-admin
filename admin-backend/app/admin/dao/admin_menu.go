@@ -119,6 +119,9 @@ func (a *AdminMenu) handleListReqSortField(sortField, sortType string) field.Exp
 	default:
 		res = DB.ID
 	}
+	if sortType == "" {
+		sortType = common.DESC
+	}
 	if sortType == common.DESC {
 		return res.Desc()
 	}

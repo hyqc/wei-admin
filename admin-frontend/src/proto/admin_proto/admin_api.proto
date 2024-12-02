@@ -4,43 +4,43 @@ option go_package = "./admin_proto;admin_proto";
 import "common.proto";
 
 // 接口列表请求参数
-message ReqApiList{
+message ReqAdminApiList{
   ReqListBase base=1;
   string key = 2;//接口键名
   string name = 3;//接口名称
   string path = 4;//接口路由
 }
-message RespApiListData{
+message RespAdminApiListData{
   int64 total=1;
-  repeated ApiItem list=2;
+  repeated AdminApiItem list=2;
 }
 
 // 全部接口列表
-message ReqApiAll{}
-message RespApiAllData{
-  repeated ApiItem list=1;
+message ReqAdminApiAll{}
+message RespAdminApiAllData{
+  repeated AdminApiItem list=1;
 }
 
 // 创建接口
-message ReqApiAdd{
+message ReqAdminApiAdd{
   string path = 1;//接口路由
   string key = 2;//接口键名
   string name = 3;//接口名称
   string describe = 4;//接口描述
   bool enabled = 5;//启用状态
 }
-message RespApiAddData{}
+message RespAdminApiAddData{}
 
 // 接口详情
-message ReqApiInfo{
+message ReqAdminApiInfo{
   int32 id = 1;//接口ID
 }
-message RespApiInfoData{
-  ApiItem data = 1;
+message RespAdminApiInfoData{
+  AdminApiItem data = 1;
 }
 
 // 接口编辑
-message ReqApiEdit{
+message ReqAdminApiEdit{
   int32 id = 1;//接口ID
   string path = 2;//接口路由
   string key = 3;//接口键名
@@ -48,17 +48,17 @@ message ReqApiEdit{
   string describe = 5;//接口描述
   bool enabled = 6;//接口状态
 }
-message RespApiEditData{}
+message RespAdminApiEditData{}
 
 // 接口禁用启用
-message ReqApiEnable{
+message ReqAdminApiEnable{
   int32 id = 1;//接口ID
   bool enabled = 2;//接口状态
 }
-message RespApiEnableData{}
+message RespAdminApiEnableData{}
 
 // 删除接口
-message ReqApiDelete{
+message ReqAdminApiDelete{
   int32 id = 1;//接口ID
 }
-message RespApiDeleteData{}
+message RespAdminApiDeleteData{}

@@ -1,14 +1,8 @@
-import { Form, Input, message, Modal, Switch } from 'antd';
+import { App, Form, Input, message, Modal, Switch } from 'antd';
 import { ChangeEvent, useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
-import { adminAPIAdd, RequestAdminAPIAddParamsType } from '@/services/apis/admin/resource';
+import { adminAPIAdd } from '@/services/apis/admin/resource';
 import { DEFAULT_RULES, path2UpperCamelCase } from './components/common';
+import { ReqAdminApiAdd } from '@/proto/admin_ts/admin_api';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -20,6 +14,7 @@ export type AddModalPropsType = {
 };
 
 const AddModal: React.FC<AddModalPropsType> = (props) => {
+  const {message} = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -30,11 +25,11 @@ const AddModal: React.FC<AddModalPropsType> = (props) => {
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminAPIAddParamsType = {
+        const data: ReqAdminApiAdd = {
           ...values,
         };
         adminAPIAdd(data).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
             form.resetFields();
           });
@@ -85,7 +80,7 @@ const AddModal: React.FC<AddModalPropsType> = (props) => {
         <Form.Item label="描述" name="describe" initialValue={''}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label="状态" name="enabled" valuePropName="checked" initialValue={true}>
+        <Form.Item label="状态" name="isEnabled" valuePropName="checked" initialValue={true}>
           <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} defaultChecked />
         </Form.Item>
       </Form>

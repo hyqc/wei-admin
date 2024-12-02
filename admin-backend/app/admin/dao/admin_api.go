@@ -17,9 +17,9 @@ type IAdminAPI interface {
 	Update(ctx *gin.Context, data *model.AdminAPI) error
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
-	List(ctx context.Context, params *admin_proto.ReqApiList) (total int64, list []*model.AdminAPI, err error)
+	List(ctx context.Context, params *admin_proto.ReqAdminApiList) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
-	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error)
+	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.AdminApiItem, err error)
 	FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error)
 }
 
@@ -50,7 +50,7 @@ func (a *AdminAPI) Delete(ctx *gin.Context, id int32) error {
 	return err
 }
 
-func (a *AdminAPI) List(ctx context.Context, params *admin_proto.ReqApiList) (total int64, list []*model.AdminAPI, err error) {
+func (a *AdminAPI) List(ctx context.Context, params *admin_proto.ReqAdminApiList) (total int64, list []*model.AdminAPI, err error) {
 	offset, limit, base := common.HandleListBaseReq(params.Base)
 	params.Base = base
 	q := a.handleListReq(ctx, params)
@@ -75,10 +75,10 @@ func (a *AdminAPI) Info(ctx *gin.Context, id int32) (*model.AdminAPI, error) {
 	return query2.AdminAPI.WithContext(ctx).Where(query2.AdminAPI.ID.Eq(id)).First()
 }
 
-func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.ApiItem, err error) {
+func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.AdminApiItem, err error) {
 	api := query2.AdminAPI
 	per := query2.AdminPermissionAPI
-	data = make([]*admin_proto.ApiItem, 0)
+	data = make([]*admin_proto.AdminApiItem, 0)
 	per.WithContext(ctx).
 		Join(api, api.ID.EqCol(per.APIID)).
 		Where(per.PermissionID.In(ids...)).
@@ -101,13 +101,16 @@ func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr
 	default:
 		res = api.ID
 	}
+	if sortType == "" {
+		sortType = common.DESC
+	}
 	if sortType == common.DESC {
 		return res.Desc()
 	}
 	return res
 }
 
-func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ReqApiList) (q query2.IAdminAPIDo) {
+func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ReqAdminApiList) (q query2.IAdminAPIDo) {
 	db := query2.AdminAPI
 	q = db.WithContext(ctx)
 

@@ -6,12 +6,12 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { ApiItem, ReqListBase } from "./common";
+import { AdminApiItem, ReqListBase } from "./common";
 
 export const protobufPackage = "admin";
 
 /** 接口列表请求参数 */
-export interface ReqApiList {
+export interface ReqAdminApiList {
   base?:
     | ReqListBase
     | undefined;
@@ -27,21 +27,21 @@ export interface ReqApiList {
   path?: string | undefined;
 }
 
-export interface RespApiListData {
+export interface RespAdminApiListData {
   total?: number | undefined;
-  list?: ApiItem[] | undefined;
+  list?: AdminApiItem[] | undefined;
 }
 
 /** 全部接口列表 */
-export interface ReqApiAll {
+export interface ReqAdminApiAll {
 }
 
-export interface RespApiAllData {
-  list?: ApiItem[] | undefined;
+export interface RespAdminApiAllData {
+  list?: AdminApiItem[] | undefined;
 }
 
 /** 创建接口 */
-export interface ReqApiAdd {
+export interface ReqAdminApiAdd {
   /** 接口路由 */
   path?:
     | string
@@ -62,21 +62,21 @@ export interface ReqApiAdd {
   enabled?: boolean | undefined;
 }
 
-export interface RespApiAddData {
+export interface RespAdminApiAddData {
 }
 
 /** 接口详情 */
-export interface ReqApiInfo {
+export interface ReqAdminApiInfo {
   /** 接口ID */
   id?: number | undefined;
 }
 
-export interface RespApiInfoData {
-  data?: ApiItem | undefined;
+export interface RespAdminApiInfoData {
+  data?: AdminApiItem | undefined;
 }
 
 /** 接口编辑 */
-export interface ReqApiEdit {
+export interface ReqAdminApiEdit {
   /** 接口ID */
   id?:
     | number
@@ -101,11 +101,11 @@ export interface ReqApiEdit {
   enabled?: boolean | undefined;
 }
 
-export interface RespApiEditData {
+export interface RespAdminApiEditData {
 }
 
 /** 接口禁用启用 */
-export interface ReqApiEnable {
+export interface ReqAdminApiEnable {
   /** 接口ID */
   id?:
     | number
@@ -114,24 +114,24 @@ export interface ReqApiEnable {
   enabled?: boolean | undefined;
 }
 
-export interface RespApiEnableData {
+export interface RespAdminApiEnableData {
 }
 
 /** 删除接口 */
-export interface ReqApiDelete {
+export interface ReqAdminApiDelete {
   /** 接口ID */
   id?: number | undefined;
 }
 
-export interface RespApiDeleteData {
+export interface RespAdminApiDeleteData {
 }
 
-function createBaseReqApiList(): ReqApiList {
+function createBaseReqAdminApiList(): ReqAdminApiList {
   return { base: undefined, key: "", name: "", path: "" };
 }
 
-export const ReqApiList: MessageFns<ReqApiList> = {
-  encode(message: ReqApiList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminApiList: MessageFns<ReqAdminApiList> = {
+  encode(message: ReqAdminApiList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
@@ -147,10 +147,10 @@ export const ReqApiList: MessageFns<ReqApiList> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqApiList {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminApiList {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqApiList();
+    const message = createBaseReqAdminApiList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -195,7 +195,7 @@ export const ReqApiList: MessageFns<ReqApiList> = {
     return message;
   },
 
-  fromJSON(object: any): ReqApiList {
+  fromJSON(object: any): ReqAdminApiList {
     return {
       base: isSet(object.base) ? ReqListBase.fromJSON(object.base) : undefined,
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -204,7 +204,7 @@ export const ReqApiList: MessageFns<ReqApiList> = {
     };
   },
 
-  toJSON(message: ReqApiList): unknown {
+  toJSON(message: ReqAdminApiList): unknown {
     const obj: any = {};
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
@@ -221,11 +221,11 @@ export const ReqApiList: MessageFns<ReqApiList> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqApiList>, I>>(base?: I): ReqApiList {
-    return ReqApiList.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminApiList>, I>>(base?: I): ReqAdminApiList {
+    return ReqAdminApiList.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqApiList>, I>>(object: I): ReqApiList {
-    const message = createBaseReqApiList();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminApiList>, I>>(object: I): ReqAdminApiList {
+    const message = createBaseReqAdminApiList();
     message.base = (object.base !== undefined && object.base !== null)
       ? ReqListBase.fromPartial(object.base)
       : undefined;
@@ -236,27 +236,27 @@ export const ReqApiList: MessageFns<ReqApiList> = {
   },
 };
 
-function createBaseRespApiListData(): RespApiListData {
+function createBaseRespAdminApiListData(): RespAdminApiListData {
   return { total: 0, list: [] };
 }
 
-export const RespApiListData: MessageFns<RespApiListData> = {
-  encode(message: RespApiListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminApiListData: MessageFns<RespAdminApiListData> = {
+  encode(message: RespAdminApiListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
     if (message.list !== undefined && message.list.length !== 0) {
       for (const v of message.list) {
-        ApiItem.encode(v!, writer.uint32(18).fork()).join();
+        AdminApiItem.encode(v!, writer.uint32(18).fork()).join();
       }
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespApiListData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminApiListData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespApiListData();
+    const message = createBaseRespAdminApiListData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -273,7 +273,7 @@ export const RespApiListData: MessageFns<RespApiListData> = {
             break;
           }
 
-          const el = ApiItem.decode(reader, reader.uint32());
+          const el = AdminApiItem.decode(reader, reader.uint32());
           if (el !== undefined) {
             message.list!.push(el);
           }
@@ -288,48 +288,48 @@ export const RespApiListData: MessageFns<RespApiListData> = {
     return message;
   },
 
-  fromJSON(object: any): RespApiListData {
+  fromJSON(object: any): RespAdminApiListData {
     return {
       total: isSet(object.total) ? globalThis.Number(object.total) : 0,
-      list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => ApiItem.fromJSON(e)) : [],
+      list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => AdminApiItem.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: RespApiListData): unknown {
+  toJSON(message: RespAdminApiListData): unknown {
     const obj: any = {};
     if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
     }
     if (message.list?.length) {
-      obj.list = message.list.map((e) => ApiItem.toJSON(e));
+      obj.list = message.list.map((e) => AdminApiItem.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespApiListData>, I>>(base?: I): RespApiListData {
-    return RespApiListData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminApiListData>, I>>(base?: I): RespAdminApiListData {
+    return RespAdminApiListData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespApiListData>, I>>(object: I): RespApiListData {
-    const message = createBaseRespApiListData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminApiListData>, I>>(object: I): RespAdminApiListData {
+    const message = createBaseRespAdminApiListData();
     message.total = object.total ?? 0;
-    message.list = object.list?.map((e) => ApiItem.fromPartial(e)) || [];
+    message.list = object.list?.map((e) => AdminApiItem.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseReqApiAll(): ReqApiAll {
+function createBaseReqAdminApiAll(): ReqAdminApiAll {
   return {};
 }
 
-export const ReqApiAll: MessageFns<ReqApiAll> = {
-  encode(_: ReqApiAll, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminApiAll: MessageFns<ReqAdminApiAll> = {
+  encode(_: ReqAdminApiAll, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqApiAll {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminApiAll {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqApiAll();
+    const message = createBaseReqAdminApiAll();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -342,42 +342,42 @@ export const ReqApiAll: MessageFns<ReqApiAll> = {
     return message;
   },
 
-  fromJSON(_: any): ReqApiAll {
+  fromJSON(_: any): ReqAdminApiAll {
     return {};
   },
 
-  toJSON(_: ReqApiAll): unknown {
+  toJSON(_: ReqAdminApiAll): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqApiAll>, I>>(base?: I): ReqApiAll {
-    return ReqApiAll.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminApiAll>, I>>(base?: I): ReqAdminApiAll {
+    return ReqAdminApiAll.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqApiAll>, I>>(_: I): ReqApiAll {
-    const message = createBaseReqApiAll();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminApiAll>, I>>(_: I): ReqAdminApiAll {
+    const message = createBaseReqAdminApiAll();
     return message;
   },
 };
 
-function createBaseRespApiAllData(): RespApiAllData {
+function createBaseRespAdminApiAllData(): RespAdminApiAllData {
   return { list: [] };
 }
 
-export const RespApiAllData: MessageFns<RespApiAllData> = {
-  encode(message: RespApiAllData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminApiAllData: MessageFns<RespAdminApiAllData> = {
+  encode(message: RespAdminApiAllData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.list !== undefined && message.list.length !== 0) {
       for (const v of message.list) {
-        ApiItem.encode(v!, writer.uint32(10).fork()).join();
+        AdminApiItem.encode(v!, writer.uint32(10).fork()).join();
       }
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespApiAllData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminApiAllData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespApiAllData();
+    const message = createBaseRespAdminApiAllData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -386,7 +386,7 @@ export const RespApiAllData: MessageFns<RespApiAllData> = {
             break;
           }
 
-          const el = ApiItem.decode(reader, reader.uint32());
+          const el = AdminApiItem.decode(reader, reader.uint32());
           if (el !== undefined) {
             message.list!.push(el);
           }
@@ -401,34 +401,36 @@ export const RespApiAllData: MessageFns<RespApiAllData> = {
     return message;
   },
 
-  fromJSON(object: any): RespApiAllData {
-    return { list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => ApiItem.fromJSON(e)) : [] };
+  fromJSON(object: any): RespAdminApiAllData {
+    return {
+      list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => AdminApiItem.fromJSON(e)) : [],
+    };
   },
 
-  toJSON(message: RespApiAllData): unknown {
+  toJSON(message: RespAdminApiAllData): unknown {
     const obj: any = {};
     if (message.list?.length) {
-      obj.list = message.list.map((e) => ApiItem.toJSON(e));
+      obj.list = message.list.map((e) => AdminApiItem.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespApiAllData>, I>>(base?: I): RespApiAllData {
-    return RespApiAllData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminApiAllData>, I>>(base?: I): RespAdminApiAllData {
+    return RespAdminApiAllData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespApiAllData>, I>>(object: I): RespApiAllData {
-    const message = createBaseRespApiAllData();
-    message.list = object.list?.map((e) => ApiItem.fromPartial(e)) || [];
+  fromPartial<I extends Exact<DeepPartial<RespAdminApiAllData>, I>>(object: I): RespAdminApiAllData {
+    const message = createBaseRespAdminApiAllData();
+    message.list = object.list?.map((e) => AdminApiItem.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseReqApiAdd(): ReqApiAdd {
+function createBaseReqAdminApiAdd(): ReqAdminApiAdd {
   return { path: "", key: "", name: "", describe: "", enabled: false };
 }
 
-export const ReqApiAdd: MessageFns<ReqApiAdd> = {
-  encode(message: ReqApiAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminApiAdd: MessageFns<ReqAdminApiAdd> = {
+  encode(message: ReqAdminApiAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.path !== undefined && message.path !== "") {
       writer.uint32(10).string(message.path);
     }
@@ -447,10 +449,10 @@ export const ReqApiAdd: MessageFns<ReqApiAdd> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqApiAdd {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminApiAdd {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqApiAdd();
+    const message = createBaseReqAdminApiAdd();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -503,7 +505,7 @@ export const ReqApiAdd: MessageFns<ReqApiAdd> = {
     return message;
   },
 
-  fromJSON(object: any): ReqApiAdd {
+  fromJSON(object: any): ReqAdminApiAdd {
     return {
       path: isSet(object.path) ? globalThis.String(object.path) : "",
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -513,7 +515,7 @@ export const ReqApiAdd: MessageFns<ReqApiAdd> = {
     };
   },
 
-  toJSON(message: ReqApiAdd): unknown {
+  toJSON(message: ReqAdminApiAdd): unknown {
     const obj: any = {};
     if (message.path !== undefined && message.path !== "") {
       obj.path = message.path;
@@ -533,11 +535,11 @@ export const ReqApiAdd: MessageFns<ReqApiAdd> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqApiAdd>, I>>(base?: I): ReqApiAdd {
-    return ReqApiAdd.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminApiAdd>, I>>(base?: I): ReqAdminApiAdd {
+    return ReqAdminApiAdd.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqApiAdd>, I>>(object: I): ReqApiAdd {
-    const message = createBaseReqApiAdd();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminApiAdd>, I>>(object: I): ReqAdminApiAdd {
+    const message = createBaseReqAdminApiAdd();
     message.path = object.path ?? "";
     message.key = object.key ?? "";
     message.name = object.name ?? "";
@@ -547,19 +549,19 @@ export const ReqApiAdd: MessageFns<ReqApiAdd> = {
   },
 };
 
-function createBaseRespApiAddData(): RespApiAddData {
+function createBaseRespAdminApiAddData(): RespAdminApiAddData {
   return {};
 }
 
-export const RespApiAddData: MessageFns<RespApiAddData> = {
-  encode(_: RespApiAddData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminApiAddData: MessageFns<RespAdminApiAddData> = {
+  encode(_: RespAdminApiAddData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespApiAddData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminApiAddData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespApiAddData();
+    const message = createBaseRespAdminApiAddData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -572,40 +574,40 @@ export const RespApiAddData: MessageFns<RespApiAddData> = {
     return message;
   },
 
-  fromJSON(_: any): RespApiAddData {
+  fromJSON(_: any): RespAdminApiAddData {
     return {};
   },
 
-  toJSON(_: RespApiAddData): unknown {
+  toJSON(_: RespAdminApiAddData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespApiAddData>, I>>(base?: I): RespApiAddData {
-    return RespApiAddData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminApiAddData>, I>>(base?: I): RespAdminApiAddData {
+    return RespAdminApiAddData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespApiAddData>, I>>(_: I): RespApiAddData {
-    const message = createBaseRespApiAddData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminApiAddData>, I>>(_: I): RespAdminApiAddData {
+    const message = createBaseRespAdminApiAddData();
     return message;
   },
 };
 
-function createBaseReqApiInfo(): ReqApiInfo {
+function createBaseReqAdminApiInfo(): ReqAdminApiInfo {
   return { id: 0 };
 }
 
-export const ReqApiInfo: MessageFns<ReqApiInfo> = {
-  encode(message: ReqApiInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminApiInfo: MessageFns<ReqAdminApiInfo> = {
+  encode(message: ReqAdminApiInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqApiInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminApiInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqApiInfo();
+    const message = createBaseReqAdminApiInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -626,11 +628,11 @@ export const ReqApiInfo: MessageFns<ReqApiInfo> = {
     return message;
   },
 
-  fromJSON(object: any): ReqApiInfo {
+  fromJSON(object: any): ReqAdminApiInfo {
     return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
   },
 
-  toJSON(message: ReqApiInfo): unknown {
+  toJSON(message: ReqAdminApiInfo): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -638,32 +640,32 @@ export const ReqApiInfo: MessageFns<ReqApiInfo> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqApiInfo>, I>>(base?: I): ReqApiInfo {
-    return ReqApiInfo.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminApiInfo>, I>>(base?: I): ReqAdminApiInfo {
+    return ReqAdminApiInfo.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqApiInfo>, I>>(object: I): ReqApiInfo {
-    const message = createBaseReqApiInfo();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminApiInfo>, I>>(object: I): ReqAdminApiInfo {
+    const message = createBaseReqAdminApiInfo();
     message.id = object.id ?? 0;
     return message;
   },
 };
 
-function createBaseRespApiInfoData(): RespApiInfoData {
+function createBaseRespAdminApiInfoData(): RespAdminApiInfoData {
   return { data: undefined };
 }
 
-export const RespApiInfoData: MessageFns<RespApiInfoData> = {
-  encode(message: RespApiInfoData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminApiInfoData: MessageFns<RespAdminApiInfoData> = {
+  encode(message: RespAdminApiInfoData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.data !== undefined) {
-      ApiItem.encode(message.data, writer.uint32(10).fork()).join();
+      AdminApiItem.encode(message.data, writer.uint32(10).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespApiInfoData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminApiInfoData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespApiInfoData();
+    const message = createBaseRespAdminApiInfoData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -672,7 +674,7 @@ export const RespApiInfoData: MessageFns<RespApiInfoData> = {
             break;
           }
 
-          message.data = ApiItem.decode(reader, reader.uint32());
+          message.data = AdminApiItem.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -684,34 +686,36 @@ export const RespApiInfoData: MessageFns<RespApiInfoData> = {
     return message;
   },
 
-  fromJSON(object: any): RespApiInfoData {
-    return { data: isSet(object.data) ? ApiItem.fromJSON(object.data) : undefined };
+  fromJSON(object: any): RespAdminApiInfoData {
+    return { data: isSet(object.data) ? AdminApiItem.fromJSON(object.data) : undefined };
   },
 
-  toJSON(message: RespApiInfoData): unknown {
+  toJSON(message: RespAdminApiInfoData): unknown {
     const obj: any = {};
     if (message.data !== undefined) {
-      obj.data = ApiItem.toJSON(message.data);
+      obj.data = AdminApiItem.toJSON(message.data);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespApiInfoData>, I>>(base?: I): RespApiInfoData {
-    return RespApiInfoData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminApiInfoData>, I>>(base?: I): RespAdminApiInfoData {
+    return RespAdminApiInfoData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespApiInfoData>, I>>(object: I): RespApiInfoData {
-    const message = createBaseRespApiInfoData();
-    message.data = (object.data !== undefined && object.data !== null) ? ApiItem.fromPartial(object.data) : undefined;
+  fromPartial<I extends Exact<DeepPartial<RespAdminApiInfoData>, I>>(object: I): RespAdminApiInfoData {
+    const message = createBaseRespAdminApiInfoData();
+    message.data = (object.data !== undefined && object.data !== null)
+      ? AdminApiItem.fromPartial(object.data)
+      : undefined;
     return message;
   },
 };
 
-function createBaseReqApiEdit(): ReqApiEdit {
+function createBaseReqAdminApiEdit(): ReqAdminApiEdit {
   return { id: 0, path: "", key: "", name: "", describe: "", enabled: false };
 }
 
-export const ReqApiEdit: MessageFns<ReqApiEdit> = {
-  encode(message: ReqApiEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminApiEdit: MessageFns<ReqAdminApiEdit> = {
+  encode(message: ReqAdminApiEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -733,10 +737,10 @@ export const ReqApiEdit: MessageFns<ReqApiEdit> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqApiEdit {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminApiEdit {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqApiEdit();
+    const message = createBaseReqAdminApiEdit();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -797,7 +801,7 @@ export const ReqApiEdit: MessageFns<ReqApiEdit> = {
     return message;
   },
 
-  fromJSON(object: any): ReqApiEdit {
+  fromJSON(object: any): ReqAdminApiEdit {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       path: isSet(object.path) ? globalThis.String(object.path) : "",
@@ -808,7 +812,7 @@ export const ReqApiEdit: MessageFns<ReqApiEdit> = {
     };
   },
 
-  toJSON(message: ReqApiEdit): unknown {
+  toJSON(message: ReqAdminApiEdit): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -831,11 +835,11 @@ export const ReqApiEdit: MessageFns<ReqApiEdit> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqApiEdit>, I>>(base?: I): ReqApiEdit {
-    return ReqApiEdit.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminApiEdit>, I>>(base?: I): ReqAdminApiEdit {
+    return ReqAdminApiEdit.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqApiEdit>, I>>(object: I): ReqApiEdit {
-    const message = createBaseReqApiEdit();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminApiEdit>, I>>(object: I): ReqAdminApiEdit {
+    const message = createBaseReqAdminApiEdit();
     message.id = object.id ?? 0;
     message.path = object.path ?? "";
     message.key = object.key ?? "";
@@ -846,19 +850,19 @@ export const ReqApiEdit: MessageFns<ReqApiEdit> = {
   },
 };
 
-function createBaseRespApiEditData(): RespApiEditData {
+function createBaseRespAdminApiEditData(): RespAdminApiEditData {
   return {};
 }
 
-export const RespApiEditData: MessageFns<RespApiEditData> = {
-  encode(_: RespApiEditData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminApiEditData: MessageFns<RespAdminApiEditData> = {
+  encode(_: RespAdminApiEditData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespApiEditData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminApiEditData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespApiEditData();
+    const message = createBaseRespAdminApiEditData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -871,30 +875,30 @@ export const RespApiEditData: MessageFns<RespApiEditData> = {
     return message;
   },
 
-  fromJSON(_: any): RespApiEditData {
+  fromJSON(_: any): RespAdminApiEditData {
     return {};
   },
 
-  toJSON(_: RespApiEditData): unknown {
+  toJSON(_: RespAdminApiEditData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespApiEditData>, I>>(base?: I): RespApiEditData {
-    return RespApiEditData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminApiEditData>, I>>(base?: I): RespAdminApiEditData {
+    return RespAdminApiEditData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespApiEditData>, I>>(_: I): RespApiEditData {
-    const message = createBaseRespApiEditData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminApiEditData>, I>>(_: I): RespAdminApiEditData {
+    const message = createBaseRespAdminApiEditData();
     return message;
   },
 };
 
-function createBaseReqApiEnable(): ReqApiEnable {
+function createBaseReqAdminApiEnable(): ReqAdminApiEnable {
   return { id: 0, enabled: false };
 }
 
-export const ReqApiEnable: MessageFns<ReqApiEnable> = {
-  encode(message: ReqApiEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminApiEnable: MessageFns<ReqAdminApiEnable> = {
+  encode(message: ReqAdminApiEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -904,10 +908,10 @@ export const ReqApiEnable: MessageFns<ReqApiEnable> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqApiEnable {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminApiEnable {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqApiEnable();
+    const message = createBaseReqAdminApiEnable();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -936,14 +940,14 @@ export const ReqApiEnable: MessageFns<ReqApiEnable> = {
     return message;
   },
 
-  fromJSON(object: any): ReqApiEnable {
+  fromJSON(object: any): ReqAdminApiEnable {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
     };
   },
 
-  toJSON(message: ReqApiEnable): unknown {
+  toJSON(message: ReqAdminApiEnable): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -954,30 +958,30 @@ export const ReqApiEnable: MessageFns<ReqApiEnable> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqApiEnable>, I>>(base?: I): ReqApiEnable {
-    return ReqApiEnable.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminApiEnable>, I>>(base?: I): ReqAdminApiEnable {
+    return ReqAdminApiEnable.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqApiEnable>, I>>(object: I): ReqApiEnable {
-    const message = createBaseReqApiEnable();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminApiEnable>, I>>(object: I): ReqAdminApiEnable {
+    const message = createBaseReqAdminApiEnable();
     message.id = object.id ?? 0;
     message.enabled = object.enabled ?? false;
     return message;
   },
 };
 
-function createBaseRespApiEnableData(): RespApiEnableData {
+function createBaseRespAdminApiEnableData(): RespAdminApiEnableData {
   return {};
 }
 
-export const RespApiEnableData: MessageFns<RespApiEnableData> = {
-  encode(_: RespApiEnableData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminApiEnableData: MessageFns<RespAdminApiEnableData> = {
+  encode(_: RespAdminApiEnableData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespApiEnableData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminApiEnableData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespApiEnableData();
+    const message = createBaseRespAdminApiEnableData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -990,40 +994,40 @@ export const RespApiEnableData: MessageFns<RespApiEnableData> = {
     return message;
   },
 
-  fromJSON(_: any): RespApiEnableData {
+  fromJSON(_: any): RespAdminApiEnableData {
     return {};
   },
 
-  toJSON(_: RespApiEnableData): unknown {
+  toJSON(_: RespAdminApiEnableData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespApiEnableData>, I>>(base?: I): RespApiEnableData {
-    return RespApiEnableData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminApiEnableData>, I>>(base?: I): RespAdminApiEnableData {
+    return RespAdminApiEnableData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespApiEnableData>, I>>(_: I): RespApiEnableData {
-    const message = createBaseRespApiEnableData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminApiEnableData>, I>>(_: I): RespAdminApiEnableData {
+    const message = createBaseRespAdminApiEnableData();
     return message;
   },
 };
 
-function createBaseReqApiDelete(): ReqApiDelete {
+function createBaseReqAdminApiDelete(): ReqAdminApiDelete {
   return { id: 0 };
 }
 
-export const ReqApiDelete: MessageFns<ReqApiDelete> = {
-  encode(message: ReqApiDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminApiDelete: MessageFns<ReqAdminApiDelete> = {
+  encode(message: ReqAdminApiDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqApiDelete {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminApiDelete {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqApiDelete();
+    const message = createBaseReqAdminApiDelete();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1044,11 +1048,11 @@ export const ReqApiDelete: MessageFns<ReqApiDelete> = {
     return message;
   },
 
-  fromJSON(object: any): ReqApiDelete {
+  fromJSON(object: any): ReqAdminApiDelete {
     return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
   },
 
-  toJSON(message: ReqApiDelete): unknown {
+  toJSON(message: ReqAdminApiDelete): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1056,29 +1060,29 @@ export const ReqApiDelete: MessageFns<ReqApiDelete> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqApiDelete>, I>>(base?: I): ReqApiDelete {
-    return ReqApiDelete.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminApiDelete>, I>>(base?: I): ReqAdminApiDelete {
+    return ReqAdminApiDelete.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqApiDelete>, I>>(object: I): ReqApiDelete {
-    const message = createBaseReqApiDelete();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminApiDelete>, I>>(object: I): ReqAdminApiDelete {
+    const message = createBaseReqAdminApiDelete();
     message.id = object.id ?? 0;
     return message;
   },
 };
 
-function createBaseRespApiDeleteData(): RespApiDeleteData {
+function createBaseRespAdminApiDeleteData(): RespAdminApiDeleteData {
   return {};
 }
 
-export const RespApiDeleteData: MessageFns<RespApiDeleteData> = {
-  encode(_: RespApiDeleteData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminApiDeleteData: MessageFns<RespAdminApiDeleteData> = {
+  encode(_: RespAdminApiDeleteData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespApiDeleteData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminApiDeleteData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespApiDeleteData();
+    const message = createBaseRespAdminApiDeleteData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1091,20 +1095,20 @@ export const RespApiDeleteData: MessageFns<RespApiDeleteData> = {
     return message;
   },
 
-  fromJSON(_: any): RespApiDeleteData {
+  fromJSON(_: any): RespAdminApiDeleteData {
     return {};
   },
 
-  toJSON(_: RespApiDeleteData): unknown {
+  toJSON(_: RespAdminApiDeleteData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespApiDeleteData>, I>>(base?: I): RespApiDeleteData {
-    return RespApiDeleteData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminApiDeleteData>, I>>(base?: I): RespAdminApiDeleteData {
+    return RespAdminApiDeleteData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespApiDeleteData>, I>>(_: I): RespApiDeleteData {
-    const message = createBaseRespApiDeleteData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminApiDeleteData>, I>>(_: I): RespAdminApiDeleteData {
+    const message = createBaseRespAdminApiDeleteData();
     return message;
   },
 };

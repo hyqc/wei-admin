@@ -19,15 +19,16 @@ message ReqListBase{
 }
 
 // 接口列表返回结构
-message ApiItem{
+message AdminApiItem{
   int32  id = 1;
   string path = 2;
   string key = 3;
   string name = 4;
-  bool enabled = 5;
+  bool isEnabled = 5;
   int32 permissionId = 6;
   string createdAt = 7;
   string updatedAt = 8;
+  string describe = 9;
 }
 
 // 账号列表返回结构

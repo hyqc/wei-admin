@@ -1,14 +1,8 @@
-import { adminAPIEdit, ResponseAdminAPIDetailType } from '@/services/apis/admin/resource';
-import { Form, Input, message, Modal, Switch } from 'antd';
+import { adminAPIEdit } from '@/services/apis/admin/resource';
+import { App, Form, Input, message, Modal, Switch } from 'antd';
 import { ChangeEvent, useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
 import { DEFAULT_RULES, path2UpperCamelCase } from './components/common';
+import { AdminApiItem } from '@/proto/admin_ts/common';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -16,11 +10,12 @@ export type NoticeModalPropsType = {
 
 export type EditModalPropsType = {
   modalStatus: boolean;
-  detailData: ResponseAdminAPIDetailType;
+  detailData: AdminApiItem;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
 const EditModal: React.FC<EditModalPropsType> = (props) => {
+  const {message} = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -33,7 +28,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
       .validateFields()
       .then((values) => {
         adminAPIEdit(values).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
           });
         });

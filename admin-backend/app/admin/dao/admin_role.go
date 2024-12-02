@@ -67,6 +67,9 @@ func (a *AdminRole) handleListReqSortField(sortField, sortType string) field.Exp
 	default:
 		res = api.ID
 	}
+	if sortType == "" {
+		sortType = common.DESC
+	}
 	if sortType == common.DESC {
 		return res.Desc()
 	}
