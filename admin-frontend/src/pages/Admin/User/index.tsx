@@ -41,7 +41,7 @@ import Authorization from '@/components/Autuorization';
 import FetchButton from '@/components/FetchButton';
 import { AdminUserListItem, AdminUserRoleItem } from '@/proto/admin_ts/common';
 import { ReqAdminUserEnabled, ReqAdminUserList, RespAdminUserInfoData, RespAdminUserListData } from '@/proto/admin_ts/admin_user';
-import { handlePagination } from '@/services/common/utils';
+import { handlePagination, searchResetPageInfo } from '@/services/common/utils';
 import { DefaultPagination } from '@/components/PageContainer/Pagination';
 import { RoleItem } from '@/proto/admin_ts/admin_role';
 
@@ -70,7 +70,7 @@ const Admin: React.FC = () => {
       .then((res: ResponseBodyType) => {
         const data: RespAdminUserListData = res.data;
         const rows = data?.list || [];
-        const total = data.total ?? 0
+        const total = data?.total ?? 0
         setRowsData(rows);
         setPageInfo((pageInfo)=>({...pageInfo,total}))
       })
@@ -207,7 +207,8 @@ const Admin: React.FC = () => {
   // 搜索重置
   function onSearchReset() {
     form.resetFields();
-    const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+    setPageInfo(searchResetPageInfo(pageInfo.pageSize))
+    const base = handlePagination(1, pageInfo.pageSize)
     getRows({ base });
   }
 

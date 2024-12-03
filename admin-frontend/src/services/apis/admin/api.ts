@@ -194,11 +194,11 @@ export const APIAdminPermissions = {
     method: POST,
   },
   bindApis: {
-    url: '/admin/permission/bindApis',
+    url: '/admin/permission/bind_apis',
     method: POST,
   },
   unbind: {
-    url: '/admin/permission/unbind',
+    url: '/admin/permission/unbind_api',
     method: POST,
   },
 };

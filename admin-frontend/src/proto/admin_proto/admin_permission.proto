@@ -4,20 +4,20 @@ option go_package = "./admin_proto;admin_proto";
 import "common.proto";
 
 // 权限列表
-message ReqPermissionList{
+message ReqAdminPermissionList{
   ReqListBase base = 1;
   int32 menuId=2;//菜单ID
   string key=3;//权限唯一标识符
   string name=4;//权限名称
   string type=5;//权限类型
 }
-message RespPermissionListData{
+message RespAdminPermissionListData{
   int64 total = 1;
   repeated PermissionListItem list = 2;
 }
 
 // 创建权限
-message ReqPermissionAdd{
+message ReqAdminPermissionAdd{
   int32 id = 1; //权限ID
   int32 menuId = 2;//权限对应的菜单ID
   string key = 3;//权限唯一标识符
@@ -27,21 +27,21 @@ message ReqPermissionAdd{
   string redirect = 7;//重定向地址
   bool enabled = 8;//是否启用
 }
-message RespPermissionAddData{
+message RespAdminPermissionAddData{
 }
 
 
 //权限详情
-message ReqPermissionInfo{
+message ReqAdminPermissionInfo{
   int32 id = 1 ;  //权限ID
 }
-message RespPermissionInfoData{
-  PermissionInfo data = 1;
+message RespAdminPermissionInfoData{
+  AdminPermissionInfo data = 1;
 }
 
 
 // 编辑权限
-message ReqPermissionEdit{
+message ReqAdminPermissionEdit{
   int32 id = 1;//权限ID
   int32 menuId = 2;//权限对应的菜单ID
   string key = 3;//权限唯一标识符
@@ -51,43 +51,49 @@ message ReqPermissionEdit{
   string redirect = 7;//重定向地址
   bool enabled = 8;//是否启用
 }
-message RespPermissionEditData{
+message RespAdminPermissionEditData{
 }
 
 
 // 启用禁用权限
-message ReqPermissionEnable{
+message ReqAdminPermissionEnable{
   int32 id = 1;//权限ID
-  bool enabled = 2;//状态
+  bool isEnabled=2;
 }
-message RespPermissionEnableData{
+message RespAdminPermissionEnableData{
 }
 
 
 // 删除权限
-message ReqPermissionDelete{
+message ReqAdminPermissionDelete{
   int32 id = 1;//权限ID
 }
-message RespPermissionDeleteData{
+message RespAdminPermissionDeleteData{
 }
 
 // 权限绑定接口
-message ReqPermissionBindApis{
+message ReqAdminPermissionBindApis{
   int32 permissionId =1; // 权限ID
   repeated int32 apiIds = 2; // 接口ID列表
 }
-message RespPermissionBindApisData{
+message RespAdminPermissionBindApisData{
+}
+
+// 权限绑定接口
+message ReqAdminPermissionUnBindApi{
+  int32 permissionId =1; // 权限ID
+  int32 apiId=2;//接口ID
+}
+message RespAdminPermissionUnBindApi{
 }
 
 //绑定权限菜单
-message ReqPermissionBindMenu{
+message ReqAdminPermissionBindMenu{
   int32 menuId = 1; // 菜单ID
-  repeated ReqPermissionAdd permissions = 2; // 菜单对应的权限ID列表
+  repeated ReqAdminPermissionAdd permissions = 2; // 菜单对应的权限ID列表
 }
-message RespPermissionBindMenuData{
+message RespAdminPermissionBindMenuData{
 }
-
-
 
 
 ////////////////////////////////////
@@ -103,7 +109,7 @@ message PermissionListItem{
   string describe = 8;//权限描述
   string type = 9;//权限类型
   string typeText = 10;//权限类型
-  bool enabled = 11;//是否启用
+  bool isEnabled = 11;//是否启用
   string createdAt = 12;
   string updatedAt = 13;
 }
@@ -122,7 +128,7 @@ message PermissionApiItem{
 }
 
 //权限详情
-message PermissionInfo{
+message AdminPermissionInfo{
   int32 id = 1;//权限ID
   int32 menuId = 2;//权限对应的菜单ID
   string menuName = 3;//菜单名称
@@ -134,7 +140,7 @@ message PermissionInfo{
   string type = 9;//权限类型
   string typeText = 10;//权限类型
   string redirect = 11;//重定向地址
-  bool enabled = 12;//是否启用
+  bool isEnabled = 12;//是否启用
   string createdAt = 13;
   string updatedAt = 14;
 }

@@ -11,7 +11,7 @@ import { AdminApiItem, ReqListBase } from "./common";
 export const protobufPackage = "admin";
 
 /** 权限列表 */
-export interface ReqPermissionList {
+export interface ReqAdminPermissionList {
   base?:
     | ReqListBase
     | undefined;
@@ -31,13 +31,13 @@ export interface ReqPermissionList {
   type?: string | undefined;
 }
 
-export interface RespPermissionListData {
+export interface RespAdminPermissionListData {
   total?: number | undefined;
   list?: PermissionListItem[] | undefined;
 }
 
 /** 创建权限 */
-export interface ReqPermissionAdd {
+export interface ReqAdminPermissionAdd {
   /** 权限ID */
   id?:
     | number
@@ -70,21 +70,21 @@ export interface ReqPermissionAdd {
   enabled?: boolean | undefined;
 }
 
-export interface RespPermissionAddData {
+export interface RespAdminPermissionAddData {
 }
 
 /** 权限详情 */
-export interface ReqPermissionInfo {
+export interface ReqAdminPermissionInfo {
   /** 权限ID */
   id?: number | undefined;
 }
 
-export interface RespPermissionInfoData {
-  data?: PermissionInfo | undefined;
+export interface RespAdminPermissionInfoData {
+  data?: AdminPermissionInfo | undefined;
 }
 
 /** 编辑权限 */
-export interface ReqPermissionEdit {
+export interface ReqAdminPermissionEdit {
   /** 权限ID */
   id?:
     | number
@@ -117,33 +117,30 @@ export interface ReqPermissionEdit {
   enabled?: boolean | undefined;
 }
 
-export interface RespPermissionEditData {
+export interface RespAdminPermissionEditData {
 }
 
 /** 启用禁用权限 */
-export interface ReqPermissionEnable {
+export interface ReqAdminPermissionEnable {
   /** 权限ID */
-  id?:
-    | number
-    | undefined;
-  /** 状态 */
-  enabled?: boolean | undefined;
+  id?: number | undefined;
+  isEnabled?: boolean | undefined;
 }
 
-export interface RespPermissionEnableData {
+export interface RespAdminPermissionEnableData {
 }
 
 /** 删除权限 */
-export interface ReqPermissionDelete {
+export interface ReqAdminPermissionDelete {
   /** 权限ID */
   id?: number | undefined;
 }
 
-export interface RespPermissionDeleteData {
+export interface RespAdminPermissionDeleteData {
 }
 
 /** 权限绑定接口 */
-export interface ReqPermissionBindApis {
+export interface ReqAdminPermissionBindApis {
   /** 权限ID */
   permissionId?:
     | number
@@ -152,20 +149,33 @@ export interface ReqPermissionBindApis {
   apiIds?: number[] | undefined;
 }
 
-export interface RespPermissionBindApisData {
+export interface RespAdminPermissionBindApisData {
+}
+
+/** 权限绑定接口 */
+export interface ReqAdminPermissionUnBindApi {
+  /** 权限ID */
+  permissionId?:
+    | number
+    | undefined;
+  /** 接口ID */
+  apiId?: number | undefined;
+}
+
+export interface RespAdminPermissionUnBindApi {
 }
 
 /** 绑定权限菜单 */
-export interface ReqPermissionBindMenu {
+export interface ReqAdminPermissionBindMenu {
   /** 菜单ID */
   menuId?:
     | number
     | undefined;
   /** 菜单对应的权限ID列表 */
-  permissions?: ReqPermissionAdd[] | undefined;
+  permissions?: ReqAdminPermissionAdd[] | undefined;
 }
 
-export interface RespPermissionBindMenuData {
+export interface RespAdminPermissionBindMenuData {
 }
 
 /**
@@ -214,7 +224,7 @@ export interface PermissionListItem {
     | string
     | undefined;
   /** 是否启用 */
-  enabled?: boolean | undefined;
+  isEnabled?: boolean | undefined;
   createdAt?: string | undefined;
   updatedAt?: string | undefined;
 }
@@ -258,7 +268,7 @@ export interface PermissionApiItem {
 }
 
 /** 权限详情 */
-export interface PermissionInfo {
+export interface AdminPermissionInfo {
   /** 权限ID */
   id?:
     | number
@@ -304,17 +314,17 @@ export interface PermissionInfo {
     | string
     | undefined;
   /** 是否启用 */
-  enabled?: boolean | undefined;
+  isEnabled?: boolean | undefined;
   createdAt?: string | undefined;
   updatedAt?: string | undefined;
 }
 
-function createBaseReqPermissionList(): ReqPermissionList {
+function createBaseReqAdminPermissionList(): ReqAdminPermissionList {
   return { base: undefined, menuId: 0, key: "", name: "", type: "" };
 }
 
-export const ReqPermissionList: MessageFns<ReqPermissionList> = {
-  encode(message: ReqPermissionList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionList: MessageFns<ReqAdminPermissionList> = {
+  encode(message: ReqAdminPermissionList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.base !== undefined) {
       ReqListBase.encode(message.base, writer.uint32(10).fork()).join();
     }
@@ -333,10 +343,10 @@ export const ReqPermissionList: MessageFns<ReqPermissionList> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionList {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionList {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionList();
+    const message = createBaseReqAdminPermissionList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -389,7 +399,7 @@ export const ReqPermissionList: MessageFns<ReqPermissionList> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionList {
+  fromJSON(object: any): ReqAdminPermissionList {
     return {
       base: isSet(object.base) ? ReqListBase.fromJSON(object.base) : undefined,
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
@@ -399,7 +409,7 @@ export const ReqPermissionList: MessageFns<ReqPermissionList> = {
     };
   },
 
-  toJSON(message: ReqPermissionList): unknown {
+  toJSON(message: ReqAdminPermissionList): unknown {
     const obj: any = {};
     if (message.base !== undefined) {
       obj.base = ReqListBase.toJSON(message.base);
@@ -419,11 +429,11 @@ export const ReqPermissionList: MessageFns<ReqPermissionList> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionList>, I>>(base?: I): ReqPermissionList {
-    return ReqPermissionList.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionList>, I>>(base?: I): ReqAdminPermissionList {
+    return ReqAdminPermissionList.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionList>, I>>(object: I): ReqPermissionList {
-    const message = createBaseReqPermissionList();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionList>, I>>(object: I): ReqAdminPermissionList {
+    const message = createBaseReqAdminPermissionList();
     message.base = (object.base !== undefined && object.base !== null)
       ? ReqListBase.fromPartial(object.base)
       : undefined;
@@ -435,12 +445,12 @@ export const ReqPermissionList: MessageFns<ReqPermissionList> = {
   },
 };
 
-function createBaseRespPermissionListData(): RespPermissionListData {
+function createBaseRespAdminPermissionListData(): RespAdminPermissionListData {
   return { total: 0, list: [] };
 }
 
-export const RespPermissionListData: MessageFns<RespPermissionListData> = {
-  encode(message: RespPermissionListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionListData: MessageFns<RespAdminPermissionListData> = {
+  encode(message: RespAdminPermissionListData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.total !== undefined && message.total !== 0) {
       writer.uint32(8).int64(message.total);
     }
@@ -452,10 +462,10 @@ export const RespPermissionListData: MessageFns<RespPermissionListData> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionListData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionListData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionListData();
+    const message = createBaseRespAdminPermissionListData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -487,14 +497,14 @@ export const RespPermissionListData: MessageFns<RespPermissionListData> = {
     return message;
   },
 
-  fromJSON(object: any): RespPermissionListData {
+  fromJSON(object: any): RespAdminPermissionListData {
     return {
       total: isSet(object.total) ? globalThis.Number(object.total) : 0,
       list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => PermissionListItem.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: RespPermissionListData): unknown {
+  toJSON(message: RespAdminPermissionListData): unknown {
     const obj: any = {};
     if (message.total !== undefined && message.total !== 0) {
       obj.total = Math.round(message.total);
@@ -505,23 +515,23 @@ export const RespPermissionListData: MessageFns<RespPermissionListData> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionListData>, I>>(base?: I): RespPermissionListData {
-    return RespPermissionListData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionListData>, I>>(base?: I): RespAdminPermissionListData {
+    return RespAdminPermissionListData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionListData>, I>>(object: I): RespPermissionListData {
-    const message = createBaseRespPermissionListData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionListData>, I>>(object: I): RespAdminPermissionListData {
+    const message = createBaseRespAdminPermissionListData();
     message.total = object.total ?? 0;
     message.list = object.list?.map((e) => PermissionListItem.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseReqPermissionAdd(): ReqPermissionAdd {
+function createBaseReqAdminPermissionAdd(): ReqAdminPermissionAdd {
   return { id: 0, menuId: 0, key: "", name: "", describe: "", type: "", redirect: "", enabled: false };
 }
 
-export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
-  encode(message: ReqPermissionAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionAdd: MessageFns<ReqAdminPermissionAdd> = {
+  encode(message: ReqAdminPermissionAdd, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -549,10 +559,10 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionAdd {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionAdd {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionAdd();
+    const message = createBaseReqAdminPermissionAdd();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -629,7 +639,7 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionAdd {
+  fromJSON(object: any): ReqAdminPermissionAdd {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
@@ -642,7 +652,7 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
     };
   },
 
-  toJSON(message: ReqPermissionAdd): unknown {
+  toJSON(message: ReqAdminPermissionAdd): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -671,11 +681,11 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionAdd>, I>>(base?: I): ReqPermissionAdd {
-    return ReqPermissionAdd.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionAdd>, I>>(base?: I): ReqAdminPermissionAdd {
+    return ReqAdminPermissionAdd.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionAdd>, I>>(object: I): ReqPermissionAdd {
-    const message = createBaseReqPermissionAdd();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionAdd>, I>>(object: I): ReqAdminPermissionAdd {
+    const message = createBaseReqAdminPermissionAdd();
     message.id = object.id ?? 0;
     message.menuId = object.menuId ?? 0;
     message.key = object.key ?? "";
@@ -688,19 +698,19 @@ export const ReqPermissionAdd: MessageFns<ReqPermissionAdd> = {
   },
 };
 
-function createBaseRespPermissionAddData(): RespPermissionAddData {
+function createBaseRespAdminPermissionAddData(): RespAdminPermissionAddData {
   return {};
 }
 
-export const RespPermissionAddData: MessageFns<RespPermissionAddData> = {
-  encode(_: RespPermissionAddData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionAddData: MessageFns<RespAdminPermissionAddData> = {
+  encode(_: RespAdminPermissionAddData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionAddData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionAddData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionAddData();
+    const message = createBaseRespAdminPermissionAddData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -713,40 +723,40 @@ export const RespPermissionAddData: MessageFns<RespPermissionAddData> = {
     return message;
   },
 
-  fromJSON(_: any): RespPermissionAddData {
+  fromJSON(_: any): RespAdminPermissionAddData {
     return {};
   },
 
-  toJSON(_: RespPermissionAddData): unknown {
+  toJSON(_: RespAdminPermissionAddData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionAddData>, I>>(base?: I): RespPermissionAddData {
-    return RespPermissionAddData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionAddData>, I>>(base?: I): RespAdminPermissionAddData {
+    return RespAdminPermissionAddData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionAddData>, I>>(_: I): RespPermissionAddData {
-    const message = createBaseRespPermissionAddData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionAddData>, I>>(_: I): RespAdminPermissionAddData {
+    const message = createBaseRespAdminPermissionAddData();
     return message;
   },
 };
 
-function createBaseReqPermissionInfo(): ReqPermissionInfo {
+function createBaseReqAdminPermissionInfo(): ReqAdminPermissionInfo {
   return { id: 0 };
 }
 
-export const ReqPermissionInfo: MessageFns<ReqPermissionInfo> = {
-  encode(message: ReqPermissionInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionInfo: MessageFns<ReqAdminPermissionInfo> = {
+  encode(message: ReqAdminPermissionInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionInfo();
+    const message = createBaseReqAdminPermissionInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -767,11 +777,11 @@ export const ReqPermissionInfo: MessageFns<ReqPermissionInfo> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionInfo {
+  fromJSON(object: any): ReqAdminPermissionInfo {
     return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
   },
 
-  toJSON(message: ReqPermissionInfo): unknown {
+  toJSON(message: ReqAdminPermissionInfo): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -779,32 +789,32 @@ export const ReqPermissionInfo: MessageFns<ReqPermissionInfo> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionInfo>, I>>(base?: I): ReqPermissionInfo {
-    return ReqPermissionInfo.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionInfo>, I>>(base?: I): ReqAdminPermissionInfo {
+    return ReqAdminPermissionInfo.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionInfo>, I>>(object: I): ReqPermissionInfo {
-    const message = createBaseReqPermissionInfo();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionInfo>, I>>(object: I): ReqAdminPermissionInfo {
+    const message = createBaseReqAdminPermissionInfo();
     message.id = object.id ?? 0;
     return message;
   },
 };
 
-function createBaseRespPermissionInfoData(): RespPermissionInfoData {
+function createBaseRespAdminPermissionInfoData(): RespAdminPermissionInfoData {
   return { data: undefined };
 }
 
-export const RespPermissionInfoData: MessageFns<RespPermissionInfoData> = {
-  encode(message: RespPermissionInfoData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionInfoData: MessageFns<RespAdminPermissionInfoData> = {
+  encode(message: RespAdminPermissionInfoData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.data !== undefined) {
-      PermissionInfo.encode(message.data, writer.uint32(10).fork()).join();
+      AdminPermissionInfo.encode(message.data, writer.uint32(10).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionInfoData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionInfoData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionInfoData();
+    const message = createBaseRespAdminPermissionInfoData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -813,7 +823,7 @@ export const RespPermissionInfoData: MessageFns<RespPermissionInfoData> = {
             break;
           }
 
-          message.data = PermissionInfo.decode(reader, reader.uint32());
+          message.data = AdminPermissionInfo.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -825,36 +835,36 @@ export const RespPermissionInfoData: MessageFns<RespPermissionInfoData> = {
     return message;
   },
 
-  fromJSON(object: any): RespPermissionInfoData {
-    return { data: isSet(object.data) ? PermissionInfo.fromJSON(object.data) : undefined };
+  fromJSON(object: any): RespAdminPermissionInfoData {
+    return { data: isSet(object.data) ? AdminPermissionInfo.fromJSON(object.data) : undefined };
   },
 
-  toJSON(message: RespPermissionInfoData): unknown {
+  toJSON(message: RespAdminPermissionInfoData): unknown {
     const obj: any = {};
     if (message.data !== undefined) {
-      obj.data = PermissionInfo.toJSON(message.data);
+      obj.data = AdminPermissionInfo.toJSON(message.data);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionInfoData>, I>>(base?: I): RespPermissionInfoData {
-    return RespPermissionInfoData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionInfoData>, I>>(base?: I): RespAdminPermissionInfoData {
+    return RespAdminPermissionInfoData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionInfoData>, I>>(object: I): RespPermissionInfoData {
-    const message = createBaseRespPermissionInfoData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionInfoData>, I>>(object: I): RespAdminPermissionInfoData {
+    const message = createBaseRespAdminPermissionInfoData();
     message.data = (object.data !== undefined && object.data !== null)
-      ? PermissionInfo.fromPartial(object.data)
+      ? AdminPermissionInfo.fromPartial(object.data)
       : undefined;
     return message;
   },
 };
 
-function createBaseReqPermissionEdit(): ReqPermissionEdit {
+function createBaseReqAdminPermissionEdit(): ReqAdminPermissionEdit {
   return { id: 0, menuId: 0, key: "", name: "", describe: "", type: "", redirect: "", enabled: false };
 }
 
-export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
-  encode(message: ReqPermissionEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionEdit: MessageFns<ReqAdminPermissionEdit> = {
+  encode(message: ReqAdminPermissionEdit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -882,10 +892,10 @@ export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionEdit {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionEdit {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionEdit();
+    const message = createBaseReqAdminPermissionEdit();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -962,7 +972,7 @@ export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionEdit {
+  fromJSON(object: any): ReqAdminPermissionEdit {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
@@ -975,7 +985,7 @@ export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
     };
   },
 
-  toJSON(message: ReqPermissionEdit): unknown {
+  toJSON(message: ReqAdminPermissionEdit): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1004,11 +1014,11 @@ export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionEdit>, I>>(base?: I): ReqPermissionEdit {
-    return ReqPermissionEdit.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionEdit>, I>>(base?: I): ReqAdminPermissionEdit {
+    return ReqAdminPermissionEdit.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionEdit>, I>>(object: I): ReqPermissionEdit {
-    const message = createBaseReqPermissionEdit();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionEdit>, I>>(object: I): ReqAdminPermissionEdit {
+    const message = createBaseReqAdminPermissionEdit();
     message.id = object.id ?? 0;
     message.menuId = object.menuId ?? 0;
     message.key = object.key ?? "";
@@ -1021,19 +1031,19 @@ export const ReqPermissionEdit: MessageFns<ReqPermissionEdit> = {
   },
 };
 
-function createBaseRespPermissionEditData(): RespPermissionEditData {
+function createBaseRespAdminPermissionEditData(): RespAdminPermissionEditData {
   return {};
 }
 
-export const RespPermissionEditData: MessageFns<RespPermissionEditData> = {
-  encode(_: RespPermissionEditData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionEditData: MessageFns<RespAdminPermissionEditData> = {
+  encode(_: RespAdminPermissionEditData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionEditData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionEditData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionEditData();
+    const message = createBaseRespAdminPermissionEditData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1046,43 +1056,43 @@ export const RespPermissionEditData: MessageFns<RespPermissionEditData> = {
     return message;
   },
 
-  fromJSON(_: any): RespPermissionEditData {
+  fromJSON(_: any): RespAdminPermissionEditData {
     return {};
   },
 
-  toJSON(_: RespPermissionEditData): unknown {
+  toJSON(_: RespAdminPermissionEditData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionEditData>, I>>(base?: I): RespPermissionEditData {
-    return RespPermissionEditData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionEditData>, I>>(base?: I): RespAdminPermissionEditData {
+    return RespAdminPermissionEditData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionEditData>, I>>(_: I): RespPermissionEditData {
-    const message = createBaseRespPermissionEditData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionEditData>, I>>(_: I): RespAdminPermissionEditData {
+    const message = createBaseRespAdminPermissionEditData();
     return message;
   },
 };
 
-function createBaseReqPermissionEnable(): ReqPermissionEnable {
-  return { id: 0, enabled: false };
+function createBaseReqAdminPermissionEnable(): ReqAdminPermissionEnable {
+  return { id: 0, isEnabled: false };
 }
 
-export const ReqPermissionEnable: MessageFns<ReqPermissionEnable> = {
-  encode(message: ReqPermissionEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionEnable: MessageFns<ReqAdminPermissionEnable> = {
+  encode(message: ReqAdminPermissionEnable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      writer.uint32(16).bool(message.enabled);
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      writer.uint32(16).bool(message.isEnabled);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionEnable {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionEnable {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionEnable();
+    const message = createBaseReqAdminPermissionEnable();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1099,7 +1109,7 @@ export const ReqPermissionEnable: MessageFns<ReqPermissionEnable> = {
             break;
           }
 
-          message.enabled = reader.bool();
+          message.isEnabled = reader.bool();
           continue;
         }
       }
@@ -1111,48 +1121,48 @@ export const ReqPermissionEnable: MessageFns<ReqPermissionEnable> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionEnable {
+  fromJSON(object: any): ReqAdminPermissionEnable {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
-      enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
+      isEnabled: isSet(object.isEnabled) ? globalThis.Boolean(object.isEnabled) : false,
     };
   },
 
-  toJSON(message: ReqPermissionEnable): unknown {
+  toJSON(message: ReqAdminPermissionEnable): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      obj.enabled = message.enabled;
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      obj.isEnabled = message.isEnabled;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionEnable>, I>>(base?: I): ReqPermissionEnable {
-    return ReqPermissionEnable.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionEnable>, I>>(base?: I): ReqAdminPermissionEnable {
+    return ReqAdminPermissionEnable.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionEnable>, I>>(object: I): ReqPermissionEnable {
-    const message = createBaseReqPermissionEnable();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionEnable>, I>>(object: I): ReqAdminPermissionEnable {
+    const message = createBaseReqAdminPermissionEnable();
     message.id = object.id ?? 0;
-    message.enabled = object.enabled ?? false;
+    message.isEnabled = object.isEnabled ?? false;
     return message;
   },
 };
 
-function createBaseRespPermissionEnableData(): RespPermissionEnableData {
+function createBaseRespAdminPermissionEnableData(): RespAdminPermissionEnableData {
   return {};
 }
 
-export const RespPermissionEnableData: MessageFns<RespPermissionEnableData> = {
-  encode(_: RespPermissionEnableData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionEnableData: MessageFns<RespAdminPermissionEnableData> = {
+  encode(_: RespAdminPermissionEnableData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionEnableData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionEnableData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionEnableData();
+    const message = createBaseRespAdminPermissionEnableData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1165,40 +1175,40 @@ export const RespPermissionEnableData: MessageFns<RespPermissionEnableData> = {
     return message;
   },
 
-  fromJSON(_: any): RespPermissionEnableData {
+  fromJSON(_: any): RespAdminPermissionEnableData {
     return {};
   },
 
-  toJSON(_: RespPermissionEnableData): unknown {
+  toJSON(_: RespAdminPermissionEnableData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionEnableData>, I>>(base?: I): RespPermissionEnableData {
-    return RespPermissionEnableData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionEnableData>, I>>(base?: I): RespAdminPermissionEnableData {
+    return RespAdminPermissionEnableData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionEnableData>, I>>(_: I): RespPermissionEnableData {
-    const message = createBaseRespPermissionEnableData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionEnableData>, I>>(_: I): RespAdminPermissionEnableData {
+    const message = createBaseRespAdminPermissionEnableData();
     return message;
   },
 };
 
-function createBaseReqPermissionDelete(): ReqPermissionDelete {
+function createBaseReqAdminPermissionDelete(): ReqAdminPermissionDelete {
   return { id: 0 };
 }
 
-export const ReqPermissionDelete: MessageFns<ReqPermissionDelete> = {
-  encode(message: ReqPermissionDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionDelete: MessageFns<ReqAdminPermissionDelete> = {
+  encode(message: ReqAdminPermissionDelete, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionDelete {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionDelete {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionDelete();
+    const message = createBaseReqAdminPermissionDelete();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1219,11 +1229,11 @@ export const ReqPermissionDelete: MessageFns<ReqPermissionDelete> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionDelete {
+  fromJSON(object: any): ReqAdminPermissionDelete {
     return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
   },
 
-  toJSON(message: ReqPermissionDelete): unknown {
+  toJSON(message: ReqAdminPermissionDelete): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -1231,29 +1241,29 @@ export const ReqPermissionDelete: MessageFns<ReqPermissionDelete> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionDelete>, I>>(base?: I): ReqPermissionDelete {
-    return ReqPermissionDelete.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionDelete>, I>>(base?: I): ReqAdminPermissionDelete {
+    return ReqAdminPermissionDelete.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionDelete>, I>>(object: I): ReqPermissionDelete {
-    const message = createBaseReqPermissionDelete();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionDelete>, I>>(object: I): ReqAdminPermissionDelete {
+    const message = createBaseReqAdminPermissionDelete();
     message.id = object.id ?? 0;
     return message;
   },
 };
 
-function createBaseRespPermissionDeleteData(): RespPermissionDeleteData {
+function createBaseRespAdminPermissionDeleteData(): RespAdminPermissionDeleteData {
   return {};
 }
 
-export const RespPermissionDeleteData: MessageFns<RespPermissionDeleteData> = {
-  encode(_: RespPermissionDeleteData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionDeleteData: MessageFns<RespAdminPermissionDeleteData> = {
+  encode(_: RespAdminPermissionDeleteData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionDeleteData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionDeleteData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionDeleteData();
+    const message = createBaseRespAdminPermissionDeleteData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1266,30 +1276,30 @@ export const RespPermissionDeleteData: MessageFns<RespPermissionDeleteData> = {
     return message;
   },
 
-  fromJSON(_: any): RespPermissionDeleteData {
+  fromJSON(_: any): RespAdminPermissionDeleteData {
     return {};
   },
 
-  toJSON(_: RespPermissionDeleteData): unknown {
+  toJSON(_: RespAdminPermissionDeleteData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionDeleteData>, I>>(base?: I): RespPermissionDeleteData {
-    return RespPermissionDeleteData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionDeleteData>, I>>(base?: I): RespAdminPermissionDeleteData {
+    return RespAdminPermissionDeleteData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionDeleteData>, I>>(_: I): RespPermissionDeleteData {
-    const message = createBaseRespPermissionDeleteData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionDeleteData>, I>>(_: I): RespAdminPermissionDeleteData {
+    const message = createBaseRespAdminPermissionDeleteData();
     return message;
   },
 };
 
-function createBaseReqPermissionBindApis(): ReqPermissionBindApis {
+function createBaseReqAdminPermissionBindApis(): ReqAdminPermissionBindApis {
   return { permissionId: 0, apiIds: [] };
 }
 
-export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
-  encode(message: ReqPermissionBindApis, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionBindApis: MessageFns<ReqAdminPermissionBindApis> = {
+  encode(message: ReqAdminPermissionBindApis, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.permissionId !== undefined && message.permissionId !== 0) {
       writer.uint32(8).int32(message.permissionId);
     }
@@ -1303,10 +1313,10 @@ export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionBindApis {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionBindApis {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionBindApis();
+    const message = createBaseReqAdminPermissionBindApis();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1345,14 +1355,14 @@ export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionBindApis {
+  fromJSON(object: any): ReqAdminPermissionBindApis {
     return {
       permissionId: isSet(object.permissionId) ? globalThis.Number(object.permissionId) : 0,
       apiIds: globalThis.Array.isArray(object?.apiIds) ? object.apiIds.map((e: any) => globalThis.Number(e)) : [],
     };
   },
 
-  toJSON(message: ReqPermissionBindApis): unknown {
+  toJSON(message: ReqAdminPermissionBindApis): unknown {
     const obj: any = {};
     if (message.permissionId !== undefined && message.permissionId !== 0) {
       obj.permissionId = Math.round(message.permissionId);
@@ -1363,30 +1373,30 @@ export const ReqPermissionBindApis: MessageFns<ReqPermissionBindApis> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionBindApis>, I>>(base?: I): ReqPermissionBindApis {
-    return ReqPermissionBindApis.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionBindApis>, I>>(base?: I): ReqAdminPermissionBindApis {
+    return ReqAdminPermissionBindApis.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionBindApis>, I>>(object: I): ReqPermissionBindApis {
-    const message = createBaseReqPermissionBindApis();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionBindApis>, I>>(object: I): ReqAdminPermissionBindApis {
+    const message = createBaseReqAdminPermissionBindApis();
     message.permissionId = object.permissionId ?? 0;
     message.apiIds = object.apiIds?.map((e) => e) || [];
     return message;
   },
 };
 
-function createBaseRespPermissionBindApisData(): RespPermissionBindApisData {
+function createBaseRespAdminPermissionBindApisData(): RespAdminPermissionBindApisData {
   return {};
 }
 
-export const RespPermissionBindApisData: MessageFns<RespPermissionBindApisData> = {
-  encode(_: RespPermissionBindApisData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionBindApisData: MessageFns<RespAdminPermissionBindApisData> = {
+  encode(_: RespAdminPermissionBindApisData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionBindApisData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionBindApisData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionBindApisData();
+    const message = createBaseRespAdminPermissionBindApisData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1399,45 +1409,164 @@ export const RespPermissionBindApisData: MessageFns<RespPermissionBindApisData> 
     return message;
   },
 
-  fromJSON(_: any): RespPermissionBindApisData {
+  fromJSON(_: any): RespAdminPermissionBindApisData {
     return {};
   },
 
-  toJSON(_: RespPermissionBindApisData): unknown {
+  toJSON(_: RespAdminPermissionBindApisData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionBindApisData>, I>>(base?: I): RespPermissionBindApisData {
-    return RespPermissionBindApisData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionBindApisData>, I>>(base?: I): RespAdminPermissionBindApisData {
+    return RespAdminPermissionBindApisData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionBindApisData>, I>>(_: I): RespPermissionBindApisData {
-    const message = createBaseRespPermissionBindApisData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionBindApisData>, I>>(_: I): RespAdminPermissionBindApisData {
+    const message = createBaseRespAdminPermissionBindApisData();
     return message;
   },
 };
 
-function createBaseReqPermissionBindMenu(): ReqPermissionBindMenu {
+function createBaseReqAdminPermissionUnBindApi(): ReqAdminPermissionUnBindApi {
+  return { permissionId: 0, apiId: 0 };
+}
+
+export const ReqAdminPermissionUnBindApi: MessageFns<ReqAdminPermissionUnBindApi> = {
+  encode(message: ReqAdminPermissionUnBindApi, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
+      writer.uint32(8).int32(message.permissionId);
+    }
+    if (message.apiId !== undefined && message.apiId !== 0) {
+      writer.uint32(16).int32(message.apiId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionUnBindApi {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseReqAdminPermissionUnBindApi();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.permissionId = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.apiId = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ReqAdminPermissionUnBindApi {
+    return {
+      permissionId: isSet(object.permissionId) ? globalThis.Number(object.permissionId) : 0,
+      apiId: isSet(object.apiId) ? globalThis.Number(object.apiId) : 0,
+    };
+  },
+
+  toJSON(message: ReqAdminPermissionUnBindApi): unknown {
+    const obj: any = {};
+    if (message.permissionId !== undefined && message.permissionId !== 0) {
+      obj.permissionId = Math.round(message.permissionId);
+    }
+    if (message.apiId !== undefined && message.apiId !== 0) {
+      obj.apiId = Math.round(message.apiId);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ReqAdminPermissionUnBindApi>, I>>(base?: I): ReqAdminPermissionUnBindApi {
+    return ReqAdminPermissionUnBindApi.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionUnBindApi>, I>>(object: I): ReqAdminPermissionUnBindApi {
+    const message = createBaseReqAdminPermissionUnBindApi();
+    message.permissionId = object.permissionId ?? 0;
+    message.apiId = object.apiId ?? 0;
+    return message;
+  },
+};
+
+function createBaseRespAdminPermissionUnBindApi(): RespAdminPermissionUnBindApi {
+  return {};
+}
+
+export const RespAdminPermissionUnBindApi: MessageFns<RespAdminPermissionUnBindApi> = {
+  encode(_: RespAdminPermissionUnBindApi, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionUnBindApi {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRespAdminPermissionUnBindApi();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): RespAdminPermissionUnBindApi {
+    return {};
+  },
+
+  toJSON(_: RespAdminPermissionUnBindApi): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RespAdminPermissionUnBindApi>, I>>(base?: I): RespAdminPermissionUnBindApi {
+    return RespAdminPermissionUnBindApi.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionUnBindApi>, I>>(_: I): RespAdminPermissionUnBindApi {
+    const message = createBaseRespAdminPermissionUnBindApi();
+    return message;
+  },
+};
+
+function createBaseReqAdminPermissionBindMenu(): ReqAdminPermissionBindMenu {
   return { menuId: 0, permissions: [] };
 }
 
-export const ReqPermissionBindMenu: MessageFns<ReqPermissionBindMenu> = {
-  encode(message: ReqPermissionBindMenu, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ReqAdminPermissionBindMenu: MessageFns<ReqAdminPermissionBindMenu> = {
+  encode(message: ReqAdminPermissionBindMenu, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.menuId !== undefined && message.menuId !== 0) {
       writer.uint32(8).int32(message.menuId);
     }
     if (message.permissions !== undefined && message.permissions.length !== 0) {
       for (const v of message.permissions) {
-        ReqPermissionAdd.encode(v!, writer.uint32(18).fork()).join();
+        ReqAdminPermissionAdd.encode(v!, writer.uint32(18).fork()).join();
       }
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ReqPermissionBindMenu {
+  decode(input: BinaryReader | Uint8Array, length?: number): ReqAdminPermissionBindMenu {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseReqPermissionBindMenu();
+    const message = createBaseReqAdminPermissionBindMenu();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1454,7 +1583,7 @@ export const ReqPermissionBindMenu: MessageFns<ReqPermissionBindMenu> = {
             break;
           }
 
-          const el = ReqPermissionAdd.decode(reader, reader.uint32());
+          const el = ReqAdminPermissionAdd.decode(reader, reader.uint32());
           if (el !== undefined) {
             message.permissions!.push(el);
           }
@@ -1469,50 +1598,50 @@ export const ReqPermissionBindMenu: MessageFns<ReqPermissionBindMenu> = {
     return message;
   },
 
-  fromJSON(object: any): ReqPermissionBindMenu {
+  fromJSON(object: any): ReqAdminPermissionBindMenu {
     return {
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
       permissions: globalThis.Array.isArray(object?.permissions)
-        ? object.permissions.map((e: any) => ReqPermissionAdd.fromJSON(e))
+        ? object.permissions.map((e: any) => ReqAdminPermissionAdd.fromJSON(e))
         : [],
     };
   },
 
-  toJSON(message: ReqPermissionBindMenu): unknown {
+  toJSON(message: ReqAdminPermissionBindMenu): unknown {
     const obj: any = {};
     if (message.menuId !== undefined && message.menuId !== 0) {
       obj.menuId = Math.round(message.menuId);
     }
     if (message.permissions?.length) {
-      obj.permissions = message.permissions.map((e) => ReqPermissionAdd.toJSON(e));
+      obj.permissions = message.permissions.map((e) => ReqAdminPermissionAdd.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReqPermissionBindMenu>, I>>(base?: I): ReqPermissionBindMenu {
-    return ReqPermissionBindMenu.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ReqAdminPermissionBindMenu>, I>>(base?: I): ReqAdminPermissionBindMenu {
+    return ReqAdminPermissionBindMenu.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReqPermissionBindMenu>, I>>(object: I): ReqPermissionBindMenu {
-    const message = createBaseReqPermissionBindMenu();
+  fromPartial<I extends Exact<DeepPartial<ReqAdminPermissionBindMenu>, I>>(object: I): ReqAdminPermissionBindMenu {
+    const message = createBaseReqAdminPermissionBindMenu();
     message.menuId = object.menuId ?? 0;
-    message.permissions = object.permissions?.map((e) => ReqPermissionAdd.fromPartial(e)) || [];
+    message.permissions = object.permissions?.map((e) => ReqAdminPermissionAdd.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseRespPermissionBindMenuData(): RespPermissionBindMenuData {
+function createBaseRespAdminPermissionBindMenuData(): RespAdminPermissionBindMenuData {
   return {};
 }
 
-export const RespPermissionBindMenuData: MessageFns<RespPermissionBindMenuData> = {
-  encode(_: RespPermissionBindMenuData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RespAdminPermissionBindMenuData: MessageFns<RespAdminPermissionBindMenuData> = {
+  encode(_: RespAdminPermissionBindMenuData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): RespPermissionBindMenuData {
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminPermissionBindMenuData {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRespPermissionBindMenuData();
+    const message = createBaseRespAdminPermissionBindMenuData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1525,20 +1654,20 @@ export const RespPermissionBindMenuData: MessageFns<RespPermissionBindMenuData> 
     return message;
   },
 
-  fromJSON(_: any): RespPermissionBindMenuData {
+  fromJSON(_: any): RespAdminPermissionBindMenuData {
     return {};
   },
 
-  toJSON(_: RespPermissionBindMenuData): unknown {
+  toJSON(_: RespAdminPermissionBindMenuData): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RespPermissionBindMenuData>, I>>(base?: I): RespPermissionBindMenuData {
-    return RespPermissionBindMenuData.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RespAdminPermissionBindMenuData>, I>>(base?: I): RespAdminPermissionBindMenuData {
+    return RespAdminPermissionBindMenuData.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RespPermissionBindMenuData>, I>>(_: I): RespPermissionBindMenuData {
-    const message = createBaseRespPermissionBindMenuData();
+  fromPartial<I extends Exact<DeepPartial<RespAdminPermissionBindMenuData>, I>>(_: I): RespAdminPermissionBindMenuData {
+    const message = createBaseRespAdminPermissionBindMenuData();
     return message;
   },
 };
@@ -1555,7 +1684,7 @@ function createBasePermissionListItem(): PermissionListItem {
     describe: "",
     type: "",
     typeText: "",
-    enabled: false,
+    isEnabled: false,
     createdAt: "",
     updatedAt: "",
   };
@@ -1595,8 +1724,8 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
     if (message.typeText !== undefined && message.typeText !== "") {
       writer.uint32(82).string(message.typeText);
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      writer.uint32(88).bool(message.enabled);
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      writer.uint32(88).bool(message.isEnabled);
     }
     if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(98).string(message.createdAt);
@@ -1702,7 +1831,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
             break;
           }
 
-          message.enabled = reader.bool();
+          message.isEnabled = reader.bool();
           continue;
         }
         case 12: {
@@ -1742,7 +1871,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
       describe: isSet(object.describe) ? globalThis.String(object.describe) : "",
       type: isSet(object.type) ? globalThis.String(object.type) : "",
       typeText: isSet(object.typeText) ? globalThis.String(object.typeText) : "",
-      enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
+      isEnabled: isSet(object.isEnabled) ? globalThis.Boolean(object.isEnabled) : false,
       createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
       updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
     };
@@ -1780,8 +1909,8 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
     if (message.typeText !== undefined && message.typeText !== "") {
       obj.typeText = message.typeText;
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      obj.enabled = message.enabled;
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      obj.isEnabled = message.isEnabled;
     }
     if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
@@ -1807,7 +1936,7 @@ export const PermissionListItem: MessageFns<PermissionListItem> = {
     message.describe = object.describe ?? "";
     message.type = object.type ?? "";
     message.typeText = object.typeText ?? "";
-    message.enabled = object.enabled ?? false;
+    message.isEnabled = object.isEnabled ?? false;
     message.createdAt = object.createdAt ?? "";
     message.updatedAt = object.updatedAt ?? "";
     return message;
@@ -2007,7 +2136,7 @@ export const PermissionApiItem: MessageFns<PermissionApiItem> = {
   },
 };
 
-function createBasePermissionInfo(): PermissionInfo {
+function createBaseAdminPermissionInfo(): AdminPermissionInfo {
   return {
     id: 0,
     menuId: 0,
@@ -2020,14 +2149,14 @@ function createBasePermissionInfo(): PermissionInfo {
     type: "",
     typeText: "",
     redirect: "",
-    enabled: false,
+    isEnabled: false,
     createdAt: "",
     updatedAt: "",
   };
 }
 
-export const PermissionInfo: MessageFns<PermissionInfo> = {
-  encode(message: PermissionInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const AdminPermissionInfo: MessageFns<AdminPermissionInfo> = {
+  encode(message: AdminPermissionInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== undefined && message.id !== 0) {
       writer.uint32(8).int32(message.id);
     }
@@ -2063,8 +2192,8 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     if (message.redirect !== undefined && message.redirect !== "") {
       writer.uint32(90).string(message.redirect);
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      writer.uint32(96).bool(message.enabled);
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      writer.uint32(96).bool(message.isEnabled);
     }
     if (message.createdAt !== undefined && message.createdAt !== "") {
       writer.uint32(106).string(message.createdAt);
@@ -2075,10 +2204,10 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): PermissionInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number): AdminPermissionInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePermissionInfo();
+    const message = createBaseAdminPermissionInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2178,7 +2307,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
             break;
           }
 
-          message.enabled = reader.bool();
+          message.isEnabled = reader.bool();
           continue;
         }
         case 13: {
@@ -2206,7 +2335,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     return message;
   },
 
-  fromJSON(object: any): PermissionInfo {
+  fromJSON(object: any): AdminPermissionInfo {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       menuId: isSet(object.menuId) ? globalThis.Number(object.menuId) : 0,
@@ -2219,13 +2348,13 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
       type: isSet(object.type) ? globalThis.String(object.type) : "",
       typeText: isSet(object.typeText) ? globalThis.String(object.typeText) : "",
       redirect: isSet(object.redirect) ? globalThis.String(object.redirect) : "",
-      enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
+      isEnabled: isSet(object.isEnabled) ? globalThis.Boolean(object.isEnabled) : false,
       createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
       updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
     };
   },
 
-  toJSON(message: PermissionInfo): unknown {
+  toJSON(message: AdminPermissionInfo): unknown {
     const obj: any = {};
     if (message.id !== undefined && message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -2260,8 +2389,8 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     if (message.redirect !== undefined && message.redirect !== "") {
       obj.redirect = message.redirect;
     }
-    if (message.enabled !== undefined && message.enabled !== false) {
-      obj.enabled = message.enabled;
+    if (message.isEnabled !== undefined && message.isEnabled !== false) {
+      obj.isEnabled = message.isEnabled;
     }
     if (message.createdAt !== undefined && message.createdAt !== "") {
       obj.createdAt = message.createdAt;
@@ -2272,11 +2401,11 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PermissionInfo>, I>>(base?: I): PermissionInfo {
-    return PermissionInfo.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<AdminPermissionInfo>, I>>(base?: I): AdminPermissionInfo {
+    return AdminPermissionInfo.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PermissionInfo>, I>>(object: I): PermissionInfo {
-    const message = createBasePermissionInfo();
+  fromPartial<I extends Exact<DeepPartial<AdminPermissionInfo>, I>>(object: I): AdminPermissionInfo {
+    const message = createBaseAdminPermissionInfo();
     message.id = object.id ?? 0;
     message.menuId = object.menuId ?? 0;
     message.menuName = object.menuName ?? "";
@@ -2288,7 +2417,7 @@ export const PermissionInfo: MessageFns<PermissionInfo> = {
     message.type = object.type ?? "";
     message.typeText = object.typeText ?? "";
     message.redirect = object.redirect ?? "";
-    message.enabled = object.enabled ?? false;
+    message.isEnabled = object.isEnabled ?? false;
     message.createdAt = object.createdAt ?? "";
     message.updatedAt = object.updatedAt ?? "";
     return message;

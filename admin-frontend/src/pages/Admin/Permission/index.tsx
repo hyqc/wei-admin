@@ -26,10 +26,8 @@ import {
   adminPermissionDetail,
   adminPermissionEnable,
   adminPermissionList,
-  adminPermissionUnbindApi,
-  RequestAdminPermissionEnableParamsType,
-  RequestAdminPermissionListParamsType,
-  ResponseAdminPermissionListItemType,
+  adminPermissionBindApis,
+  adminPermissionUnBindApi,
 } from '@/services/apis/admin/permission';
 import { DEFAULT_PAGE_INFO } from '@/services/apis/config';
 import { ColumnsType } from 'antd/lib/table';
@@ -42,23 +40,27 @@ import { adminMenuPages } from '@/services/apis/admin/menu';
 import PageMenus from './components/PageMenus';
 import FetchButton from '@/components/FetchButton';
 import { DefaultPagination } from '@/components/PageContainer/Pagination';
-import { PermissionListItem } from '@/proto/admin_ts/admin_permission';
+import { PermissionListItem, ReqAdminPermissionEnable, ReqAdminPermissionList, RespAdminPermissionListData } from '@/proto/admin_ts/admin_permission';
+import { AdminApiItem } from '@/proto/admin_ts/common';
+import { handlePagination, searchResetPageInfo } from '@/services/common/utils';
+import { RowEnabledButton } from '@/components';
+import { MenuTreeItem } from '@/proto/admin_ts/admin_menu';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
 
 const Admin: React.FC = () => {
-  const {message} = App.useApp()
+  const { message } = App.useApp()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
   const [detailData, setDetailData] = useState<any>();
-  const [rowsData, setRowsData] = useState<ResponseAdminPermissionListItemType[]>([]);
+  const [rowsData, setRowsData] = useState<PermissionListItem[]>([]);
   const [detailModalStatus, setDetailModalStatus] = useState<boolean>(false);
   const [editModalStatus, setEditModalStatus] = useState<boolean>(false);
   const [addModalStatus, setAddModalStatus] = useState<boolean>(false);
   const [bindAPIModalStatus, setBindAPIModalStatus] = useState<boolean>(false);
-  const [pageMenusData, setPageMenusData] = useState<any[]>([]);
+  const [pageMenusData, setPageMenusData] = useState<MenuTreeItem[]>([]);
 
   const columns: ColumnsType<any> = [
     {
@@ -108,29 +110,22 @@ const Admin: React.FC = () => {
       title: '状态',
       width: '6rem',
       align: 'center',
-      dataIndex: 'enabled',
-      render(enabled: boolean, record: ResponseAdminPermissionListItemType) {
+      dataIndex: 'isEnabled',
+      render(isEnabled: boolean, record: PermissionListItem) {
         return (
           <Authorization
             name="AdminPermissionEdit"
             forbidden={
-              <>
-                <Switch
-                  disabled
-                  checkedChildren={'启用'}
-                  unCheckedChildren={'禁用'}
-                  checked={enabled}
-                />
-              </>
+              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
             }
           >
             <Popconfirm
-              title={`确定要${record.enabled ? '禁用' : '启用'}该权限吗？`}
+              title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
               okText="确定"
               cancelText="取消"
               onConfirm={() => updateEnabled(record)}
             >
-              <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} checked={enabled} />
+              <RowEnabledButton isEnabled={isEnabled} disabled={false} />
             </Popconfirm>
           </Authorization>
         );
@@ -140,7 +135,7 @@ const Admin: React.FC = () => {
       title: '操作',
       align: 'left',
       width: '15rem',
-      render(text, record: ResponseAdminPermissionListItemType) {
+      render(text, record: PermissionListItem) {
         return (
           <Space>
             <Authorization name="AdminPermissionView">
@@ -154,7 +149,7 @@ const Admin: React.FC = () => {
             </Authorization>
             {/* 禁用的才能删除 */}
             <Authorization name="AdminPermissionDelete">
-              {!record.enabled ? (
+              {!record.isEnabled ? (
                 <Popconfirm
                   title="确定要删除该权限吗？"
                   okText="确定"
@@ -174,15 +169,15 @@ const Admin: React.FC = () => {
   ];
 
   // 获取权限列表
-  function getRows(data?: RequestAdminPermissionListParamsType) {
+  function getRows(data?: ReqAdminPermissionList) {
     setLoading(true);
     adminPermissionList(data)
-      .then((res: ResponseListType) => {
-        const data: ResponseListDataType = res.data;
+      .then((res) => {
+        const data: RespAdminPermissionListData = res.data;
         const rows = data?.list || [];
-        const page = { total: data.total, pageSize: data.pageSize, pageNum: data.pageNum };
-        setPageInfo(page);
+        const total = data?.total ?? 0
         setRowsData(rows);
+        setPageInfo((pageInfo) => ({ ...pageInfo, total }))
       })
       .catch((err) => {
         console.log('error', err);
@@ -193,14 +188,15 @@ const Admin: React.FC = () => {
   }
 
   // 权限状态更新
-  function updateEnabled(record: ResponseAdminPermissionListItemType) {
-    const updateData: RequestAdminPermissionEnableParamsType = {
+  function updateEnabled(record: PermissionListItem) {
+    const updateData: ReqAdminPermissionEnable = {
       id: record.id,
-      enabled: !record.enabled,
+      isEnabled: !record.isEnabled,
     };
     adminPermissionEnable(updateData).then((res) => {
-      message.success(res.message, MessageDuritain, () => {
-        getRows({ ...form.getFieldsValue() });
+      message.success(res.msg, MessageDuritain, () => {
+        const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+        getRows({ base, ...form.getFieldsValue() });
       });
     });
   }
@@ -211,7 +207,7 @@ const Admin: React.FC = () => {
   }
 
   // 权限详情
-  function openDetailModal(record: ResponseAdminPermissionListItemType) {
+  function openDetailModal(record: PermissionListItem) {
     adminPermissionDetail({ id: record.id }).then((res) => {
       setDetailData(res.data);
       setDetailModalStatus(true);
@@ -219,7 +215,7 @@ const Admin: React.FC = () => {
   }
 
   // 权限编辑
-  function openEditModal(record: ResponseAdminPermissionListItemType) {
+  function openEditModal(record: PermissionListItem) {
     adminPermissionDetail({ id: record.id }).then((res) => {
       setDetailData(res.data);
       setEditModalStatus(true);
@@ -227,17 +223,18 @@ const Admin: React.FC = () => {
   }
 
   // 删除绑定的接口
-  function deleteBindApi(id: number, apiId: number) {
-    adminPermissionUnbindApi({ id, apiId }).then((res) => {
-      message.success(res.message, MessageDuritain, () => {
-        getRows({ ...form.getFieldsValue() });
+  function deleteBindApi(permissionId: number, apiId: number) {
+    adminPermissionUnBindApi({ permissionId, apiId }).then((res) => {
+      message.success(res.msg, MessageDuritain, () => {
+        const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+        getRows({ base, ...form.getFieldsValue() });
       });
     });
   }
 
   function showApisTag(
-    apis: ResponseAdminAPIAllItemType[],
-    record: ResponseAdminPermissionListItemType,
+    apis: AdminApiItem[],
+    record: PermissionListItem,
   ) {
     return apis?.map((item) => {
       return (
@@ -254,7 +251,7 @@ const Admin: React.FC = () => {
             title={`确定要解绑${item.path}接口吗？`}
             okText="确定"
             cancelText="取消"
-            onConfirm={() => deleteBindApi(record.id, item.id)}
+            onConfirm={() => deleteBindApi(record.id ?? 0, item.id ?? 0)}
           >
             <Tag style={{ cursor: 'pointer', margin: '4px' }}>{item.name}</Tag>
           </Popconfirm>
@@ -263,7 +260,7 @@ const Admin: React.FC = () => {
     });
   }
 
-  function openBindAPIModal(record: ResponseAdminPermissionListItemType) {
+  function openBindAPIModal(record: PermissionListItem) {
     adminPermissionDetail({ id: record.id }).then((res) => {
       setDetailData(res.data);
       setBindAPIModalStatus(true);
@@ -273,7 +270,8 @@ const Admin: React.FC = () => {
   function noticeAddModal(data: NoticeModalPropsType) {
     setAddModalStatus(false);
     if (data.reload) {
-      getRows({ ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
@@ -281,7 +279,8 @@ const Admin: React.FC = () => {
     setDetailData(undefined);
     setDetailModalStatus(false);
     if (data.reload) {
-      getRows({ ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
@@ -289,7 +288,8 @@ const Admin: React.FC = () => {
     setDetailData(undefined);
     setEditModalStatus(false);
     if (data.reload) {
-      getRows({ ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
@@ -297,49 +297,53 @@ const Admin: React.FC = () => {
     setDetailData(undefined);
     setBindAPIModalStatus(false);
     if (data.reload) {
-      getRows({ ...form.getFieldsValue() });
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     }
   }
 
   // 删除权限
-  function onDelete(record: ResponseAdminPermissionListItemType) {
-    adminPermissionDelete({ id: record.id, enabled: record.enabled }).then((res) => {
-      message.success(res.message, MessageDuritain);
-      getRows({ ...form.getFieldsValue() });
+  function onDelete(record: PermissionListItem) {
+    adminPermissionDelete({ id: record.id ?? 0 }).then((res) => {
+      message.success(res.msg, MessageDuritain);
+      const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+      getRows({ base, ...form.getFieldsValue() });
     });
   }
 
   // 管理员列表搜索
-  function onSearchFinish(values: RequestAdminPermissionListParamsType) {
-    const page = { ...pageInfo, pageNum: 1 };
-    getRows({ ...values, ...page });
+  function onSearchFinish(values: ReqAdminPermissionList) {
+    const base = handlePagination(1, pageInfo.pageSize)
+    getRows({ ...values, base });
   }
 
-  // 管理员搜索重置
+  // 搜索重置
   function onSearchReset() {
     form.resetFields();
-    getRows({ pageNum: 1, pageSize: pageInfo.pageSize });
+    setPageInfo(searchResetPageInfo(pageInfo.pageSize))
+    const base = handlePagination(1, pageInfo.pageSize)
+    getRows({ base });
   }
 
   function onShowSizeChange(current: number, size: number) {
-    const page = { pageSize: size, pageNum: current };
-    setPageInfo({ ...pageInfo, ...page });
+    const page = { ...pageInfo, pageSize: size, pageNum: current }
+    setPageInfo(() => ({ ...page }));
   }
 
   function tableChange(pagination: any, filters: any, sorter: any) {
-    const page = { pageSize: pagination.pageSize, pageNum: pagination.current };
+    const page = handlePagination(pagination.current, pagination.pageSize)
     setPageInfo({ ...pageInfo, ...page });
+    const base = { ...page, sortField: sorter.field, sortType: sorter.order, }
     getRows({
       ...form.getFieldsValue(),
-      ...page,
-      sortField: sorter.field,
-      sortType: sorter.order,
+      base,
     });
   }
 
   function getPageMenus() {
     adminMenuPages().then((res: ResponseBodyType) => {
-      setPageMenusData(res.data);
+      const data: MenuTreeItem[] = res.data.list ?? []
+      setPageMenusData(data);
     });
   }
 
@@ -402,7 +406,7 @@ const Admin: React.FC = () => {
                 </Button>
                 <Button type="primary" htmlType="button" onClick={onSearchReset}>
                   <ReloadOutlined />
-                  清除
+                  重置
                 </Button>
               </Space>
             </Col>

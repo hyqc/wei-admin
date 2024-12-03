@@ -82,12 +82,12 @@ func (a *AdminPermissionReqValidator) EditReq(data interface{}) url.Values {
 
 func (a *AdminPermissionReqValidator) EnableReq(data interface{}) url.Values {
 	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):      []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool"},
+		validator.GetValidateJsonOmitemptyTag("id"):        []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("isEnabled"): []string{"bool"},
 	}
 	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):      []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool:类型错误"},
+		validator.GetValidateJsonOmitemptyTag("id"):        []string{"required:ID不能为空", "min:ID无效"},
+		validator.GetValidateJsonOmitemptyTag("isEnabled"): []string{"bool:类型错误"},
 	}
 	opts := govalidator.Options{
 		Data:     data,
@@ -137,6 +137,23 @@ func (a *AdminPermissionReqValidator) PermissionBindMenuReq(data interface{}) ur
 	messages := govalidator.MapData{
 		validator.GetValidateJsonOmitemptyTag("menuId"):      []string{"required:菜单ID不能为空", "min:菜单ID无效"},
 		validator.GetValidateJsonOmitemptyTag("permissions"): []string{"required:权限配置不能为空", "min:权限配置不能为空"},
+	}
+	opts := govalidator.Options{
+		Data:     data,
+		Rules:    rules,
+		Messages: messages,
+	}
+	return govalidator.New(opts).ValidateStruct()
+}
+
+func (a *AdminPermissionReqValidator) UnBindAPIReq(data interface{}) url.Values {
+	rules := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("apiId"):        []string{"required", "min:1"},
+		validator.GetValidateJsonOmitemptyTag("permissionId"): []string{"required", "min:1"},
+	}
+	messages := govalidator.MapData{
+		validator.GetValidateJsonOmitemptyTag("apiId"):        []string{"required:接口ID不能为空", "min:接口ID无效"},
+		validator.GetValidateJsonOmitemptyTag("permissionId"): []string{"required:权限ID不能为空", "min:权限ID不能为空"},
 	}
 	opts := govalidator.Options{
 		Data:     data,

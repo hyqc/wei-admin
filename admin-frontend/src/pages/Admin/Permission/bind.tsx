@@ -1,18 +1,11 @@
 import {
-  adminPermissionBindApi,
-  RequestAdminPermissionBindApiParamsType,
-  ResponseAdminPermissionDetailType,
+  adminPermissionBindApis,
 } from '@/services/apis/admin/permission';
-import { Form, Input, message, Modal, Select } from 'antd';
+import { App, Form, Input, Modal, Select } from 'antd';
 import { useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
-import { adminAPIAll, ResponseAdminAPIAllItemType } from '@/services/apis/admin/resource';
+import { adminAPIAll } from '@/services/apis/admin/resource';
+import { AdminPermissionInfo, ReqAdminPermissionBindApis } from '@/proto/admin_ts/admin_permission';
+import { AdminApiItem } from '@/proto/admin_ts/common';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
@@ -20,34 +13,35 @@ export type NoticeModalPropsType = {
 
 export type BindModalPropsType = {
   modalStatus: boolean;
-  detailData: ResponseAdminPermissionDetailType;
+  detailData: AdminPermissionInfo;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
 const BindModal: React.FC<BindModalPropsType> = (props) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const { modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-  const [apiOptions, setAPIOptions] = useState<ResponseAdminAPIAllItemType[]>([]);
+  const [apiOptions, setAPIOptions] = useState<AdminApiItem[]>([]);
 
   const apiIdsValue: number[] =
-    detailData?.apis?.map((item: ResponseAdminAPIAllItemType) => {
-      return item.id;
-    }) || [];
+    detailData?.apis?.map((item: AdminApiItem) => {
+      return item.id ?? 0;
+    }).filter(id => id > 0) || [];
 
   function handleOk() {
     setConfirmLoading(true);
     form
       .validateFields()
       .then((values) => {
-        const data: RequestAdminPermissionBindApiParamsType = {
+        const data: ReqAdminPermissionBindApis = {
           permissionId: detailData.id,
           apiIds: values.apiIds || [],
         };
-        adminPermissionBindApi(data)
+        adminPermissionBindApis(data)
           .then((res) => {
             message.destroy();
-            message.success(res.message, MessageDuritain, () => {
+            message.success(res.msg, MessageDuritain, () => {
               noticeModal({ reload: true });
             });
           })

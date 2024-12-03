@@ -176,6 +176,10 @@ export interface ReqAdminMenuPages {
   all?: boolean | undefined;
 }
 
+export interface RespAdminMenuPages {
+  list?: MenuTreeItem[] | undefined;
+}
+
 /** 页面模块权限列表 */
 export interface ReqAdminMenuMode {
 }
@@ -1809,6 +1813,71 @@ export const ReqAdminMenuPages: MessageFns<ReqAdminMenuPages> = {
   fromPartial<I extends Exact<DeepPartial<ReqAdminMenuPages>, I>>(object: I): ReqAdminMenuPages {
     const message = createBaseReqAdminMenuPages();
     message.all = object.all ?? false;
+    return message;
+  },
+};
+
+function createBaseRespAdminMenuPages(): RespAdminMenuPages {
+  return { list: [] };
+}
+
+export const RespAdminMenuPages: MessageFns<RespAdminMenuPages> = {
+  encode(message: RespAdminMenuPages, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.list !== undefined && message.list.length !== 0) {
+      for (const v of message.list) {
+        MenuTreeItem.encode(v!, writer.uint32(10).fork()).join();
+      }
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RespAdminMenuPages {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRespAdminMenuPages();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          const el = MenuTreeItem.decode(reader, reader.uint32());
+          if (el !== undefined) {
+            message.list!.push(el);
+          }
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RespAdminMenuPages {
+    return {
+      list: globalThis.Array.isArray(object?.list) ? object.list.map((e: any) => MenuTreeItem.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: RespAdminMenuPages): unknown {
+    const obj: any = {};
+    if (message.list?.length) {
+      obj.list = message.list.map((e) => MenuTreeItem.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RespAdminMenuPages>, I>>(base?: I): RespAdminMenuPages {
+    return RespAdminMenuPages.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RespAdminMenuPages>, I>>(object: I): RespAdminMenuPages {
+    const message = createBaseRespAdminMenuPages();
+    message.list = object.list?.map((e) => MenuTreeItem.fromPartial(e)) || [];
     return message;
   },
 };

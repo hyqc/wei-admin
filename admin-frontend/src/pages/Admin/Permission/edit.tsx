@@ -1,39 +1,31 @@
 import {
   adminPermissionEdit,
-  ResponseAdminPermissionDetailType,
 } from '@/services/apis/admin/permission';
-import { Form, Input, message, Modal, Select, Switch } from 'antd';
+import { App, Form, Input, message, Modal, Select, Switch } from 'antd';
 import { ChangeEvent, useEffect, useState } from 'react';
-
-// import 'antd/es/modal/style';
-
-
-// import 'antd/es/slider/style';
-
-
 import { DEFAULT_RULES, path2UpperCamelCase } from './components/common';
 import PageMenus from './components/PageMenus';
-import { ResponseAdminMenuListItemType } from '@/services/apis/admin/menu';
 import { first2Upcase } from '@/utils/common';
+import { AdminPermissionInfo } from '@/proto/admin_ts/admin_permission';
+import { MenuTreeItem } from '@/proto/admin_ts/admin_menu';
 
 export type NoticeModalPropsType = {
   reload?: boolean;
 };
 
 export type EditModalPropsType = {
-  pageMenusData: ResponseAdminMenuListItemType[];
+  pageMenusData: MenuTreeItem[];
   modalStatus: boolean;
-  detailData: ResponseAdminPermissionDetailType;
+  detailData: AdminPermissionInfo;
   noticeModal: (data: NoticeModalPropsType) => void;
 };
 
 const EditModal: React.FC<EditModalPropsType> = (props) => {
+  const {message} = App.useApp();
   const [form] = Form.useForm();
   const { pageMenusData, modalStatus, detailData, noticeModal } = props;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-  const [menuCheckedItem, setMenuCheckedItem] = useState<
-    ResponseAdminMenuListItemType | undefined
-  >();
+  const [menuCheckedItem, setMenuCheckedItem] = useState<MenuTreeItem | undefined>();
   const [pageMenusDataMap, setPageMenusDataMap] = useState<any>();
   const rules: any = DEFAULT_RULES;
 
@@ -43,7 +35,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
       .validateFields()
       .then((values) => {
         adminPermissionEdit(values).then((res) => {
-          message.success(res.message, MessageDuritain, () => {
+          message.success(res.msg, MessageDuritain, () => {
             noticeModal({ reload: true });
           });
         });
@@ -78,7 +70,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
 
   function makePermissionKey(path?: string) {
     const type = form.getFieldValue('type');
-    path = path ? path : menuCheckedItem ? menuCheckedItem.path : '';
+    path = path ??  (menuCheckedItem?.path ?? '');
     const key = path2UpperCamelCase(path) + first2Upcase(type);
     form.setFieldsValue({ key });
   }
@@ -86,7 +78,7 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
   useEffect(() => {
     let data: any = {};
     pageMenusData?.forEach((item) => {
-      data[item.id] = item;
+      data[item.id ?? 0] = item;
     });
     setPageMenusDataMap(data);
   }, [pageMenusData]);
@@ -139,8 +131,8 @@ const EditModal: React.FC<EditModalPropsType> = (props) => {
         <Form.Item label="描述" name="describe">
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label="状态" name="enabled" valuePropName="checked">
-          <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} defaultChecked />
+        <Form.Item label="状态" name="isEnabled" valuePropName="checked">
+          <Switch checkedChildren={'启用'} unCheckedChildren={'禁用'} />
         </Form.Item>
       </Form>
     </Modal>)

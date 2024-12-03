@@ -1,12 +1,13 @@
-import { ResponseAdminMenuListItemType } from '@/services/apis/admin/menu';
+import { MenuTreeItem } from '@/proto/admin_ts/admin_menu';
 import { Select } from 'antd';
 import { useEffect, useState } from 'react';
 
 export type AddModalPropsType = {
-  data: ResponseAdminMenuListItemType[];
+  data: MenuTreeItem[];
   value?: number;
   disabled?: boolean;
   onChange?: (parentid: number) => void;
+  children?: React.ReactNode;
 };
 
 const PageMenus: React.FC<AddModalPropsType> = (props) => {
@@ -35,9 +36,9 @@ const PageMenus: React.FC<AddModalPropsType> = (props) => {
       value={value || menuId}
     >
       {props?.children}
-      {data?.map((item: ResponseAdminMenuListItemType) => {
+      {data?.map((item: MenuTreeItem) => {
         return (
-          <Select.Option key={item.id + ''} value={item.id}>
+          <Select.Option key={item.id} value={item.id}>
             {item.name}
           </Select.Option>
         );

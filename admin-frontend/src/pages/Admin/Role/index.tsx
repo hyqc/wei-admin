@@ -19,7 +19,7 @@ import {
 } from '@/services/apis/admin/role';
 import { DEFAULT_PAGE_INFO } from '@/services/apis/config';
 import { PageInfoType } from '@/services/apis/types';
-import { handlePagination } from '@/services/common/utils';
+import { handlePagination, searchResetPageInfo } from '@/services/common/utils';
 import { PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { App, Button, Col, Form, Input, Popconfirm, Row, Select, Space, Table } from 'antd';
 import type { Gutter } from 'antd/lib/grid/row';
@@ -53,7 +53,7 @@ const Admin: React.FC = () => {
       .then((res) => {
         const data: RespAdminRoleListData = res.data;
         const rows = data?.list || [];
-        const total = data.total ?? 0;
+        const total = data?.total ?? 0;
         setRowsData(rows);
         setPageInfo((pageInfo) => ({ ...pageInfo, total }));
       })
@@ -154,7 +154,8 @@ const Admin: React.FC = () => {
   // 搜索重置
   function onSearchReset() {
     form.resetFields();
-    const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize);
+    setPageInfo(searchResetPageInfo(pageInfo.pageSize))
+    const base = handlePagination(1, pageInfo.pageSize)
     getRows({ base });
   }
 

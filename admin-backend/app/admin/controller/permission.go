@@ -22,7 +22,7 @@ type PermissionController struct {
 // List 权限列表
 func (PermissionController) List(ctx *gin.Context) {
 	msg := "PermissionController.List"
-	params := &admin_proto.ReqPermissionList{}
+	params := &admin_proto.ReqAdminPermissionList{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.ListReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -44,7 +44,7 @@ func (PermissionController) List(ctx *gin.Context) {
 // Add 添加权限
 func (PermissionController) Add(ctx *gin.Context) {
 	msg := "PermissionController.Add"
-	params := &admin_proto.ReqPermissionAdd{}
+	params := &admin_proto.ReqAdminPermissionAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.AddReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -63,7 +63,7 @@ func (PermissionController) Add(ctx *gin.Context) {
 // Info 详情
 func (PermissionController) Info(ctx *gin.Context) {
 	msg := "PermissionController.Info"
-	params := &admin_proto.ReqPermissionInfo{}
+	params := &admin_proto.ReqAdminPermissionInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.InfoReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -85,7 +85,7 @@ func (PermissionController) Info(ctx *gin.Context) {
 // Edit 编辑权限
 func (PermissionController) Edit(ctx *gin.Context) {
 	msg := "PermissionController.Edit"
-	params := &admin_proto.ReqPermissionEdit{}
+	params := &admin_proto.ReqAdminPermissionEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.EditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -105,7 +105,7 @@ func (PermissionController) Edit(ctx *gin.Context) {
 // Enable 启用禁用
 func (PermissionController) Enable(ctx *gin.Context) {
 	msg := "PermissionController.Enable"
-	params := &admin_proto.ReqPermissionEnable{}
+	params := &admin_proto.ReqAdminPermissionEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.EnableReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -125,7 +125,7 @@ func (PermissionController) Enable(ctx *gin.Context) {
 // Delete 删除权限
 func (PermissionController) Delete(ctx *gin.Context) {
 	msg := "PermissionController.Delete"
-	params := &admin_proto.ReqPermissionDelete{}
+	params := &admin_proto.ReqAdminPermissionDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.DeleteReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -145,7 +145,7 @@ func (PermissionController) Delete(ctx *gin.Context) {
 // BindAPI 绑定权限接口
 func (PermissionController) BindAPI(ctx *gin.Context) {
 	msg := "PermissionController.BindAPI"
-	params := &admin_proto.ReqPermissionBindApis{}
+	params := &admin_proto.ReqAdminPermissionBindApis{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.BindAPIReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
@@ -162,10 +162,30 @@ func (PermissionController) BindAPI(ctx *gin.Context) {
 	return
 }
 
+// UnBindAPI 解绑权限接口
+func (PermissionController) UnBindAPI(ctx *gin.Context) {
+	msg := "PermissionController.UnBindAPI"
+	params := &admin_proto.ReqAdminPermissionUnBindApi{}
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.UnBindAPIReq); err != nil {
+		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		code.JSON(ctx, result)
+		return
+	}
+	if err := logic.H.AdminPermission.UnBindAPI(ctx, params); err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
+}
+
 // AddMenuPermissions 指定菜单创建查看编辑删除权限
 func (PermissionController) AddMenuPermissions(ctx *gin.Context) {
 	msg := "PermissionController.AddMenuPermissions"
-	params := &admin_proto.ReqPermissionBindMenu{}
+	params := &admin_proto.ReqAdminPermissionBindMenu{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.PermissionBindMenuReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)

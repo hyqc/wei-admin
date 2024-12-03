@@ -33,7 +33,7 @@ import { DefaultPagination } from '@/components/PageContainer/Pagination';
 import { ReqAdminApiEnable, ReqAdminApiList, RespAdminApiListData } from '@/proto/admin_ts/admin_api';
 import { AdminApiItem } from '@/proto/admin_ts/common';
 import { PageInfoType } from '@/services/apis/types';
-import { handlePagination } from '@/services/common/utils';
+import { handlePagination, searchResetPageInfo } from '@/services/common/utils';
 import { RowEnabledButton } from '@/components';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
@@ -155,7 +155,7 @@ const Admin: React.FC = () => {
       .then((res) => {
         const data: RespAdminApiListData = res.data;
         const rows = data?.list || [];
-        const total = data.total ?? 0
+        const total = data?.total ?? 0
         setRowsData(rows);
         setPageInfo((pageInfo) => ({ ...pageInfo, total }))
       })
@@ -240,7 +240,8 @@ const Admin: React.FC = () => {
   // 搜索重置
   function onSearchReset() {
     form.resetFields();
-    const base = handlePagination(pageInfo.pageNum, pageInfo.pageSize)
+    setPageInfo(searchResetPageInfo(pageInfo.pageSize))
+    const base = handlePagination(1, pageInfo.pageSize)
     getRows({ base });
   }
 

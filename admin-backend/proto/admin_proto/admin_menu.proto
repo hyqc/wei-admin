@@ -96,6 +96,9 @@ message RespAdminMenuPermissionsData{
 message ReqAdminMenuPages{
   bool all = 1;//是否顶部插入全部
 }
+message RespAdminMenuPages{
+  repeated MenuTreeItem list = 1;
+}
 
 // 页面模块权限列表
 message ReqAdminMenuMode{}

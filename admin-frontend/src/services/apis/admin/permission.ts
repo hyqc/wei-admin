@@ -1,9 +1,9 @@
 // adminPermissions 管理员管理接口
 import { request } from 'umi';
 import { APIAdminPermissions } from './api';
-import type { ResponseBodyType, ResponseListType } from '../types';
-import { ResponseAdminAPIAllItemType } from './resource';
-import { ReqPermissionBindMenu } from '@/proto/admin_ts/admin_permission';
+import type { ResponseBodyType } from '../types';
+import { ReqAdminPermissionAdd, ReqAdminPermissionBindApis, ReqAdminPermissionDelete, ReqAdminPermissionEdit, ReqAdminPermissionEnable, ReqAdminPermissionInfo, ReqAdminPermissionList, ReqAdminPermissionUnBindApi } from '@/proto/admin_ts/admin_permission';
+import { ReqAdminRoleBindPermissions } from '@/proto/admin_ts/admin_role';
 
 /************************************************************/
 /**
@@ -21,47 +21,8 @@ export async function adminPermissionAll() {
 /**
  * 权限分页列表
  */
-export type RequestAdminPermissionListParamsType = {
-  name?: string;
-  key?: string;
-  menuId?: number;
-  enabled?: boolean;
-  type?: string;
-  pageSize?: number;
-  pageNum?: number;
-};
-
-export type ResponseAdminMenuPermissionsItemType = {
-  menuId: number;
-  id?: number;
-  key: string;
-  type: string;
-  typeText: string;
-  name: string;
-  apis: ResponseAdminAPIAllItemType[];
-  enabled: boolean;
-  describe?: string;
-};
-
-export type ResponseAdminPermissionListItemType = {
-  menuId: number;
-  menuName?: string;
-  menuPath?: string;
-  id: number;
-  key: string;
-  name: string;
-  type: string;
-  typeText: string;
-  describe?: string;
-  enabled: boolean;
-  enabledText?: string;
-  createTime: string;
-  modifyTime: string;
-  apis: ResponseAdminAPIAllItemType[];
-};
-
-export async function adminPermissionList(params?: RequestAdminPermissionListParamsType) {
-  return request<ResponseListType>(APIAdminPermissions.list.url, {
+export async function adminPermissionList(params?: ReqAdminPermissionList) {
+  return request<ResponseBodyType>(APIAdminPermissions.list.url, {
     method: APIAdminPermissions.list.method,
     data: params,
   });
@@ -71,12 +32,7 @@ export async function adminPermissionList(params?: RequestAdminPermissionListPar
 /**
  * 给菜单创建权限
  */
-export type RequestAdminPermissionAddForMenuParamsType = {
-  menuId: number;
-  permissions: ResponseAdminMenuPermissionsItemType[];
-};
-
-export async function adminAddMenuPermission(params: ReqPermissionBindMenu) {
+export async function adminAddMenuPermission(params: ReqAdminRoleBindPermissions) {
   return request<ResponseBodyType>(APIAdminPermissions.addMenuPermissions.url, {
     method: APIAdminPermissions.addMenuPermissions.method,
     data: params,
@@ -86,16 +42,7 @@ export async function adminAddMenuPermission(params: ReqPermissionBindMenu) {
 /**
  * 添加权限
  */
-export type RequestAdminPermissionAddParamsType = {
-  name: string; // 权限唯一名称
-  key: string; // 权限的唯一键
-  type: string; // 权限类型
-  menuId: number; // 菜单ID
-  describe: string; // 权限描述
-  enabled: boolean; // 权限状态
-};
-
-export async function adminPermissionAdd(params: RequestAdminPermissionAddParamsType) {
+export async function adminPermissionAdd(params: ReqAdminPermissionAdd) {
   return request<ResponseBodyType>(APIAdminPermissions.add.url, {
     method: APIAdminPermissions.add.method,
     data: params,
@@ -106,29 +53,9 @@ export async function adminPermissionAdd(params: RequestAdminPermissionAddParams
 /**
  * 详情
  */
-export type RequestAdminPermissionDetailParamsType = {
-  id: number;
-};
-
-export type ResponseAdminPermissionDetailType = {
-  menuId: number;
-  menuName?: string;
-  menuPath: string;
-  id: number;
-  key: string;
-  name: string;
-  type: string;
-  typeText: string;
-  describe?: string;
-  enabled: boolean;
-  enabledText?: string;
-  createTime: string;
-  modifyTime: string;
-  apis: ResponseAdminAPIAllItemType[];
-};
-export async function adminPermissionDetail(params: RequestAdminPermissionDetailParamsType) {
-  return request<ResponseBodyType>(APIAdminPermissions.detail.url, {
-    method: APIAdminPermissions.detail.method,
+export async function adminPermissionDetail(params: ReqAdminPermissionInfo) {
+  return request<ResponseBodyType>(APIAdminPermissions.info.url, {
+    method: APIAdminPermissions.info.method,
     data: params,
   });
 }
@@ -137,16 +64,7 @@ export async function adminPermissionDetail(params: RequestAdminPermissionDetail
 /**
  * 编辑
  */
-export type RequestAdminPermissionEditParamsType = {
-  id: number;
-  name?: string;
-  key?: string;
-  describe?: string;
-  enabled: boolean;
-  type: string;
-};
-
-export async function adminPermissionEdit(params: RequestAdminPermissionEditParamsType) {
+export async function adminPermissionEdit(params: ReqAdminPermissionEdit) {
   return request<ResponseBodyType>(APIAdminPermissions.edit.url, {
     method: APIAdminPermissions.edit.method,
     data: params,
@@ -157,12 +75,7 @@ export async function adminPermissionEdit(params: RequestAdminPermissionEditPara
 /**
  * 启用禁用
  */
-export type RequestAdminPermissionEnableParamsType = {
-  id: number;
-  enabled: boolean;
-};
-
-export async function adminPermissionEnable(params: RequestAdminPermissionEnableParamsType) {
+export async function adminPermissionEnable(params: ReqAdminPermissionEnable) {
   return request<ResponseBodyType>(APIAdminPermissions.enable.url, {
     method: APIAdminPermissions.enable.method,
     data: params,
@@ -173,12 +86,7 @@ export async function adminPermissionEnable(params: RequestAdminPermissionEnable
 /**
  * 删除
  */
-export type RequestAdminPermissionDeleteParamsType = {
-  id: number;
-  enabled: boolean;
-};
-
-export async function adminPermissionDelete(params: RequestAdminPermissionDeleteParamsType) {
+export async function adminPermissionDelete(params: ReqAdminPermissionDelete) {
   return request<ResponseBodyType>(APIAdminPermissions.delete.url, {
     method: APIAdminPermissions.delete.method,
     data: params,
@@ -187,32 +95,21 @@ export async function adminPermissionDelete(params: RequestAdminPermissionDelete
 
 /************************************************************/
 /**
- * 解绑接口
+ * 绑定接口列表
  */
-export type RequestAdminPermissionUnbindApiParamsType = {
-  id: number;
-  apiId: number;
-};
-
-export async function adminPermissionUnbindApi(params: RequestAdminPermissionUnbindApiParamsType) {
-  return request<ResponseBodyType>(APIAdminPermissions.unbind.url, {
-    method: APIAdminPermissions.unbind.method,
+export async function adminPermissionBindApis(params: ReqAdminPermissionBindApis) {
+  return request<ResponseBodyType>(APIAdminPermissions.bindApis.url, {
+    method: APIAdminPermissions.bindApis.method,
     data: params,
   });
 }
-
 /************************************************************/
 /**
- * 绑定接口
+ * 解绑接口
  */
-export type RequestAdminPermissionBindApiParamsType = {
-  permissionId: number;
-  apiIds: number;
-};
-
-export async function adminPermissionBindApi(params: RequestAdminPermissionBindApiParamsType) {
-  return request<ResponseBodyType>(APIAdminPermissions.bindApis.url, {
-    method: APIAdminPermissions.bindApis.method,
+export async function adminPermissionUnBindApi(params: ReqAdminPermissionUnBindApi) {
+  return request<ResponseBodyType>(APIAdminPermissions.unbind.url, {
+    method: APIAdminPermissions.unbind.method,
     data: params,
   });
 }

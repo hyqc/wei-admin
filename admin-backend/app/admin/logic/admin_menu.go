@@ -28,7 +28,7 @@ type IAdminMenuLogic interface {
 	Show(ctx *gin.Context, params *admin_proto.ReqAdminMenuShow) error
 	Delete(ctx *gin.Context, params *admin_proto.ReqAdminMenuDelete) error
 	Permissions(ctx *gin.Context, params *admin_proto.ReqAdminMenuPermissions) (*admin_proto.RespAdminMenuPermissionsData, error)
-	Pages(ctx *gin.Context, params *admin_proto.ReqAdminMenuPages) (list []*admin_proto.MenuTreeItem, err error)
+	Pages(ctx *gin.Context, params *admin_proto.ReqAdminMenuPages) (*admin_proto.RespAdminMenuPages, error)
 	AllMode(ctx *gin.Context) (*admin_proto.RespAdminMenuModeData, error)
 }
 
@@ -221,20 +221,34 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAd
 	return data, nil
 }
 
-func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.ReqAdminMenuPages) (list []*admin_proto.MenuTreeItem, err error) {
-	//data, err := dao.H.AdminMenu.FindPages(ctx)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if params.All {
-	//	list = append(list, &admin_proto.MenuTreeItem{
-	//		Level: 0,
-	//		Id:    0,
-	//		Key:   "All",
-	//		Name:  "全部",
-	//	})
-	//}
-	return
+func (a *AdminMenuLogic) Pages(ctx *gin.Context, params *admin_proto.ReqAdminMenuPages) (*admin_proto.RespAdminMenuPages, error) {
+	data, err := dao.H.AdminMenu.FindPages(ctx)
+	if err != nil {
+		return nil, err
+	}
+	list := make([]*admin_proto.MenuTreeItem, 0, len(data)+1)
+	for _, item := range data {
+		list = append(list, &admin_proto.MenuTreeItem{
+			Id:       item.ID,
+			Path:     item.Path,
+			Key:      item.Key,
+			ParentId: item.ParentID,
+			Name:     item.Name,
+		})
+	}
+	if params.All {
+		list = append(list, &admin_proto.MenuTreeItem{
+			Id:       0,
+			ParentId: 0,
+			Path:     "",
+			Key:      "All",
+			Name:     "全部",
+		})
+	}
+	rest := &admin_proto.RespAdminMenuPages{
+		List: list,
+	}
+	return rest, nil
 }
 
 func (a *AdminMenuLogic) handleListData(rows []*model.AdminMenu) (list []*admin_proto.MenuItem, err error) {

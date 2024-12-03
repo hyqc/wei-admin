@@ -68,7 +68,8 @@ func admins(g *gin.RouterGroup) {
 		permission.POST("/edit", permissionAPI.Edit)
 		permission.POST("/enable", permissionAPI.Enable)
 		permission.POST("/delete", permissionAPI.Delete)
-		permission.POST("/bind_api", permissionAPI.BindAPI)
+		permission.POST("/bind_apis", permissionAPI.BindAPI)
+		permission.POST("/unbind_api", permissionAPI.UnBindAPI)
 		permission.POST("/add_menu_permissions", permissionAPI.AddMenuPermissions)
 	}
 
