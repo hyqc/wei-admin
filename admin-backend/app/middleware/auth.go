@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"admin/app/admin/dao"
 	"admin/code"
 	"admin/constant"
 	"admin/global"
@@ -25,6 +26,10 @@ func auth() gin.HandlerFunc {
 				code.JSON(ctx, code.NewCodeError(code_proto.ErrorCode_AuthTokenInspectInvalid, err))
 				return
 			}
+
+			// 查询管理员的权限
+			dao.H.AdminPermission.FindAdminPermissions(ctx, cla.AdminID, 0)
+
 			ctx.Set(constant.ContextClaims, cla)
 		}
 
