@@ -2,7 +2,7 @@ import { request } from 'umi';
 import { ResponseBodyType } from '../types';
 import { APIAccount, APICommon } from './api';
 import { MenuDataItem } from '@ant-design/pro-components';
-import { ReqLogin, RespLoginData } from '@/proto/admin_ts/admin_account';
+import { ReqAccountEdit, ReqAccountPasswordEdit, ReqLogin, RespLoginData } from '@/proto/admin_ts/admin_account';
 
 export type MenusRemoteItem = {
   [key: string]: MenuDataItem;
@@ -44,25 +44,14 @@ export async function upload(data: RequestUploadFileParamsType) {
   });
 }
 
-export type RequestCurrentAdminEditParamsType = {
-  nickname?: string;
-  avatar?: string;
-  email?: string;
-};
-
-export async function currentAdminEdit(params?: RequestCurrentAdminEditParamsType) {
+export async function currentAdminEdit(params?: ReqAccountEdit) {
   return request<ResponseBodyType>(APIAccount.edit.url, {
     method: APIAccount.edit.method,
     data: params,
   });
 }
 
-export type RequestCurrentAdminEditPasswordParamsType = {
-  password?: string;
-  confirmPassword?: string;
-};
-
-export async function currentAdminEditPassword(params?: RequestCurrentAdminEditPasswordParamsType) {
+export async function currentAdminEditPassword(params?: ReqAccountPasswordEdit) {
   return request<ResponseBodyType>(APIAccount.password.url, {
     method: APIAccount.password.method,
     data: params,

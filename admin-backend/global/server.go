@@ -1,4 +1,4 @@
-package config
+package global
 
 type Server struct {
 	Debug bool   `yaml:"debug"`

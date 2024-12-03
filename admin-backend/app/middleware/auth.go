@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"admin/code"
-	"admin/config"
 	"admin/constant"
+	"admin/global"
 	"admin/pkg/core"
 	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
@@ -18,9 +18,9 @@ func getAuthorization(ctx *gin.Context) string {
 
 func auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		if !funk.ContainsString(config.AppConfig.Server.JWT.IgnoreUrls, ctx.Request.URL.Path) {
+		if !funk.ContainsString(global.AppConfig.Server.JWT.IgnoreUrls, ctx.Request.URL.Path) {
 			token := getAuthorization(ctx)
-			cla, err := core.JWTCheck(token, config.AppConfig.Server.JWT.Secret)
+			cla, err := core.JWTCheck(token, global.AppConfig.Server.JWT.Secret)
 			if err != nil {
 				code.JSON(ctx, code.NewCodeError(code_proto.ErrorCode_AuthTokenInspectInvalid, err))
 				return

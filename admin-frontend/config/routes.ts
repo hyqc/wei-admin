@@ -92,6 +92,7 @@ export default [
         component: './404',
         access: true,
         key: '404',
+        layout: true,
       },
     ],
   },
@@ -104,8 +105,18 @@ export default [
     access: true,
   },
   {
+    path: '/403',
+    layout: true,
+    component: './403',
+  },
+  {
+    path: '/404',
+    layout: true,
     component: './404',
-    key: '404',
-    access: true,
+  },
+  {
+    path: '*',
+    layout: true,
+    component: './404',
   },
 ];

@@ -3,7 +3,7 @@ package logic
 import (
 	"admin/app/admin/dao"
 	"admin/app/admin/gen/model"
-	"admin/config"
+	"admin/global"
 	"admin/pkg/core"
 	"admin/pkg/utils"
 	"admin/proto/admin_proto"
@@ -84,7 +84,7 @@ func createToken(adminId int32, username string, seconds int64) (string, error) 
 		AccountId:     adminId,
 		ExpireSeconds: seconds,
 		UUID:          jti,
-		Secret:        config.AppConfig.Server.JWT.Secret,
+		Secret:        global.AppConfig.Server.JWT.Secret,
 	})
 	return token, err
 }

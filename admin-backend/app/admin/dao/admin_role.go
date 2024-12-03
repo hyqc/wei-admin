@@ -5,7 +5,7 @@ import (
 	model2 "admin/app/admin/gen/model"
 	query2 "admin/app/admin/gen/query"
 	"admin/app/common"
-	"admin/config"
+	"admin/global"
 	"admin/proto/admin_proto"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -153,8 +153,8 @@ func (a *AdminRole) FindAdminRolePermissionByRoleId(ctx context.Context, roleId 
 
 func (a *AdminRole) BindPermissions(ctx context.Context, roleId int32, data []*model2.AdminRolePermission) error {
 	pa := query2.AdminRolePermission
-	err := config.AppConfig.DBClient.Wei.Transaction(func(tx *gorm.DB) error {
-		if _, err := pa.WithContext(ctx).Where(pa.PermissionID.Eq(roleId)).Delete(); err != nil {
+	err := global.AppConfig.DBClient.Wei.Transaction(func(tx *gorm.DB) error {
+		if _, err := pa.WithContext(ctx).Where(pa.RoleID.Eq(roleId)).Delete(); err != nil {
 			return err
 		}
 		return pa.WithContext(ctx).Create(data...)

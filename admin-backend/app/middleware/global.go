@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"admin/code"
-	"admin/config"
+	"admin/global"
 	"admin/pkg/utils"
 	"admin/proto/code_proto"
 	"bytes"
@@ -49,15 +49,15 @@ func logger() gin.HandlerFunc {
 		body, err := io.ReadAll(ctx.Request.Body)
 		if err != nil {
 			msg := code.NewCodeError(code_proto.ErrorCode_ReadContextRequestBodyFailed, err)
-			config.AppLoggerSugared.Errorw("read context request body error", msg, err)
+			global.AppLoggerSugared.Errorw("read context request body error", msg, err)
 			code.JSON(ctx, msg)
 			return
 		}
 		ctx.Request.Body = io.NopCloser(bytes.NewReader(body))
-		config.AppLoggerSugared.Debugw("body", zap.ByteString("body", body))
-		config.AppLoggerSugared.Debugw("query", zap.String("raw", ctx.Request.URL.RawQuery))
+		global.AppLoggerSugared.Debugw("body", zap.ByteString("body", body))
+		global.AppLoggerSugared.Debugw("query", zap.String("raw", ctx.Request.URL.RawQuery))
 		cost := time.Since(start)
-		config.AppLoggerSugared.Infow("request",
+		global.AppLoggerSugared.Infow("request",
 			zap.Duration("cost", cost),
 			zap.String("method", ctx.Request.Method),
 			zap.Int("status", ctx.Writer.Status()),
@@ -72,7 +72,7 @@ func logger() gin.HandlerFunc {
 
 func recovery() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		logger := config.AppLoggerSugared
+		logger := global.AppLoggerSugared
 		defer func() {
 			if err := recover(); err != nil {
 				errInfo := string(debug.Stack())
@@ -101,7 +101,7 @@ func recovery() gin.HandlerFunc {
 					return
 				}
 
-				if config.AppConfig.Server.Debug {
+				if global.AppConfig.Server.Debug {
 					logger.Error("[Recovery from panic]",
 						zap.String("path", ctx.Request.URL.Path),
 						zap.Any("error", err),

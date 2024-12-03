@@ -5,7 +5,7 @@ import (
 	"admin/app/admin/gen/model"
 	"admin/app/admin/gen/query"
 	"admin/app/common"
-	"admin/config"
+	"admin/global"
 	"admin/proto/admin_proto"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -166,7 +166,7 @@ func (a *AdminPermission) Enable(ctx *gin.Context, id int32, enabled bool) error
 }
 
 func (a *AdminPermission) Delete(ctx *gin.Context, id int32) error {
-	t := config.AppConfig.DBClient.Wei
+	t := global.AppConfig.DBClient.Wei
 	err := t.Transaction(func(tx *gorm.DB) error {
 		db := query.AdminPermission
 		_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
@@ -190,7 +190,7 @@ func (a *AdminPermission) BatchAddPermissions(ctx *gin.Context, data []*model.Ad
 
 func (a *AdminPermission) BindApis(ctx *gin.Context, permissionId int32, permissionApes []*model.AdminPermissionAPI) error {
 	pa := query.AdminPermissionAPI
-	err := config.AppConfig.DBClient.Wei.Transaction(func(tx *gorm.DB) error {
+	err := global.AppConfig.DBClient.Wei.Transaction(func(tx *gorm.DB) error {
 		if _, err := pa.WithContext(ctx).Where(pa.PermissionID.Eq(permissionId)).Delete(); err != nil {
 			return err
 		}

@@ -5,8 +5,8 @@ import (
 	"admin/app/admin/validate"
 	"admin/app/common"
 	"admin/code"
-	"admin/config"
 	"admin/constant"
+	"admin/global"
 	"admin/pkg/core"
 	"admin/pkg/validator"
 	"admin/proto/admin_proto"
@@ -22,7 +22,7 @@ type AccountController struct {
 func (AccountController) Register(ctx *gin.Context) {
 	msg := "AccountController.Register"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	config.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -42,7 +42,7 @@ func (AccountController) Login(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.LoginReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
-		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -53,7 +53,7 @@ func (AccountController) Login(ctx *gin.Context) {
 	}
 	result.SetData(data)
 
-	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -70,7 +70,7 @@ func (AccountController) Info(ctx *gin.Context) {
 	}
 
 	result.SetData(data)
-	config.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -82,7 +82,7 @@ func (AccountController) Edit(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
-		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -91,7 +91,7 @@ func (AccountController) Edit(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -103,7 +103,7 @@ func (AccountController) Password(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditPasswordReq); err != nil {
 		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
-		config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -112,7 +112,7 @@ func (AccountController) Password(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -127,7 +127,7 @@ func (AccountController) Menu(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -141,7 +141,7 @@ func (AccountController) Permission(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	config.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }

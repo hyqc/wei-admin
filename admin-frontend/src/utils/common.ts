@@ -131,7 +131,6 @@ export const GetLoginToken = (): TokenType | undefined => {
  */
 export const SetLoginToken = (token: string, expire: number, remember: boolean): void => {
   const tokenInfo: TokenType = { token, expire: expire * 1000, remember };
-  console.log('============', tokenInfo)
   // 设置token
   localStorage.setItem(LocalStorageTokenKey, JSON.stringify(tokenInfo));
 };
@@ -145,7 +144,7 @@ export const Logout = (): void => {
   const { search, pathname } = history.location;
   const { redirect } = query;
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  if (!IsLongPage() && !redirect) {
+  if (!IsLoginPage() && !redirect) {
     history.replace({
       pathname: LoginPath,
       search: stringify({
@@ -158,7 +157,7 @@ export const Logout = (): void => {
 /**
  * 是否是登录页
  */
-export const IsLongPage = (): boolean => {
+export const IsLoginPage = (): boolean => {
   return location.pathname === LoginPath;
 };
 

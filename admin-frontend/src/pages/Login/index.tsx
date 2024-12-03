@@ -33,7 +33,6 @@ const Login: React.FC = () => {
       const query = parse(history.location.search);
       const { redirect } = query as { redirect: string };
       const redirectURL =  redirect || '/home';
-      console.log('===', redirectURL)
       window.location.href = redirectURL
       return;
     } catch (error) {

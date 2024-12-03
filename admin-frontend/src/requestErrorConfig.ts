@@ -1,7 +1,7 @@
 ﻿import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
-import { message, notification } from 'antd';
-import { GetLoginToken, IsLongPage } from './utils/common';
+import { message } from 'antd';
+import { GetLoginToken, IsLoginPage } from './utils/common';
 import { SUCCESS } from './services/apis/code';
 
 // 错误处理方案： 错误类型
@@ -95,7 +95,7 @@ export const errorConfig: RequestConfig = {
       const realyUrl = `${BaseAPI}${url}`;
       console.log('请求拦截器：', BaseAPI, url, realyUrl);
       let headers = config.headers
-      if (!IsLongPage()) {
+      if (!IsLoginPage()) {
         const tokenInfo = GetLoginToken();
         const token = tokenInfo !== undefined ? tokenInfo.token : '';
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

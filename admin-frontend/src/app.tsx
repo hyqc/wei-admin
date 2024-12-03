@@ -8,9 +8,10 @@ import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import React from 'react';
 import { currentAdminInfo } from './services/apis/admin/account';
-import { GetLoginToken, HandleMenusToMap, HandleRemoteMenuIntoLocal, IsLogin, IsLongPage, Logout, MenusMapType } from './utils/common';
+import { GetLoginToken, HandleMenusToMap, HandleRemoteMenuIntoLocal, IsLogin, IsLoginPage, IsLongPage, Logout, MenusMapType } from './utils/common';
 import { AdminInfo, RespAccountInfoData, RespAccountPermissionData } from './proto/admin_ts/admin_account';
 import { PermissionsType } from './services/apis/types';
+import NoFoundPage from './pages/404';
 const isDev = process.env.NODE_ENV === 'development';
 
 
@@ -41,7 +42,7 @@ export async function getInitialState(): Promise<{
     return undefined;
   };
   // 如果不是登录页面，执行
-  if (!IsLongPage()) {
+  if (!IsLoginPage()) {
     const currentUserData: RespAccountInfoData = await fetchUserInfo();
     const currentUser = currentUserData?.data;
     const permissions = { ...currentUser?.permissions };
@@ -179,6 +180,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       );
     },
     ...initialState?.settings,
+    noFound: <NoFoundPage />,
   };
 };
 

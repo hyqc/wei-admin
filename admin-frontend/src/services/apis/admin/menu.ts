@@ -1,5 +1,5 @@
 // adminMenus 菜单管理接口
-import { request } from 'umi';
+import { request } from '@@/plugin-request';
 import { APIAdminMenus } from './api';
 import type { ResponseBodyType } from '../types';
 import { ReqAdminMenuAdd, ReqAdminMenuDelete, ReqAdminMenuEdit, ReqAdminMenuEnable, ReqAdminMenuInfo, ReqAdminMenuList, ReqAdminMenuPages, ReqAdminMenuPermissions, ReqAdminMenuShow, ReqMenuList } from '@/proto/admin_ts/admin_menu';

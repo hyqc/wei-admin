@@ -1,4 +1,5 @@
 import ForbiddenPage from '@/pages/403';
+import NoFoundPage from '@/pages/404';
 import { PageContainer } from '@ant-design/pro-layout';
 import React from 'react';
 import { useModel } from 'umi';
@@ -15,10 +16,13 @@ const Content: React.FC<ContentType> = (props: any) => {
   const menuMap = initialState?.menuData || {};
   const pathname = path(location.pathname);
   let canAccessLocalMenu = true
+  let notFound = false
   if(menuMap[pathname]!==undefined){
     canAccessLocalMenu = menuMap[pathname]?.access;
+    notFound = false
+  }else{
+    notFound = true
   }
-
   const initCardStyle: any = () => {
     let wrapperStyless = {
       padding: '0 0 1.4rem',
@@ -36,12 +40,13 @@ const Content: React.FC<ContentType> = (props: any) => {
       ? path.substring(0, path.length - 1)
       : path;
   }
-
-  return canAccessLocalMenu ? (
-    <PageContainer style={wrapperStyless}>{props?.children}</PageContainer>
-  ) : (
-    <ForbiddenPage />
-  );
+  return (
+    canAccessLocalMenu ? (
+      <PageContainer style={wrapperStyless}>{props?.children}</PageContainer>
+    ) : (
+      <ForbiddenPage />
+    )
+  )
 };
 
 export default Content;

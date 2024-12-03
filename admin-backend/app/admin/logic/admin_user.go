@@ -4,7 +4,7 @@ import (
 	"admin/app/admin/dao"
 	model2 "admin/app/admin/gen/model"
 	"admin/code"
-	"admin/config"
+	"admin/global"
 	"admin/pkg/utils"
 	"admin/pkg/utils/array"
 	"admin/pkg/utils/pwd"
@@ -52,7 +52,7 @@ func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.R
 		return nil, code.NewCodeError(code_proto.ErrorCode_AdminAccountPasswordInvalid, nil)
 	}
 
-	info, err := getAccountInfo(ctx, data, true, config.AppConfig.Server.JWT.UsefulLife)
+	info, err := getAccountInfo(ctx, data, true, global.AppConfig.Server.JWT.UsefulLife)
 	if err != nil {
 		return nil, err
 	}

@@ -54,13 +54,14 @@ const Admin: React.FC = () => {
     {
       title: 'ID',
       dataIndex: 'id',
-      width: '4rem',
+      width: '6rem',
       align: 'center',
       sorter: true,
     },
     {
       title: '名称',
       align: 'left',
+      width: '12rem',
       dataIndex: 'name',
     },
     {
@@ -117,6 +118,7 @@ const Admin: React.FC = () => {
       title: '操作',
       align: 'left',
       width: '10rem',
+      fixed: 'right',
       render(text, record: AdminApiItem) {
         return (
           <Space>
