@@ -1,0 +1,71 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+import "admin_menu.proto";
+
+// 登录
+message ReqLogin{
+  string username = 1; // 用户名
+  string password = 2; // 密码
+}
+message RespLoginData{
+  AdminInfo data = 2;
+}
+
+//账号详情
+message ReqAccountInfo{
+  bool refreshToken=1;//刷新token
+}
+message RespAccountInfoData{
+  AdminInfo data = 2;
+}
+
+// 账号编辑
+message ReqAccountEdit{
+  string nickname=1;//名称
+  string avatar=2;//头像
+  string email=3;//邮箱
+}
+message RespAccountEditData{
+}
+
+// 修改密码
+message ReqAccountPasswordEdit{
+  string oldPassword=1;//旧密码
+  string password=2;//新密码
+  string confirmPassword=3;//确认密码
+}
+message RespAccountPasswordEditData{
+}
+
+// 个人权限
+message ReqAccountPermission{
+  int32 menuId=1;//菜单ID
+}
+message RespAccountPermissionData{
+}
+
+
+///////////////////////////////////////////结构
+
+// 管理员账号详情
+message AdminInfo{
+  int32 adminId = 1;
+  string username = 2;
+  string nickname = 3;
+  string avatar = 4;
+  string email = 5;
+  string createdAt = 6;
+  string updatedAt = 7;
+  string lastLoginTime = 8;
+  string lastLoginIp = 9;
+  int32 loginTotal = 10;
+  bool enabled = 11;
+  string token = 12;
+  int64 expire = 13;
+  string expireDataTime = 14;
+  map<string, MenuItem> menus = 15;
+  map<string, string> permissions = 16;
+  repeated AdminUserRoleItem roles = 17;
+}

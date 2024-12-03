@@ -1,0 +1,114 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+
+
+//角色列表
+message ReqAdminRoleList{
+  ReqListBase base = 1;
+  int32 id=2;//角色ID
+  string name=3;//角色名称
+  int32 enabled=4;//启用状态，0：全部，1：启用，2：禁用
+}
+message RespAdminRoleListData{
+  int64 total = 1;
+  repeated RoleItem list = 2;
+}
+
+//有效角色列表
+message ReqAdminRoleAll{
+  int32 id=1;//角色ID
+  string name=2;//角色名称
+  int32 enabled=3;//启用状态，0：全部，1：启用，2：禁用
+}
+message RespAdminRoleAll{}
+
+//创建角色
+message ReqAdminRoleAdd{
+  string name=1;//角色名称
+  string describe=2;//角色描述
+  bool enabled=3;//启用状态
+}
+message RoleAddResp{}
+
+//角色详情
+message ReqAdminRoleInfo{
+  int32 id=1;//角色ID
+}
+message RespAdminRoleInfoData{
+  int32 id=1;//角色ID
+  string name=2;//角色名称
+  string describe=3;//角色描述
+  bool isEnabled=4;//启用状态
+  int32 createAdminId=5;//创建人ID
+  string createAdminName=6;//创建人名称
+  int32 modifyAdminId=7;//修改人ID
+  string modifyAdminName=8;//修改人名称
+  string createdAt=9;//创建时间
+  string updatedAt=10;//更新时间
+  repeated RolePermissionItem permissions=11;
+  repeated int32 permissionIds=12;
+}
+
+//编辑角色
+message ReqAdminRoleEdit{
+  int32 id=1;//角色ID
+  string name=2;//角色名称
+  string describe=3;//角色描述
+  bool isEnabled=4;//启用状态
+}
+message RespAdminRoleEditData{}
+
+//启用禁用角色
+message ReqAdminRoleEnable{
+  int32 id=1;//角色ID
+  bool enabled=2;//启用状态
+}
+message RespAdminRoleEnableData{}
+
+//删除角色
+message ReqAdminRoleDelete{
+  int32 id=1;//角色ID
+  repeated int32 permissionIds=2;//权限ID集合
+}
+message RespAdminRoleDeleteData{}
+
+//角色绑定权限
+message ReqAdminRoleBindPermissions{
+  int32 id=1;//角色ID
+  repeated int32 permissionIds=2;//权限ID集合
+}
+message RespAdminRoleBindPermissionsData{}
+
+
+//角色权限列表
+message ReqAdminRolePermissions{
+  int32 id=1;//角色ID
+}
+message RespAdminRolePermissionsData{
+  repeated RolePermissionItem list=1;
+}
+
+///////////////////////////////////////////
+//角色
+message RoleItem{
+  int32 id = 1;//角色ID
+  string name = 2;//角色名称
+  string describe=3;//角色名称
+  int32 createAdminId=4;//创建人ID
+  string createAdminName=5;//创建人名称
+  bool isEnabled = 6;//是否启用
+  string createdAt = 7;
+  string updatedAt = 8;
+}
+
+//角色权限
+message RolePermissionItem{
+  int32 roleId=1;//权限ID
+  int32 permissionId=2;//权限ID
+  string permissionName=3;//权限名称
+  string permissionKey=4;//权限键名
+  string permissionType=5;//权限类型
+  string permissionTypeText=6;//权限类型
+}

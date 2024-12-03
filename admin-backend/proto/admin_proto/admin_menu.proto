@@ -1,0 +1,193 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+import "admin_model.proto";
+
+
+// 菜单列表
+message ReqAdminMenuList{
+  ReqListBase base = 1;
+  string key = 2;// 菜单键名
+  string path = 3;//菜单路由
+  string name = 4;//菜单名称
+  int32 parentId = 5; // 父级菜单
+}
+message RespAdminMenuListData{
+  int64 total = 1;
+  repeated MenuItem list = 2;
+}
+
+
+// 创建菜单
+message ReqAdminMenuAdd{
+  string key = 1;// 菜单键名
+  string path = 2;//菜单路由
+  string name = 3;//菜单名称
+  int32 parentId = 4; // 父级菜单
+  string describe = 5;//菜单描述
+  string redirect = 6;//菜单重定向路由
+  string icon = 7;//菜单图标
+  bool hideChildrenInMenu = 8;//是否隐藏子菜单
+  bool hideInMenu = 9;//是否隐藏菜单
+  bool enabled = 10;//是否启用菜单
+  int32 sort = 11;//菜单排序值
+  string component = 12;//菜单组件
+}
+message RespAdminMenuAddData{}
+
+// 菜单想去
+message ReqAdminMenuInfo{
+  int32 menuId = 1;//菜单ID
+}
+message RespAdminMenuInfoData{
+  AdminMenuModel data = 1;
+}
+
+// 便捷菜单
+message ReqAdminMenuEdit{
+  int32 id = 1;
+  int32 parentId = 2;
+  string path = 3;
+  string name = 4;
+  string key = 5;
+  string describe = 6;
+  string icon = 7;
+  int32 sort = 8;
+  string redirect = 9;
+  string component = 10;
+  bool isHideInMenu = 11;
+  bool isHideChildrenInMenu = 12;
+  bool isEnabled = 13;
+}
+message RespAdminMenuEditData{}
+
+// 启用禁用菜单
+message ReqAdminMenuEnable{
+  int32 menuId = 1;//菜单ID
+  bool enabled = 2;//是否启用菜单
+}
+message RespAdminMenuEnableData{}
+
+// 启用禁用菜单
+message ReqAdminMenuShow{
+  int32 menuId = 1;//菜单ID
+  string field = 2;//要编辑的字段
+  bool show = 3;//是否显示菜单
+}
+message RespAdminMenuShow{}
+
+// 删除菜单
+message ReqAdminMenuDelete{
+  int32 menuId = 1;//菜单ID
+}
+message RespAdminMenuDeleteData{}
+
+// 菜单权限列表
+message ReqAdminMenuPermissions{
+  int32 menuId = 1;//菜单ID
+}
+message RespAdminMenuPermissionsData{
+  AdminMenuModel menuInfo = 1;
+  repeated MenuPermissionItem permissions = 2;
+}
+
+// 页面菜单列表
+message ReqAdminMenuPages{
+  bool all = 1;//是否顶部插入全部
+}
+message RespAdminMenuPages{
+  repeated MenuTreeItem list = 1;
+}
+
+// 页面模块权限列表
+message ReqAdminMenuMode{}
+message RespAdminMenuModeData{
+  repeated MenuModeItem modes = 1;
+}
+
+//////////////////////////////////
+//菜单
+message MenuItem{
+  string key = 1; // 菜单唯一键
+  string path = 2; // 菜单路由
+  string name = 3; // 菜单名称
+  string icon = 4; // 菜单图标
+  string component = 5;
+  string authority = 6;
+  bool hideInMenu = 7;
+  bool hideChildrenInMenu = 8;
+  repeated MenuItem routes = 9;
+}
+
+// 有效菜单树
+message MenuTreeItem{
+  //菜单层级
+  int32 level = 1;
+  //菜单自增ID
+  int32 id = 2;
+  //菜单唯一键
+  string key = 3;
+  //菜单名称
+  string name = 4;
+  //父级菜单ID
+  int32 parentId = 5;
+  //菜单描述
+  string describe = 6;
+  //菜单路径
+  string path = 7;
+  //重定向地址
+  string redirect = 8;
+  //组件名称
+  string component = 9;
+
+  //菜单排序
+  int32 sort = 10;
+
+  //菜单图标
+  string icon = 11;
+  //是否在菜单中隐藏子菜单
+  bool hideChildrenInMenu = 12;
+  //是否隐藏菜单
+  bool hideInMenu = 13;
+
+  //是否启用
+  bool enabled = 14;
+
+  int64 createTime = 15;
+
+  int64 modifyTime = 16;
+  repeated MenuTreeItem children = 17;
+}
+
+//菜单模块
+message MenuModeItem{
+  int32 modelId = 1;//模块菜单ID
+  string modelName = 2;//模块菜单名称
+  repeated MenuPageItem pages = 3;//模块下面的页面列表
+}
+//模块页面
+message MenuPageItem{
+  int32 pageId = 1;//页面菜单ID
+  string pageName = 2;//页面菜单名称
+  repeated MenuPagePermissions permissions = 3;//页面菜单权限
+}
+//模块页面权限
+message MenuPagePermissions{
+  int32 permissionId = 1;//权限ID
+  string permissionName = 2; //权限名称
+  string permissionType = 3; //权限类型
+  string permissionTypeName = 4;//权限类型名称
+}
+
+//菜单权限
+message MenuPermissionItem{
+  int32 id = 1;
+  string name = 2;
+  string key = 3;
+  string type = 4;
+  string typeName = 5;
+  string Describe = 6;
+  bool enabled = 7;
+  int32 menuId = 8;
+}

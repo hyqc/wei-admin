@@ -1,0 +1,33 @@
+server:
+  debug: true
+  port: 3000
+  pprof: true
+  jwt:
+    # jwt token 加密密钥
+    secret: MHcCAQEEIEiE+ONCLujTc4ibxd9qtfVRGlrSX2A0qXYVzrw4hUREoAoGCCqGSM49AwEHoUQDQgAEisyae3uURSutgrUTw8r14dC1Wtjflq9l3D75jk+9JQprkXQB7TFBwRCdco3/h+oAQrozhqvgKG+nulGIoOSpaQ==
+    # jwt token有效期，单位秒
+    useful_life: 604800
+    # 不需要验证 jwt token 的路由
+    ignore_urls:
+      - /admin/account/login
+database:
+  wei:
+    user: root
+    pwd: 123456
+    host: 127.0.0.1
+    port: 3306
+    dbname: wei
+    charset: utf8mb4
+    parse_time: True
+    location: Local
+    max_idle_cons: 2
+    max_open_cons: 20
+    conn_max_lifetime_minutes: 200
+logger:
+  filename: "./logs/admin_proto.log"
+  max_size: 5
+  max_backups: 7
+  max_age: 14
+  compress: true
+  level: -1 # debug=-1, info=0, warn=1
+  json: true

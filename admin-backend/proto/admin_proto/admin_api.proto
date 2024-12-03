@@ -1,0 +1,64 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+
+// 接口列表请求参数
+message ReqAdminApiList{
+  ReqListBase base=1;
+  string key = 2;//接口键名
+  string name = 3;//接口名称
+  string path = 4;//接口路由
+}
+message RespAdminApiListData{
+  int64 total=1;
+  repeated AdminApiItem list=2;
+}
+
+// 全部接口列表
+message ReqAdminApiAll{}
+message RespAdminApiAllData{
+  repeated AdminApiItem list=1;
+}
+
+// 创建接口
+message ReqAdminApiAdd{
+  string path = 1;//接口路由
+  string key = 2;//接口键名
+  string name = 3;//接口名称
+  string describe = 4;//接口描述
+  bool enabled = 5;//启用状态
+}
+message RespAdminApiAddData{}
+
+// 接口详情
+message ReqAdminApiInfo{
+  int32 id = 1;//接口ID
+}
+message RespAdminApiInfoData{
+  AdminApiItem data = 1;
+}
+
+// 接口编辑
+message ReqAdminApiEdit{
+  int32 id = 1;//接口ID
+  string path = 2;//接口路由
+  string key = 3;//接口键名
+  string name = 4;//接口名称
+  string describe = 5;//接口描述
+  bool enabled = 6;//接口状态
+}
+message RespAdminApiEditData{}
+
+// 接口禁用启用
+message ReqAdminApiEnable{
+  int32 id = 1;//接口ID
+  bool enabled = 2;//接口状态
+}
+message RespAdminApiEnableData{}
+
+// 删除接口
+message ReqAdminApiDelete{
+  int32 id = 1;//接口ID
+}
+message RespAdminApiDeleteData{}

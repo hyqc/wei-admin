@@ -1,0 +1,53 @@
+version: '2'
+services:
+  consul:
+    container_name: consul
+    image: hashicorp/consul:latest
+    ports:
+      -  "8500:8500"
+    volumes:
+      - /data/db/consul/data:/consul/data:rw
+    restart: unless-stopped
+  redis:
+    container_name: redis
+    image: redis:5.0.5-alpine
+    ports:
+      -  "6379:6379"
+    volumes:
+      - /data/etc/redis/redis.conf:/etc/redis/redis.conf:rw
+      - /data/db/redis/data:/data:rw
+    restart: unless-stopped
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.25
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - /data/db/mysql:/var/lib/mysql:rw
+    restart: unless-stopped
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper:latest
+    ports:
+      - "2181:2181"
+    volumes:
+      - /data/db/zookeeper/data:/data:rw
+      - /data/log/zookeeper/datalog:/datalog:rw
+    restart: unless-stopped
+  kafka:
+    container_name: kafka
+    image: wurstmeister/kafka:2.12-2.3.1
+    ports:
+      - "9092:9092"
+    environment:
+      DOCKER_API_VERSION: 1.22
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.8.223
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+    volumes:
+      - /data/db/kafka/data:/var/lib/kafka/data:rw
+    restart: unless-stopped
+

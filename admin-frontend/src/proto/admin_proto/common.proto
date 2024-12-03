@@ -1,0 +1,54 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+
+message RespCode{
+  int32 code = 1;
+  string msg = 2;
+  string reason = 3;
+}
+
+message ReqListBase{
+  int32 pageSize = 1; // 分页偏移量
+  int32 pageNum = 2; // 页码
+  string sortField = 3; // 排序字段
+  string sortType = 4; // 排序值
+  int32 enabled = 5; // 0：全部 1：启用 2：禁用
+  int64 createStartTime = 6; // 查询开始时间戳秒
+  int64 createEndTime = 7; //查询结束时间戳秒
+}
+
+// 接口列表返回结构
+message AdminApiItem{
+  int32  id = 1;
+  string path = 2;
+  string key = 3;
+  string name = 4;
+  bool isEnabled = 5;
+  int32 permissionId = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+  string describe = 9;
+}
+
+// 账号列表返回结构
+message AdminUserListItem{
+  int32 adminId = 1; // 管理员ID
+  string username = 2; // 账号名称
+  string nickname = 3; // 昵称
+  string email = 4; // 邮箱
+  string avatar = 5; // 头像
+  int32 loginTotal = 6; // 登录次数
+  string lastLoginIp = 7; // 上次登录IP
+  string lastLoginTime = 8; // 上次登录时间
+  bool isEnabled = 9; // 是否启用
+  string createdAt = 10; // 创建时间
+  string updatedAt = 11; // 更新时间
+  repeated AdminUserRoleItem roles = 12;
+  bool isEnabledButtonDisabled = 13;
+}
+// 账号角色列表
+message AdminUserRoleItem{
+  int32 roleId = 1; //角色ID
+  string roleName = 2;
+}

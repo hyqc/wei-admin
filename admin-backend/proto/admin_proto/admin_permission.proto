@@ -1,0 +1,146 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+
+// 权限列表
+message ReqAdminPermissionList{
+  ReqListBase base = 1;
+  int32 menuId=2;//菜单ID
+  string key=3;//权限唯一标识符
+  string name=4;//权限名称
+  string type=5;//权限类型
+}
+message RespAdminPermissionListData{
+  int64 total = 1;
+  repeated PermissionListItem list = 2;
+}
+
+// 创建权限
+message ReqAdminPermissionAdd{
+  int32 id = 1; //权限ID
+  int32 menuId = 2;//权限对应的菜单ID
+  string key = 3;//权限唯一标识符
+  string name = 4;//权限名称
+  string describe = 5;//权限描述
+  string type = 6;//权限类型
+  string redirect = 7;//重定向地址
+  bool enabled = 8;//是否启用
+}
+message RespAdminPermissionAddData{
+}
+
+
+//权限详情
+message ReqAdminPermissionInfo{
+  int32 id = 1 ;  //权限ID
+}
+message RespAdminPermissionInfoData{
+  AdminPermissionInfo data = 1;
+}
+
+
+// 编辑权限
+message ReqAdminPermissionEdit{
+  int32 id = 1;//权限ID
+  int32 menuId = 2;//权限对应的菜单ID
+  string key = 3;//权限唯一标识符
+  string name = 4;//权限名称
+  string describe = 5;//权限描述
+  string type = 6;//权限类型
+  string redirect = 7;//重定向地址
+  bool enabled = 8;//是否启用
+}
+message RespAdminPermissionEditData{
+}
+
+
+// 启用禁用权限
+message ReqAdminPermissionEnable{
+  int32 id = 1;//权限ID
+  bool isEnabled=2;
+}
+message RespAdminPermissionEnableData{
+}
+
+
+// 删除权限
+message ReqAdminPermissionDelete{
+  int32 id = 1;//权限ID
+}
+message RespAdminPermissionDeleteData{
+}
+
+// 权限绑定接口
+message ReqAdminPermissionBindApis{
+  int32 permissionId =1; // 权限ID
+  repeated int32 apiIds = 2; // 接口ID列表
+}
+message RespAdminPermissionBindApisData{
+}
+
+// 权限绑定接口
+message ReqAdminPermissionUnBindApi{
+  int32 permissionId =1; // 权限ID
+  int32 apiId=2;//接口ID
+}
+message RespAdminPermissionUnBindApi{
+}
+
+//绑定权限菜单
+message ReqAdminPermissionBindMenu{
+  int32 menuId = 1; // 菜单ID
+  repeated ReqAdminPermissionAdd permissions = 2; // 菜单对应的权限ID列表
+}
+message RespAdminPermissionBindMenuData{
+}
+
+
+////////////////////////////////////
+//权限列表
+message PermissionListItem{
+  int32 id = 1;//权限ID
+  int32 menuId = 2;//权限对应的菜单ID
+  string menuName = 3;//菜单名称
+  string menuPath = 4;//菜单路由
+  repeated AdminApiItem apis = 5; //接口列表
+  string key = 6;//权限唯一标识符
+  string name = 7;//权限名称
+  string describe = 8;//权限描述
+  string type = 9;//权限类型
+  string typeText = 10;//权限类型
+  bool isEnabled = 11;//是否启用
+  string createdAt = 12;
+  string updatedAt = 13;
+}
+
+// 权限接口列表
+message PermissionApiItem{
+  int32 id = 1;//权限ID
+  int32 menuId = 2;//菜单ID
+  string key = 3;//权限键名
+  string type = 4;//权限类型
+  string typeText = 5;//权限类型
+  string name = 6;//权限名称
+  repeated AdminApiItem apis = 7;//接口列表
+  bool enabled = 8;//是否启用
+  string describe = 9;//权限描述
+}
+
+//权限详情
+message AdminPermissionInfo{
+  int32 id = 1;//权限ID
+  int32 menuId = 2;//权限对应的菜单ID
+  string menuName = 3;//菜单名称
+  string menuPath = 4;//菜单路由
+  repeated AdminApiItem apis = 5; //接口列表
+  string key = 6;//权限唯一标识符
+  string name = 7;//权限名称
+  string describe = 8;//权限描述
+  string type = 9;//权限类型
+  string typeText = 10;//权限类型
+  string redirect = 11;//重定向地址
+  bool isEnabled = 12;//是否启用
+  string createdAt = 13;
+  string updatedAt = 14;
+}

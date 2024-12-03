@@ -1,0 +1,39 @@
+syntax = "proto3";
+package error_code;
+option go_package = "./code_proto;code_proto";
+
+enum ErrorCode{
+  Success = 0; // 成功
+  Error = 1; // 失败
+  ReadContextRequestBodyFailed = 100001; // 获取请求体内容失败
+  RecordNotExist = 100002; // 记录不存在
+  RecordNValidCanNotDeleted = 100003; // 生效中的记录不能删除
+
+  AuthTokenFailed = 200001; // 鉴权失败
+  AuthTokenInvalid = 200002; // BearerToken无效
+  AuthTokenInspectInvalid = 200003; // BearerToken无效
+  AuthTokenInfoInvalid = 200004 ;// Token信息无效
+
+  RequestBodyInvalid = 300001;// 请求体参数无效
+  RequestQueryInvalid = 300002;// 请求查询参数无效
+  RequestParamsInvalid = 300003;// 请求参数无效
+
+  AdminAccountPasswordInvalid = 400001;// 账号或密码错误
+  AdminAccountNotExist = 400002;// 账号不存在或已被删除
+  AdminAccountInvalid = 400003;// 账号已被封禁
+
+  AdminApiNameExist = 500001; // 接口名称已存在
+  AdminApiPathExist = 500002; // 接口路径已存在
+  AdminApiKeyExist = 500003; // 接口键名已存在
+  AdminApiNotExist = 500004; // 接口不存在货已失效
+
+  AdminPermissionKeyExist = 600001; // 权限键名已存在
+  AdminPermissionExist = 600002; // 该菜单下权限已存在
+  AdminPermissionKeyNeed = 600003; // 权限键名不能为空
+  AdminPermissionNameNeed = 600004; // 权限名称不能为空
+  AdminPermissionTypeInvalid = 600005; // 权限类型无效
+
+  AdminMenuNotExist = 700001; // 菜单不存在
+
+  AdminRoleNotExist = 800001; // 角色不存在
+}
