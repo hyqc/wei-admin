@@ -9,19 +9,17 @@ import {
   Col,
   Space,
   Table,
-  message,
   Popconfirm,
   Switch,
   Tag,
   Tooltip,
+  App,
 } from 'antd';
 import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
 import type { Gutter } from 'antd/lib/grid/row';
 import {
   PageInfoType,
   ResponseBodyType,
-  ResponseListDataType,
-  ResponseListType,
 } from '@/services/apis/types';
 import {
   adminPermissionDelete,
@@ -40,16 +38,17 @@ import AdminPermissionAddModal, { NoticeModalPropsType } from './add';
 import AdminPermissionEditModal from './edit';
 import AdminPermissionDetailModal from './detail';
 import AdminPermissionBindApiModal from './bind';
-import { adminMenuPages, ResponseAdminMenuListItemType } from '@/services/apis/admin/menu';
+import { adminMenuPages } from '@/services/apis/admin/menu';
 import PageMenus from './components/PageMenus';
-import { ResponseAdminAPIAllItemType } from '@/services/apis/admin/resource';
 import FetchButton from '@/components/FetchButton';
 import { DefaultPagination } from '@/components/PageContainer/Pagination';
+import { PermissionListItem } from '@/proto/admin_ts/admin_permission';
 
 const FormSearchRowGutter: [Gutter, Gutter] = [12, 0];
 const FormSearchRowColSpan = 5.2;
 
 const Admin: React.FC = () => {
+  const {message} = App.useApp()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
@@ -59,7 +58,7 @@ const Admin: React.FC = () => {
   const [editModalStatus, setEditModalStatus] = useState<boolean>(false);
   const [addModalStatus, setAddModalStatus] = useState<boolean>(false);
   const [bindAPIModalStatus, setBindAPIModalStatus] = useState<boolean>(false);
-  const [pageMenusData, setPageMenusData] = useState<ResponseAdminMenuListItemType[]>([]);
+  const [pageMenusData, setPageMenusData] = useState<any[]>([]);
 
   const columns: ColumnsType<any> = [
     {
@@ -78,7 +77,7 @@ const Admin: React.FC = () => {
       title: '名称',
       align: 'left',
       dataIndex: 'name',
-      render(name: string, record: ResponseAdminPermissionListItemType) {
+      render(name: string, record: PermissionListItem) {
         return <Tooltip title={record.key}>{name}</Tooltip>;
       },
     },
@@ -87,7 +86,7 @@ const Admin: React.FC = () => {
       align: 'left',
       dataIndex: 'typeText',
       width: '3rem',
-      render(type: string, record: ResponseAdminPermissionListItemType) {
+      render(type: string, record: PermissionListItem) {
         return record.type === 'view' ? (
           <Tag color="#87d068">{record.typeText}</Tag>
         ) : record.type === 'edit' ? (
@@ -101,7 +100,7 @@ const Admin: React.FC = () => {
       title: '关联接口',
       align: 'left',
       dataIndex: 'apis',
-      render(apis: ResponseAdminAPIAllItemType[], record: ResponseAdminPermissionListItemType) {
+      render(apis: PermissionListItem[], record: PermissionListItem) {
         return showApisTag(apis, record);
       },
     },

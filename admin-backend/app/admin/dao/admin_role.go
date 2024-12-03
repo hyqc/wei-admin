@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"admin/app/admin/gen/custom/admin_custom"
+	"admin/app/admin/dao/types"
 	model2 "admin/app/admin/gen/model"
 	query2 "admin/app/admin/gen/query"
 	"admin/app/common"
@@ -18,12 +18,12 @@ type IAdminRole interface {
 	FindAdminUserByRoleIds(ctx context.Context, ids []int32) ([]*model2.AdminUserRole, error)
 	List(ctx context.Context, params *admin_proto.ReqAdminRoleList) (int64, []*model2.AdminRole, error)
 	Create(ctx context.Context, data *model2.AdminRole) error
-	Info(ctx context.Context, id int32) (*admin_custom.AdminRoleInfo, error)
+	Info(ctx context.Context, id int32) (*types.AdminRoleInfo, error)
 	FindById(ctx context.Context, id int32) (*model2.AdminRole, error)
 	Update(ctx context.Context, info *model2.AdminRole) error
 	Enable(ctx context.Context, id int32, enabled bool) error
 	Delete(ctx context.Context, id int32) error
-	FindAdminRolePermissionByRoleId(ctx context.Context, id int32) ([]*admin_custom.AdminRolePermissionItem, error)
+	FindAdminRolePermissionByRoleId(ctx context.Context, id int32) ([]*types.AdminRolePermissionItem, error)
 	BindPermissions(ctx context.Context, id int32, data []*model2.AdminRolePermission) error
 	FindRolesById(ctx context.Context, id int32) ([]*model2.AdminRole, error)
 	FindAllValid(ctx *gin.Context) ([]*model2.AdminRole, error)
@@ -108,12 +108,12 @@ func (a *AdminRole) Create(ctx context.Context, data *model2.AdminRole) error {
 	return query2.AdminRole.WithContext(ctx).Create(data)
 }
 
-func (a *AdminRole) Info(ctx context.Context, id int32) (*admin_custom.AdminRoleInfo, error) {
+func (a *AdminRole) Info(ctx context.Context, id int32) (*types.AdminRoleInfo, error) {
 	t1 := query2.AdminRole
 	t2 := query2.AdminUser
 	b := t2.As("b")
 	c := t2.As("c")
-	data := &admin_custom.AdminRoleInfo{}
+	data := &types.AdminRoleInfo{}
 	err := t1.WithContext(ctx).Select(t1.ID, t1.Name, t1.Describe, t1.IsEnabled, t1.CreateAdminID, b.Username.As("create_admin_name"), t1.ModifyAdminID, c.Username.As("modify_admin_name"), t1.CreatedAt, t1.UpdatedAt).
 		LeftJoin(b, b.ID.EqCol(t1.CreateAdminID)).
 		LeftJoin(c, c.ID.EqCol(t1.ModifyAdminID)).Where(t1.ID.Eq(id)).Scan(data)
@@ -140,7 +140,7 @@ func (a *AdminRole) Delete(ctx context.Context, id int32) error {
 	return err
 }
 
-func (a *AdminRole) FindAdminRolePermissionByRoleId(ctx context.Context, roleId int32) (list []*admin_custom.AdminRolePermissionItem, err error) {
+func (a *AdminRole) FindAdminRolePermissionByRoleId(ctx context.Context, roleId int32) (list []*types.AdminRolePermissionItem, err error) {
 	ta := query2.AdminRolePermission.As("a")
 	tb := query2.AdminPermission.As("b")
 	err = ta.WithContext(ctx).

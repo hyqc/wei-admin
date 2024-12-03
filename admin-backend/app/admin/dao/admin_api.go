@@ -1,8 +1,9 @@
 package dao
 
 import (
+	"admin/app/admin/dao/types"
 	"admin/app/admin/gen/model"
-	query2 "admin/app/admin/gen/query"
+	"admin/app/admin/gen/query"
 	"admin/app/common"
 	"admin/proto/admin_proto"
 	"context"
@@ -19,7 +20,7 @@ type IAdminAPI interface {
 	Delete(ctx *gin.Context, id int32) error
 	List(ctx context.Context, params *admin_proto.ReqAdminApiList) (total int64, list []*model.AdminAPI, err error)
 	FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) // 查找所有有效的接口
-	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.AdminApiItem, err error)
+	FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*types.AdminApiPermissionItem, err error)
 	FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error)
 }
 
@@ -31,21 +32,21 @@ func newAdminAPI() *AdminAPI {
 }
 
 func (a *AdminAPI) Create(ctx *gin.Context, data *model.AdminAPI) error {
-	return query2.AdminAPI.WithContext(ctx).Create(data)
+	return query.AdminAPI.WithContext(ctx).Create(data)
 }
 
 func (a *AdminAPI) Update(ctx *gin.Context, data *model.AdminAPI) error {
-	return query2.AdminAPI.WithContext(ctx).Where(query2.AdminAPI.ID.Eq(data.ID)).Save(data)
+	return query.AdminAPI.WithContext(ctx).Where(query.AdminAPI.ID.Eq(data.ID)).Save(data)
 }
 
 func (a *AdminAPI) Enable(ctx *gin.Context, id int32, enabled bool) error {
-	db := query2.AdminAPI
+	db := query.AdminAPI
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).UpdateColumn(db.IsEnabled, enabled)
 	return err
 }
 
 func (a *AdminAPI) Delete(ctx *gin.Context, id int32) error {
-	db := query2.AdminAPI
+	db := query.AdminAPI
 	_, err := db.WithContext(ctx).Where(db.ID.Eq(id)).Delete()
 	return err
 }
@@ -63,31 +64,34 @@ func (a *AdminAPI) List(ctx context.Context, params *admin_proto.ReqAdminApiList
 }
 
 func (a *AdminAPI) FindAllValid(ctx context.Context) (list []*model.AdminAPI, err error) {
-	db := query2.AdminAPI
+	db := query.AdminAPI
 	return db.WithContext(ctx).Where(db.IsEnabled.Is(true)).Find()
 }
 func (a *AdminAPI) FindByIds(ctx *gin.Context, ids []int32, enabled bool) ([]*model.AdminAPI, error) {
-	db := query2.AdminAPI
+	db := query.AdminAPI
 	return db.WithContext(ctx).Where(db.IsEnabled.Is(enabled), db.ID.In(ids...)).Find()
 }
 
 func (a *AdminAPI) Info(ctx *gin.Context, id int32) (*model.AdminAPI, error) {
-	return query2.AdminAPI.WithContext(ctx).Where(query2.AdminAPI.ID.Eq(id)).First()
+	return query.AdminAPI.WithContext(ctx).Where(query.AdminAPI.ID.Eq(id)).First()
 }
 
-func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*admin_proto.AdminApiItem, err error) {
-	api := query2.AdminAPI
-	per := query2.AdminPermissionAPI
-	data = make([]*admin_proto.AdminApiItem, 0)
-	per.WithContext(ctx).
-		Join(api, api.ID.EqCol(per.APIID)).
-		Where(per.PermissionID.In(ids...)).
-		Scan(&data).Error()
-	return data, err
+func (a *AdminAPI) FindByPermissionIds(ctx *gin.Context, ids []int32) (data []*types.AdminApiPermissionItem, err error) {
+	api := query.AdminAPI
+	per := query.AdminPermissionAPI
+	data = make([]*types.AdminApiPermissionItem, 0)
+	err = api.WithContext(ctx).
+		Select(api.ID, api.Key, api.Name, api.IsEnabled, api.Path, api.Describe, per.PermissionID).
+		Join(per, per.APIID.EqCol(api.ID)).
+		Where(per.PermissionID.In(ids...)).Scan(&data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr {
-	api := query2.AdminAPI
+	api := query.AdminAPI
 	var res field.OrderExpr
 	switch sortField {
 	case api.CreatedAt.ColumnName().String():
@@ -110,8 +114,8 @@ func (a *AdminAPI) handleListReqSortField(sortField, sortType string) field.Expr
 	return res
 }
 
-func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ReqAdminApiList) (q query2.IAdminAPIDo) {
-	db := query2.AdminAPI
+func (a *AdminAPI) handleListReq(ctx context.Context, params *admin_proto.ReqAdminApiList) (q query.IAdminAPIDo) {
+	db := query.AdminAPI
 	q = db.WithContext(ctx)
 
 	switch params.Base.Enabled {

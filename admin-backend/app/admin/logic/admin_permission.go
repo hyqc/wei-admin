@@ -69,7 +69,15 @@ func (a *AdminPermissionLogic) List(ctx *gin.Context, params *admin_proto.ReqPer
 				if _, ok := apisMap[item.PermissionId]; !ok {
 					apisMap[item.PermissionId] = make([]*admin_proto.AdminApiItem, 0)
 				}
-				apisMap[item.PermissionId] = append(apisMap[item.PermissionId], item)
+				apisMap[item.PermissionId] = append(apisMap[item.PermissionId], &admin_proto.AdminApiItem{
+					Id:           item.ID,
+					Path:         item.Path,
+					Key:          item.Key,
+					Name:         item.Name,
+					IsEnabled:    item.IsEnabled,
+					PermissionId: item.PermissionId,
+					Describe:     item.Describe,
+				})
 			}
 		}
 
@@ -167,9 +175,20 @@ func (a *AdminPermissionLogic) Info(ctx *gin.Context, params *admin_proto.ReqPer
 			return nil, code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
 		}
 	}
-	apiList, err := dao.H.AdminAPI.FindByPermissionIds(ctx, []int32{data.ID})
+	apiListTmp, err := dao.H.AdminAPI.FindByPermissionIds(ctx, []int32{data.ID})
 	if err != nil {
 		return nil, err
+	}
+	apiList := make([]*admin_proto.AdminApiItem, 0, len(apiListTmp))
+	for _, item := range apiListTmp {
+		apiList = append(apiList, &admin_proto.AdminApiItem{
+			Id:        item.ID,
+			Path:      item.Path,
+			Key:       item.Key,
+			Name:      item.Name,
+			IsEnabled: item.IsEnabled,
+			Describe:  item.Describe,
+		})
 	}
 	return &admin_proto.PermissionInfo{
 		Id:        data.ID,

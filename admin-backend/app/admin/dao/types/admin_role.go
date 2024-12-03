@@ -1,4 +1,4 @@
-package admin_custom
+package types
 
 import "time"
 

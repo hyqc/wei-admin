@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"admin/app/admin/gen/custom/admin_custom"
+	"admin/app/admin/dao/types"
 	"admin/app/admin/gen/model"
 	"admin/app/admin/gen/query"
 	"admin/app/common"
@@ -24,7 +24,7 @@ type IAdminPermission interface {
 	Info(ctx *gin.Context, id int32) (*model.AdminPermission, error)
 	Update(ctx *gin.Context, data *model.AdminPermission) error
 	Enable(ctx *gin.Context, id int32, enabled bool) error
-	FindPermissionMenuInfoById(ctx *gin.Context, permissionId int32) (*admin_custom.AdminPermissionMenu, error)
+	FindPermissionMenuInfoById(ctx *gin.Context, permissionId int32) (*types.AdminPermissionMenu, error)
 	Delete(ctx *gin.Context, id int32) error
 	BindApis(ctx *gin.Context, permissionId int32, permissionApes []*model.AdminPermissionAPI) error
 	BatchAddPermissions(ctx *gin.Context, data []*model.AdminPermission) error
@@ -188,10 +188,10 @@ func (a *AdminPermission) BindApis(ctx *gin.Context, permissionId int32, permiss
 	return err
 }
 
-func (a *AdminPermission) FindPermissionMenuInfoById(ctx *gin.Context, permissionId int32) (*admin_custom.AdminPermissionMenu, error) {
+func (a *AdminPermission) FindPermissionMenuInfoById(ctx *gin.Context, permissionId int32) (*types.AdminPermissionMenu, error) {
 	p := query.AdminPermission
 	m := query.AdminMenu
-	data := &admin_custom.AdminPermissionMenu{}
+	data := &types.AdminPermissionMenu{}
 	fields := []field.Expr{
 		p.ID,
 		p.MenuID,
