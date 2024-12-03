@@ -1,9 +1,9 @@
 package serves
 
 import (
+	"admin/app/middleware"
 	"admin/app/router"
-	"admin/config"
-	"admin/middleware"
+	"admin/global"
 	"admin/pkg/utils"
 	"context"
 	"errors"
@@ -38,7 +38,7 @@ func Run() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer func() {
 		cancel()
-		config.LoggerClose()
+		global.LoggerClose()
 	}()
 
 	parseCmd()
@@ -49,7 +49,7 @@ func Run() {
 }
 
 func parseConfig() {
-	if err := config.ParseConfig(configFullPath); err != nil {
+	if err := global.ParseConfig(configFullPath); err != nil {
 		utils.PrintfLn("parse yaml config: %s , error: %s", configFilePath, err.Error())
 		os.Exit(1)
 		return
@@ -59,13 +59,13 @@ func parseConfig() {
 
 func initConfig() {
 
-	if err := config.InitLogger(); err != nil {
+	if err := global.InitLogger(); err != nil {
 		utils.PrintfLn("init logger config error: %s", err.Error())
 		os.Exit(1)
 		return
 	}
 
-	if err := config.InitMySQLDB(); err != nil {
+	if err := global.InitMySQLDB(); err != nil {
 		utils.PrintfLn("init database config error: %s", err.Error())
 		os.Exit(2)
 		return
@@ -76,21 +76,21 @@ func initConfig() {
 
 func runServe() {
 
-	if !config.AppConfig.Server.Debug {
+	if !global.AppConfig.Server.Debug {
 		gin.SetMode(gin.ReleaseMode)
 		gin.DisableConsoleColor()
 	}
 
 	e := gin.Default()
 
-	if config.AppConfig.Server.Pprof {
+	if global.AppConfig.Server.Pprof {
 		pprof.Register(e)
 	}
 
 	e.Use(middleware.Global...)
 	router.Routes(e)
 
-	port := config.AppConfig.Server.Port
+	port := global.AppConfig.Server.Port
 	server.Addr = fmt.Sprintf(":%s", port)
 	server.Handler = e
 	go func() {

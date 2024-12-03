@@ -4,7 +4,7 @@ import (
 	"admin/app/admin/gen/model"
 	"admin/app/admin/gen/query"
 	"admin/app/common"
-	"admin/config"
+	"admin/global"
 	"admin/pkg/utils"
 	"admin/proto/admin_proto"
 	"context"
@@ -59,7 +59,7 @@ func (a *AdminMenu) Show(ctx *gin.Context, menuId int32, f string, show bool) er
 }
 
 func (a *AdminMenu) Delete(ctx *gin.Context, id int32) error {
-	t := config.AppConfig.DBClient.Wei
+	t := global.AppConfig.DBClient.Wei
 	err := t.Transaction(func(tx *gorm.DB) error {
 		menu := query.AdminMenu
 		_, err := menu.WithContext(ctx).Where(menu.ID.Eq(id)).Delete()

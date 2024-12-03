@@ -2,7 +2,7 @@ package controller
 
 import (
 	"admin/code"
-	"admin/config"
+	"admin/global"
 	"admin/pkg/core"
 	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
@@ -15,7 +15,7 @@ type DemoController struct {
 
 func (d DemoController) Demo(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	config.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
+	global.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
 	code.JSON(ctx, result)
 	return
 }

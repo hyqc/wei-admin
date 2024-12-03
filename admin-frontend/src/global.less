@@ -15,13 +15,22 @@ body,
 
 .ant-layout {
   min-height: 100vh;
+  display: flex;
+  width: 100%;
 }
 .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
   left: unset;
 }
 
+
+
 canvas {
   display: block;
+}
+
+.ant-app {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 body {
@@ -33,6 +42,10 @@ body {
 ul,
 ol {
   list-style: none;
+}
+
+.ant-pro-page-container-children-container{
+  padding-inline: 1rem;
 }
 
 @media (max-width: 768px) {

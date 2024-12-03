@@ -1,4 +1,4 @@
-import { useIntl } from '@umijs/max';
+import { useIntl } from 'umi';
 import { Button, message, notification } from 'antd';
 import defaultSettings from '../config/defaultSettings';
 

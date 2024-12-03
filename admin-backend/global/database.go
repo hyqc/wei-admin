@@ -1,4 +1,4 @@
-package config
+package global
 
 import (
 	"admin/app/admin/gen/query"
