@@ -5,6 +5,7 @@ import (
 	"admin/app/admin/gen/model"
 	"admin/app/admin/gen/query"
 	"admin/app/common"
+	"admin/constant"
 	"admin/global"
 	"admin/proto/admin_proto"
 	"context"
@@ -233,6 +234,9 @@ func (a *AdminPermission) FindByIds(ctx *gin.Context, ids []int32) ([]*model.Adm
 }
 
 func (a *AdminPermission) IsAdminCanAccessPath(ctx context.Context, adminId int32, path string) (bool, error) {
+	if constant.IsAdministrator(adminId) {
+		return true, nil
+	}
 	user := query.AdminUser
 	userRole := query.AdminUserRole
 	role := query.AdminRole
@@ -251,6 +255,9 @@ func (a *AdminPermission) IsAdminCanAccessPath(ctx context.Context, adminId int3
 		Where(user.ID.Eq(adminId), user.IsEnabled.Is(true), api.Path.Eq(path)).First()
 	if err != nil {
 		return false, err
+	}
+	if data == nil {
+		return false, nil
 	}
 	if data.ID == adminId {
 		return true, nil

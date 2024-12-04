@@ -28,8 +28,11 @@ func auth() gin.HandlerFunc {
 			}
 
 			// 查询管理员的权限
-			dao.H.AdminPermission.FindAdminPermissions(ctx, cla.AdminID, 0)
-
+			pass, err := dao.H.AdminPermission.IsAdminCanAccessPath(ctx, cla.AdminID, ctx.Request.URL.Path)
+			if err != nil || !pass {
+				code.JSON(ctx, code.NewCodeError(code_proto.ErrorCode_AuthTokenForbidden, err))
+				return
+			}
 			ctx.Set(constant.ContextClaims, cla)
 		}
 

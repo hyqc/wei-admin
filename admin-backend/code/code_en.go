@@ -13,6 +13,7 @@ var enMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AuthTokenInvalid:        "token invalid",
 	code_proto.ErrorCode_AuthTokenInspectInvalid: "token inspect invalid",
 	code_proto.ErrorCode_AuthTokenInfoInvalid:    "token info invalid",
+	code_proto.ErrorCode_AuthTokenForbidden:      "request forbidden",
 
 	code_proto.ErrorCode_RequestBodyInvalid:   "request body invalid",
 	code_proto.ErrorCode_RequestQueryInvalid:  "request query invalid",
