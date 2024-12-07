@@ -1,5 +1,5 @@
 import { PermissionsType } from '@/services/apis/types';
-import { useModel } from 'umi';
+import { useModel } from '@umijs/max'
 
 export type AuthorizationType = {
   name?: string;

@@ -1,8 +1,8 @@
 import ForbiddenPage from '@/pages/403';
-import NoFoundPage from '@/pages/404';
-import { PageContainer } from '@ant-design/pro-layout';
+// import { PageContainer } from '@ant-design/pro-layout';
 import React from 'react';
-import { useModel } from 'umi';
+import { useModel } from '@umijs/max';
+import PageContainer from '../PageContainer';
 
 export type ContentType = {
   wrapperStyle?: React.CSSProperties;

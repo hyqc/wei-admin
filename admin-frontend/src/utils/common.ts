@@ -3,7 +3,7 @@ import { MenuDataItem } from '@umijs/route-utils';
 import { parse } from 'query-string';
 import { stringify } from 'querystring';
 import React from 'react';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 
 const iconMap: Map<string, any> = new Set(Object.entries(IconMap))
 /**
@@ -139,7 +139,7 @@ export const SetLoginToken = (token: string, expire: number, remember: boolean):
  * 退出
  */
 export const Logout = (): void => {
-  localStorage.removeItem(LocalStorageTokenKey);
+  localStorage.clear();
   const query = parse(history.location.search);
   const { search, pathname } = history.location;
   const { redirect } = query;

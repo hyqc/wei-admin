@@ -1,18 +1,18 @@
 import { AdminUserFormRules } from '@/pages/Admin/User/common';
 import {
   currentAdminEdit,
-  RequestCurrentAdminEditParamsType,
   upload,
 } from '@/services/apis/admin/account';
 import { APICommon } from '@/services/apis/admin/api';
 import { GetLoginToken } from '@/utils/common';
 import { CloudUploadOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message, msg, Upload, UploadFile } from 'antd';
+import { App, Button, Form, Input, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useModel } from '@umijs/max'
 
 const CurrentAccountInfo: React.FC = () => {
+  const {message} = App.useApp()
   const [form] = Form.useForm();
   const { initialState } = useModel('@@initialState');
   const detailData = { ...initialState?.currentUser };
@@ -34,8 +34,7 @@ const CurrentAccountInfo: React.FC = () => {
     form
       .validateFields()
       .then((values) => {
-        let data: RequestCurrentAdminEditParamsType;
-        data = {
+        let data = {
           nickname: values.nickname,
           email: values.email,
           avatar,
