@@ -26,8 +26,8 @@ type ReqLogin struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"` // 用户名
-	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"` // 密码
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty" label:"用户名"` // 用户名 // @gotags:  label:"用户名"
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty" label:"密码"` // 密码  // @gotags:  label:"密码"
 }
 
 func (x *ReqLogin) Reset() {
@@ -216,9 +216,9 @@ type ReqAccountEdit struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Nickname string `protobuf:"bytes,1,opt,name=nickname,proto3" json:"nickname,omitempty"` //名称
-	Avatar   string `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty"`     //头像
-	Email    string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`       //邮箱
+	Nickname string `protobuf:"bytes,1,opt,name=nickname,proto3" json:"nickname,omitempty" label:"用户名"` //名称 // @gotags:  label:"用户名"
+	Avatar   string `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty" label:"头像地址"`     //头像 // @gotags:  label:"头像地址"
+	Email    string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty" label:"邮箱"`       //邮箱 // @gotags:  label:"邮箱"
 }
 
 func (x *ReqAccountEdit) Reset() {
@@ -314,9 +314,9 @@ type ReqAccountPasswordEdit struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	OldPassword     string `protobuf:"bytes,1,opt,name=oldPassword,proto3" json:"oldPassword,omitempty"`         //旧密码
-	Password        string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`               //新密码
-	ConfirmPassword string `protobuf:"bytes,3,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty"` //确认密码
+	OldPassword     string `protobuf:"bytes,1,opt,name=oldPassword,proto3" json:"oldPassword,omitempty" label:"旧密码"`         //旧密码 // @gotags:  label:"旧密码"
+	Password        string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty" label:"新密码"`               //新密码 // @gotags:  label:"新密码"
+	ConfirmPassword string `protobuf:"bytes,3,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty" label:"确认密码"` //确认密码 // // @gotags:  label:"确认密码"
 }
 
 func (x *ReqAccountPasswordEdit) Reset() {
@@ -412,7 +412,7 @@ type ReqAccountPermission struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"` //菜单ID
+	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID"` //菜单ID // @gotags:  label:"菜单ID"
 }
 
 func (x *ReqAccountPermission) Reset() {

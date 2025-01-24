@@ -15,6 +15,7 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AuthTokenInvalid:        "登录令牌无效",
 	code_proto.ErrorCode_AuthTokenInspectInvalid: "登录令牌检查失败",
 	code_proto.ErrorCode_AuthTokenInfoInvalid:    "登录令牌信息无效",
+	code_proto.ErrorCode_AuthTokenForbidden:      "没有访问权限",
 
 	code_proto.ErrorCode_RequestBodyInvalid:   "请求体参数无效",
 	code_proto.ErrorCode_RequestQueryInvalid:  "查询参数无效",

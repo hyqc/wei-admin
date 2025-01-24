@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"admin/app/admin/dao"
 	"admin/code"
 	"admin/constant"
 	"admin/global"
@@ -23,6 +24,13 @@ func auth() gin.HandlerFunc {
 			cla, err := core.JWTCheck(token, global.AppConfig.Server.JWT.Secret)
 			if err != nil {
 				code.JSON(ctx, code.NewCodeError(code_proto.ErrorCode_AuthTokenInspectInvalid, err))
+				return
+			}
+
+			// 查询管理员的权限
+			pass, err := dao.H.AdminPermission.IsAdminCanAccessPath(ctx, cla.AdminID, ctx.Request.URL.Path)
+			if err != nil || !pass {
+				code.JSON(ctx, code.NewCodeError(code_proto.ErrorCode_AuthTokenForbidden, err))
 				return
 			}
 			ctx.Set(constant.ContextClaims, cla)

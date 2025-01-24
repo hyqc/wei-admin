@@ -157,14 +157,14 @@ type ReqAdminPermissionAdd struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`            //权限ID
-	MenuId   int32  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty"`    //权限对应的菜单ID
-	Key      string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`           //权限唯一标识符
-	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`         //权限名称
-	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty"` //权限描述
-	Type     string `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`         //权限类型
-	Redirect string `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty"` //重定向地址
-	Enabled  bool   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty"`  //是否启用
+	Id       int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID"`            // @gotags:  label:"权限ID"
+	MenuId   int32  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty" label:"权限对应的菜单ID"`    // @gotags:  label:"权限对应的菜单ID"
+	Key      string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty" label:"权限唯一标识符"`           // @gotags:  label:"权限唯一标识符"
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"权限名称"`         // @gotags:  label:"权限名称"
+	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"权限描述"` // @gotags:  label:"权限描述"
+	Type     string `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty" label:"权限类型"`         // @gotags:  label:"权限类型"
+	Redirect string `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向地址"` // @gotags:  label:"重定向地址"
+	Enabled  bool   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty" label:"是否启用"`  // @gotags:  label:"是否启用"
 }
 
 func (x *ReqAdminPermissionAdd) Reset() {
@@ -295,7 +295,7 @@ type ReqAdminPermissionInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //权限ID
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID"` // @gotags:  label:"权限ID"
 }
 
 func (x *ReqAdminPermissionInfo) Reset() {
@@ -386,14 +386,14 @@ type ReqAdminPermissionEdit struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`            //权限ID
-	MenuId   int32  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty"`    //权限对应的菜单ID
-	Key      string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`           //权限唯一标识符
-	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`         //权限名称
-	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty"` //权限描述
-	Type     string `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`         //权限类型
-	Redirect string `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty"` //重定向地址
-	Enabled  bool   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty"`  //是否启用
+	Id       int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID"`            // @gotags:  label:"权限ID"
+	MenuId   int32  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty" label:"权限对应的菜单ID"`    // @gotags:  label:"权限对应的菜单ID"
+	Key      string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty" label:"权限唯一标识符"`           // @gotags:  label:"权限唯一标识符"
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"权限名称"`         // @gotags:  label:"权限名称"
+	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"权限描述"` // @gotags:  label:"权限描述"
+	Type     string `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty" label:"权限类型"`         // @gotags:  label:"权限类型"
+	Redirect string `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向地址"` // @gotags:  label:"重定向地址"
+	Enabled  bool   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"`  // @gotags:  label:"启用状态"
 }
 
 func (x *ReqAdminPermissionEdit) Reset() {
@@ -524,8 +524,8 @@ type ReqAdminPermissionEnable struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //权限ID
-	IsEnabled bool  `protobuf:"varint,2,opt,name=isEnabled,proto3" json:"isEnabled,omitempty"`
+	Id        int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID"`               // @gotags:  label:"权限ID"
+	IsEnabled bool  `protobuf:"varint,2,opt,name=isEnabled,proto3" json:"isEnabled,omitempty" label:"启用状态"` // @gotags:  label:"启用状态"
 }
 
 func (x *ReqAdminPermissionEnable) Reset() {
@@ -614,7 +614,7 @@ type ReqAdminPermissionDelete struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //权限ID
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID"` // @gotags:  label:"权限ID"
 }
 
 func (x *ReqAdminPermissionDelete) Reset() {
@@ -696,8 +696,8 @@ type ReqAdminPermissionBindApis struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PermissionId int32   `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty"` // 权限ID
-	ApiIds       []int32 `protobuf:"varint,2,rep,packed,name=apiIds,proto3" json:"apiIds,omitempty"`      // 接口ID列表
+	PermissionId int32   `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty" label:"权限ID"` // @gotags:  label:"权限ID"
+	ApiIds       []int32 `protobuf:"varint,2,rep,packed,name=apiIds,proto3" json:"apiIds,omitempty" label:"接口ID列表"`      // @gotags:  label:"接口ID列表"
 }
 
 func (x *ReqAdminPermissionBindApis) Reset() {
@@ -786,8 +786,8 @@ type ReqAdminPermissionUnBindApi struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PermissionId int32 `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty"` // 权限ID
-	ApiId        int32 `protobuf:"varint,2,opt,name=apiId,proto3" json:"apiId,omitempty"`               //接口ID
+	PermissionId int32 `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty" label:"权限ID"` // @gotags:  label:"权限ID"
+	ApiId        int32 `protobuf:"varint,2,opt,name=apiId,proto3" json:"apiId,omitempty" label:"接口ID"`               // @gotags:  label:"接口ID"
 }
 
 func (x *ReqAdminPermissionUnBindApi) Reset() {
@@ -876,8 +876,8 @@ type ReqAdminPermissionBindMenu struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MenuId      int32                    `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"`          // 菜单ID
-	Permissions []*ReqAdminPermissionAdd `protobuf:"bytes,2,rep,name=permissions,proto3" json:"permissions,omitempty"` // 菜单对应的权限ID列表
+	MenuId      int32                    `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID"`          // @gotags:  label:"菜单ID"
+	Permissions []*ReqAdminPermissionAdd `protobuf:"bytes,2,rep,name=permissions,proto3" json:"permissions,omitempty" label:"权限ID列表"` // @gotags:  label:"权限ID列表"
 }
 
 func (x *ReqAdminPermissionBindMenu) Reset() {

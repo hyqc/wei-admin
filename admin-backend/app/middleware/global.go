@@ -106,13 +106,13 @@ func recovery() gin.HandlerFunc {
 						zap.String("path", ctx.Request.URL.Path),
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
-						zap.String("stack", errInfo),
+						zap.Any("stack", errInfo),
 					)
 				} else {
 					logger.Error("[Recovery from panic]",
 						zap.String("path", ctx.Request.URL.Path),
 						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
+						zap.Any("request", string(httpRequest)),
 					)
 				}
 

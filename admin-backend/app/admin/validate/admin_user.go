@@ -1,11 +1,8 @@
 package validate
 
 import (
-	"admin/pkg/validator"
+	"admin/pkg/govalidate"
 	"admin/proto/admin_proto"
-	"fmt"
-	"github.com/thedevsaddam/govalidator"
-	"net/url"
 )
 
 var AdminUserReq = &AdminUserReqValidator{}
@@ -14,160 +11,102 @@ type AdminUserReqValidator struct {
 }
 
 // ListReq 接口列表参数验证
-func (a *AdminUserReqValidator) ListReq(data interface{}) url.Values {
-	return url.Values{}
+func (a *AdminUserReqValidator) ListReq(data interface{}) error {
+	return nil
 }
 
-func (a *AdminUserReqValidator) AddReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("username"):        []string{"required", fmt.Sprintf("regex:%s", PatternAdminUsernameRule)},
-		validator.GetValidateJsonOmitemptyTag("nickname"):        []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
-		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
-		validator.GetValidateJsonOmitemptyTag("email"):           []string{"email"},
-		validator.GetValidateJsonOmitemptyTag("avatar"):          []string{"url"},
+func (a *AdminUserReqValidator) AddReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminUserAdd{},
+			Rules: map[string]string{
+				"Username":        "required,adminname",
+				"Nickname":        "required,trimBlank",
+				"Password":        "required,adminpwd",
+				"ConfirmPassword": "required,eqfield=Password,adminpwd",
+				"Email":           "omitempty,email",
+				"Avatar":          "omitempty,url",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("username"):        []string{"required:账号不能为空", fmt.Sprintf("regex:%s", PatternAdminUsernameMsg)},
-		validator.GetValidateJsonOmitemptyTag("nickname"):        []string{"required:昵称不能为空", fmt.Sprintf("regex:%s", PatternTrimBlankStringMsg)},
-		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required:密码不能为空", PatternAdminPasswordMsg},
-		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required:密码不能为空", PatternAdminPasswordMsg},
-		validator.GetValidateJsonOmitemptyTag("email"):           []string{"email:邮箱格式错误"},
-		validator.GetValidateJsonOmitemptyTag("avatar"):          []string{"url:无效链接地址"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	res := govalidator.New(opts).ValidateStruct()
-	errs := map[string][]string(res)
-	if len(errs) > 0 {
-		return res
-	}
-	tmp := data.(*admin_proto.ReqAdminUserAdd)
-	if tmp.Password != tmp.ConfirmPassword {
-		res["confirmPassword"] = []string{"两次输入的密码不一致"}
-	}
-	return res
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) InfoReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required", "min:1"},
+func (a *AdminUserReqValidator) InfoReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminUserInfo{},
+			Rules: map[string]string{
+				"AdminId": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required:ID不能为空", "min:ID无效"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) EditReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"):  []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("username"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminUsernameRule)},
-		validator.GetValidateJsonOmitemptyTag("nickname"): []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("email"):    []string{"email"},
-		validator.GetValidateJsonOmitemptyTag("avatar"):   []string{"url"},
+func (a *AdminUserReqValidator) EditReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminUserEdit{},
+			Rules: map[string]string{
+				"AdminId":  "required",
+				"Username": "required,adminname",
+				"Nickname": "required,trimBlank",
+				"Email":    "omitempty,email",
+				"Avatar":   "omitempty,url",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"):  []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("username"): []string{"required:账号不能为空", fmt.Sprintf("regex:%s", PatternAdminUsernameMsg)},
-		validator.GetValidateJsonOmitemptyTag("nickname"): []string{"required:昵称不能为空", fmt.Sprintf("regex:%s", PatternTrimBlankStringMsg)},
-		validator.GetValidateJsonOmitemptyTag("email"):    []string{"email:邮箱格式错误"},
-		validator.GetValidateJsonOmitemptyTag("avatar"):   []string{"url:无效链接地址"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	res := govalidator.New(opts).ValidateStruct()
-	return res
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) EditPasswordReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"):         []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
-		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required", fmt.Sprintf("regex:%s", PatternAdminPasswordRule)},
+func (a *AdminUserReqValidator) EditPasswordReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminUserEditPassword{},
+			Rules: map[string]string{
+				"AdminId":         "required",
+				"Password":        "required,adminpwd",
+				"ConfirmPassword": "required,eqfield=Password,adminpwd",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"):         []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("password"):        []string{"required:密码不能为空", PatternAdminPasswordMsg},
-		validator.GetValidateJsonOmitemptyTag("confirmPassword"): []string{"required:密码不能为空", PatternAdminPasswordMsg},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	res := govalidator.New(opts).ValidateStruct()
-	errs := map[string][]string(res)
-	if len(errs) > 0 {
-		return res
-	}
-	tmp, ok := data.(*admin_proto.ReqAdminUserEditPassword)
-	if !ok {
-		res["adminId"] = []string{"请求参数格式错误"}
-		return res
-	}
-	if tmp.Password != "" && tmp.Password != tmp.ConfirmPassword {
-		res["confirmPassword"] = []string{"两次输入的密码不一致"}
-	}
-	return res
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) EnableReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool"},
+func (a *AdminUserReqValidator) EnableReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminUserEnabled{},
+			Rules: map[string]string{
+				"AdminId": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool:类型错误"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) DeleteReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required", "min:1"},
+func (a *AdminUserReqValidator) DeleteReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminUserDelete{},
+			Rules: map[string]string{
+				"AdminId": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required:ID不能为空", "min:ID无效"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) BindRolesReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("roleIds"): []string{"required", "min:1"},
+func (a *AdminUserReqValidator) BindRolesReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminUserBindRoles{},
+			Rules: map[string]string{
+				"AdminId": "required",
+				"RoleIds": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("adminId"): []string{"required:账号ID不能为空", "min:账号ID无效"},
-		validator.GetValidateJsonOmitemptyTag("roleIds"): []string{"required:角色配置不能为空", "min:角色配置不能为空"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }

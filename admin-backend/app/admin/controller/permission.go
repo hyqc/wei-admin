@@ -8,7 +8,7 @@ import (
 	"admin/constant"
 	"admin/global"
 	"admin/pkg/core"
-	"admin/pkg/validator"
+	"admin/pkg/govalidate"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
@@ -24,8 +24,8 @@ func (PermissionController) List(ctx *gin.Context) {
 	msg := "PermissionController.List"
 	params := &admin_proto.ReqAdminPermissionList{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.ListReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.ListReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -46,8 +46,8 @@ func (PermissionController) Add(ctx *gin.Context) {
 	msg := "PermissionController.Add"
 	params := &admin_proto.ReqAdminPermissionAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.AddReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.AddReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -65,8 +65,8 @@ func (PermissionController) Info(ctx *gin.Context) {
 	msg := "PermissionController.Info"
 	params := &admin_proto.ReqAdminPermissionInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.InfoReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.InfoReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -87,8 +87,8 @@ func (PermissionController) Edit(ctx *gin.Context) {
 	msg := "PermissionController.Edit"
 	params := &admin_proto.ReqAdminPermissionEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.EditReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.EditReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -107,8 +107,8 @@ func (PermissionController) Enable(ctx *gin.Context) {
 	msg := "PermissionController.Enable"
 	params := &admin_proto.ReqAdminPermissionEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.EnableReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.EnableReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -127,8 +127,8 @@ func (PermissionController) Delete(ctx *gin.Context) {
 	msg := "PermissionController.Delete"
 	params := &admin_proto.ReqAdminPermissionDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.DeleteReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.DeleteReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -147,8 +147,8 @@ func (PermissionController) BindAPI(ctx *gin.Context) {
 	msg := "PermissionController.BindAPI"
 	params := &admin_proto.ReqAdminPermissionBindApis{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.BindAPIReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.BindAPIReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -167,8 +167,8 @@ func (PermissionController) UnBindAPI(ctx *gin.Context) {
 	msg := "PermissionController.UnBindAPI"
 	params := &admin_proto.ReqAdminPermissionUnBindApi{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.UnBindAPIReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.UnBindAPIReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -187,8 +187,8 @@ func (PermissionController) AddMenuPermissions(ctx *gin.Context) {
 	msg := "PermissionController.AddMenuPermissions"
 	params := &admin_proto.ReqAdminPermissionBindMenu{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminPermissionReq.PermissionBindMenuReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminPermissionReq.PermissionBindMenuReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return

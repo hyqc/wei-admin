@@ -6,10 +6,10 @@ import "common.proto";
 // 权限列表
 message ReqAdminPermissionList{
   ReqListBase base = 1;
-  int32 menuId=2;//菜单ID
-  string key=3;//权限唯一标识符
-  string name=4;//权限名称
-  string type=5;//权限类型
+  int32 menuId = 2;//菜单ID
+  string key = 3;//权限唯一标识符
+  string name = 4;//权限名称
+  string type = 5;//权限类型
 }
 message RespAdminPermissionListData{
   int64 total = 1;
@@ -18,14 +18,14 @@ message RespAdminPermissionListData{
 
 // 创建权限
 message ReqAdminPermissionAdd{
-  int32 id = 1; //权限ID
-  int32 menuId = 2;//权限对应的菜单ID
-  string key = 3;//权限唯一标识符
-  string name = 4;//权限名称
-  string describe = 5;//权限描述
-  string type = 6;//权限类型
-  string redirect = 7;//重定向地址
-  bool enabled = 8;//是否启用
+  int32 id = 1;   // @gotags:  label:"权限ID"
+  int32 menuId = 2;  // @gotags:  label:"权限对应的菜单ID"
+  string key = 3;  // @gotags:  label:"权限唯一标识符"
+  string name = 4;  // @gotags:  label:"权限名称"
+  string describe = 5;  // @gotags:  label:"权限描述"
+  string type = 6;  // @gotags:  label:"权限类型"
+  string redirect = 7; // @gotags:  label:"重定向地址"
+  bool enabled = 8;  // @gotags:  label:"是否启用"
 }
 message RespAdminPermissionAddData{
 }
@@ -33,7 +33,7 @@ message RespAdminPermissionAddData{
 
 //权限详情
 message ReqAdminPermissionInfo{
-  int32 id = 1 ;  //权限ID
+  int32 id = 1 ;  // @gotags:  label:"权限ID"
 }
 message RespAdminPermissionInfoData{
   AdminPermissionInfo data = 1;
@@ -42,14 +42,14 @@ message RespAdminPermissionInfoData{
 
 // 编辑权限
 message ReqAdminPermissionEdit{
-  int32 id = 1;//权限ID
-  int32 menuId = 2;//权限对应的菜单ID
-  string key = 3;//权限唯一标识符
-  string name = 4;//权限名称
-  string describe = 5;//权限描述
-  string type = 6;//权限类型
-  string redirect = 7;//重定向地址
-  bool enabled = 8;//是否启用
+  int32 id = 1;  // @gotags:  label:"权限ID"
+  int32 menuId = 2;  // @gotags:  label:"权限对应的菜单ID"
+  string key = 3;  // @gotags:  label:"权限唯一标识符"
+  string name = 4;  // @gotags:  label:"权限名称"
+  string describe = 5;  // @gotags:  label:"权限描述"
+  string type = 6;  // @gotags:  label:"权限类型"
+  string redirect = 7;  // @gotags:  label:"重定向地址"
+  bool enabled = 8; // @gotags:  label:"启用状态"
 }
 message RespAdminPermissionEditData{
 }
@@ -57,8 +57,8 @@ message RespAdminPermissionEditData{
 
 // 启用禁用权限
 message ReqAdminPermissionEnable{
-  int32 id = 1;//权限ID
-  bool isEnabled=2;
+  int32 id = 1; // @gotags:  label:"权限ID"
+  bool isEnabled = 2; // @gotags:  label:"启用状态"
 }
 message RespAdminPermissionEnableData{
 }
@@ -66,31 +66,31 @@ message RespAdminPermissionEnableData{
 
 // 删除权限
 message ReqAdminPermissionDelete{
-  int32 id = 1;//权限ID
+  int32 id = 1; // @gotags:  label:"权限ID"
 }
 message RespAdminPermissionDeleteData{
 }
 
 // 权限绑定接口
 message ReqAdminPermissionBindApis{
-  int32 permissionId =1; // 权限ID
-  repeated int32 apiIds = 2; // 接口ID列表
+  int32 permissionId = 1; // @gotags:  label:"权限ID"
+  repeated int32 apiIds = 2; // @gotags:  label:"接口ID列表"
 }
 message RespAdminPermissionBindApisData{
 }
 
 // 权限绑定接口
 message ReqAdminPermissionUnBindApi{
-  int32 permissionId =1; // 权限ID
-  int32 apiId=2;//接口ID
+  int32 permissionId = 1; // @gotags:  label:"权限ID"
+  int32 apiId = 2; // @gotags:  label:"接口ID"
 }
 message RespAdminPermissionUnBindApi{
 }
 
 //绑定权限菜单
 message ReqAdminPermissionBindMenu{
-  int32 menuId = 1; // 菜单ID
-  repeated ReqAdminPermissionAdd permissions = 2; // 菜单对应的权限ID列表
+  int32 menuId = 1; // @gotags:  label:"菜单ID"
+  repeated ReqAdminPermissionAdd permissions = 2; // @gotags:  label:"权限ID列表"
 }
 message RespAdminPermissionBindMenuData{
 }

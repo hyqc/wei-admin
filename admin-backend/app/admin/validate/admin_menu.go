@@ -1,10 +1,8 @@
 package validate
 
 import (
-	"admin/pkg/validator"
-	"fmt"
-	"github.com/thedevsaddam/govalidator"
-	"net/url"
+	"admin/pkg/govalidate"
+	"admin/proto/admin_proto"
 )
 
 var AdminMenuReq = &AdminMenuReqValidator{}
@@ -12,140 +10,100 @@ var AdminMenuReq = &AdminMenuReqValidator{}
 type AdminMenuReqValidator struct {
 }
 
-// ListReq 接口列表参数验证
-func (a *AdminMenuReqValidator) ListReq(data interface{}) url.Values {
-	return url.Values{}
+func (a *AdminMenuReqValidator) AddReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminMenuAdd{},
+			Rules: map[string]string{
+				"ParentId": "min=0",
+				"Path":     "required,adminApiPath",
+				"Key":      "required,adminApiKey",
+				"Name":     "required,trimBlank",
+				"Describe": "required,trimBlank",
+			},
+		},
+	}
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) AddReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"min:0"},
-		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiPathRule)},
-		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiKeyRule)},
-		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("describe"): []string{fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
+func (a *AdminMenuReqValidator) InfoReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminMenuInfo{},
+			Rules: map[string]string{
+				"MenuId": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"min:父菜单ID无效"},
-		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required:接口路由不能为空", PatternAdminApiPathMsg},
-		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required:接口路由键名不能为空", PatternAdminApiKeyMsg},
-		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required:接口名称不能为空", PatternTrimBlankStringMsg},
-		validator.GetValidateJsonOmitemptyTag("describe"): []string{PatternTrimBlankStringMsg},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) InfoReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required", "min:1"},
+func (a *AdminMenuReqValidator) EditReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminMenuEdit{},
+			Rules: map[string]string{
+				"Id":       "required",
+				"ParentId": "min=0",
+				"Path":     "required,adminApiPath",
+				"Key":      "required,adminApiKey",
+				"Name":     "required,trimBlank",
+				"Describe": "required,trimBlank",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required:ID不能为空", "min:ID无效"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) EditReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"min:0"},
-		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiPathRule)},
-		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required", fmt.Sprintf("regex:%s", PatternAdminApiKeyRule)},
-		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
-		validator.GetValidateJsonOmitemptyTag("describe"): []string{"required", fmt.Sprintf("regex:%s", PatternTrimBlankStringRule)},
+func (a *AdminMenuReqValidator) EnableReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminMenuEnable{},
+			Rules: map[string]string{
+				"MenuId": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("id"):       []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("parentId"): []string{"min:父菜单ID无效"},
-		validator.GetValidateJsonOmitemptyTag("path"):     []string{"required:接口路由不能为空", fmt.Sprintf("regex:%s", PatternAdminApiPathMsg)},
-		validator.GetValidateJsonOmitemptyTag("key"):      []string{"required:接口路由键名不能为空", fmt.Sprintf("regex:%s", PatternAdminApiKeyMsg)},
-		validator.GetValidateJsonOmitemptyTag("name"):     []string{"required:接口名称不能为空", fmt.Sprintf("regex:%s", PatternTrimBlankStringMsg)},
-		validator.GetValidateJsonOmitemptyTag("describe"): []string{fmt.Sprintf("regex:%s", PatternTrimBlankStringMsg)},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) EnableReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"):  []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool"},
+func (a *AdminMenuReqValidator) ShowReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminMenuShow{},
+			Rules: map[string]string{
+				"MenuId": "required",
+				"Field":  "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"):  []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("enabled"): []string{"bool:类型错误"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) ShowReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required", "min:1"},
-		validator.GetValidateJsonOmitemptyTag("field"):  []string{"required"},
-		validator.GetValidateJsonOmitemptyTag("show"):   []string{"bool"},
+func (a *AdminMenuReqValidator) DeleteReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminMenuDelete{},
+			Rules: map[string]string{
+				"MenuId": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required:ID不能为空", "min:ID无效"},
-		validator.GetValidateJsonOmitemptyTag("field"):  []string{"参数错误"},
-		validator.GetValidateJsonOmitemptyTag("show"):   []string{"bool:类型错误"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) DeleteReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required", "min:1"},
+func (a *AdminMenuReqValidator) PermissionsReq(data interface{}) error {
+	rules := govalidate.Rules{
+		{
+			Type: admin_proto.ReqAdminMenuPermissions{},
+			Rules: map[string]string{
+				"MenuId": "required",
+			},
+		},
 	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required:菜单ID不能为空", "min:菜单ID不能小于1"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
+	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) PermissionsReq(data interface{}) url.Values {
-	rules := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required", "min:1"},
-	}
-	messages := govalidator.MapData{
-		validator.GetValidateJsonOmitemptyTag("menuId"): []string{"required:菜单ID不能为空", "min:菜单ID不能小于1"},
-	}
-	opts := govalidator.Options{
-		Data:     data,
-		Rules:    rules,
-		Messages: messages,
-	}
-	return govalidator.New(opts).ValidateStruct()
-}
-
-func (a *AdminMenuReqValidator) PagesReq(data interface{}) url.Values {
-	return url.Values{}
+func (a *AdminMenuReqValidator) PagesReq(data interface{}) error {
+	return nil
 }

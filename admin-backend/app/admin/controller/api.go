@@ -8,7 +8,7 @@ import (
 	"admin/constant"
 	"admin/global"
 	"admin/pkg/core"
-	"admin/pkg/validator"
+	"admin/pkg/govalidate"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
@@ -23,8 +23,8 @@ func (APIController) List(ctx *gin.Context) {
 	msg := "APIController.List"
 	params := &admin_proto.ReqAdminApiList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -58,8 +58,8 @@ func (APIController) Add(ctx *gin.Context) {
 	msg := "APIController.Add"
 	params := &admin_proto.ReqAdminApiAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminApiReq.AddReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminApiReq.AddReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -77,8 +77,8 @@ func (APIController) Info(ctx *gin.Context) {
 	msg := "APIController.Info"
 	params := &admin_proto.ReqAdminApiInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminApiReq.InfoReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminApiReq.InfoReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -98,8 +98,8 @@ func (APIController) Edit(ctx *gin.Context) {
 	msg := "APIController.Edit"
 	params := &admin_proto.ReqAdminApiEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminApiReq.EditReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminApiReq.EditReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -117,8 +117,8 @@ func (APIController) Enable(ctx *gin.Context) {
 	msg := "APIController.Enable"
 	params := &admin_proto.ReqAdminApiEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminApiReq.EnableReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminApiReq.EnableReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -136,8 +136,8 @@ func (APIController) Delete(ctx *gin.Context) {
 	msg := "APIController.Delete"
 	params := &admin_proto.ReqAdminApiDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminApiReq.DeleteReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminApiReq.DeleteReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return

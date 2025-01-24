@@ -181,7 +181,7 @@ type ReqAdminUserInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AdminId int32 `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty"` //管理员ID
+	AdminId int32 `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty" label:"管理员ID"` // @gotags: label:"管理员ID"
 }
 
 func (x *ReqAdminUserInfo) Reset() {
@@ -272,13 +272,13 @@ type ReqAdminUserAdd struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Username        string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`               //账号
-	Nickname        string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`               //昵称
-	Password        string `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`               //密码
-	ConfirmPassword string `protobuf:"bytes,4,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty"` //确认密码
-	Enabled         bool   `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty"`                //账号启用状态
-	Email           string `protobuf:"bytes,6,opt,name=email,proto3" json:"email,omitempty"`                     //邮箱
-	Avatar          string `protobuf:"bytes,7,opt,name=avatar,proto3" json:"avatar,omitempty"`                   //头像地址
+	Username        string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty" label:"账号"`               // @gotags: label:"账号"
+	Nickname        string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty" label:"昵称"`               // @gotags: label:"昵称"
+	Password        string `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty" label:"密码"`               // @gotags: label:"密码"
+	ConfirmPassword string `protobuf:"bytes,4,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty" label:"确认密码"` // @gotags: label:"确认密码"
+	Enabled         bool   `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty" label:"账号启用状态"`                // @gotags: label:"账号启用状态"
+	Email           string `protobuf:"bytes,6,opt,name=email,proto3" json:"email,omitempty" label:"邮箱"`                     // @gotags: label:"邮箱"
+	Avatar          string `protobuf:"bytes,7,opt,name=avatar,proto3" json:"avatar,omitempty" label:"头像地址"`                   // @gotags: label:"头像地址"
 }
 
 func (x *ReqAdminUserAdd) Reset() {
@@ -402,12 +402,12 @@ type ReqAdminUserEdit struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AdminId  int32  `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty"`  //管理员ID
-	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"` //账号
-	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"` //昵称
-	Enabled  bool   `protobuf:"varint,4,opt,name=enabled,proto3" json:"enabled,omitempty"`  //账号启用状态
-	Email    string `protobuf:"bytes,5,opt,name=email,proto3" json:"email,omitempty"`       //邮箱
-	Avatar   string `protobuf:"bytes,6,opt,name=avatar,proto3" json:"avatar,omitempty"`     //头像地址
+	AdminId  int32  `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty" label:"管理员ID"`  //管理员ID @gotags: label:"管理员ID"
+	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty" label:"账号"` //账号 @gotags: label:"账号"
+	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty" label:"昵称"` //昵称 @gotags: label:"昵称"
+	Enabled  bool   `protobuf:"varint,4,opt,name=enabled,proto3" json:"enabled,omitempty" label:"账号启用状态"`  //账号启用状态 @gotags: label:"账号启用状态"
+	Email    string `protobuf:"bytes,5,opt,name=email,proto3" json:"email,omitempty" label:"邮箱"`       //邮箱 @gotags: label:"邮箱"
+	Avatar   string `protobuf:"bytes,6,opt,name=avatar,proto3" json:"avatar,omitempty" label:"头像地址"`     //头像地址 @gotags: label:"头像地址"
 }
 
 func (x *ReqAdminUserEdit) Reset() {
@@ -524,9 +524,9 @@ type ReqAdminUserEditPassword struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AdminId         int32  `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty"`                //管理员ID
-	Password        string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`               //密码
-	ConfirmPassword string `protobuf:"bytes,3,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty"` //确认密码
+	AdminId         int32  `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty" label:"管理员ID"`                //管理员ID @gotags: label:"管理员ID"
+	Password        string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty" label:"密码"`               //密码 @gotags: label:"密码"
+	ConfirmPassword string `protobuf:"bytes,3,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty" label:"确认密码"` //确认密码 @gotags: label:"确认密码"
 }
 
 func (x *ReqAdminUserEditPassword) Reset() {
@@ -622,8 +622,8 @@ type ReqAdminUserEnabled struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AdminId int32 `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty"` //管理员ID
-	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"` //账号启用状态
+	AdminId int32 `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty" label:"管理员ID"` //管理员ID @gotags: label:"管理员ID"
+	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty" label:"账号启用状态"` //账号启用状态 @gotags: label:"账号启用状态"
 }
 
 func (x *ReqAdminUserEnabled) Reset() {
@@ -712,7 +712,7 @@ type ReqAdminUserDelete struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AdminId int32 `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty"` //管理员ID
+	AdminId int32 `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty" label:"管理员ID"` //管理员ID @gotags: label:"管理员ID"
 }
 
 func (x *ReqAdminUserDelete) Reset() {
@@ -794,8 +794,8 @@ type ReqAdminUserBindRoles struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AdminId int32   `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty"`        //管理员ID
-	RoleIds []int32 `protobuf:"varint,2,rep,packed,name=roleIds,proto3" json:"roleIds,omitempty"` //角色ID列表
+	AdminId int32   `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty" label:"管理员ID"`        //管理员ID @gotags: label:"管理员ID"
+	RoleIds []int32 `protobuf:"varint,2,rep,packed,name=roleIds,proto3" json:"roleIds,omitempty" label:"角色ID列表"` //角色ID列表 @gotags: label:"角色ID列表"
 }
 
 func (x *ReqAdminUserBindRoles) Reset() {

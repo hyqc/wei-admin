@@ -14,6 +14,7 @@ init:
 	go install github.com/mwitkow/go-proto-validators/protoc-gen-govalidators@latest
 	go install github.com/go-micro/generator/cmd/protoc-gen-micro@latest
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	go install github.com/favadi/protoc-go-inject-tag@latest
 	go mod tidy
 
 .PHONY: proto
@@ -22,7 +23,7 @@ proto:
     			   --proto_path=. \
     			   --proto_path=../../third_party  \
     			   --go_out=paths=source_relative:. \
-    			   *.proto
+    			   *.proto && protoc-go-inject-tag -input="*.pb.go"
 
 .PHONY: proto_all
 proto_all:

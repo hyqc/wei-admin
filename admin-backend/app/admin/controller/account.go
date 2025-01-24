@@ -8,7 +8,7 @@ import (
 	"admin/constant"
 	"admin/global"
 	"admin/pkg/core"
-	"admin/pkg/validator"
+	"admin/pkg/govalidate"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
@@ -40,8 +40,8 @@ func (AccountController) Login(ctx *gin.Context) {
 	msg := "AccountController.Login"
 	params := &admin_proto.ReqLogin{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminAccountReq.LoginReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminAccountReq.LoginReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -80,8 +80,8 @@ func (AccountController) Edit(ctx *gin.Context) {
 	msg := "AccountController.Edit"
 	params := &admin_proto.ReqAccountEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminAccountReq.AccountEditReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
@@ -101,8 +101,8 @@ func (AccountController) Password(ctx *gin.Context) {
 	msg := "AccountController.Password"
 	params := &admin_proto.ReqAccountPasswordEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validator.Validate(ctx, params, validate.AdminAccountReq.AccountEditPasswordReq); err != nil {
-		result.SetCodeError(code_proto.ErrorCode_RequestParamsInvalid, err)
+	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminAccountReq.AccountEditPasswordReq); err != nil {
+		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return

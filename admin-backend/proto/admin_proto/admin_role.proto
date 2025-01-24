@@ -26,15 +26,15 @@ message RespAdminRoleAll{}
 
 //创建角色
 message ReqAdminRoleAdd{
-  string name=1;//角色名称
-  string describe=2;//角色描述
-  bool enabled=3;//启用状态
+  string name=1; // @gotags: label:"角色名称"
+  string describe=2; // @gotags: label:"角色描述"
+  bool enabled=3; // @gotags: label:"启用状态"
 }
 message RoleAddResp{}
 
 //角色详情
 message ReqAdminRoleInfo{
-  int32 id=1;//角色ID
+  int32 id=1; // @gotags: label:"角色ID"
 }
 message RespAdminRoleInfoData{
   int32 id=1;//角色ID
@@ -53,38 +53,38 @@ message RespAdminRoleInfoData{
 
 //编辑角色
 message ReqAdminRoleEdit{
-  int32 id=1;//角色ID
-  string name=2;//角色名称
-  string describe=3;//角色描述
-  bool isEnabled=4;//启用状态
+  int32 id=1; // @gotags: label:"角色ID"
+  string name=2; // @gotags: label:"角色名称"
+  string describe=3; // @gotags: label:"角色描述"
+  bool isEnabled=4; // @gotags: label:"启用状态"
 }
 message RespAdminRoleEditData{}
 
 //启用禁用角色
 message ReqAdminRoleEnable{
-  int32 id=1;//角色ID
-  bool enabled=2;//启用状态
+  int32 id=1; // @gotags: label:"角色ID"
+  bool enabled=2; // @gotags: label:"启用状态"
 }
 message RespAdminRoleEnableData{}
 
 //删除角色
 message ReqAdminRoleDelete{
-  int32 id=1;//角色ID
-  repeated int32 permissionIds=2;//权限ID集合
+  int32 id=1; // @gotags: label:"角色ID"
+  repeated int32 permissionIds=2; // @gotags: label:"权限ID集合"
 }
 message RespAdminRoleDeleteData{}
 
 //角色绑定权限
 message ReqAdminRoleBindPermissions{
-  int32 id=1;//角色ID
-  repeated int32 permissionIds=2;//权限ID集合
+  int32 id=1; // @gotags: label:"角色ID"
+  repeated int32 permissionIds=2; // @gotags: label:"权限ID集合"
 }
 message RespAdminRoleBindPermissionsData{}
 
 
 //角色权限列表
 message ReqAdminRolePermissions{
-  int32 id=1;//角色ID
+  int32 id=1; // @gotags: label:"角色ID"
 }
 message RespAdminRolePermissionsData{
   repeated RolePermissionItem list=1;

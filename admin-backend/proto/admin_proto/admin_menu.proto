@@ -21,24 +21,24 @@ message RespAdminMenuListData{
 
 // 创建菜单
 message ReqAdminMenuAdd{
-  string key = 1;// 菜单键名
-  string path = 2;//菜单路由
-  string name = 3;//菜单名称
-  int32 parentId = 4; // 父级菜单
-  string describe = 5;//菜单描述
-  string redirect = 6;//菜单重定向路由
-  string icon = 7;//菜单图标
-  bool hideChildrenInMenu = 8;//是否隐藏子菜单
-  bool hideInMenu = 9;//是否隐藏菜单
-  bool enabled = 10;//是否启用菜单
-  int32 sort = 11;//菜单排序值
-  string component = 12;//菜单组件
+  string key = 1;  // @gotags:  label:"菜单键名"
+  string path = 2;  // @gotags:  label:"菜单路由"
+  string name = 3;  // @gotags:  label:"菜单名称"
+  int32 parentId = 4;   // @gotags:  label:"父级菜单"
+  string describe = 5;  // @gotags:  label:"描述"
+  string redirect = 6;  // @gotags:  label:"重定向路由"
+  string icon = 7; // @gotags:  label:"图标"
+  bool hideChildrenInMenu = 8;  // @gotags:  label:"隐藏子菜单状态"
+  bool hideInMenu = 9;  // @gotags:  label:"隐藏状态"
+  bool enabled = 10;  // @gotags:  label:"启用状态"
+  int32 sort = 11;  // @gotags:  label:"排序值"
+  string component = 12;  // @gotags:  label:"组件"
 }
 message RespAdminMenuAddData{}
 
 // 菜单想去
 message ReqAdminMenuInfo{
-  int32 menuId = 1;//菜单ID
+  int32 menuId = 1; // @gotags:  label:"菜单ID"
 }
 message RespAdminMenuInfoData{
   AdminMenuModel data = 1;
@@ -46,40 +46,40 @@ message RespAdminMenuInfoData{
 
 // 便捷菜单
 message ReqAdminMenuEdit{
-  int32 id = 1;
-  int32 parentId = 2;
-  string path = 3;
-  string name = 4;
-  string key = 5;
-  string describe = 6;
-  string icon = 7;
-  int32 sort = 8;
-  string redirect = 9;
-  string component = 10;
-  bool isHideInMenu = 11;
-  bool isHideChildrenInMenu = 12;
-  bool isEnabled = 13;
+  int32 id = 1; // @gotags:  label:"菜单ID"
+  int32 parentId = 2; // @gotags:  label:"父级菜单ID"
+  string path = 3; // @gotags:  label:"菜单路由"
+  string name = 4; // @gotags:  label:"菜单名称"
+  string key = 5; // @gotags:  label:"菜单键名"
+  string describe = 6; // @gotags:  label:"描述"
+  string icon = 7; // @gotags:  label:"菜单图标"
+  int32 sort = 8; // @gotags:  label:"排序值"
+  string redirect = 9; // @gotags:  label:"重定向路由"
+  string component = 10; // @gotags:  label:"组件"
+  bool isHideInMenu = 11; // @gotags:  label:"是否显示菜单"
+  bool isHideChildrenInMenu = 12; // @gotags:  label:"是否显示子菜单"
+  bool isEnabled = 13; // @gotags:  label:"是否启用菜单"
 }
 message RespAdminMenuEditData{}
 
 // 启用禁用菜单
 message ReqAdminMenuEnable{
-  int32 menuId = 1;//菜单ID
-  bool enabled = 2;//是否启用菜单
+  int32 menuId = 1; // @gotags:  label:"菜单ID"
+  bool enabled = 2; // @gotags:  label:"是否启用菜单"
 }
 message RespAdminMenuEnableData{}
 
 // 启用禁用菜单
 message ReqAdminMenuShow{
-  int32 menuId = 1;//菜单ID
-  string field = 2;//要编辑的字段
-  bool show = 3;//是否显示菜单
+  int32 menuId = 1; // @gotags:  label:"菜单ID"
+  string field = 2;  // @gotags:  label:"要编辑的字段"
+  bool show = 3;  // @gotags:  label:"是否显示菜单"
 }
 message RespAdminMenuShow{}
 
 // 删除菜单
 message ReqAdminMenuDelete{
-  int32 menuId = 1;//菜单ID
+  int32 menuId = 1; // @gotags:  label:"菜单ID"
 }
 message RespAdminMenuDeleteData{}
 

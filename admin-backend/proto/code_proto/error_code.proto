@@ -13,6 +13,7 @@ enum ErrorCode{
   AuthTokenInvalid = 200002; // BearerToken无效
   AuthTokenInspectInvalid = 200003; // BearerToken无效
   AuthTokenInfoInvalid = 200004 ;// Token信息无效
+  AuthTokenForbidden = 200005; // 没有访问权限
 
   RequestBodyInvalid = 300001;// 请求体参数无效
   RequestQueryInvalid = 300002;// 请求查询参数无效

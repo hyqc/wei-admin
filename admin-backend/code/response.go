@@ -24,7 +24,7 @@ type IMessage interface {
 	SetMsg(msg string)
 	GetMsg() string
 	GetError() string
-	SetCodeMsg(code code_proto.ErrorCode, msg string)
+	SetCodeMsg(code code_proto.ErrorCode, msg error)
 	SetCodeError(code code_proto.ErrorCode, err error)
 	SetData(data interface{})
 	GetData() interface{}
@@ -64,9 +64,9 @@ func (m *Message) GetError() string {
 	return m.Reason
 }
 
-func (m *Message) SetCodeMsg(code code_proto.ErrorCode, message string) {
+func (m *Message) SetCodeMsg(code code_proto.ErrorCode, err error) {
 	m.Code = code
-	m.Msg = message
+	m.Msg = err.Error()
 	m.Reason = m.Msg
 }
 func (m *Message) SetCodeError(code code_proto.ErrorCode, err error) {

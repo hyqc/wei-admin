@@ -247,9 +247,9 @@ type ReqAdminRoleAdd struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name     string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`         //角色名称
-	Describe string `protobuf:"bytes,2,opt,name=describe,proto3" json:"describe,omitempty"` //角色描述
-	Enabled  bool   `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty"`  //启用状态
+	Name     string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" label:"角色名称"`         // @gotags: label:"角色名称"
+	Describe string `protobuf:"bytes,2,opt,name=describe,proto3" json:"describe,omitempty" label:"角色描述"` // @gotags: label:"角色描述"
+	Enabled  bool   `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"`  // @gotags: label:"启用状态"
 }
 
 func (x *ReqAdminRoleAdd) Reset() {
@@ -345,7 +345,7 @@ type ReqAdminRoleInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //角色ID
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"角色ID"` // @gotags: label:"角色ID"
 }
 
 func (x *ReqAdminRoleInfo) Reset() {
@@ -524,10 +524,10 @@ type ReqAdminRoleEdit struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`               //角色ID
-	Name      string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`            //角色名称
-	Describe  string `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe,omitempty"`    //角色描述
-	IsEnabled bool   `protobuf:"varint,4,opt,name=isEnabled,proto3" json:"isEnabled,omitempty"` //启用状态
+	Id        int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"角色ID"`               // @gotags: label:"角色ID"
+	Name      string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" label:"角色名称"`            // @gotags: label:"角色名称"
+	Describe  string `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe,omitempty" label:"角色描述"`    // @gotags: label:"角色描述"
+	IsEnabled bool   `protobuf:"varint,4,opt,name=isEnabled,proto3" json:"isEnabled,omitempty" label:"启用状态"` // @gotags: label:"启用状态"
 }
 
 func (x *ReqAdminRoleEdit) Reset() {
@@ -630,8 +630,8 @@ type ReqAdminRoleEnable struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id      int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`           //角色ID
-	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"` //启用状态
+	Id      int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"角色ID"`           // @gotags: label:"角色ID"
+	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"` // @gotags: label:"启用状态"
 }
 
 func (x *ReqAdminRoleEnable) Reset() {
@@ -720,8 +720,8 @@ type ReqAdminRoleDelete struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                              //角色ID
-	PermissionIds []int32 `protobuf:"varint,2,rep,packed,name=permissionIds,proto3" json:"permissionIds,omitempty"` //权限ID集合
+	Id            int32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"角色ID"`                              // @gotags: label:"角色ID"
+	PermissionIds []int32 `protobuf:"varint,2,rep,packed,name=permissionIds,proto3" json:"permissionIds,omitempty" label:"权限ID集合"` // @gotags: label:"权限ID集合"
 }
 
 func (x *ReqAdminRoleDelete) Reset() {
@@ -810,8 +810,8 @@ type ReqAdminRoleBindPermissions struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                              //角色ID
-	PermissionIds []int32 `protobuf:"varint,2,rep,packed,name=permissionIds,proto3" json:"permissionIds,omitempty"` //权限ID集合
+	Id            int32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"角色ID"`                              // @gotags: label:"角色ID"
+	PermissionIds []int32 `protobuf:"varint,2,rep,packed,name=permissionIds,proto3" json:"permissionIds,omitempty" label:"权限ID集合"` // @gotags: label:"权限ID集合"
 }
 
 func (x *ReqAdminRoleBindPermissions) Reset() {
@@ -900,7 +900,7 @@ type ReqAdminRolePermissions struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` //角色ID
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"角色ID"` // @gotags: label:"角色ID"
 }
 
 func (x *ReqAdminRolePermissions) Reset() {

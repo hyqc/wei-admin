@@ -157,18 +157,18 @@ type ReqAdminMenuAdd struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key                string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`                                // 菜单键名
-	Path               string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`                              //菜单路由
-	Name               string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                              //菜单名称
-	ParentId           int32  `protobuf:"varint,4,opt,name=parentId,proto3" json:"parentId,omitempty"`                     // 父级菜单
-	Describe           string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty"`                      //菜单描述
-	Redirect           string `protobuf:"bytes,6,opt,name=redirect,proto3" json:"redirect,omitempty"`                      //菜单重定向路由
-	Icon               string `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty"`                              //菜单图标
-	HideChildrenInMenu bool   `protobuf:"varint,8,opt,name=hideChildrenInMenu,proto3" json:"hideChildrenInMenu,omitempty"` //是否隐藏子菜单
-	HideInMenu         bool   `protobuf:"varint,9,opt,name=hideInMenu,proto3" json:"hideInMenu,omitempty"`                 //是否隐藏菜单
-	Enabled            bool   `protobuf:"varint,10,opt,name=enabled,proto3" json:"enabled,omitempty"`                      //是否启用菜单
-	Sort               int32  `protobuf:"varint,11,opt,name=sort,proto3" json:"sort,omitempty"`                            //菜单排序值
-	Component          string `protobuf:"bytes,12,opt,name=component,proto3" json:"component,omitempty"`                   //菜单组件
+	Key                string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty" label:"菜单键名"`                                // @gotags:  label:"菜单键名"
+	Path               string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty" label:"菜单路由"`                              // @gotags:  label:"菜单路由"
+	Name               string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" label:"菜单名称"`                              // @gotags:  label:"菜单名称"
+	ParentId           int32  `protobuf:"varint,4,opt,name=parentId,proto3" json:"parentId,omitempty" label:"父级菜单"`                     // @gotags:  label:"父级菜单"
+	Describe           string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"描述"`                      // @gotags:  label:"描述"
+	Redirect           string `protobuf:"bytes,6,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向路由"`                      // @gotags:  label:"重定向路由"
+	Icon               string `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty" label:"图标"`                              // @gotags:  label:"图标"
+	HideChildrenInMenu bool   `protobuf:"varint,8,opt,name=hideChildrenInMenu,proto3" json:"hideChildrenInMenu,omitempty" label:"隐藏子菜单状态"` // @gotags:  label:"隐藏子菜单状态"
+	HideInMenu         bool   `protobuf:"varint,9,opt,name=hideInMenu,proto3" json:"hideInMenu,omitempty" label:"隐藏状态"`                 // @gotags:  label:"隐藏状态"
+	Enabled            bool   `protobuf:"varint,10,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"`                      // @gotags:  label:"启用状态"
+	Sort               int32  `protobuf:"varint,11,opt,name=sort,proto3" json:"sort,omitempty" label:"排序值"`                            // @gotags:  label:"排序值"
+	Component          string `protobuf:"bytes,12,opt,name=component,proto3" json:"component,omitempty" label:"组件"`                   // @gotags:  label:"组件"
 }
 
 func (x *ReqAdminMenuAdd) Reset() {
@@ -327,7 +327,7 @@ type ReqAdminMenuInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"` //菜单ID
+	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID"` // @gotags:  label:"菜单ID"
 }
 
 func (x *ReqAdminMenuInfo) Reset() {
@@ -418,19 +418,19 @@ type ReqAdminMenuEdit struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                   int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	ParentId             int32  `protobuf:"varint,2,opt,name=parentId,proto3" json:"parentId,omitempty"`
-	Path                 string `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty"`
-	Name                 string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Key                  string `protobuf:"bytes,5,opt,name=key,proto3" json:"key,omitempty"`
-	Describe             string `protobuf:"bytes,6,opt,name=describe,proto3" json:"describe,omitempty"`
-	Icon                 string `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty"`
-	Sort                 int32  `protobuf:"varint,8,opt,name=sort,proto3" json:"sort,omitempty"`
-	Redirect             string `protobuf:"bytes,9,opt,name=redirect,proto3" json:"redirect,omitempty"`
-	Component            string `protobuf:"bytes,10,opt,name=component,proto3" json:"component,omitempty"`
-	IsHideInMenu         bool   `protobuf:"varint,11,opt,name=isHideInMenu,proto3" json:"isHideInMenu,omitempty"`
-	IsHideChildrenInMenu bool   `protobuf:"varint,12,opt,name=isHideChildrenInMenu,proto3" json:"isHideChildrenInMenu,omitempty"`
-	IsEnabled            bool   `protobuf:"varint,13,opt,name=isEnabled,proto3" json:"isEnabled,omitempty"`
+	Id                   int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"菜单ID"`                                      // @gotags:  label:"菜单ID"
+	ParentId             int32  `protobuf:"varint,2,opt,name=parentId,proto3" json:"parentId,omitempty" label:"父级菜单ID"`                          // @gotags:  label:"父级菜单ID"
+	Path                 string `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty" label:"菜单路由"`                                   // @gotags:  label:"菜单路由"
+	Name                 string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"菜单名称"`                                   // @gotags:  label:"菜单名称"
+	Key                  string `protobuf:"bytes,5,opt,name=key,proto3" json:"key,omitempty" label:"菜单键名"`                                     // @gotags:  label:"菜单键名"
+	Describe             string `protobuf:"bytes,6,opt,name=describe,proto3" json:"describe,omitempty" label:"描述"`                           // @gotags:  label:"描述"
+	Icon                 string `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty" label:"菜单图标"`                                   // @gotags:  label:"菜单图标"
+	Sort                 int32  `protobuf:"varint,8,opt,name=sort,proto3" json:"sort,omitempty" label:"排序值"`                                  // @gotags:  label:"排序值"
+	Redirect             string `protobuf:"bytes,9,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向路由"`                           // @gotags:  label:"重定向路由"
+	Component            string `protobuf:"bytes,10,opt,name=component,proto3" json:"component,omitempty" label:"组件"`                        // @gotags:  label:"组件"
+	IsHideInMenu         bool   `protobuf:"varint,11,opt,name=isHideInMenu,proto3" json:"isHideInMenu,omitempty" label:"是否显示菜单"`                 // @gotags:  label:"是否显示菜单"
+	IsHideChildrenInMenu bool   `protobuf:"varint,12,opt,name=isHideChildrenInMenu,proto3" json:"isHideChildrenInMenu,omitempty" label:"是否显示子菜单"` // @gotags:  label:"是否显示子菜单"
+	IsEnabled            bool   `protobuf:"varint,13,opt,name=isEnabled,proto3" json:"isEnabled,omitempty" label:"是否启用菜单"`                       // @gotags:  label:"是否启用菜单"
 }
 
 func (x *ReqAdminMenuEdit) Reset() {
@@ -596,8 +596,8 @@ type ReqAdminMenuEnable struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MenuId  int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"`   //菜单ID
-	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"` //是否启用菜单
+	MenuId  int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID"`   // @gotags:  label:"菜单ID"
+	Enabled bool  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty" label:"是否启用菜单"` // @gotags:  label:"是否启用菜单"
 }
 
 func (x *ReqAdminMenuEnable) Reset() {
@@ -686,9 +686,9 @@ type ReqAdminMenuShow struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MenuId int32  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"` //菜单ID
-	Field  string `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`    //要编辑的字段
-	Show   bool   `protobuf:"varint,3,opt,name=show,proto3" json:"show,omitempty"`     //是否显示菜单
+	MenuId int32  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID"` // @gotags:  label:"菜单ID"
+	Field  string `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty" label:"要编辑的字段"`    // @gotags:  label:"要编辑的字段"
+	Show   bool   `protobuf:"varint,3,opt,name=show,proto3" json:"show,omitempty" label:"是否显示菜单"`     // @gotags:  label:"是否显示菜单"
 }
 
 func (x *ReqAdminMenuShow) Reset() {
@@ -784,7 +784,7 @@ type ReqAdminMenuDelete struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty"` //菜单ID
+	MenuId int32 `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID"` // @gotags:  label:"菜单ID"
 }
 
 func (x *ReqAdminMenuDelete) Reset() {

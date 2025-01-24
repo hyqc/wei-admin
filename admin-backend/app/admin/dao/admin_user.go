@@ -9,6 +9,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
+	"gorm.io/gorm/clause"
 	"time"
 )
 
@@ -146,7 +147,9 @@ func (a *AdminUser) Delete(ctx *gin.Context, id int32) error {
 
 func (a *AdminUser) AddRoles(ctx *gin.Context, roles []*model2.AdminUserRole) error {
 	db := query2.AdminUserRole
-	return db.WithContext(ctx).Create(roles...)
+	return db.WithContext(ctx).Clauses(clause.Insert{
+		Modifier: "IGNORE",
+	}).Create(roles...)
 }
 
 func (a *AdminUser) FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) (list []*types.AdminUserRole, err error) {

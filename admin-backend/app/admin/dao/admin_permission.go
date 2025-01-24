@@ -5,6 +5,7 @@ import (
 	"admin/app/admin/gen/model"
 	"admin/app/admin/gen/query"
 	"admin/app/common"
+	"admin/constant"
 	"admin/global"
 	"admin/proto/admin_proto"
 	"context"
@@ -30,6 +31,7 @@ type IAdminPermission interface {
 	UnBindApi(ctx *gin.Context, permissionId, apiId int32) error
 	BatchAddPermissions(ctx *gin.Context, data []*model.AdminPermission) error
 	FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminPermission, error)
+	IsAdminCanAccessPath(ctx context.Context, adminId int32, path string) (bool, error)
 }
 
 type AdminPermission struct {
@@ -229,4 +231,36 @@ func (a *AdminPermission) FindPermissionMenuInfoById(ctx *gin.Context, permissio
 
 func (a *AdminPermission) FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminPermission, error) {
 	return query.AdminPermission.WithContext(ctx).Where(query.AdminPermission.ID.In(ids...)).Find()
+}
+
+func (a *AdminPermission) IsAdminCanAccessPath(ctx context.Context, adminId int32, path string) (bool, error) {
+	if constant.IsAdministrator(adminId) {
+		return true, nil
+	}
+	user := query.AdminUser
+	userRole := query.AdminUserRole
+	role := query.AdminRole
+	rolePermission := query.AdminRolePermission
+	permission := query.AdminPermission
+	perApi := query.AdminPermissionAPI
+	api := query.AdminAPI
+
+	data, err := user.WithContext(ctx).
+		Join(userRole, userRole.AdminID.EqCol(user.ID)).
+		Join(role, role.ID.EqCol(userRole.RoleID), role.IsEnabled.Is(true)).
+		Join(rolePermission, rolePermission.RoleID.EqCol(role.ID)).
+		Join(permission, permission.ID.EqCol(rolePermission.PermissionID), permission.IsEnabled.Is(true)).
+		Join(perApi, perApi.PermissionID.EqCol(permission.ID)).
+		Join(api, api.ID.EqCol(perApi.APIID), api.IsEnabled.Is(true)).
+		Where(user.ID.Eq(adminId), user.IsEnabled.Is(true), api.Path.Eq(path)).First()
+	if err != nil {
+		return false, err
+	}
+	if data == nil {
+		return false, nil
+	}
+	if data.ID == adminId {
+		return true, nil
+	}
+	return false, nil
 }

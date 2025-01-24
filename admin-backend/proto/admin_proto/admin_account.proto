@@ -6,8 +6,8 @@ import "admin_menu.proto";
 
 // 登录
 message ReqLogin{
-  string username = 1; // 用户名
-  string password = 2; // 密码
+  string username = 1; // 用户名 // @gotags:  label:"用户名"
+  string password = 2; // 密码  // @gotags:  label:"密码"
 }
 message RespLoginData{
   AdminInfo data = 2;
@@ -23,25 +23,25 @@ message RespAccountInfoData{
 
 // 账号编辑
 message ReqAccountEdit{
-  string nickname=1;//名称
-  string avatar=2;//头像
-  string email=3;//邮箱
+  string nickname=1;//名称 // @gotags:  label:"用户名"
+  string avatar=2;//头像 // @gotags:  label:"头像地址"
+  string email=3;//邮箱 // @gotags:  label:"邮箱"
 }
 message RespAccountEditData{
 }
 
 // 修改密码
 message ReqAccountPasswordEdit{
-  string oldPassword=1;//旧密码
-  string password=2;//新密码
-  string confirmPassword=3;//确认密码
+  string oldPassword=1;//旧密码 // @gotags:  label:"旧密码"
+  string password=2;//新密码 // @gotags:  label:"新密码"
+  string confirmPassword=3;//确认密码 // // @gotags:  label:"确认密码"
 }
 message RespAccountPasswordEditData{
 }
 
 // 个人权限
 message ReqAccountPermission{
-  int32 menuId=1;//菜单ID
+  int32 menuId=1;//菜单ID // @gotags:  label:"菜单ID"
 }
 message RespAccountPermissionData{
 }

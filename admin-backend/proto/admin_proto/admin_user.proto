@@ -22,7 +22,7 @@ message RespAdminUserListData{
 
 // 账号详情
 message ReqAdminUserInfo{
-  int32 adminId = 1;//管理员ID
+  int32 adminId = 1; // @gotags: label:"管理员ID"
 }
 message RespAdminUserInfoData{
   AdminMenuModel data = 1;
@@ -31,57 +31,57 @@ message RespAdminUserInfoData{
 
 // 添加账号
 message ReqAdminUserAdd{
-  string username = 1;//账号
-  string nickname = 2;//昵称
-  string password = 3;//密码
-  string confirmPassword = 4;//确认密码
-  bool enabled = 5;//账号启用状态
-  string email = 6;//邮箱
-  string avatar = 7;//头像地址
+  string username = 1;// @gotags: label:"账号"
+  string nickname = 2; // @gotags: label:"昵称"
+  string password = 3;// @gotags: label:"密码"
+  string confirmPassword = 4; // @gotags: label:"确认密码"
+  bool enabled = 5;  // @gotags: label:"账号启用状态"
+  string email = 6; // @gotags: label:"邮箱"
+  string avatar = 7; // @gotags: label:"头像地址"
 }
 message RespAdminUserAddData{
 }
 
 // 账号编辑
 message ReqAdminUserEdit{
-  int32 adminId = 1;//管理员ID
-  string username = 2;//账号
-  string nickname = 3;//昵称
-  bool enabled = 4;//账号启用状态
-  string email = 5;//邮箱
-  string avatar = 6;//头像地址
+  int32 adminId = 1;//管理员ID @gotags: label:"管理员ID"
+  string username = 2;//账号 @gotags: label:"账号"
+  string nickname = 3;//昵称 @gotags: label:"昵称"
+  bool enabled = 4;//账号启用状态 @gotags: label:"账号启用状态"
+  string email = 5;//邮箱 @gotags: label:"邮箱"
+  string avatar = 6;//头像地址 @gotags: label:"头像地址"
 }
 message RespAdminUserEditData{
 }
 
 // 账号编辑
 message ReqAdminUserEditPassword{
-  int32 adminId = 1;//管理员ID
-  string password = 2;//密码
-  string confirmPassword = 3;//确认密码
+  int32 adminId = 1;//管理员ID @gotags: label:"管理员ID"
+  string password = 2;//密码 @gotags: label:"密码"
+  string confirmPassword = 3;//确认密码 @gotags: label:"确认密码"
 }
 message RespAdminUserEditPasswordData{
 }
 
 // 账号状态更改
 message ReqAdminUserEnabled{
-  int32 adminId = 1;//管理员ID
-  bool enabled = 2;//账号启用状态
+  int32 adminId = 1;//管理员ID @gotags: label:"管理员ID"
+  bool enabled = 2;//账号启用状态 @gotags: label:"账号启用状态"
 }
 message RespAdminUserEnabledData{
 }
 
 // 删除账号
 message ReqAdminUserDelete{
-  int32 adminId = 1;//管理员ID
+  int32 adminId = 1;//管理员ID @gotags: label:"管理员ID"
 }
 message RespAdminUserDeleteData{
 }
 
 // 账号绑定角色
 message ReqAdminUserBindRoles{
-  int32 adminId = 1;//管理员ID
-  repeated int32 roleIds = 2;//角色ID列表
+  int32 adminId = 1;//管理员ID @gotags: label:"管理员ID"
+  repeated int32 roleIds = 2;//角色ID列表 @gotags: label:"角色ID列表"
 }
 message RespAdminUserBindRolesData{
 }
