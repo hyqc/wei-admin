@@ -9,21 +9,15 @@ import (
 	"regexp"
 )
 
-func init() {
-	err := govalidate.Init(zh.New(), func(valid *validator.Validate, trans ut.Translator) error {
-		return zhTrans.RegisterDefaultTranslations(valid, trans)
-	})
-	if err != nil {
-		panic(err)
-	}
+type customRegexpRule struct {
+	Name    string `json:"name"`
+	Msg     string `json:"msg"`
+	Pattern string `json:"pattern"`
+}
 
-	type CustomRule struct {
-		Name    string `json:"name"`
-		Msg     string `json:"msg"`
-		Pattern string `json:"pattern"`
-	}
-
-	pattenrs := []CustomRule{
+var (
+	// 自定义规则
+	customRegexpPatterns = []customRegexpRule{
 		{
 			Name:    "adminname",
 			Msg:     "{0}必须是数字字母组合",
@@ -55,14 +49,17 @@ func init() {
 			Pattern: PatternTrimBlankStringRule,
 		},
 	}
+)
 
-	for _, val := range pattenrs {
+// 初始化自定义规则
+func initCustomRegexpRules() error {
+	for _, val := range customRegexpPatterns {
 		item := val
-		err = govalidate.Validator.RegisterValidation(item.Name, func(fl validator.FieldLevel) bool {
+		err := govalidate.Validator.RegisterValidation(item.Name, func(fl validator.FieldLevel) bool {
 			return regexp.MustCompile(item.Pattern).MatchString(fl.Field().String())
 		}, true)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		err = govalidate.Validator.RegisterTranslation(item.Name, govalidate.Translator, func(ut ut.Translator) error {
@@ -72,7 +69,21 @@ func init() {
 			return t
 		})
 		if err != nil {
-			panic(err)
+			return err
 		}
+	}
+	return nil
+}
+
+func init() {
+	err := govalidate.Init(zh.New(), func(valid *validator.Validate, trans ut.Translator) error {
+		return zhTrans.RegisterDefaultTranslations(valid, trans)
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	if err := initCustomRegexpRules(); err != nil {
+		panic(err)
 	}
 }
