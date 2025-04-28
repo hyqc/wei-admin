@@ -6,6 +6,7 @@ import (
 	"admin/pkg/utils"
 	"admin/proto/code_proto"
 	"bytes"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"io"
@@ -64,7 +65,7 @@ func logger() gin.HandlerFunc {
 			zap.String("path", ctx.Request.URL.Path),
 			zap.String("ip", ctx.ClientIP()),
 			zap.String("user-agent", ctx.Request.UserAgent()),
-			zap.String("errors", ctx.Errors.ByType(gin.ErrorTypePrivate).String()),
+			zap.Any("errors", ctx.Errors.ByType(gin.ErrorTypePrivate).String()),
 		)
 		ctx.Next()
 	}
@@ -76,8 +77,7 @@ func recovery() gin.HandlerFunc {
 		defer func() {
 			if err := recover(); err != nil {
 				errInfo := string(debug.Stack())
-				utils.PrintfLn("panic", err)
-				utils.PrintfLn("panic", errInfo)
+				utils.PrintfLn(fmt.Sprintf("panic: %v, error: %v", err, errInfo))
 				// Check for a broken connection, as it is not really a
 				// condition that warrants a panic stack trace.
 				var brokenPipe bool

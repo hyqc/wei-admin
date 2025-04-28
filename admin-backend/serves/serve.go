@@ -50,7 +50,7 @@ func Run() {
 
 func parseConfig() {
 	if err := global.ParseConfig(configFullPath); err != nil {
-		utils.PrintfLn("parse yaml config: %s , error: %s", configFilePath, err.Error())
+		utils.PrintfLn("parse yaml config: %s , error: %v", configFilePath, err.Error())
 		os.Exit(1)
 		return
 	}
@@ -60,13 +60,13 @@ func parseConfig() {
 func initConfig() {
 
 	if err := global.InitLogger(); err != nil {
-		utils.PrintfLn("init logger config error: %s", err.Error())
+		utils.PrintfLn("init logger config error: %v", err.Error())
 		os.Exit(1)
 		return
 	}
 
 	if err := global.InitMySQLDB(); err != nil {
-		utils.PrintfLn("init database config error: %s", err.Error())
+		utils.PrintfLn("init database config error: %v", err.Error())
 		os.Exit(2)
 		return
 	}
@@ -96,7 +96,7 @@ func runServe() {
 	go func() {
 		utils.PrintfLn(fmt.Sprintf("start serve port: %s", port))
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			utils.PrintfLn("start serve port: %s, error: %s", port, err)
+			utils.PrintfLn("start serve port: %s, error: %v", port, err)
 			return
 		}
 	}()

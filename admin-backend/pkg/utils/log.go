@@ -11,6 +11,5 @@ func PrintfLn(f string, args ...any) {
 		fmt.Printf(fmt.Sprintf("%v SERVE %v\n", time.Now().Format(time.RFC3339), f))
 		return
 	}
-	fmt.Printf(fmt.Sprintf("%v SERVE %v \n", time.Now().Format(time.RFC3339), f), args...)
-	fmt.Println()
+	fmt.Printf(fmt.Sprintf("%v SERVE %v %v\n", time.Now().Format(time.RFC3339), f, args), args...)
 }

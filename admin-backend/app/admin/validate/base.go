@@ -86,12 +86,13 @@ func init() {
 		panic(fmt.Sprintf("init validator lang err: %v", err))
 	}
 
+	if err = initCustomRegexpRules(); err != nil {
+		panic(err)
+	}
+
 	err = govalidate.GinInitTrans(zhv, call)
 	if err != nil {
 		panic(fmt.Sprintf("init validator lang err: %v", err))
 	}
 
-	if err := initCustomRegexpRules(); err != nil {
-		panic(err)
-	}
 }

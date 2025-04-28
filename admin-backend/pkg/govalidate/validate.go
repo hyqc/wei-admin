@@ -28,6 +28,9 @@ func ValidateWithCtx(ctx *gin.Context, data any, call ...ValidatorFunc) error {
 		// 请求解析失败
 		return TranslateError(err)
 	}
+	if call == nil || len(call) == 0 {
+		return nil
+	}
 	return Validate(data, call...)
 }
 
