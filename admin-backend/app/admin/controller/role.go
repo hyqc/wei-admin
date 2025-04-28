@@ -2,7 +2,6 @@ package controller
 
 import (
 	"admin/app/admin/logic"
-	"admin/app/admin/validate"
 	"admin/app/common"
 	"admin/code"
 	"admin/constant"
@@ -24,7 +23,7 @@ func (RoleController) List(ctx *gin.Context) {
 	msg := "RoleController.List"
 	params := &admin_proto.ReqAdminRoleList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.ListReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -61,7 +60,7 @@ func (RoleController) Add(ctx *gin.Context) {
 	msg := "RoleController.Add"
 	params := &admin_proto.ReqAdminRoleAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.AddReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -81,7 +80,7 @@ func (RoleController) Info(ctx *gin.Context) {
 	msg := "RoleController.Info"
 	params := &admin_proto.ReqAdminRoleInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.InfoReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -103,7 +102,7 @@ func (RoleController) Edit(ctx *gin.Context) {
 	msg := "RoleController.Edit"
 	params := &admin_proto.ReqAdminRoleEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.EditReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -123,7 +122,7 @@ func (RoleController) Enable(ctx *gin.Context) {
 	msg := "RoleController.Enable"
 	params := &admin_proto.ReqAdminRoleEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.EnableReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -143,7 +142,7 @@ func (RoleController) Delete(ctx *gin.Context) {
 	msg := "RoleController.Delete"
 	params := &admin_proto.ReqAdminRoleDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.DeleteReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -163,7 +162,7 @@ func (RoleController) BindPermissions(ctx *gin.Context) {
 	msg := "RoleController.Delete"
 	params := &admin_proto.ReqAdminRoleBindPermissions{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.RoleBindPermissionsReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -183,7 +182,7 @@ func (RoleController) Permissions(ctx *gin.Context) {
 	msg := "RoleController.Permissions"
 	params := &admin_proto.ReqAdminRolePermissions{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminRoleReq.RolePermissionsReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)

@@ -15,26 +15,18 @@ func TranslateError(err error) error {
 	if !ok {
 		return err
 	}
-	em := errs.Translate(Translator)
+	em := errs.Translate(trans)
 	for _, e := range em {
 		return errors.New(e)
 	}
 	return err
 }
 
-// ValidateStructWithRules 验证结构体使用map传入验证规则
-func ValidateStructWithRules(data any, rules Rules) error {
-	for _, item := range rules {
-		Validator.RegisterStructValidationMapRules(item.Rules, item.Type)
-	}
-	return TranslateError(Validator.Struct(data))
-}
-
 // ValidateWithCtx 执行验证器
 func ValidateWithCtx(ctx *gin.Context, data any, call ...ValidatorFunc) error {
 	if err := ctx.ShouldBind(data); err != nil {
 		// 请求解析失败
-		return err
+		return TranslateError(err)
 	}
 	return Validate(data, call...)
 }

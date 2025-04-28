@@ -23,17 +23,17 @@ message RespAdminApiAllData{
 
 // 创建接口
 message ReqAdminApiAdd{
-  string path = 1;//接口路由
-  string key = 2;//接口键名
-  string name = 3;//接口名称
-  string describe = 4;//接口描述
+  string path = 1;//接口路由 @gotags:  label:"接口路由" binding:"required,adminApiPath"
+  string key = 2;//接口键名 @gotags:  label:"接口键名" binding:"required,adminApiKey"
+  string name = 3;//接口名称 @gotags:  label:"接口名称" binding:"required,trimBlank"
+  string describe = 4;//接口描述 @gotags:  label:"接口描述" binding:"required,trimBlank"
   bool enabled = 5;//启用状态
 }
 message RespAdminApiAddData{}
 
 // 接口详情
 message ReqAdminApiInfo{
-  int32 id = 1;//接口ID
+  int32 id = 1;//接口ID @gotags:  label:"接口ID" binding:"required,min=1"
 }
 message RespAdminApiInfoData{
   AdminApiItem data = 1;
@@ -41,24 +41,24 @@ message RespAdminApiInfoData{
 
 // 接口编辑
 message ReqAdminApiEdit{
-  int32 id = 1;//接口ID
-  string path = 2;//接口路由
-  string key = 3;//接口键名
-  string name = 4;//接口名称
-  string describe = 5;//接口描述
+  int32 id = 1;//接口ID @gotags:  label:"接口ID" binding:"required,min=1"
+  string path = 2;//接口路由 @gotags:  label:"接口路由" binding:"required,adminApiPath"
+  string key = 3;//接口键名 @gotags:  label:"接口键名" binding:"required,adminApiKey"
+  string name = 4;//接口名称 @gotags:  label:"接口名称" binding:"required,trimBlank"
+  string describe = 5;//接口描述 @gotags:  label:"接口描述" binding:"required,trimBlank"
   bool enabled = 6;//接口状态
 }
 message RespAdminApiEditData{}
 
 // 接口禁用启用
 message ReqAdminApiEnable{
-  int32 id = 1;//接口ID
+  int32 id = 1;//接口ID @gotags:  label:"接口ID" binding:"required,min=1"
   bool enabled = 2;//接口状态
 }
 message RespAdminApiEnableData{}
 
 // 删除接口
 message ReqAdminApiDelete{
-  int32 id = 1;//接口ID
+  int32 id = 1;//接口ID @gotags:  label:"接口ID" binding:"required,min=1"
 }
 message RespAdminApiDeleteData{}

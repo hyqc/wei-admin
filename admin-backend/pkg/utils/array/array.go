@@ -2,8 +2,6 @@ package array
 
 import "slices"
 
-import "sort"
-
 type Number interface {
 	int | int8 | int32 | int64 | uint | uint32 | uint64 | float32 | float64
 }

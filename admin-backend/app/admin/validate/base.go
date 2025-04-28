@@ -2,6 +2,7 @@ package validate
 
 import (
 	"admin/pkg/govalidate"
+	"fmt"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
@@ -62,7 +63,7 @@ func initCustomRegexpRules() error {
 			return err
 		}
 
-		err = govalidate.Validator.RegisterTranslation(item.Name, govalidate.Translator, func(ut ut.Translator) error {
+		err = govalidate.Validator.RegisterTranslation(item.Name, govalidate.GetTrans(), func(ut ut.Translator) error {
 			return ut.Add(item.Name, item.Msg, true)
 		}, func(ut ut.Translator, fe validator.FieldError) string {
 			t, _ := ut.T(item.Name, fe.Field(), fe.Param())
@@ -76,11 +77,18 @@ func initCustomRegexpRules() error {
 }
 
 func init() {
-	err := govalidate.Init(zh.New(), func(valid *validator.Validate, trans ut.Translator) error {
+	zhv := zh.New()
+	call := func(valid *validator.Validate, trans ut.Translator) error {
 		return zhTrans.RegisterDefaultTranslations(valid, trans)
-	})
+	}
+	err := govalidate.Init(zhv, call)
 	if err != nil {
-		panic(err)
+		panic(fmt.Sprintf("init validator lang err: %v", err))
+	}
+
+	err = govalidate.GinInitTrans(zhv, call)
+	if err != nil {
+		panic(fmt.Sprintf("init validator lang err: %v", err))
 	}
 
 	if err := initCustomRegexpRules(); err != nil {

@@ -2,7 +2,6 @@ package controller
 
 import (
 	"admin/app/admin/logic"
-	"admin/app/admin/validate"
 	"admin/app/common"
 	"admin/code"
 	"admin/constant"
@@ -46,7 +45,7 @@ func (UserController) Add(ctx *gin.Context) {
 	msg := "UserController.Add"
 	params := &admin_proto.ReqAdminUserAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminUserReq.AddReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -65,7 +64,7 @@ func (UserController) Info(ctx *gin.Context) {
 	msg := "UserController.Info"
 	params := &admin_proto.ReqAdminUserInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminUserReq.InfoReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -86,7 +85,7 @@ func (UserController) Edit(ctx *gin.Context) {
 	msg := "UserController.Edit"
 	params := &admin_proto.ReqAdminUserEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminUserReq.EditReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -105,7 +104,7 @@ func (UserController) EditPassword(ctx *gin.Context) {
 	msg := "UserController.EditPassword"
 	params := &admin_proto.ReqAdminUserEditPassword{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminUserReq.EditPasswordReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -124,7 +123,7 @@ func (UserController) Enable(ctx *gin.Context) {
 	msg := "UserController.Enable"
 	params := &admin_proto.ReqAdminUserEnabled{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminUserReq.EnableReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -143,7 +142,7 @@ func (UserController) Delete(ctx *gin.Context) {
 	msg := "UserController.Delete"
 	params := &admin_proto.ReqAdminUserDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminUserReq.DeleteReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -162,7 +161,7 @@ func (UserController) BindRoles(ctx *gin.Context) {
 	msg := "UserController.BindRoles"
 	params := &admin_proto.ReqAdminUserBindRoles{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params, validate.AdminUserReq.BindRolesReq); err != nil {
+	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)

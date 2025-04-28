@@ -21,10 +21,10 @@ message RespAdminMenuListData{
 
 // 创建菜单
 message ReqAdminMenuAdd{
-  string key = 1;  // @gotags:  label:"菜单键名"
-  string path = 2;  // @gotags:  label:"菜单路由"
-  string name = 3;  // @gotags:  label:"菜单名称"
-  int32 parentId = 4;   // @gotags:  label:"父级菜单"
+  string key = 1;  // @gotags:  label:"菜单键名" binding:"required,adminApiKey"
+  string path = 2;  // @gotags:  label:"菜单路由" binding:"required,adminApiPath"
+  string name = 3;  // @gotags:  label:"菜单名称" binding:"required,trimBlank"
+  int32 parentId = 4;   // @gotags:  label:"父级菜单" binding:"min=0"
   string describe = 5;  // @gotags:  label:"描述"
   string redirect = 6;  // @gotags:  label:"重定向路由"
   string icon = 7; // @gotags:  label:"图标"
@@ -38,7 +38,7 @@ message RespAdminMenuAddData{}
 
 // 菜单想去
 message ReqAdminMenuInfo{
-  int32 menuId = 1; // @gotags:  label:"菜单ID"
+  int32 menuId = 1; // @gotags:  label:"菜单ID" binding:"required,min=1"
 }
 message RespAdminMenuInfoData{
   AdminMenuModel data = 1;
@@ -46,12 +46,12 @@ message RespAdminMenuInfoData{
 
 // 便捷菜单
 message ReqAdminMenuEdit{
-  int32 id = 1; // @gotags:  label:"菜单ID"
-  int32 parentId = 2; // @gotags:  label:"父级菜单ID"
-  string path = 3; // @gotags:  label:"菜单路由"
-  string name = 4; // @gotags:  label:"菜单名称"
-  string key = 5; // @gotags:  label:"菜单键名"
-  string describe = 6; // @gotags:  label:"描述"
+  int32 id = 1; // @gotags:  label:"菜单ID" binding:"required,min=1"
+  int32 parentId = 2; // @gotags:  label:"父级菜单ID" binding:"min=0"
+  string path = 3; // @gotags:  label:"菜单路由" binding:"required,adminApiPath"
+  string name = 4; // @gotags:  label:"菜单名称" binding:"required,trimBlank"
+  string key = 5; // @gotags:  label:"菜单键名" binding:"required,adminApiKey"
+  string describe = 6; // @gotags:  label:"描述" binding:"required,trimBlank"
   string icon = 7; // @gotags:  label:"菜单图标"
   int32 sort = 8; // @gotags:  label:"排序值"
   string redirect = 9; // @gotags:  label:"重定向路由"
@@ -64,28 +64,28 @@ message RespAdminMenuEditData{}
 
 // 启用禁用菜单
 message ReqAdminMenuEnable{
-  int32 menuId = 1; // @gotags:  label:"菜单ID"
+  int32 menuId = 1; // @gotags:  label:"菜单ID" binding:"required,min=1"
   bool enabled = 2; // @gotags:  label:"是否启用菜单"
 }
 message RespAdminMenuEnableData{}
 
 // 启用禁用菜单
 message ReqAdminMenuShow{
-  int32 menuId = 1; // @gotags:  label:"菜单ID"
-  string field = 2;  // @gotags:  label:"要编辑的字段"
+  int32 menuId = 1; // @gotags:  label:"菜单ID" binding:"required,min=1"
+  string field = 2;  // @gotags:  label:"要编辑的字段" binding:"required,trimBlank"
   bool show = 3;  // @gotags:  label:"是否显示菜单"
 }
 message RespAdminMenuShow{}
 
 // 删除菜单
 message ReqAdminMenuDelete{
-  int32 menuId = 1; // @gotags:  label:"菜单ID"
+  int32 menuId = 1; // @gotags:  label:"菜单ID" binding:"required,min=1"
 }
 message RespAdminMenuDeleteData{}
 
 // 菜单权限列表
 message ReqAdminMenuPermissions{
-  int32 menuId = 1;//菜单ID
+  int32 menuId = 1;//菜单ID @gotags:  label:"菜单ID" binding:"required,min=1"
 }
 message RespAdminMenuPermissionsData{
   AdminMenuModel menuInfo = 1;
