@@ -12,11 +12,11 @@ type AdminApiReqValidator struct {
 }
 
 // ListReq 接口列表参数验证
-func (a *AdminApiReqValidator) ListReq(data interface{}) url.Values {
+func (a *AdminApiReqValidator) ListReq(data any) url.Values {
 	return url.Values{}
 }
 
-func (a *AdminApiReqValidator) AddReq(data interface{}) error {
+func (a *AdminApiReqValidator) AddReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminApiAdd{},
@@ -31,7 +31,7 @@ func (a *AdminApiReqValidator) AddReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminApiReqValidator) InfoReq(data interface{}) error {
+func (a *AdminApiReqValidator) InfoReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminApiInfo{},
@@ -43,7 +43,7 @@ func (a *AdminApiReqValidator) InfoReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminApiReqValidator) EditReq(data interface{}) error {
+func (a *AdminApiReqValidator) EditReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminApiEdit{},
@@ -58,7 +58,7 @@ func (a *AdminApiReqValidator) EditReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminApiReqValidator) EnableReq(data interface{}) error {
+func (a *AdminApiReqValidator) EnableReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminApiEnable{},
@@ -70,7 +70,7 @@ func (a *AdminApiReqValidator) EnableReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminApiReqValidator) DeleteReq(data interface{}) error {
+func (a *AdminApiReqValidator) DeleteReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminApiDelete{},

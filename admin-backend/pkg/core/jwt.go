@@ -36,7 +36,7 @@ func JWTCreate(option CustomClaimsOption) (string, error) {
 
 func JWTCheck(t, secret string) (*CustomClaims, error) {
 	result := &CustomClaims{}
-	token, err := jwt.ParseWithClaims(t, result, func(t *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(t, result, func(t *jwt.Token) (any, error) {
 		return []byte(secret), nil
 	})
 	if err != nil {

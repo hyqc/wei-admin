@@ -11,7 +11,7 @@ type AdminAccountReqValidator struct {
 }
 
 // LoginReq 登录参数验证
-func (a *AdminAccountReqValidator) LoginReq(data interface{}) error {
+func (a *AdminAccountReqValidator) LoginReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqLogin{},
@@ -24,7 +24,7 @@ func (a *AdminAccountReqValidator) LoginReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminAccountReqValidator) AccountEditReq(data interface{}) error {
+func (a *AdminAccountReqValidator) AccountEditReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAccountEdit{},
@@ -38,7 +38,7 @@ func (a *AdminAccountReqValidator) AccountEditReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminAccountReqValidator) AccountEditPasswordReq(data interface{}) error {
+func (a *AdminAccountReqValidator) AccountEditPasswordReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAccountPasswordEdit{},

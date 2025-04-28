@@ -1,5 +1,7 @@
 package array
 
+import "slices"
+
 import "sort"
 
 type Number interface {
@@ -23,9 +25,7 @@ func Deduplicate[T Number](arr []T, removeZero, order bool) []T {
 		res = append(res, k)
 	}
 	if order {
-		sort.Slice(res, func(i, j int) bool {
-			return res[i] < res[j]
-		})
+		slices.Sort(res)
 	}
 	return res
 }

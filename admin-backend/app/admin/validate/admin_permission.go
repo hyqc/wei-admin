@@ -11,11 +11,11 @@ type AdminPermissionReqValidator struct {
 }
 
 // ListReq 权限列表参数验证
-func (a *AdminPermissionReqValidator) ListReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) ListReq(data any) error {
 	return nil
 }
 
-func (a *AdminPermissionReqValidator) AddReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) AddReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionAdd{},
@@ -31,7 +31,7 @@ func (a *AdminPermissionReqValidator) AddReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminPermissionReqValidator) InfoReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) InfoReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionInfo{},
@@ -43,7 +43,7 @@ func (a *AdminPermissionReqValidator) InfoReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminPermissionReqValidator) EditReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) EditReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionEdit{},
@@ -60,7 +60,7 @@ func (a *AdminPermissionReqValidator) EditReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminPermissionReqValidator) EnableReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) EnableReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionEnable{},
@@ -72,7 +72,7 @@ func (a *AdminPermissionReqValidator) EnableReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminPermissionReqValidator) DeleteReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) DeleteReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionDelete{},
@@ -84,7 +84,7 @@ func (a *AdminPermissionReqValidator) DeleteReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminPermissionReqValidator) BindAPIReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) BindAPIReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionBindApis{},
@@ -97,7 +97,7 @@ func (a *AdminPermissionReqValidator) BindAPIReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminPermissionReqValidator) PermissionBindMenuReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) PermissionBindMenuReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionBindMenu{},
@@ -110,7 +110,7 @@ func (a *AdminPermissionReqValidator) PermissionBindMenuReq(data interface{}) er
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminPermissionReqValidator) UnBindAPIReq(data interface{}) error {
+func (a *AdminPermissionReqValidator) UnBindAPIReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminPermissionUnBindApi{},

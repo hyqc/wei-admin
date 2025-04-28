@@ -52,7 +52,7 @@ func (a *AdminMenu) Enable(ctx *gin.Context, id int32, enabled bool) error {
 }
 func (a *AdminMenu) Show(ctx *gin.Context, menuId int32, f string, show bool) error {
 	db := query.AdminMenu
-	_, err := db.WithContext(ctx).Where(db.ID.Eq(menuId)).Updates(map[string]interface{}{
+	_, err := db.WithContext(ctx).Where(db.ID.Eq(menuId)).Updates(map[string]any{
 		fmt.Sprintf("is_%s", utils.CamelToSnake(f)): show,
 	})
 	return err

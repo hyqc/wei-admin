@@ -10,7 +10,7 @@ var AdminMenuReq = &AdminMenuReqValidator{}
 type AdminMenuReqValidator struct {
 }
 
-func (a *AdminMenuReqValidator) AddReq(data interface{}) error {
+func (a *AdminMenuReqValidator) AddReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminMenuAdd{},
@@ -26,7 +26,7 @@ func (a *AdminMenuReqValidator) AddReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) InfoReq(data interface{}) error {
+func (a *AdminMenuReqValidator) InfoReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminMenuInfo{},
@@ -38,7 +38,7 @@ func (a *AdminMenuReqValidator) InfoReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) EditReq(data interface{}) error {
+func (a *AdminMenuReqValidator) EditReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminMenuEdit{},
@@ -55,7 +55,7 @@ func (a *AdminMenuReqValidator) EditReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) EnableReq(data interface{}) error {
+func (a *AdminMenuReqValidator) EnableReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminMenuEnable{},
@@ -67,7 +67,7 @@ func (a *AdminMenuReqValidator) EnableReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) ShowReq(data interface{}) error {
+func (a *AdminMenuReqValidator) ShowReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminMenuShow{},
@@ -80,7 +80,7 @@ func (a *AdminMenuReqValidator) ShowReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) DeleteReq(data interface{}) error {
+func (a *AdminMenuReqValidator) DeleteReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminMenuDelete{},
@@ -92,7 +92,7 @@ func (a *AdminMenuReqValidator) DeleteReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) PermissionsReq(data interface{}) error {
+func (a *AdminMenuReqValidator) PermissionsReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminMenuPermissions{},
@@ -104,6 +104,6 @@ func (a *AdminMenuReqValidator) PermissionsReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminMenuReqValidator) PagesReq(data interface{}) error {
+func (a *AdminMenuReqValidator) PagesReq(data any) error {
 	return nil
 }

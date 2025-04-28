@@ -11,11 +11,11 @@ type AdminUserReqValidator struct {
 }
 
 // ListReq 接口列表参数验证
-func (a *AdminUserReqValidator) ListReq(data interface{}) error {
+func (a *AdminUserReqValidator) ListReq(data any) error {
 	return nil
 }
 
-func (a *AdminUserReqValidator) AddReq(data interface{}) error {
+func (a *AdminUserReqValidator) AddReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminUserAdd{},
@@ -32,7 +32,7 @@ func (a *AdminUserReqValidator) AddReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) InfoReq(data interface{}) error {
+func (a *AdminUserReqValidator) InfoReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminUserInfo{},
@@ -44,7 +44,7 @@ func (a *AdminUserReqValidator) InfoReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) EditReq(data interface{}) error {
+func (a *AdminUserReqValidator) EditReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminUserEdit{},
@@ -60,7 +60,7 @@ func (a *AdminUserReqValidator) EditReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) EditPasswordReq(data interface{}) error {
+func (a *AdminUserReqValidator) EditPasswordReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminUserEditPassword{},
@@ -74,7 +74,7 @@ func (a *AdminUserReqValidator) EditPasswordReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) EnableReq(data interface{}) error {
+func (a *AdminUserReqValidator) EnableReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminUserEnabled{},
@@ -86,7 +86,7 @@ func (a *AdminUserReqValidator) EnableReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) DeleteReq(data interface{}) error {
+func (a *AdminUserReqValidator) DeleteReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminUserDelete{},
@@ -98,7 +98,7 @@ func (a *AdminUserReqValidator) DeleteReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminUserReqValidator) BindRolesReq(data interface{}) error {
+func (a *AdminUserReqValidator) BindRolesReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminUserBindRoles{},

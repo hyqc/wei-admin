@@ -30,7 +30,7 @@ type custom struct {
 }
 
 // ValidatorFunc 验证函数类型，data 为结构体类型的数值
-type ValidatorFunc func(data interface{}) error
+type ValidatorFunc func(data any) error
 
 // Rules 验证规则
 type Rules []*StructRule
@@ -44,7 +44,7 @@ type StructRule struct {
 	//   Age int
 	// }
 	// 则Type为Foo{}
-	Type interface{}
+	Type any
 
 	// Rules map[string]string
 	// key为结构体字段名，value为验证规则，示例：

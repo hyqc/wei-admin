@@ -10,7 +10,7 @@ type ConfigReader interface {
 }
 
 type ConfigDecoder interface {
-	Decode(data []byte, conf interface{}) interface{}
+	Decode(data []byte, conf any) any
 }
 
 type ConfigReloader interface {

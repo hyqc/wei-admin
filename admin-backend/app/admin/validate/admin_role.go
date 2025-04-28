@@ -11,11 +11,11 @@ type AdminRoleReqValidator struct {
 }
 
 // ListReq 接口列表参数验证
-func (a *AdminRoleReqValidator) ListReq(data interface{}) error {
+func (a *AdminRoleReqValidator) ListReq(data any) error {
 	return nil
 }
 
-func (a *AdminRoleReqValidator) AddReq(data interface{}) error {
+func (a *AdminRoleReqValidator) AddReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminRoleAdd{},
@@ -28,7 +28,7 @@ func (a *AdminRoleReqValidator) AddReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminRoleReqValidator) InfoReq(data interface{}) error {
+func (a *AdminRoleReqValidator) InfoReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminRoleInfo{},
@@ -40,7 +40,7 @@ func (a *AdminRoleReqValidator) InfoReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminRoleReqValidator) EditReq(data interface{}) error {
+func (a *AdminRoleReqValidator) EditReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminRoleEdit{},
@@ -54,7 +54,7 @@ func (a *AdminRoleReqValidator) EditReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminRoleReqValidator) EnableReq(data interface{}) error {
+func (a *AdminRoleReqValidator) EnableReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminRoleEnable{},
@@ -66,7 +66,7 @@ func (a *AdminRoleReqValidator) EnableReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminRoleReqValidator) DeleteReq(data interface{}) error {
+func (a *AdminRoleReqValidator) DeleteReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminRoleDelete{},
@@ -78,7 +78,7 @@ func (a *AdminRoleReqValidator) DeleteReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminRoleReqValidator) RolePermissionsReq(data interface{}) error {
+func (a *AdminRoleReqValidator) RolePermissionsReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminRolePermissions{},
@@ -90,7 +90,7 @@ func (a *AdminRoleReqValidator) RolePermissionsReq(data interface{}) error {
 	return govalidate.ValidateStructWithRules(data, rules)
 }
 
-func (a *AdminRoleReqValidator) RoleBindPermissionsReq(data interface{}) error {
+func (a *AdminRoleReqValidator) RoleBindPermissionsReq(data any) error {
 	rules := govalidate.Rules{
 		{
 			Type: admin_proto.ReqAdminRoleBindPermissions{},

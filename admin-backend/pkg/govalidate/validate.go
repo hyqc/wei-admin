@@ -23,7 +23,7 @@ func TranslateError(err error) error {
 }
 
 // ValidateStructWithRules 验证结构体使用map传入验证规则
-func ValidateStructWithRules(data interface{}, rules Rules) error {
+func ValidateStructWithRules(data any, rules Rules) error {
 	for _, item := range rules {
 		Validator.RegisterStructValidationMapRules(item.Rules, item.Type)
 	}
@@ -31,7 +31,7 @@ func ValidateStructWithRules(data interface{}, rules Rules) error {
 }
 
 // ValidateWithCtx 执行验证器
-func ValidateWithCtx(ctx *gin.Context, data interface{}, call ...ValidatorFunc) error {
+func ValidateWithCtx(ctx *gin.Context, data any, call ...ValidatorFunc) error {
 	if err := ctx.ShouldBind(data); err != nil {
 		// 请求解析失败
 		return err
@@ -40,7 +40,7 @@ func ValidateWithCtx(ctx *gin.Context, data interface{}, call ...ValidatorFunc) 
 }
 
 // Validate 执行验证器
-func Validate(data interface{}, call ...ValidatorFunc) error {
+func Validate(data any, call ...ValidatorFunc) error {
 	for _, handler := range call {
 		if err := handler(data); err != nil {
 			return err

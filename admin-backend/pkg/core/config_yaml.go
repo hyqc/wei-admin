@@ -16,7 +16,7 @@ func (Yaml) Read(path string) ([]byte, error) {
 	return body, nil
 }
 
-func (Yaml) Decode(data []byte, conf interface{}) interface{} {
+func (Yaml) Decode(data []byte, conf any) any {
 	err := yaml.Unmarshal(data, conf)
 	if err != nil {
 		return err

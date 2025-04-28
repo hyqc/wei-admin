@@ -73,7 +73,7 @@ func ExampleValidate() {
 		},
 	}
 
-	reqAddr := func(data interface{}) error {
+	reqAddr := func(data any) error {
 		rules := []*StructRule{
 			{
 				Type: Foo{},

@@ -15,7 +15,7 @@ type MessageBase struct {
 
 type Message struct {
 	MessageBase
-	Data interface{} `json:"data"`
+	Data any `json:"data"`
 }
 
 type IMessage interface {
@@ -26,8 +26,8 @@ type IMessage interface {
 	GetError() string
 	SetCodeMsg(code code_proto.ErrorCode, msg error)
 	SetCodeError(code code_proto.ErrorCode, err error)
-	SetData(data interface{})
-	GetData() interface{}
+	SetData(data any)
+	GetData() any
 	Error() string
 	SetError(err error)
 	SetMessage(err IMessage)
@@ -75,11 +75,11 @@ func (m *Message) SetCodeError(code code_proto.ErrorCode, err error) {
 	m.Reason = err.Error()
 }
 
-func (m *Message) SetData(data interface{}) {
+func (m *Message) SetData(data any) {
 	m.Data = data
 }
 
-func (m *Message) GetData() interface{} {
+func (m *Message) GetData() any {
 	return m.Data
 }
 

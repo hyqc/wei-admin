@@ -25,7 +25,7 @@ func GetOutBoundIP() (ip string, err error) {
 }
 
 // BeanCopy 结构体深拷贝
-func BeanCopy(dst, src interface{}) error {
+func BeanCopy(dst, src any) error {
 
 	if reflect.TypeOf(src).Kind() != reflect.Pointer {
 		return errors.New("src must be pointer")
