@@ -104,7 +104,7 @@ func generateProtoFile(protoContent *strings.Builder, table Item, rows *sql.Rows
 	fieldIndex := 1
 	for rows.Next() {
 		var (
-			null, key, def, extra interface{}
+			null, key, def, extra any
 			fieldName, fieldType  string
 		)
 		if err := rows.Scan(&fieldName, &fieldType, &null, &key, &def, &extra); err != nil {

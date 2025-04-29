@@ -22,7 +22,7 @@ func (APIController) List(ctx *gin.Context) {
 	msg := "APIController.List"
 	params := &admin_proto.ReqAdminApiList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -57,7 +57,7 @@ func (APIController) Add(ctx *gin.Context) {
 	msg := "APIController.Add"
 	params := &admin_proto.ReqAdminApiAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -76,7 +76,7 @@ func (APIController) Info(ctx *gin.Context) {
 	msg := "APIController.Info"
 	params := &admin_proto.ReqAdminApiInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -97,7 +97,7 @@ func (APIController) Edit(ctx *gin.Context) {
 	msg := "APIController.Edit"
 	params := &admin_proto.ReqAdminApiEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -116,7 +116,7 @@ func (APIController) Enable(ctx *gin.Context) {
 	msg := "APIController.Enable"
 	params := &admin_proto.ReqAdminApiEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -135,7 +135,7 @@ func (APIController) Delete(ctx *gin.Context) {
 	msg := "APIController.Delete"
 	params := &admin_proto.ReqAdminApiDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)

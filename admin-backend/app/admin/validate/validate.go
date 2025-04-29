@@ -25,8 +25,8 @@ func TranslateError(err error) error {
 	return err
 }
 
-// ValidateWithCtx 执行验证器
-func ValidateWithCtx(ctx *gin.Context, data any, call ...ValidatorFunc) error {
+// WithCtx 执行验证器
+func WithCtx(ctx *gin.Context, data any, call ...ValidatorFunc) error {
 	if err := ctx.ShouldBind(data); err != nil {
 		// 请求解析失败
 		return TranslateError(err)
@@ -34,14 +34,14 @@ func ValidateWithCtx(ctx *gin.Context, data any, call ...ValidatorFunc) error {
 	if call == nil || len(call) == 0 {
 		return nil
 	}
-	return TranslateError(Validate(data, call...))
+	return Validate(data, call...)
 }
 
 // Validate 执行验证器
 func Validate(data any, call ...ValidatorFunc) error {
 	for _, handler := range call {
 		if err := handler(data); err != nil {
-			return err
+			return TranslateError(err)
 		}
 	}
 	return nil

@@ -23,7 +23,7 @@ func (MenuController) List(ctx *gin.Context) {
 	msg := "MenuController.List"
 	params := &admin_proto.ReqAdminMenuList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -60,7 +60,7 @@ func (MenuController) Add(ctx *gin.Context) {
 	msg := "MenuController.Add"
 	params := &admin_proto.ReqAdminMenuAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -80,7 +80,7 @@ func (MenuController) Info(ctx *gin.Context) {
 	msg := "MenuController.Info"
 	params := &admin_proto.ReqAdminMenuInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -102,7 +102,7 @@ func (MenuController) Edit(ctx *gin.Context) {
 	msg := "MenuController.Edit"
 	params := &admin_proto.ReqAdminMenuEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -122,7 +122,7 @@ func (MenuController) Enable(ctx *gin.Context) {
 	msg := "MenuController.Enable"
 	params := &admin_proto.ReqAdminMenuEnable{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -142,7 +142,7 @@ func (MenuController) Show(ctx *gin.Context) {
 	msg := "MenuController.Show"
 	params := &admin_proto.ReqAdminMenuShow{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -162,7 +162,7 @@ func (MenuController) Delete(ctx *gin.Context) {
 	msg := "MenuController.Delete"
 	params := &admin_proto.ReqAdminMenuDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -182,7 +182,7 @@ func (MenuController) Permissions(ctx *gin.Context) {
 	msg := "MenuController.Permissions"
 	params := &admin_proto.ReqAdminMenuPermissions{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -204,7 +204,7 @@ func (MenuController) Pages(ctx *gin.Context) {
 	msg := "MenuController.Permissions"
 	params := &admin_proto.ReqAdminMenuPages{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
