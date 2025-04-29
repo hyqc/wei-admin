@@ -1,4 +1,4 @@
-package validate
+package global
 
 // 正则规则表达式
 const (

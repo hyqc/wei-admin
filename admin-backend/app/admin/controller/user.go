@@ -2,12 +2,12 @@ package controller
 
 import (
 	"admin/app/admin/logic"
+	"admin/app/admin/validate"
 	"admin/app/common"
 	"admin/code"
 	"admin/constant"
 	"admin/global"
 	"admin/pkg/core"
-	"admin/pkg/govalidate"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func (UserController) List(ctx *gin.Context) {
 	msg := "UserController.List"
 	params := &admin_proto.ReqAdminUserList{Base: common.NewListBaseReq()}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -45,7 +45,7 @@ func (UserController) Add(ctx *gin.Context) {
 	msg := "UserController.Add"
 	params := &admin_proto.ReqAdminUserAdd{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -64,7 +64,7 @@ func (UserController) Info(ctx *gin.Context) {
 	msg := "UserController.Info"
 	params := &admin_proto.ReqAdminUserInfo{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -85,7 +85,7 @@ func (UserController) Edit(ctx *gin.Context) {
 	msg := "UserController.Edit"
 	params := &admin_proto.ReqAdminUserEdit{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -104,7 +104,7 @@ func (UserController) EditPassword(ctx *gin.Context) {
 	msg := "UserController.EditPassword"
 	params := &admin_proto.ReqAdminUserEditPassword{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -123,7 +123,7 @@ func (UserController) Enable(ctx *gin.Context) {
 	msg := "UserController.Enable"
 	params := &admin_proto.ReqAdminUserEnabled{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -142,7 +142,7 @@ func (UserController) Delete(ctx *gin.Context) {
 	msg := "UserController.Delete"
 	params := &admin_proto.ReqAdminUserDelete{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
@@ -161,7 +161,7 @@ func (UserController) BindRoles(ctx *gin.Context) {
 	msg := "UserController.BindRoles"
 	params := &admin_proto.ReqAdminUserBindRoles{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := govalidate.ValidateWithCtx(ctx, params); err != nil {
+	if err := validate.ValidateWithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
