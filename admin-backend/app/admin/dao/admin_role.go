@@ -153,7 +153,7 @@ func (a *AdminRole) FindAdminRolePermissionByRoleId(ctx context.Context, roleId 
 
 func (a *AdminRole) BindPermissions(ctx context.Context, roleId int32, data []*model2.AdminRolePermission) error {
 	pa := query2.AdminRolePermission
-	err := global.AppConfig.DBClient.Wei.Transaction(func(tx *gorm.DB) error {
+	err := global.AppDB.Wei.Transaction(func(tx *gorm.DB) error {
 		if _, err := pa.WithContext(ctx).Where(pa.RoleID.Eq(roleId)).Delete(); err != nil {
 			return err
 		}

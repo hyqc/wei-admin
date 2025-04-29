@@ -10,13 +10,13 @@ type Config struct {
 	Server   Server   `yaml:"server"`
 	Database Database `yaml:"database"`
 	Logger   Logger   `yaml:"logger"`
-	DBClient *DBClient
 }
 
 var (
 	AppConfig        = &Config{}
 	AppLogger        *zap.Logger
 	AppLoggerSugared *zap.SugaredLogger
+	AppDB            *DBClient
 )
 
 func ParseConfig(name string) error {

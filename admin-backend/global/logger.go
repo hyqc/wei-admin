@@ -2,7 +2,6 @@ package global
 
 import (
 	"admin/pkg/logger"
-	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
@@ -12,7 +11,7 @@ type Logger struct {
 	MaxBackups int    `yaml:"max_backups"`
 	MaxAge     int    `yaml:"max_age"`
 	Compress   bool   `yaml:"compress"`
-	Level      int    `yaml:"level"`
+	Level      string `yaml:"level"`
 	Json       bool   `yaml:"json"`
 }
 
@@ -26,7 +25,7 @@ func InitLogger() error {
 			MaxAge:     cf.MaxAge,
 			Compress:   cf.Compress,
 		},
-		Level: zapcore.Level(cf.Level),
+		Level: logger.LevelMap[cf.Level],
 		Json:  cf.Json,
 	})
 	if err != nil {

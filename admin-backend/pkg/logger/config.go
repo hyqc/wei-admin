@@ -14,7 +14,25 @@ type Logger struct {
 	Json   bool
 }
 
+const (
+	LoggerLevelDebug = "debug"
+	LoggerLevelInfo  = "info"
+	LoggerLevelWarn  = "warn"
+	LoggerLevelError = "error"
+	LoggerLevelFatal = "fatal"
+)
+
 var config = zap.NewProductionEncoderConfig()
+
+var (
+	LevelMap = map[string]zapcore.Level{
+		LoggerLevelDebug: zapcore.DebugLevel,
+		LoggerLevelInfo:  zapcore.InfoLevel,
+		LoggerLevelWarn:  zapcore.WarnLevel,
+		LoggerLevelError: zapcore.ErrorLevel,
+		LoggerLevelFatal: zapcore.FatalLevel,
+	}
+)
 
 func NewDefaultLogger(filename string) *Logger {
 	return &Logger{
