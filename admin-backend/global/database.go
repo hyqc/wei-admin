@@ -2,7 +2,7 @@ package global
 
 import (
 	"admin/app/admin/gen/query"
-	"admin/pkg/components/mysql"
+	"admin/pkg/config/store/mysql"
 	"gorm.io/gorm"
 )
 

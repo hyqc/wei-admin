@@ -1,0 +1,10 @@
+nacos:
+  hosts:
+    - 192.168.9.212:8848
+  namespace: 'c0e86a48-6cf9-4ebb-bd69-1a74e8ba2416'
+  user: 'nacos'
+  password: 'nacos'
+  dataId: 'game.yaml'
+  group: 'hope_city2'
+  cluster: "hope_city_admin"
+  open: true
