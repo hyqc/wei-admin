@@ -23,10 +23,16 @@ type IConfig interface {
 	Original() interface{}
 }
 
+const (
+	cfsValueLocalFile = "local"
+	cfsValueNacosFile = "nacos"
+)
+
 var (
-	cfp   = flag.String("cfp", ".", "配置文件路径")
-	cfs   = flag.String("cfs", "", "配置源键名")
-	env   = flag.String("env", "", "自定义环境变量值")
+	cfp = flag.String("cfp", ".", "配置文件路径\n")
+	cfs = flag.String("cfs", cfsValueLocalFile, fmt.Sprintf("配置源名称，可能值: \n1. %s:本地配置文件\n2. %s: 解析本地配置中指定的%s源的配置\n",
+		cfsValueLocalFile, cfsValueNacosFile, cfsValueNacosFile))
+	env   = flag.String("env", "", "自定义环境变量值\n")
 	Nacos = &NacosConfig{}
 	coder = yaml.NewEncoder()
 )
@@ -46,10 +52,11 @@ func Init(cf IConfig) error {
 	if err := loadFile(cf); err != nil {
 		return err
 	}
-	if len(*cfs) == 0 {
+	if *cfs != cfsValueNacosFile {
 		//解析本地的配置
 		return nil
 	}
+
 	if err := loadFile(Nacos, *cfs); err != nil {
 		return err
 	}
