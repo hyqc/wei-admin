@@ -46,36 +46,14 @@ func Init(cf IConfig) error {
 	if err := loadFile(cf); err != nil {
 		return err
 	}
-	keys := getConfigSourceKeys()
-	if len(keys) == 0 {
+	if len(*cfs) == 0 {
 		//解析本地的配置
 		return nil
 	}
-	if err := loadFile(Nacos, keys...); err != nil {
+	if err := loadFile(Nacos, *cfs); err != nil {
 		return err
 	}
 	return loadNacos(Nacos, cf)
-}
-
-func getConfigSourceKeys() (keys []string) {
-	tmp := *cfs
-	if len(tmp) == 0 {
-		return
-	}
-	val := strings.Split(tmp, ",")
-	m := make(map[string]struct{})
-	for _, v := range val {
-		v = strings.TrimSpace(v)
-		if v == "" {
-			continue
-		}
-		m[v] = struct{}{}
-	}
-
-	for v := range m {
-		keys = append(keys, v)
-	}
-	return
 }
 
 // LoadByNacosDataId 解析Nacos中的DataID配置项
@@ -99,7 +77,12 @@ func loadFile(cf IConfig, keys ...string) error {
 		filepath = fmt.Sprintf("%s/config-%s.yaml", *cfp, mode)
 	}
 
-	logger.Infof("开始加载配置文件,文件路径: %s, keys: %v", filepath, keys)
+	if len(keys) == 0 {
+		logger.Infof("开始加载配置文件,文件路径cfp: %s, 配置源cfs:", filepath)
+	} else {
+		logger.Infof("开始加载配置文件,文件路径cfp: %s, 配置源cfs: %v", filepath, keys[0])
+	}
+
 	opts := []config.Option{
 		config.WithSource(file.NewSource(file.WithPath(filepath))),
 		config.WithReader(json.NewReader(reader.WithEncoder(coder))),

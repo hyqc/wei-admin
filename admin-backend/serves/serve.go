@@ -4,6 +4,7 @@ import (
 	"admin/app/middleware"
 	"admin/app/router"
 	"admin/global"
+	"admin/pkg/config"
 	"admin/pkg/utils"
 	"context"
 	"errors"
@@ -69,7 +70,7 @@ func runServe() {
 	server.Handler = e
 
 	go func() {
-		utils.PrintfLn(fmt.Sprintf("start serve port: %v", port))
+		utils.PrintfLn(fmt.Sprintf("start serve env: %v, port: %v", config.Env(), port))
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			utils.PrintfLn("start serve port: %v, error: %v", port, err)
 			return
@@ -78,7 +79,7 @@ func runServe() {
 }
 
 func signalListen(ctx context.Context) {
-	utils.PrintfLn("listen os signal...")
+	utils.PrintfLn("listen os signal")
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	select {
 	case <-sig:
