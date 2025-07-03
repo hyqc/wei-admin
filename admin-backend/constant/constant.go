@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"admin/pkg/core"
+	"admin/pkg/utils/jwt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,10 +17,10 @@ func IsAdministrator(adminId int32) bool {
 	return adminId == AdministerId
 }
 
-func GetCustomClaims(ctx *gin.Context) *core.CustomClaims {
+func GetCustomClaims(ctx *gin.Context) *jwt.CustomClaims {
 	val, ok := ctx.Get(ContextClaims)
 	if ok {
-		return val.(*core.CustomClaims)
+		return val.(*jwt.CustomClaims)
 	}
 	return nil
 }

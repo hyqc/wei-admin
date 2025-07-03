@@ -43,12 +43,12 @@ func HandleListBaseReq(params *admin_proto.ReqListBase) (offset, limit int, data
 // HandleLogicError 处理逻辑层返回的错误
 func HandleLogicError(ctx *gin.Context, err error, msg string, result code.IMessage) {
 	if errors.As(err, &result) {
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
 	result.SetCodeError(code_proto.ErrorCode_Error, err)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 	code.JSON(ctx, result)
 	return
 }

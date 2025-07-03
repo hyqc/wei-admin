@@ -25,7 +25,7 @@ func (UserController) List(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -35,7 +35,7 @@ func (UserController) List(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -47,7 +47,7 @@ func (UserController) Add(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -55,7 +55,7 @@ func (UserController) Add(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }
 
@@ -66,7 +66,7 @@ func (UserController) Info(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -76,7 +76,7 @@ func (UserController) Info(ctx *gin.Context) {
 		return
 	}
 	result.SetData(info)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }
 
@@ -87,7 +87,7 @@ func (UserController) Edit(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -95,7 +95,7 @@ func (UserController) Edit(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }
 
@@ -106,7 +106,7 @@ func (UserController) EditPassword(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -114,7 +114,7 @@ func (UserController) EditPassword(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }
 
@@ -125,7 +125,7 @@ func (UserController) Enable(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -133,7 +133,7 @@ func (UserController) Enable(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }
 
@@ -144,7 +144,7 @@ func (UserController) Delete(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -152,7 +152,7 @@ func (UserController) Delete(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }
 
@@ -163,7 +163,7 @@ func (UserController) BindRoles(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -171,6 +171,6 @@ func (UserController) BindRoles(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }

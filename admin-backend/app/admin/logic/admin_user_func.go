@@ -4,15 +4,15 @@ import (
 	"admin/app/admin/dao"
 	"admin/app/admin/gen/model"
 	"admin/global"
-	"admin/pkg/core"
 	"admin/pkg/utils"
+	"admin/pkg/utils/jwt"
 	"admin/proto/admin_proto"
 	"context"
 	"encoding/json"
 	"time"
 )
 
-func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds int64) (*admin_proto.AdminInfo, error) {
+func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken bool, seconds time.Duration) (*admin_proto.AdminInfo, error) {
 	data.Password = ""
 	resp := &admin_proto.AdminInfo{
 		AdminId:       data.ID,
@@ -34,14 +34,13 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 	}
 	resp.LastLoginIp = lastLoginIp
 	if refreshToken {
-		token, err := createToken(data.ID, data.Username, seconds)
+		token, err := createToken(data.ID, data.Username, int64(seconds))
 		if err != nil {
 			return nil, err
 		}
-		resp.Token = token
-		expireDate := time.Now().Add(time.Second * time.Duration(seconds))
-		resp.Expire = expireDate.Unix()
-		resp.ExpireDataTime = utils.HandleTime2String(expireDate)
+		resp.Token = token.Token
+		resp.Expire = token.ExpiryAt.Unix()
+		resp.ExpireDataTime = utils.HandleTime2String(token.ExpiryAt)
 	}
 
 	// 菜单
@@ -74,19 +73,13 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 	return resp, err
 }
 
-func createToken(adminId int32, username string, seconds int64) (string, error) {
+func createToken(adminId int32, username string, seconds int64) (*jwt.Token, error) {
 	// 生成token
-	jti, err := core.Sonyflake.NextID()
-	if err != nil {
-		return "", err
-	}
-	token, err := core.JWTCreate(core.CustomClaimsOption{
+	data := jwt.ClaimsData{
 		AccountId:     adminId,
 		ExpireSeconds: seconds,
-		UUID:          jti,
-		Secret:        global.AppConfig.Server.JWT.Secret,
-	})
-	return token, err
+	}
+	return global.AppAuth.Generate(data)
 }
 
 func getMyMenusAndPermissions(ctx context.Context, adminId int32) (menus []*admin_proto.MenuItem, permissionKeys map[string]string, err error) {

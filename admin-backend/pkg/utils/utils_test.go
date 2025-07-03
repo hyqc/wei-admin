@@ -45,3 +45,13 @@ func TestCamelToSnake(t *testing.T) {
 		fmt.Println(CamelToSnake(v))
 	}
 }
+
+func TestGetOutBoundIP(t *testing.T) {
+	ip, err := GetOutBoundIP()
+	assert.Nil(t, err, "错误1")
+	fmt.Println("ip: ", ip)
+
+	lip, err := GetLocalBoundIP()
+	assert.Nil(t, err, "错误1")
+	fmt.Println("lip: ", lip)
+}

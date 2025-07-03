@@ -1,11 +1,14 @@
 package utils
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
-	"fmt"
 	"github.com/spf13/viper"
+	"io"
 	"net"
 	"reflect"
+	"sort"
 	"strings"
 	"time"
 	"unicode"
@@ -13,15 +16,53 @@ import (
 
 // GetOutBoundIP 获取对外IP
 func GetOutBoundIP() (ip string, err error) {
-	conn, err := net.Dial("udp", "8.8.8.8:53")
+	conn, err := net.Dial("udp", "8.8.8.8:80")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
-	fmt.Println(localAddr.String())
 	ip = strings.Split(localAddr.String(), ":")[0]
 	return
+}
+
+func GetLocalBoundIP() ([]string, error) {
+	var ips []string
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		return nil, err
+	}
+	for _, i := range interfaces {
+		byIndex, err := net.InterfaceByName(i.Name)
+		if err != nil {
+			continue
+		}
+		addrs, err := byIndex.Addrs()
+		if err != nil {
+			continue
+		}
+		for _, addr := range addrs {
+			var ip net.IP
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+
+			if ip == nil || ip.IsLoopback() {
+				continue
+			}
+			ip = ip.To4()
+			if ip == nil {
+				continue // 不是IPv4地址
+			}
+			ips = append(ips, ip.String())
+		}
+	}
+	sort.Slice(ips, func(i, j int) bool {
+		return ips[i] > ips[j]
+	})
+	return ips, nil
 }
 
 // BeanCopy 结构体深拷贝
@@ -103,4 +144,10 @@ func CamelToSnake(s string) string {
 		}
 	}
 	return string(result)
+}
+
+func Md5(code string) string {
+	MD5 := md5.New()
+	_, _ = io.WriteString(MD5, code)
+	return hex.EncodeToString(MD5.Sum(nil))
 }

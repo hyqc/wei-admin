@@ -15,7 +15,7 @@ type DemoController struct {
 
 func (d DemoController) Demo(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	global.AppLogger.Sugar().Debugw("info", zap.Any("msg", result))
+	global.LogSugar.Debugw("info", zap.Any("msg", result))
 	code.JSON(ctx, result)
 	return
 }

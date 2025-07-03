@@ -21,7 +21,7 @@ type AccountController struct {
 func (AccountController) Register(ctx *gin.Context) {
 	msg := "AccountController.Register"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	global.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -41,7 +41,7 @@ func (AccountController) Login(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -52,7 +52,7 @@ func (AccountController) Login(ctx *gin.Context) {
 	}
 	result.SetData(data)
 
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -62,14 +62,14 @@ func (AccountController) Info(ctx *gin.Context) {
 	msg := "AccountController.Info"
 	refreshToken := ctx.GetBool("refreshToken")
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := logic.H.AdminUser.AccountInfo(ctx, constant.GetCustomClaims(ctx).AdminID, refreshToken, constant.AdminTokenExpireSeconds)
+	data, err := logic.H.AdminUser.AccountInfo(ctx, constant.GetCustomClaims(ctx).AccountId, refreshToken, constant.AdminTokenExpireSeconds)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
 
 	result.SetData(data)
-	global.AppLogger.Sugar().Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -81,16 +81,16 @@ func (AccountController) Edit(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
-	err := logic.H.AdminUser.AccountEdit(ctx, constant.GetCustomClaims(ctx).AdminID, params)
+	err := logic.H.AdminUser.AccountEdit(ctx, constant.GetCustomClaims(ctx).AccountId, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -102,16 +102,16 @@ func (AccountController) Password(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
-	err := logic.H.AdminUser.AccountEditPassword(ctx, constant.GetCustomClaims(ctx).AdminID, params)
+	err := logic.H.AdminUser.AccountEditPassword(ctx, constant.GetCustomClaims(ctx).AccountId, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -120,13 +120,13 @@ func (AccountController) Password(ctx *gin.Context) {
 func (AccountController) Menu(ctx *gin.Context) {
 	msg := "AccountController.Menu"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := logic.H.AdminUser.MyMenus(ctx, constant.GetCustomClaims(ctx).AdminID)
+	data, err := logic.H.AdminUser.MyMenus(ctx, constant.GetCustomClaims(ctx).AccountId)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -134,13 +134,13 @@ func (AccountController) Menu(ctx *gin.Context) {
 func (AccountController) Permission(ctx *gin.Context) {
 	msg := "AccountController.Permission"
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	data, err := logic.H.AdminUser.MyPermission(ctx, constant.GetCustomClaims(ctx).AdminID)
+	data, err := logic.H.AdminUser.MyPermission(ctx, constant.GetCustomClaims(ctx).AccountId)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }

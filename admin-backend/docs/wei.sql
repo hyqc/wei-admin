@@ -1,5 +1,5 @@
 /*
- Navicat Premium Data Transfer
+ Navicat Premium CustomClaims Transfer
 
  Source Server         : localhost_3306
  Source Server Type    : MySQL

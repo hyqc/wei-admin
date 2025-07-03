@@ -70,7 +70,7 @@ func (a *AdminRoleLogic) HandleItemData(item *model.AdminRole) (data *admin_prot
 }
 
 func (a *AdminRoleLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminRoleAdd) error {
-	adminId := constant.GetCustomClaims(ctx).AdminID
+	adminId := constant.GetCustomClaims(ctx).AccountId
 	data := &model.AdminRole{
 		Name:          params.Name,
 		Describe:      params.Describe,

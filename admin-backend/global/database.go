@@ -6,18 +6,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type Database struct {
-	Wei mysql.Config `yaml:"wei"`
+type Store struct {
+	Wei mysql.Config `json:"wei"`
 }
 
 type DBClient struct {
 	Wei *gorm.DB
 }
 
-func InitMySQLDB() error {
+func initMySQLDB() error {
 	AppDB = &DBClient{}
 
-	db, err := mysql.New(&AppConfig.Database.Wei)
+	db, err := mysql.New(&AppConfig.Store.Wei)
 	if err != nil {
 		return err
 	}

@@ -25,7 +25,7 @@ func (MenuController) List(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -35,7 +35,7 @@ func (MenuController) List(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -50,7 +50,7 @@ func (MenuController) Tree(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -62,7 +62,7 @@ func (MenuController) Add(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -70,7 +70,7 @@ func (MenuController) Add(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -82,7 +82,7 @@ func (MenuController) Info(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -92,7 +92,7 @@ func (MenuController) Info(ctx *gin.Context) {
 		return
 	}
 	result.SetData(info)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -104,7 +104,7 @@ func (MenuController) Edit(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -112,7 +112,7 @@ func (MenuController) Edit(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -124,7 +124,7 @@ func (MenuController) Enable(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -132,7 +132,7 @@ func (MenuController) Enable(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -144,7 +144,7 @@ func (MenuController) Show(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -152,7 +152,7 @@ func (MenuController) Show(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -164,7 +164,7 @@ func (MenuController) Delete(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -172,7 +172,7 @@ func (MenuController) Delete(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -184,7 +184,7 @@ func (MenuController) Permissions(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -194,7 +194,7 @@ func (MenuController) Permissions(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -206,7 +206,7 @@ func (MenuController) Pages(ctx *gin.Context) {
 	result := code.NewCode(code_proto.ErrorCode_Success)
 	if err := validate.WithCtx(ctx, params); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
-		global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
+		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
 	}
@@ -216,7 +216,7 @@ func (MenuController) Pages(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }
@@ -231,7 +231,7 @@ func (MenuController) Modes(ctx *gin.Context) {
 		return
 	}
 	result.SetData(data)
-	global.AppLoggerSugared.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
 }

@@ -1,0 +1,40 @@
+server:
+  debug: true
+  port: 3000
+  pprof: true
+nacos:
+  host: '192.168.9.212'
+  port: 8848
+  namespace: 'c0e86a48-6cf9-4ebb-bd69-1a74e8ba2416'
+  user: 'nacos'
+  password: 'nacos'
+  dataId: 'admin.yaml'
+  group: 'hope_city2'
+  cluster: "hope_city_admin"
+jwt:
+  public: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FDN1U4bkhja2VXcmg1UXNPYmJsUGxUNGpScQo3dzVpUDdUK0x3QU1hTHZWUUQvZ2VnMWlJeDVjQlhIOEF1dXFxNVVrSkNyZnRJRTNBa0x0dTBZT1F6UmZ6ejFvCnpZbVJHNGp3UmducWt1c1BCdHMxYXZ4NUpDeUhkTTczS2tJbmF1b2Vad3RYOXc1QllFc0RZaE1zUVVpeDB3REoKcFZ0RjhsQWpCMUdjcW93czR3SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ=="
+  private: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUNkd0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQW1Fd2dnSmRBZ0VBQW9HQkFMdFR5Y2R5UjVhdUhsQ3cKNXR1VStWUGlOR3J2RG1JL3RQNHZBQXhvdTlWQVArQjZEV0lqSGx3RmNmd0M2NnFybFNRa0t0KzBnVGNDUXUyNwpSZzVETkYvUFBXak5pWkViaVBCR0NlcVM2dzhHMnpWcS9Ia2tMSWQwenZjcVFpZHE2aDVuQzFmM0RrRmdTd05pCkV5eEJTTEhUQU1tbFcwWHlVQ01IVVp5cWpDempBZ01CQUFFQ2dZRUF0YVJkZUNQNy9zUC9hVWJmMC9QMGY3NU0KRFpTWVlmUmNVRXpLd3oyYlJRRHo3M3JxRjBydVdWUitYbHVHb1F1WHBsL2JvdWVvaytxQmMzdXdSb3dyN3o5WgpYS2ptSEFQNEJldTg0M0F2VGhFc3ZGY09Ld2RkREZPNmNBRU92WTU3dm96R0M0aUpoZ1MxYTNITHppdVk4V05oClgrazhEY2FWa0xSRG9lRjdNT0VDUVFEM3lLd05INU11UVBFS2ZURVhrd0Iyckd6VmUyUzNKU0JtLzg3TzZDVUQKRitlMjlLZ1dneENjeDBVZzFpdTF6c3o3UWx2UGY3TllKZW80eUhLdFVNRmRBa0VBd1ludFN4eEpsc1FkTUd0OApManAyZnN6L3RjMWk2UG5hSXJhNjdoYkZwczRGRm1TTU5QV3RJeDY5d2lyNGpnYVVYbjRTeUNrK3hIK2d2K01TCkJnS0RQd0pCQVBHZzhnNjJITXU5THBGZzlnK2NIWmFjbkdFdVBFL1ExNkU1a2MzNVdhYURtRVcwblhtZWhBT3UKMnYyamZPcUZhU1VZVi9tbitSZGJtZVdYcXlUU0hFMENRQ1lvUkdHUHBTNlZZYy9mRVMrb0ZSNncyaVdFNWVCYgpDbGZYd1FrWjhrUU4wRkQyNS9HMUVqcWZYL2c5TXA0RnpCREpPSGpBTVFEYXpOMm9MakNESkU4Q1FHbDRQa2l2CjJhZWtFRldmaFBmZHFJL1QxZlkvUjBWeis5NHlpbWFCdExqaEFXb3ZHdk1ncnlDT2dycHdBSkgyZjU4SjhvdUwKdXVSQ2RVN2liQnYxKzI0PQotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0t"
+  expire: "300h"
+  ignore:
+    - /admin/account/login
+database:
+  wei:
+    user: root
+    pwd: 123456
+    host: 127.0.0.1
+    port: 3306
+    dbname: wei
+    charset: utf8mb4
+    parse_time: True
+    location: Local
+    max_idle_cons: 2
+    max_open_cons: 20
+    conn_max_lifetime_minutes: 200
+logger:
+  filename: "./logs/admin.log"
+  max_size: 5
+  max_backups: 7
+  max_age: 14
+  compress: true
+  level: debug # debug, info, warn,error
+  json: true

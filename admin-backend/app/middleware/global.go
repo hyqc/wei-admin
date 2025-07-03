@@ -50,15 +50,15 @@ func logger() gin.HandlerFunc {
 		body, err := io.ReadAll(ctx.Request.Body)
 		if err != nil {
 			msg := code.NewCodeError(code_proto.ErrorCode_ReadContextRequestBodyFailed, err)
-			global.AppLoggerSugared.Errorw("read context request body error", msg, err)
+			global.LogSugar.Errorw("read context request body error", msg, err)
 			code.JSON(ctx, msg)
 			return
 		}
 		ctx.Request.Body = io.NopCloser(bytes.NewReader(body))
-		global.AppLoggerSugared.Debugw("body", zap.ByteString("body", body))
-		global.AppLoggerSugared.Debugw("query", zap.String("raw", ctx.Request.URL.RawQuery))
+		global.LogSugar.Debugw("body", zap.ByteString("body", body))
+		global.LogSugar.Debugw("query", zap.String("raw", ctx.Request.URL.RawQuery))
 		cost := time.Since(start)
-		global.AppLoggerSugared.Infow("request",
+		global.LogSugar.Infow("request",
 			zap.Duration("cost", cost),
 			zap.String("method", ctx.Request.Method),
 			zap.Int("status", ctx.Writer.Status()),
@@ -73,7 +73,7 @@ func logger() gin.HandlerFunc {
 
 func recovery() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		logger := global.AppLoggerSugared
+		logger := global.LogSugar
 		defer func() {
 			if err := recover(); err != nil {
 				errInfo := string(debug.Stack())

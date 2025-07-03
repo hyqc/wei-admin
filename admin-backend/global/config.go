@@ -1,34 +1,64 @@
 package global
 
 import (
+	"admin/pkg/config"
+	"admin/pkg/utils"
+	"admin/pkg/utils/jwt"
+	"fmt"
+	"go-micro.dev/v5/logger"
 	"go.uber.org/zap"
-	"gopkg.in/yaml.v3"
-	"os"
 )
 
 type Config struct {
-	Server   Server   `yaml:"server"`
-	Database Database `yaml:"database"`
-	Logger   Logger   `yaml:"logger"`
+	Server config.Server `json:"server"`
+	Logger config.Logger `json:"logger"`
+	JWT    config.Jwt    `json:"JWT"`
+	Store  Store         `json:"store"`
 }
 
+func (c *Config) Handle() error {
+	return nil
+}
+
+func (c *Config) Original() any {
+	return c
+}
+
+type initConfigFunc func() error
+
 var (
-	AppConfig        = &Config{}
-	AppLogger        *zap.Logger
-	AppLoggerSugared *zap.SugaredLogger
-	AppDB            *DBClient
+	AppConfig = &Config{}
+	Log       *zap.Logger
+	LogSugar  *zap.SugaredLogger
+	AppDB     *DBClient
+	AppAuth   *jwt.Auth
 )
 
-func ParseConfig(name string) error {
-	body, err := os.ReadFile(name)
+var (
+	//注册初始化方法
+	initConfigCall = []initConfigFunc{
+		initConfig,
+		initLogger,
+		initMySQLDB,
+		initJwt,
+		initServer,
+	}
+)
+
+func init() {
+	initValidator()
+}
+
+func initConfig() error {
+	return config.Init(AppConfig)
+}
+
+func initServer() error {
+	ip, err := utils.GetOutBoundIP()
 	if err != nil {
+		logger.Errorf("initServer utils.GetOutBoundIP error: %v", err)
 		return err
 	}
-	if err := yaml.Unmarshal(body, AppConfig); err != nil {
-		return err
-	}
-	if AppConfig.Server.JWT.UsefulLife == 0 {
-		AppConfig.Server.JWT.UsefulLife = 3600 * 24
-	}
+	AppConfig.Server.Id = utils.Md5(fmt.Sprintf("%s=%s:%d", AppConfig.Server.Name, ip, AppConfig.Server.Port))
 	return nil
 }

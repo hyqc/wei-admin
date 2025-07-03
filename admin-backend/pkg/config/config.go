@@ -3,6 +3,7 @@ package config
 import (
 	json2 "encoding/json"
 	"flag"
+	"fmt"
 	"github.com/micro/plugins/v5/config/encoder/yaml"
 	nacosSource "github.com/micro/plugins/v5/config/source/nacos"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
@@ -23,22 +24,58 @@ type IConfig interface {
 }
 
 var (
-	cfp     = flag.String("cfp", "./config.yaml", "配置文件路径")
-	env     = flag.String("env", "", "自定义环境变量值")
-	RunMode string
-	Nacos   = &NacosConfig{}
-	coder   = yaml.NewEncoder()
+	cfp   = flag.String("cfp", ".", "配置文件路径")
+	cfs   = flag.String("cfs", "", "配置源键名")
+	env   = flag.String("env", "", "自定义环境变量值")
+	Nacos = &NacosConfig{}
+	coder = yaml.NewEncoder()
 )
 
-func Init(cf IConfig) error {
+func init() {
 	flag.Parse()
+}
 
+func Env() string {
+	return *env
+}
+
+// Init 初始化解析Nacos
+func Init(cf IConfig) error {
+	logger.Infof("Server Run Env=%s", Env())
 	//解析config.yaml配置文件的nacos配置
-	err := loadLocal(Nacos, "nacos")
-	if err != nil {
+	if err := loadFile(cf); err != nil {
 		return err
 	}
-	return loadRemote(Nacos, cf)
+	keys := getConfigSourceKeys()
+	if len(keys) == 0 {
+		//解析本地的配置
+		return nil
+	}
+	if err := loadFile(Nacos, keys...); err != nil {
+		return err
+	}
+	return loadNacos(Nacos, cf)
+}
+
+func getConfigSourceKeys() (keys []string) {
+	tmp := *cfs
+	if len(tmp) == 0 {
+		return
+	}
+	val := strings.Split(tmp, ",")
+	m := make(map[string]struct{})
+	for _, v := range val {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		m[v] = struct{}{}
+	}
+
+	for v := range m {
+		keys = append(keys, v)
+	}
+	return
 }
 
 // LoadByNacosDataId 解析Nacos中的DataID配置项
@@ -50,12 +87,21 @@ func LoadByNacosDataId(ncf *NacosConfig, cf IConfig, dataId string, keys ...stri
 	return load(cf, c, keys...)
 }
 
-// loadLocal 加载配置文件配置并解析
-func loadLocal(cf IConfig, keys ...string) error {
-	filename := *cfp
-	logger.Infof("开始加载配置文件,文件路径: %s, keys: %v", filename, keys)
+// loadFile 加载配置文件配置并解析
+func loadFile(cf IConfig, keys ...string) error {
+	var (
+		filepath string
+		mode     = Env()
+	)
+	if mode == "" {
+		filepath = fmt.Sprintf("%s/config.yaml", *cfp)
+	} else {
+		filepath = fmt.Sprintf("%s/config-%s.yaml", *cfp, mode)
+	}
+
+	logger.Infof("开始加载配置文件,文件路径: %s, keys: %v", filepath, keys)
 	opts := []config.Option{
-		config.WithSource(file.NewSource(file.WithPath(filename))),
+		config.WithSource(file.NewSource(file.WithPath(filepath))),
 		config.WithReader(json.NewReader(reader.WithEncoder(coder))),
 	}
 	// 加载配置
@@ -66,8 +112,8 @@ func loadLocal(cf IConfig, keys ...string) error {
 	return load(cf, c, keys...)
 }
 
-// loadRemote 加载Nacos中的配置项并解析
-func loadRemote(ncf *NacosConfig, cf IConfig, keys ...string) error {
+// loadNacos 加载Nacos中的配置项并解析
+func loadNacos(ncf *NacosConfig, cf IConfig, keys ...string) error {
 	c, err := getNacosConfig(ncf)
 	if err != nil {
 		return err

@@ -52,7 +52,7 @@ func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.R
 		return nil, code.NewCodeError(code_proto.ErrorCode_AdminAccountPasswordInvalid, nil)
 	}
 
-	info, err := getAccountInfo(ctx, data, true, global.AppConfig.Server.JWT.UsefulLife)
+	info, err := getAccountInfo(ctx, data, true, global.AppConfig.JWT.Expire)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (a *AdminUserLogic) AccountInfo(ctx context.Context, adminId int32, refresh
 		return nil, err
 	}
 
-	info, err := getAccountInfo(ctx, data, refreshToken, seconds)
+	info, err := getAccountInfo(ctx, data, refreshToken, time.Duration(seconds))
 	if err != nil {
 		return nil, err
 	}

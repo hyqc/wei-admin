@@ -9,21 +9,21 @@ import (
 )
 
 type Config struct {
-	User                   string `yaml:"user"`
-	Password               string `yaml:"pwd"`
-	Host                   string `yaml:"host"`
-	Port                   string `yaml:"port"`
-	Dbname                 string `yaml:"dbname"`
-	Charset                string `yaml:"charset"`
-	ParseTime              string `yaml:"parse_time"`
-	Location               string `yaml:"location"`
-	MaxIdleCons            int    `yaml:"max_idle_cons"`
-	MaxOpenCons            int    `yaml:"max_open_cons"`
-	ConnMaxLifetimeMinutes int    `yaml:"conn_max_lifetime_minutes"`
+	User                   string `json:"user"`
+	Password               string `json:"pwd"`
+	Host                   string `json:"host"`
+	Port                   int    `json:"port"`
+	Dbname                 string `json:"dbname"`
+	Charset                string `json:"charset"`
+	ParseTime              bool   `json:"parse_time"`
+	Location               string `json:"location"`
+	MaxIdleCons            int    `json:"max_idle_cons"`
+	MaxOpenCons            int    `json:"max_open_cons"`
+	ConnMaxLifetimeMinutes int    `json:"conn_max_lifetime_minutes"`
 }
 
 func New(conf *Config) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=%s&loc=%s",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%v&loc=%s",
 		conf.User, conf.Password, conf.Host, conf.Port, conf.Dbname, conf.Charset, conf.ParseTime, conf.Location)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
