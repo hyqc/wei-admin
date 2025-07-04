@@ -153,14 +153,14 @@ func (x *RespAdminPermissionListData) GetList() []*PermissionListItem {
 // 创建权限
 type ReqAdminPermissionAdd struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"`            // @gotags:  label:"权限ID" binding:"required,min=1"
-	MenuId        int32                  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty" label:"权限对应的菜单ID" binding:"required,min=1"`    // @gotags:  label:"权限对应的菜单ID" binding:"required,min=1"
-	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty" label:"权限唯一标识符" binding:"required,trimBlank"`           // @gotags:  label:"权限唯一标识符" binding:"required,trimBlank"
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"权限名称" binding:"required,trimBlank"`         // @gotags:  label:"权限名称" binding:"required,trimBlank"
-	Describe      string                 `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"权限描述" binding:"required,trimBlank"` // @gotags:  label:"权限描述" binding:"required,trimBlank"
-	Type          string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty" label:"权限类型" binding:"required,trimBlank"`         // @gotags:  label:"权限类型" binding:"required,trimBlank"
-	Redirect      string                 `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向地址"` // @gotags:  label:"重定向地址"
-	Enabled       bool                   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty" label:"是否启用"`  // @gotags:  label:"是否启用"
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"`            //	@gotags:	label:"权限ID" binding:"required,min=1"
+	MenuId        int32                  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty" label:"权限对应的菜单ID" binding:"required,min=1"`    //	@gotags:	label:"权限对应的菜单ID" binding:"required,min=1"
+	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty" label:"权限唯一标识符" binding:"required,trimBlank"`           //	@gotags:	label:"权限唯一标识符" binding:"required,trimBlank"
+	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"权限名称" binding:"required,trimBlank"`         //	@gotags:	label:"权限名称" binding:"required,trimBlank"
+	Describe      string                 `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"权限描述" binding:"required,trimBlank"` //	@gotags:	label:"权限描述" binding:"required,trimBlank"
+	Type          string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty" label:"权限类型" binding:"required,trimBlank"`         //	@gotags:	label:"权限类型" binding:"required,trimBlank"
+	Redirect      string                 `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向地址"` //	@gotags:	label:"重定向地址"
+	Enabled       bool                   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty" label:"是否启用"`  //	@gotags:	label:"是否启用"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -290,7 +290,7 @@ func (*RespAdminPermissionAddData) Descriptor() ([]byte, []int) {
 // 权限详情
 type ReqAdminPermissionInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"` // @gotags:  label:"权限ID" binding:"required,min=1"
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"` //	@gotags:	label:"权限ID" binding:"required,min=1"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -379,14 +379,14 @@ func (x *RespAdminPermissionInfoData) GetData() *AdminPermissionInfo {
 // 编辑权限
 type ReqAdminPermissionEdit struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"`            // @gotags:  label:"权限ID" binding:"required,min=1"
-	MenuId        int32                  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty" label:"权限对应的菜单ID" binding:"required,min=1"`    // @gotags:  label:"权限对应的菜单ID" binding:"required,min=1"
-	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty" label:"权限唯一标识符" binding:"required,trimBlank"`           // @gotags:  label:"权限唯一标识符" binding:"required,trimBlank"
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"权限名称" binding:"required,trimBlank"`         // @gotags:  label:"权限名称" binding:"required,trimBlank"
-	Describe      string                 `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"权限描述" binding:"required,trimBlank"` // @gotags:  label:"权限描述" binding:"required,trimBlank"
-	Type          string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty" label:"权限类型" binding:"required,trimBlank"`         // @gotags:  label:"权限类型" binding:"required,trimBlank"
-	Redirect      string                 `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向地址"` // @gotags:  label:"重定向地址"
-	Enabled       bool                   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"`  // @gotags:  label:"启用状态"
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"`            //	@gotags:	label:"权限ID" binding:"required,min=1"
+	MenuId        int32                  `protobuf:"varint,2,opt,name=menuId,proto3" json:"menuId,omitempty" label:"权限对应的菜单ID" binding:"required,min=1"`    //	@gotags:	label:"权限对应的菜单ID" binding:"required,min=1"
+	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty" label:"权限唯一标识符" binding:"required,trimBlank"`           //	@gotags:	label:"权限唯一标识符" binding:"required,trimBlank"
+	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"权限名称" binding:"required,trimBlank"`         //	@gotags:	label:"权限名称" binding:"required,trimBlank"
+	Describe      string                 `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"权限描述" binding:"required,trimBlank"` //	@gotags:	label:"权限描述" binding:"required,trimBlank"
+	Type          string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty" label:"权限类型" binding:"required,trimBlank"`         //	@gotags:	label:"权限类型" binding:"required,trimBlank"
+	Redirect      string                 `protobuf:"bytes,7,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向地址"` //	@gotags:	label:"重定向地址"
+	Enabled       bool                   `protobuf:"varint,8,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"`  //	@gotags:	label:"启用状态"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -516,8 +516,8 @@ func (*RespAdminPermissionEditData) Descriptor() ([]byte, []int) {
 // 启用禁用权限
 type ReqAdminPermissionEnable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"`               // @gotags:  label:"权限ID" binding:"required,min=1"
-	IsEnabled     bool                   `protobuf:"varint,2,opt,name=isEnabled,proto3" json:"isEnabled,omitempty" label:"启用状态"` // @gotags:  label:"启用状态"
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"`               //	@gotags:	label:"权限ID" binding:"required,min=1"
+	IsEnabled     bool                   `protobuf:"varint,2,opt,name=isEnabled,proto3" json:"isEnabled,omitempty" label:"启用状态"` //	@gotags:	label:"启用状态"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -605,7 +605,7 @@ func (*RespAdminPermissionEnableData) Descriptor() ([]byte, []int) {
 // 删除权限
 type ReqAdminPermissionDelete struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"` // @gotags:  label:"权限ID" binding:"required,min=1"
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"权限ID" binding:"required,min=1"` //	@gotags:	label:"权限ID" binding:"required,min=1"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -686,8 +686,8 @@ func (*RespAdminPermissionDeleteData) Descriptor() ([]byte, []int) {
 // 权限绑定接口
 type ReqAdminPermissionBindApis struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PermissionId  int32                  `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty" label:"权限ID" binding:"required,min=1"` // @gotags:  label:"权限ID" binding:"required,min=1"
-	ApiIds        []int32                `protobuf:"varint,2,rep,packed,name=apiIds,proto3" json:"apiIds,omitempty" label:"接口ID列表" binding:"required,min=1"`      // @gotags:  label:"接口ID列表" binding:"required,min=1"
+	PermissionId  int32                  `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty" label:"权限ID" binding:"required,min=1"` //	@gotags:	label:"权限ID" binding:"required,min=1"
+	ApiIds        []int32                `protobuf:"varint,2,rep,packed,name=apiIds,proto3" json:"apiIds,omitempty" label:"接口ID列表" binding:"required,min=1"`      //	@gotags:	label:"接口ID列表" binding:"required,min=1"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -775,8 +775,8 @@ func (*RespAdminPermissionBindApisData) Descriptor() ([]byte, []int) {
 // 权限绑定接口
 type ReqAdminPermissionUnBindApi struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PermissionId  int32                  `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty" label:"权限ID" binding:"required,min=1"` // @gotags:  label:"权限ID" binding:"required,min=1"
-	ApiId         int32                  `protobuf:"varint,2,opt,name=apiId,proto3" json:"apiId,omitempty" label:"接口ID" binding:"required,min=1"`               // @gotags:  label:"接口ID" binding:"required,min=1"
+	PermissionId  int32                  `protobuf:"varint,1,opt,name=permissionId,proto3" json:"permissionId,omitempty" label:"权限ID" binding:"required,min=1"` //	@gotags:	label:"权限ID" binding:"required,min=1"
+	ApiId         int32                  `protobuf:"varint,2,opt,name=apiId,proto3" json:"apiId,omitempty" label:"接口ID" binding:"required,min=1"`               //	@gotags:	label:"接口ID" binding:"required,min=1"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -864,8 +864,8 @@ func (*RespAdminPermissionUnBindApi) Descriptor() ([]byte, []int) {
 // 绑定权限菜单
 type ReqAdminPermissionBindMenu struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	MenuId        int32                    `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"`          // @gotags:  label:"菜单ID" binding:"required,min=1"
-	Permissions   []*ReqAdminPermissionAdd `protobuf:"bytes,2,rep,name=permissions,proto3" json:"permissions,omitempty" label:"权限ID列表" binding:"required,min=1"` // @gotags:  label:"权限ID列表" binding:"required,min=1"
+	MenuId        int32                    `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"`          //	@gotags:	label:"菜单ID" binding:"required,min=1"
+	Permissions   []*ReqAdminPermissionAdd `protobuf:"bytes,2,rep,name=permissions,proto3" json:"permissions,omitempty" label:"权限ID列表" binding:"required,min=1"` //	@gotags:	label:"权限ID列表" binding:"required,min=1"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

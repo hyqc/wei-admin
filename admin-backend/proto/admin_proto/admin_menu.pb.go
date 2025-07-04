@@ -153,18 +153,18 @@ func (x *RespAdminMenuListData) GetList() []*MenuItem {
 // 创建菜单
 type ReqAdminMenuAdd struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
-	Key                string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty" label:"菜单键名" binding:"required,adminApiKey"`                                // @gotags:  label:"菜单键名" binding:"required,adminApiKey"
-	Path               string                 `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty" label:"菜单路由" binding:"required,adminApiPath"`                              // @gotags:  label:"菜单路由" binding:"required,adminApiPath"
-	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" label:"菜单名称" binding:"required,trimBlank"`                              // @gotags:  label:"菜单名称" binding:"required,trimBlank"
-	ParentId           int32                  `protobuf:"varint,4,opt,name=parentId,proto3" json:"parentId,omitempty" label:"父级菜单" binding:"min=0"`                     // @gotags:  label:"父级菜单" binding:"min=0"
-	Describe           string                 `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"描述"`                      // @gotags:  label:"描述"
-	Redirect           string                 `protobuf:"bytes,6,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向路由"`                      // @gotags:  label:"重定向路由"
-	Icon               string                 `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty" label:"图标"`                              // @gotags:  label:"图标"
-	HideChildrenInMenu bool                   `protobuf:"varint,8,opt,name=hideChildrenInMenu,proto3" json:"hideChildrenInMenu,omitempty" label:"隐藏子菜单状态"` // @gotags:  label:"隐藏子菜单状态"
-	HideInMenu         bool                   `protobuf:"varint,9,opt,name=hideInMenu,proto3" json:"hideInMenu,omitempty" label:"隐藏状态"`                 // @gotags:  label:"隐藏状态"
-	Enabled            bool                   `protobuf:"varint,10,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"`                      // @gotags:  label:"启用状态"
-	Sort               int32                  `protobuf:"varint,11,opt,name=sort,proto3" json:"sort,omitempty" label:"排序值"`                            // @gotags:  label:"排序值"
-	Component          string                 `protobuf:"bytes,12,opt,name=component,proto3" json:"component,omitempty" label:"组件"`                   // @gotags:  label:"组件"
+	Key                string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty" label:"菜单键名" binding:"required,adminApiKey"`                                //	@gotags:	label:"菜单键名" binding:"required,adminApiKey"
+	Path               string                 `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty" label:"菜单路由" binding:"required,adminApiPath"`                              //	@gotags:	label:"菜单路由" binding:"required,adminApiPath"
+	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" label:"菜单名称" binding:"required,trimBlank"`                              //	@gotags:	label:"菜单名称" binding:"required,trimBlank"
+	ParentId           int32                  `protobuf:"varint,4,opt,name=parentId,proto3" json:"parentId,omitempty" label:"父级菜单" binding:"min=0"`                     //	@gotags:	label:"父级菜单" binding:"min=0"
+	Describe           string                 `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty" label:"描述"`                      //	@gotags:	label:"描述"
+	Redirect           string                 `protobuf:"bytes,6,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向路由"`                      //	@gotags:	label:"重定向路由"
+	Icon               string                 `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty" label:"图标"`                              //	@gotags:	label:"图标"
+	HideChildrenInMenu bool                   `protobuf:"varint,8,opt,name=hideChildrenInMenu,proto3" json:"hideChildrenInMenu,omitempty" label:"隐藏子菜单状态"` //	@gotags:	label:"隐藏子菜单状态"
+	HideInMenu         bool                   `protobuf:"varint,9,opt,name=hideInMenu,proto3" json:"hideInMenu,omitempty" label:"隐藏状态"`                 //	@gotags:	label:"隐藏状态"
+	Enabled            bool                   `protobuf:"varint,10,opt,name=enabled,proto3" json:"enabled,omitempty" label:"启用状态"`                      //	@gotags:	label:"启用状态"
+	Sort               int32                  `protobuf:"varint,11,opt,name=sort,proto3" json:"sort,omitempty" label:"排序值"`                            //	@gotags:	label:"排序值"
+	Component          string                 `protobuf:"bytes,12,opt,name=component,proto3" json:"component,omitempty" label:"组件"`                   //	@gotags:	label:"组件"
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -322,7 +322,7 @@ func (*RespAdminMenuAddData) Descriptor() ([]byte, []int) {
 // 菜单想去
 type ReqAdminMenuInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"` // @gotags:  label:"菜单ID" binding:"required,min=1"
+	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"` //	@gotags:	label:"菜单ID" binding:"required,min=1"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -411,19 +411,19 @@ func (x *RespAdminMenuInfoData) GetData() *AdminMenuModel {
 // 便捷菜单
 type ReqAdminMenuEdit struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Id                   int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"菜单ID" binding:"required,min=1"`                                      // @gotags:  label:"菜单ID" binding:"required,min=1"
-	ParentId             int32                  `protobuf:"varint,2,opt,name=parentId,proto3" json:"parentId,omitempty" label:"父级菜单ID" binding:"min=0"`                          // @gotags:  label:"父级菜单ID" binding:"min=0"
-	Path                 string                 `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty" label:"菜单路由" binding:"required,adminApiPath"`                                   // @gotags:  label:"菜单路由" binding:"required,adminApiPath"
-	Name                 string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"菜单名称" binding:"required,trimBlank"`                                   // @gotags:  label:"菜单名称" binding:"required,trimBlank"
-	Key                  string                 `protobuf:"bytes,5,opt,name=key,proto3" json:"key,omitempty" label:"菜单键名" binding:"required,adminApiKey"`                                     // @gotags:  label:"菜单键名" binding:"required,adminApiKey"
-	Describe             string                 `protobuf:"bytes,6,opt,name=describe,proto3" json:"describe,omitempty" label:"描述" binding:"required,trimBlank"`                           // @gotags:  label:"描述" binding:"required,trimBlank"
-	Icon                 string                 `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty" label:"菜单图标"`                                   // @gotags:  label:"菜单图标"
-	Sort                 int32                  `protobuf:"varint,8,opt,name=sort,proto3" json:"sort,omitempty" label:"排序值"`                                  // @gotags:  label:"排序值"
-	Redirect             string                 `protobuf:"bytes,9,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向路由"`                           // @gotags:  label:"重定向路由"
-	Component            string                 `protobuf:"bytes,10,opt,name=component,proto3" json:"component,omitempty" label:"组件"`                        // @gotags:  label:"组件"
-	IsHideInMenu         bool                   `protobuf:"varint,11,opt,name=isHideInMenu,proto3" json:"isHideInMenu,omitempty" label:"是否显示菜单"`                 // @gotags:  label:"是否显示菜单"
-	IsHideChildrenInMenu bool                   `protobuf:"varint,12,opt,name=isHideChildrenInMenu,proto3" json:"isHideChildrenInMenu,omitempty" label:"是否显示子菜单"` // @gotags:  label:"是否显示子菜单"
-	IsEnabled            bool                   `protobuf:"varint,13,opt,name=isEnabled,proto3" json:"isEnabled,omitempty" label:"是否启用菜单"`                       // @gotags:  label:"是否启用菜单"
+	Id                   int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" label:"菜单ID" binding:"required,min=1"`                                      //	@gotags:	label:"菜单ID" binding:"required,min=1"
+	ParentId             int32                  `protobuf:"varint,2,opt,name=parentId,proto3" json:"parentId,omitempty" label:"父级菜单ID" binding:"min=0"`                          //	@gotags:	label:"父级菜单ID" binding:"min=0"
+	Path                 string                 `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty" label:"菜单路由" binding:"required,adminApiPath"`                                   //	@gotags:	label:"菜单路由" binding:"required,adminApiPath"
+	Name                 string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" label:"菜单名称" binding:"required,trimBlank"`                                   //	@gotags:	label:"菜单名称" binding:"required,trimBlank"
+	Key                  string                 `protobuf:"bytes,5,opt,name=key,proto3" json:"key,omitempty" label:"菜单键名" binding:"required,adminApiKey"`                                     //	@gotags:	label:"菜单键名" binding:"required,adminApiKey"
+	Describe             string                 `protobuf:"bytes,6,opt,name=describe,proto3" json:"describe,omitempty" label:"描述" binding:"required,trimBlank"`                           //	@gotags:	label:"描述" binding:"required,trimBlank"
+	Icon                 string                 `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty" label:"菜单图标"`                                   //	@gotags:	label:"菜单图标"
+	Sort                 int32                  `protobuf:"varint,8,opt,name=sort,proto3" json:"sort,omitempty" label:"排序值"`                                  //	@gotags:	label:"排序值"
+	Redirect             string                 `protobuf:"bytes,9,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向路由"`                           //	@gotags:	label:"重定向路由"
+	Component            string                 `protobuf:"bytes,10,opt,name=component,proto3" json:"component,omitempty" label:"组件"`                        //	@gotags:	label:"组件"
+	IsHideInMenu         bool                   `protobuf:"varint,11,opt,name=isHideInMenu,proto3" json:"isHideInMenu,omitempty" label:"是否显示菜单"`                 //	@gotags:	label:"是否显示菜单"
+	IsHideChildrenInMenu bool                   `protobuf:"varint,12,opt,name=isHideChildrenInMenu,proto3" json:"isHideChildrenInMenu,omitempty" label:"是否显示子菜单"` //	@gotags:	label:"是否显示子菜单"
+	IsEnabled            bool                   `protobuf:"varint,13,opt,name=isEnabled,proto3" json:"isEnabled,omitempty" label:"是否启用菜单"`                       //	@gotags:	label:"是否启用菜单"
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -588,8 +588,8 @@ func (*RespAdminMenuEditData) Descriptor() ([]byte, []int) {
 // 启用禁用菜单
 type ReqAdminMenuEnable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"`   // @gotags:  label:"菜单ID" binding:"required,min=1"
-	Enabled       bool                   `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty" label:"是否启用菜单"` // @gotags:  label:"是否启用菜单"
+	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"`   //	@gotags:	label:"菜单ID" binding:"required,min=1"
+	Enabled       bool                   `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty" label:"是否启用菜单"` //	@gotags:	label:"是否启用菜单"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -677,9 +677,9 @@ func (*RespAdminMenuEnableData) Descriptor() ([]byte, []int) {
 // 启用禁用菜单
 type ReqAdminMenuShow struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"` // @gotags:  label:"菜单ID" binding:"required,min=1"
-	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty" label:"要编辑的字段" binding:"required,trimBlank"`    // @gotags:  label:"要编辑的字段" binding:"required,trimBlank"
-	Show          bool                   `protobuf:"varint,3,opt,name=show,proto3" json:"show,omitempty" label:"是否显示菜单"`     // @gotags:  label:"是否显示菜单"
+	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"` //	@gotags:	label:"菜单ID" binding:"required,min=1"
+	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty" label:"要编辑的字段" binding:"required,trimBlank"`    //	@gotags:	label:"要编辑的字段" binding:"required,trimBlank"
+	Show          bool                   `protobuf:"varint,3,opt,name=show,proto3" json:"show,omitempty" label:"是否显示菜单"`     //	@gotags:	label:"是否显示菜单"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -774,7 +774,7 @@ func (*RespAdminMenuShow) Descriptor() ([]byte, []int) {
 // 删除菜单
 type ReqAdminMenuDelete struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"` // @gotags:  label:"菜单ID" binding:"required,min=1"
+	MenuId        int32                  `protobuf:"varint,1,opt,name=menuId,proto3" json:"menuId,omitempty" label:"菜单ID" binding:"required,min=1"` //	@gotags:	label:"菜单ID" binding:"required,min=1"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

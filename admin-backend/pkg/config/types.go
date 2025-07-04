@@ -49,8 +49,14 @@ type Broker struct {
 }
 
 type Jwt struct {
-	Private string        `json:"private"`
-	Public  string        `json:"public"`
-	Expire  time.Duration `json:"expire"` //秒
-	Ignore  []string      `json:"ignore"` //不严重jwt token的路由地址
+	Private    string                         `json:"private"`
+	Public     string                         `json:"public"`
+	Expire     time.Duration                  `json:"expire"`  //秒
+	Ignores    []IgnoreUrlRule                `json:"ignores"` //不严重jwt token的路由地址
+	IgnoresMap map[string]map[string]struct{} //ignore转map
+}
+
+type IgnoreUrlRule struct {
+	Method string   `json:"method"`
+	Paths  []string `json:"paths"`
 }

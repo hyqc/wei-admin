@@ -19,6 +19,15 @@ type PermissionController struct {
 }
 
 // List 权限列表
+//
+//	@Summary		权限列表
+//	@Description	权限列表
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionList							true	"请求参数"
+//	@Success		200		{object}	code.Message{data=admin_proto.RespAdminPermissionListData}	"desc"
+//	@Router			/admin/permission/list [post]
 func (PermissionController) List(ctx *gin.Context) {
 	msg := "PermissionController.List"
 	params := &admin_proto.ReqAdminPermissionList{}
@@ -41,6 +50,15 @@ func (PermissionController) List(ctx *gin.Context) {
 }
 
 // Add 添加权限
+//
+//	@Summary		添加权限
+//	@Description	添加权限
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionAdd	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}				"desc"
+//	@Router			/admin/permission/add [post]
 func (PermissionController) Add(ctx *gin.Context) {
 	msg := "PermissionController.Add"
 	params := &admin_proto.ReqAdminPermissionAdd{}
@@ -59,7 +77,16 @@ func (PermissionController) Add(ctx *gin.Context) {
 	code.JSON(ctx, result)
 }
 
-// Info 详情
+// Info 权限详情
+//
+//	@Summary		权限详情
+//	@Description	权限详情
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionInfo					true	"请求参数"
+//	@Success		200		{object}	code.Message{data=admin_proto.AdminPermissionInfo}	"desc"
+//	@Router			/admin/permission/info [post]
 func (PermissionController) Info(ctx *gin.Context) {
 	msg := "PermissionController.Info"
 	params := &admin_proto.ReqAdminPermissionInfo{}
@@ -82,6 +109,15 @@ func (PermissionController) Info(ctx *gin.Context) {
 }
 
 // Edit 编辑权限
+//
+//	@Summary		编辑权限
+//	@Description	编辑权限
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionEdit	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}				"desc"
+//	@Router			/admin/permission/edit [post]
 func (PermissionController) Edit(ctx *gin.Context) {
 	msg := "PermissionController.Edit"
 	params := &admin_proto.ReqAdminPermissionEdit{}
@@ -101,7 +137,16 @@ func (PermissionController) Edit(ctx *gin.Context) {
 	return
 }
 
-// Enable 启用禁用
+// Enable 权限启用|禁用
+//
+//	@Summary		权限启用|禁用
+//	@Description	权限启用|禁用
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionEnable	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}					"desc"
+//	@Router			/admin/permission/enable [post]
 func (PermissionController) Enable(ctx *gin.Context) {
 	msg := "PermissionController.Enable"
 	params := &admin_proto.ReqAdminPermissionEnable{}
@@ -122,6 +167,15 @@ func (PermissionController) Enable(ctx *gin.Context) {
 }
 
 // Delete 删除权限
+//
+//	@Summary		删除权限
+//	@Description	删除权限
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionDelete	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}					"desc"
+//	@Router			/admin/permission/delete [post]
 func (PermissionController) Delete(ctx *gin.Context) {
 	msg := "PermissionController.Delete"
 	params := &admin_proto.ReqAdminPermissionDelete{}
@@ -142,6 +196,15 @@ func (PermissionController) Delete(ctx *gin.Context) {
 }
 
 // BindAPI 绑定权限接口
+//
+//	@Summary		绑定权限接口
+//	@Description	绑定权限接口
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionBindApis	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}					"desc"
+//	@Router			/admin/permission/bind_apis [post]
 func (PermissionController) BindAPI(ctx *gin.Context) {
 	msg := "PermissionController.BindAPI"
 	params := &admin_proto.ReqAdminPermissionBindApis{}
@@ -162,6 +225,15 @@ func (PermissionController) BindAPI(ctx *gin.Context) {
 }
 
 // UnBindAPI 解绑权限接口
+//
+//	@Summary		解绑权限接口
+//	@Description	解绑权限接口
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionUnBindApi	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}					"desc"
+//	@Router			/admin/permission/unbind_api [post]
 func (PermissionController) UnBindAPI(ctx *gin.Context) {
 	msg := "PermissionController.UnBindAPI"
 	params := &admin_proto.ReqAdminPermissionUnBindApi{}
@@ -182,6 +254,15 @@ func (PermissionController) UnBindAPI(ctx *gin.Context) {
 }
 
 // AddMenuPermissions 指定菜单创建查看编辑删除权限
+//
+//	@Summary		指定菜单创建查看编辑删除权限
+//	@Description	指定菜单创建查看编辑删除权限
+//	@Tags			权限接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminPermissionBindMenu	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}					"desc"
+//	@Router			/admin/permission/add_menu_permissions [post]
 func (PermissionController) AddMenuPermissions(ctx *gin.Context) {
 	msg := "PermissionController.AddMenuPermissions"
 	params := &admin_proto.ReqAdminPermissionBindMenu{}

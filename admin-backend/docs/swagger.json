@@ -1,0 +1,3818 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/admin/account/edit": {
+            "post": {
+                "description": "编辑账号",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号相关接口"
+                ],
+                "summary": "编辑账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "头像 @gotags:  binding:\"url\" label:\"头像地址\"",
+                        "name": "avatar",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "邮箱 @gotags:  binding:\"email\" label:\"邮箱\"",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "maxLength": 32,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "名称 @gotags:  binding:\"required,min=1,max=32\" label:\"用户名\"",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/account/info": {
+            "post": {
+                "description": "账号详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号相关接口"
+                ],
+                "summary": "账号详情",
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAccountInfoData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/account/login": {
+            "post": {
+                "description": "登录后台",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号相关接口"
+                ],
+                "summary": "登录后台",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "密码  @gotags: binding:\"required,adminpwd\" label:\"密码\"",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名 @gotags: binding:\"required,adminname\" label:\"用户名\"",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespLoginData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/account/menu": {
+            "post": {
+                "description": "登录用户可访问的菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号相关接口"
+                ],
+                "summary": "登录用户可访问的菜单",
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/admin_proto.MenuItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/account/password": {
+            "post": {
+                "description": "修改密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号相关接口"
+                ],
+                "summary": "修改密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "确认密码  @gotags: binding:\"required,adminpwd,eqfield=Password\" label:\"确认密码\"",
+                        "name": "confirmPassword",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "旧密码 @gotags:  binding:\"required,adminpwd\" label:\"旧密码\"",
+                        "name": "oldPassword",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "新密码 @gotags:  binding:\"required,adminpwd\" label:\"新密码\"",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/account/permission": {
+            "post": {
+                "description": "我的权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号相关接口"
+                ],
+                "summary": "我的权限",
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/api/add": {
+            "post": {
+                "description": "新增接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "API接口相关"
+                ],
+                "summary": "新增接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "接口描述 @gotags:  label:\"接口描述\" binding:\"required,trimBlank\"",
+                        "name": "describe",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "启用状态",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口键名 @gotags:  label:\"接口键名\" binding:\"required,adminApiKey\"",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口名称 @gotags:  label:\"接口名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口路由 @gotags:  label:\"接口路由\" binding:\"required,adminApiPath\"",
+                        "name": "path",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/api/all": {
+            "post": {
+                "description": "全部有效接口列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "API接口相关"
+                ],
+                "summary": "全部有效接口列表",
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/admin_proto.AdminApiItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/api/delete": {
+            "post": {
+                "description": "接口删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "API接口相关"
+                ],
+                "summary": "接口删除",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "接口ID @gotags:  label:\"接口ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/api/edit": {
+            "post": {
+                "description": "接口编辑",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "API接口相关"
+                ],
+                "summary": "接口编辑",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "接口描述 @gotags:  label:\"接口描述\" binding:\"required,trimBlank\"",
+                        "name": "describe",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "接口状态",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "接口ID @gotags:  label:\"接口ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口键名 @gotags:  label:\"接口键名\" binding:\"required,adminApiKey\"",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口名称 @gotags:  label:\"接口名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口路由 @gotags:  label:\"接口路由\" binding:\"required,adminApiPath\"",
+                        "name": "path",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/api/enable": {
+            "post": {
+                "description": "接口启用/禁用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "API接口相关"
+                ],
+                "summary": "接口启用/禁用",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "接口状态",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "接口ID @gotags:  label:\"接口ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/api/info": {
+            "post": {
+                "description": "接口详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "API接口相关"
+                ],
+                "summary": "接口详情",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "接口ID @gotags:  label:\"接口ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.AdminApiItem"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/api/list": {
+            "post": {
+                "description": "接口列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "API接口相关"
+                ],
+                "summary": "接口列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "接口键名",
+                        "name": "key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "接口路由",
+                        "name": "path",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminApiListData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/add": {
+            "post": {
+                "description": "添加菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "添加菜单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"组件\"",
+                        "name": "component",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"描述\"",
+                        "name": "describe",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"启用状态\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"隐藏子菜单状态\"",
+                        "name": "hideChildrenInMenu",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"隐藏状态\"",
+                        "name": "hideInMenu",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"图标\"",
+                        "name": "icon",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"菜单键名\" binding:\"required,adminApiKey\"",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"菜单名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"父级菜单\" binding:\"min=0\"",
+                        "name": "parentId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"菜单路由\" binding:\"required,adminApiPath\"",
+                        "name": "path",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"重定向路由\"",
+                        "name": "redirect",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"排序值\"",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/delete": {
+            "post": {
+                "description": "删除菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "删除菜单",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/edit": {
+            "post": {
+                "description": "编辑菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "编辑菜单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"组件\"",
+                        "name": "component",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"描述\" binding:\"required,trimBlank\"",
+                        "name": "describe",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"菜单图标\"",
+                        "name": "icon",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"菜单ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"是否启用菜单\"",
+                        "name": "isEnabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"是否显示子菜单\"",
+                        "name": "isHideChildrenInMenu",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"是否显示菜单\"",
+                        "name": "isHideInMenu",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"菜单键名\" binding:\"required,adminApiKey\"",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"菜单名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"父级菜单ID\" binding:\"min=0\"",
+                        "name": "parentId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"菜单路由\" binding:\"required,adminApiPath\"",
+                        "name": "path",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"重定向路由\"",
+                        "name": "redirect",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"排序值\"",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/enable": {
+            "post": {
+                "description": "启用禁用菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "启用禁用菜单",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"是否启用菜单\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/info": {
+            "post": {
+                "description": "菜单详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "菜单详情",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminMenuInfoData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/list": {
+            "post": {
+                "description": "菜单列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "菜单列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "菜单键名",
+                        "name": "key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "菜单名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "父级菜单",
+                        "name": "parentId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "菜单路由",
+                        "name": "path",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminMenuListData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/modes": {
+            "post": {
+                "description": "页面模块权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "页面模块权限列表",
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminMenuModeData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/pages": {
+            "post": {
+                "description": "页面菜单列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "页面菜单列表",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "是否顶部插入全部",
+                        "name": "all",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminMenuPages"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/permissions": {
+            "post": {
+                "description": "菜单权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "菜单权限列表",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "菜单ID @gotags:  label:\"菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminMenuPermissionsData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/show": {
+            "post": {
+                "description": "显示|隐藏菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "显示|隐藏菜单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"要编辑的字段\" binding:\"required,trimBlank\"",
+                        "name": "field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"是否显示菜单\"",
+                        "name": "show",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu/true": {
+            "post": {
+                "description": "有效菜单树",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜单接口相关"
+                ],
+                "summary": "有效菜单树",
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/admin_proto.MenuTreeItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/add": {
+            "post": {
+                "description": "添加权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "添加权限",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限描述\" binding:\"required,trimBlank\"",
+                        "name": "describe",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"是否启用\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限唯一标识符\" binding:\"required,trimBlank\"",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限对应的菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"重定向地址\"",
+                        "name": "redirect",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限类型\" binding:\"required,trimBlank\"",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/add_menu_permissions": {
+            "post": {
+                "description": "指定菜单创建查看编辑删除权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "指定菜单创建查看编辑删除权限",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/bind_apis": {
+            "post": {
+                "description": "绑定权限接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "绑定权限接口",
+                "parameters": [
+                    {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "@gotags:\tlabel:\"接口ID列表\" binding:\"required,min=1\"",
+                        "name": "apiIds",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                        "name": "permissionId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/delete": {
+            "post": {
+                "description": "删除权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "删除权限",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/edit": {
+            "post": {
+                "description": "编辑权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "编辑权限",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限描述\" binding:\"required,trimBlank\"",
+                        "name": "describe",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"启用状态\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限唯一标识符\" binding:\"required,trimBlank\"",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限对应的菜单ID\" binding:\"required,min=1\"",
+                        "name": "menuId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"重定向地址\"",
+                        "name": "redirect",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags:\tlabel:\"权限类型\" binding:\"required,trimBlank\"",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/enable": {
+            "post": {
+                "description": "权限启用|禁用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "权限启用|禁用",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags:\tlabel:\"启用状态\"",
+                        "name": "isEnabled",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/info": {
+            "post": {
+                "description": "权限详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "权限详情",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.AdminPermissionInfo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/list": {
+            "post": {
+                "description": "权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "权限列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "权限唯一标识符",
+                        "name": "key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "菜单ID",
+                        "name": "menuId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "权限名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "权限类型",
+                        "name": "type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminPermissionListData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/permission/unbind_api": {
+            "post": {
+                "description": "解绑权限接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限接口相关"
+                ],
+                "summary": "解绑权限接口",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"接口ID\" binding:\"required,min=1\"",
+                        "name": "apiId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                        "name": "permissionId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/add": {
+            "post": {
+                "description": "添加角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "添加角色",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"角色描述\" binding:\"omitempty,trimBlank\"",
+                        "name": "describe",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags: label:\"启用状态\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"角色名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/all": {
+            "post": {
+                "description": "全部有效角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "全部有效角色",
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/admin_proto.RoleItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/bind_permissions": {
+            "post": {
+                "description": "角色绑定权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "角色绑定权限",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags: label:\"角色ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "@gotags: label:\"权限ID集合\" binding:\"required,min=1\"",
+                        "name": "permissionIds",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/delete": {
+            "post": {
+                "description": "删除角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "删除角色",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags: label:\"角色ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "@gotags: label:\"权限ID集合\" binding:\"required,min=1\"",
+                        "name": "permissionIds",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/edit": {
+            "post": {
+                "description": "编辑角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "编辑角色",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"角色描述\" binding:\"omitempty,trimBlank\"",
+                        "name": "describe",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags: label:\"角色ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags: label:\"启用状态\"",
+                        "name": "isEnabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"角色名称\" binding:\"required,trimBlank\"",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/enable": {
+            "post": {
+                "description": "角色启用|禁用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "角色启用|禁用",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "@gotags: label:\"启用状态\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags: label:\"角色ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/info": {
+            "post": {
+                "description": "角色详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "角色详情",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags: label:\"角色ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminRoleInfoData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/list": {
+            "post": {
+                "description": "角色列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "角色列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "启用状态，0：全部，1：启用，2：禁用",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "角色ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "角色名称",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminRoleListData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/role/permissions": {
+            "post": {
+                "description": "角色权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色接口相关"
+                ],
+                "summary": "角色权限列表",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags: label:\"角色ID\" binding:\"required,min=1\"",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/admin_proto.RolePermissionItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/add": {
+            "post": {
+                "description": "添加管理员",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "添加管理员",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"头像地址\" binding:\"omitempty,url\"",
+                        "name": "avatar",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"确认密码\" binding:\"required,eqfield=Password,adminpwd\"",
+                        "name": "confirmPassword",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"邮箱\" binding:\"omitempty,email\"",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "@gotags: label:\"账号启用状态\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"昵称\" binding:\"required,trimBlank\"`",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"密码\" binding:\"required,adminpwd\"`",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "@gotags: label:\"账号\" binding:\"required,adminname\"`",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/bind_roles": {
+            "post": {
+                "description": "管理员绑定角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "管理员绑定角色",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "管理员ID @gotags: label:\"管理员ID\" binding:\"required,min=1\"",
+                        "name": "adminId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "角色ID列表 @gotags: label:\"角色ID列表\" binding:\"required,min=1\"",
+                        "name": "roleIds",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/delete": {
+            "post": {
+                "description": "删除管理员",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "删除管理员",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "管理员ID @gotags: label:\"管理员ID\" binding:\"required,min=1\"",
+                        "name": "adminId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/edit": {
+            "post": {
+                "description": "编辑管理员",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "编辑管理员",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "管理员ID @gotags: label:\"管理员ID\" binding:\"required,min=1\"",
+                        "name": "adminId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "头像地址 @gotags: label:\"头像地址\" binding:\"omitempty,url\"",
+                        "name": "avatar",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "邮箱 @gotags: label:\"邮箱\" binding:\"omitempty,email\"",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "账号启用状态 @gotags: label:\"账号启用状态\"",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称 @gotags: label:\"昵称\" binding:\"required,trimBlank\"",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "账号 @gotags: label:\"账号\" binding:\"required,adminname\"",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/edit_pwd": {
+            "post": {
+                "description": "编辑管理员密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "编辑管理员密码",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "管理员ID @gotags: label:\"管理员ID\" binding:\"required,min=1\"",
+                        "name": "adminId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "确认密码 @gotags: label:\"确认密码\" binding:\"required,eqfield=Password,adminpwd\"",
+                        "name": "confirmPassword",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码 @gotags: label:\"密码\" binding:\"required,adminpwd\"",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/enable": {
+            "post": {
+                "description": "启用|禁用管理员账号",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "启用|禁用管理员账号",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "管理员ID @gotags: label:\"管理员ID\" binding:\"required,min=1\"",
+                        "name": "adminId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "账号启用状态 @gotags: label:\"账号启用状态\"",
+                        "name": "enabled",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/info": {
+            "post": {
+                "description": "管理员详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "管理员详情",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "@gotags: label:\"管理员ID\" binding:\"required,min=1\"`",
+                        "name": "adminId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAccountInfoData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/list": {
+            "post": {
+                "description": "管理员列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员账号接口相关"
+                ],
+                "summary": "管理员列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "0全部，1启用，2禁用",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "角色ID",
+                        "name": "roleIds",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "账号",
+                        "name": "username",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "desc",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Message"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin_proto.RespAdminUserListData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "admin_proto.AdminApiItem": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isEnabled": {
+                    "type": "boolean"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "permissionId": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.AdminInfo": {
+            "type": "object",
+            "properties": {
+                "adminId": {
+                    "type": "integer"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "expire": {
+                    "type": "integer"
+                },
+                "expireDataTime": {
+                    "type": "string"
+                },
+                "lastLoginIp": {
+                    "type": "string"
+                },
+                "lastLoginTime": {
+                    "type": "string"
+                },
+                "loginTotal": {
+                    "type": "integer"
+                },
+                "menus": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/admin_proto.MenuItem"
+                    }
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.AdminUserRoleItem"
+                    }
+                },
+                "token": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.AdminMenuModel": {
+            "type": "object",
+            "properties": {
+                "component": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isEnabled": {
+                    "type": "boolean"
+                },
+                "isHideChildrenInMenu": {
+                    "type": "boolean"
+                },
+                "isHideInMenu": {
+                    "type": "boolean"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.AdminPermissionInfo": {
+            "type": "object",
+            "properties": {
+                "apis": {
+                    "description": "接口列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.AdminApiItem"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "describe": {
+                    "description": "权限描述",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "权限ID",
+                    "type": "integer"
+                },
+                "isEnabled": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                },
+                "key": {
+                    "description": "权限唯一标识符",
+                    "type": "string"
+                },
+                "menuId": {
+                    "description": "权限对应的菜单ID",
+                    "type": "integer"
+                },
+                "menuName": {
+                    "description": "菜单名称",
+                    "type": "string"
+                },
+                "menuPath": {
+                    "description": "菜单路由",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "权限名称",
+                    "type": "string"
+                },
+                "redirect": {
+                    "description": "重定向地址",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "权限类型",
+                    "type": "string"
+                },
+                "typeText": {
+                    "description": "权限类型",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.AdminUserListItem": {
+            "type": "object",
+            "properties": {
+                "adminId": {
+                    "description": "管理员ID",
+                    "type": "integer"
+                },
+                "avatar": {
+                    "description": "头像",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "isEnabled": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                },
+                "isEnabledButtonDisabled": {
+                    "type": "boolean"
+                },
+                "lastLoginIp": {
+                    "description": "上次登录IP",
+                    "type": "string"
+                },
+                "lastLoginTime": {
+                    "description": "上次登录时间",
+                    "type": "string"
+                },
+                "loginTotal": {
+                    "description": "登录次数",
+                    "type": "integer"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.AdminUserRoleItem"
+                    }
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "账号名称",
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.AdminUserRoleItem": {
+            "type": "object",
+            "properties": {
+                "roleId": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "roleName": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.MenuItem": {
+            "type": "object",
+            "properties": {
+                "authority": {
+                    "type": "string"
+                },
+                "component": {
+                    "type": "string"
+                },
+                "hideChildrenInMenu": {
+                    "type": "boolean"
+                },
+                "hideInMenu": {
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "菜单图标",
+                    "type": "string"
+                },
+                "key": {
+                    "description": "菜单唯一键",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "菜单名称",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "菜单路由",
+                    "type": "string"
+                },
+                "routes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuItem"
+                    }
+                }
+            }
+        },
+        "admin_proto.MenuModeItem": {
+            "type": "object",
+            "properties": {
+                "modelId": {
+                    "description": "模块菜单ID",
+                    "type": "integer"
+                },
+                "modelName": {
+                    "description": "模块菜单名称",
+                    "type": "string"
+                },
+                "pages": {
+                    "description": "模块下面的页面列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuPageItem"
+                    }
+                }
+            }
+        },
+        "admin_proto.MenuPageItem": {
+            "type": "object",
+            "properties": {
+                "pageId": {
+                    "description": "页面菜单ID",
+                    "type": "integer"
+                },
+                "pageName": {
+                    "description": "页面菜单名称",
+                    "type": "string"
+                },
+                "permissions": {
+                    "description": "页面菜单权限",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuPagePermissions"
+                    }
+                }
+            }
+        },
+        "admin_proto.MenuPagePermissions": {
+            "type": "object",
+            "properties": {
+                "permissionId": {
+                    "description": "权限ID",
+                    "type": "integer"
+                },
+                "permissionName": {
+                    "description": "权限名称",
+                    "type": "string"
+                },
+                "permissionType": {
+                    "description": "权限类型",
+                    "type": "string"
+                },
+                "permissionTypeName": {
+                    "description": "权限类型名称",
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.MenuPermissionItem": {
+            "type": "object",
+            "properties": {
+                "Describe": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "menuId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "typeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.MenuTreeItem": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuTreeItem"
+                    }
+                },
+                "component": {
+                    "description": "组件名称",
+                    "type": "string"
+                },
+                "createTime": {
+                    "type": "integer"
+                },
+                "describe": {
+                    "description": "菜单描述",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                },
+                "hideChildrenInMenu": {
+                    "description": "是否在菜单中隐藏子菜单",
+                    "type": "boolean"
+                },
+                "hideInMenu": {
+                    "description": "是否隐藏菜单",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "菜单图标",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "菜单自增ID",
+                    "type": "integer"
+                },
+                "key": {
+                    "description": "菜单唯一键",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "菜单层级",
+                    "type": "integer"
+                },
+                "modifyTime": {
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "菜单名称",
+                    "type": "string"
+                },
+                "parentId": {
+                    "description": "父级菜单ID",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "菜单路径",
+                    "type": "string"
+                },
+                "redirect": {
+                    "description": "重定向地址",
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "菜单排序",
+                    "type": "integer"
+                }
+            }
+        },
+        "admin_proto.PermissionListItem": {
+            "type": "object",
+            "properties": {
+                "apis": {
+                    "description": "接口列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.AdminApiItem"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "describe": {
+                    "description": "权限描述",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "权限ID",
+                    "type": "integer"
+                },
+                "isEnabled": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                },
+                "key": {
+                    "description": "权限唯一标识符",
+                    "type": "string"
+                },
+                "menuId": {
+                    "description": "权限对应的菜单ID",
+                    "type": "integer"
+                },
+                "menuName": {
+                    "description": "菜单名称",
+                    "type": "string"
+                },
+                "menuPath": {
+                    "description": "菜单路由",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "权限名称",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "权限类型",
+                    "type": "string"
+                },
+                "typeText": {
+                    "description": "权限类型",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.ReqAdminPermissionAdd": {
+            "type": "object",
+            "required": [
+                "describe",
+                "id",
+                "key",
+                "menuId",
+                "name",
+                "type"
+            ],
+            "properties": {
+                "describe": {
+                    "description": "@gotags:\tlabel:\"权限描述\" binding:\"required,trimBlank\"",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "@gotags:\tlabel:\"是否启用\"",
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "@gotags:\tlabel:\"权限ID\" binding:\"required,min=1\"",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "key": {
+                    "description": "@gotags:\tlabel:\"权限唯一标识符\" binding:\"required,trimBlank\"",
+                    "type": "string"
+                },
+                "menuId": {
+                    "description": "@gotags:\tlabel:\"权限对应的菜单ID\" binding:\"required,min=1\"",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "name": {
+                    "description": "@gotags:\tlabel:\"权限名称\" binding:\"required,trimBlank\"",
+                    "type": "string"
+                },
+                "redirect": {
+                    "description": "@gotags:\tlabel:\"重定向地址\"",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "@gotags:\tlabel:\"权限类型\" binding:\"required,trimBlank\"",
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.ReqListBase": {
+            "type": "object",
+            "properties": {
+                "createEndTime": {
+                    "description": "查询结束时间戳秒",
+                    "type": "integer"
+                },
+                "createStartTime": {
+                    "description": "查询开始时间戳秒",
+                    "type": "integer"
+                },
+                "enabled": {
+                    "description": "0：全部 1：启用 2：禁用",
+                    "type": "integer"
+                },
+                "pageNum": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "分页偏移量",
+                    "type": "integer"
+                },
+                "sortField": {
+                    "description": "排序字段",
+                    "type": "string"
+                },
+                "sortType": {
+                    "description": "排序值",
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.RespAccountInfoData": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/admin_proto.AdminInfo"
+                }
+            }
+        },
+        "admin_proto.RespAdminApiListData": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.AdminApiItem"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin_proto.RespAdminMenuInfoData": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/admin_proto.AdminMenuModel"
+                }
+            }
+        },
+        "admin_proto.RespAdminMenuListData": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuItem"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin_proto.RespAdminMenuModeData": {
+            "type": "object",
+            "properties": {
+                "modes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuModeItem"
+                    }
+                }
+            }
+        },
+        "admin_proto.RespAdminMenuPages": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuTreeItem"
+                    }
+                }
+            }
+        },
+        "admin_proto.RespAdminMenuPermissionsData": {
+            "type": "object",
+            "properties": {
+                "menuInfo": {
+                    "$ref": "#/definitions/admin_proto.AdminMenuModel"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.MenuPermissionItem"
+                    }
+                }
+            }
+        },
+        "admin_proto.RespAdminPermissionListData": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.PermissionListItem"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin_proto.RespAdminRoleInfoData": {
+            "type": "object",
+            "properties": {
+                "createAdminId": {
+                    "description": "创建人ID",
+                    "type": "integer"
+                },
+                "createAdminName": {
+                    "description": "创建人名称",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "description": "角色描述",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "isEnabled": {
+                    "description": "启用状态",
+                    "type": "boolean"
+                },
+                "modifyAdminId": {
+                    "description": "修改人ID",
+                    "type": "integer"
+                },
+                "modifyAdminName": {
+                    "description": "修改人名称",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "角色名称",
+                    "type": "string"
+                },
+                "permissionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.RolePermissionItem"
+                    }
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.RespAdminRoleListData": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.RoleItem"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin_proto.RespAdminUserListData": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin_proto.AdminUserListItem"
+                    }
+                },
+                "pageNum": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin_proto.RespLoginData": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/admin_proto.AdminInfo"
+                }
+            }
+        },
+        "admin_proto.RoleItem": {
+            "type": "object",
+            "properties": {
+                "createAdminId": {
+                    "description": "创建人ID",
+                    "type": "integer"
+                },
+                "createAdminName": {
+                    "description": "创建人名称",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "describe": {
+                    "description": "角色名称",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "isEnabled": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "角色名称",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin_proto.RolePermissionItem": {
+            "type": "object",
+            "properties": {
+                "permissionId": {
+                    "description": "权限ID",
+                    "type": "integer"
+                },
+                "permissionKey": {
+                    "description": "权限键名",
+                    "type": "string"
+                },
+                "permissionName": {
+                    "description": "权限名称",
+                    "type": "string"
+                },
+                "permissionType": {
+                    "description": "权限类型",
+                    "type": "string"
+                },
+                "permissionTypeText": {
+                    "description": "权限类型",
+                    "type": "string"
+                },
+                "roleId": {
+                    "description": "权限ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "code.Message": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "错误码",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/code_proto.ErrorCode"
+                        }
+                    ]
+                },
+                "data": {},
+                "msg": {
+                    "description": "错误码描述",
+                    "type": "string"
+                },
+                "reason": {
+                    "description": "错误具体信息",
+                    "type": "string"
+                }
+            }
+        },
+        "code_proto.ErrorCode": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                100001,
+                100002,
+                100003,
+                200001,
+                200002,
+                200003,
+                200004,
+                200005,
+                300001,
+                300002,
+                300003,
+                400001,
+                400002,
+                400003,
+                500001,
+                500002,
+                500003,
+                500004,
+                600001,
+                600002,
+                600003,
+                600004,
+                600005,
+                700001,
+                800001
+            ],
+            "x-enum-comments": {
+                "ErrorCode_AdminAccountInvalid": "账号已被封禁",
+                "ErrorCode_AdminAccountNotExist": "账号不存在或已被删除",
+                "ErrorCode_AdminAccountPasswordInvalid": "账号或密码错误",
+                "ErrorCode_AdminApiKeyExist": "接口键名已存在",
+                "ErrorCode_AdminApiNameExist": "接口名称已存在",
+                "ErrorCode_AdminApiNotExist": "接口不存在货已失效",
+                "ErrorCode_AdminApiPathExist": "接口路径已存在",
+                "ErrorCode_AdminMenuNotExist": "菜单不存在",
+                "ErrorCode_AdminPermissionExist": "该菜单下权限已存在",
+                "ErrorCode_AdminPermissionKeyExist": "权限键名已存在",
+                "ErrorCode_AdminPermissionKeyNeed": "权限键名不能为空",
+                "ErrorCode_AdminPermissionNameNeed": "权限名称不能为空",
+                "ErrorCode_AdminPermissionTypeInvalid": "权限类型无效",
+                "ErrorCode_AdminRoleNotExist": "角色不存在",
+                "ErrorCode_AuthTokenFailed": "鉴权失败",
+                "ErrorCode_AuthTokenForbidden": "没有访问权限",
+                "ErrorCode_AuthTokenInfoInvalid": "Token信息无效",
+                "ErrorCode_AuthTokenInspectInvalid": "BearerToken无效",
+                "ErrorCode_AuthTokenInvalid": "BearerToken无效",
+                "ErrorCode_Error": "失败",
+                "ErrorCode_ReadContextRequestBodyFailed": "获取请求体内容失败",
+                "ErrorCode_RecordNValidCanNotDeleted": "生效中的记录不能删除",
+                "ErrorCode_RecordNotExist": "记录不存在",
+                "ErrorCode_RequestBodyInvalid": "请求体参数无效",
+                "ErrorCode_RequestParamsInvalid": "请求参数无效",
+                "ErrorCode_RequestQueryInvalid": "请求查询参数无效",
+                "ErrorCode_Success": "成功"
+            },
+            "x-enum-varnames": [
+                "ErrorCode_Success",
+                "ErrorCode_Error",
+                "ErrorCode_ReadContextRequestBodyFailed",
+                "ErrorCode_RecordNotExist",
+                "ErrorCode_RecordNValidCanNotDeleted",
+                "ErrorCode_AuthTokenFailed",
+                "ErrorCode_AuthTokenInvalid",
+                "ErrorCode_AuthTokenInspectInvalid",
+                "ErrorCode_AuthTokenInfoInvalid",
+                "ErrorCode_AuthTokenForbidden",
+                "ErrorCode_RequestBodyInvalid",
+                "ErrorCode_RequestQueryInvalid",
+                "ErrorCode_RequestParamsInvalid",
+                "ErrorCode_AdminAccountPasswordInvalid",
+                "ErrorCode_AdminAccountNotExist",
+                "ErrorCode_AdminAccountInvalid",
+                "ErrorCode_AdminApiNameExist",
+                "ErrorCode_AdminApiPathExist",
+                "ErrorCode_AdminApiKeyExist",
+                "ErrorCode_AdminApiNotExist",
+                "ErrorCode_AdminPermissionKeyExist",
+                "ErrorCode_AdminPermissionExist",
+                "ErrorCode_AdminPermissionKeyNeed",
+                "ErrorCode_AdminPermissionNameNeed",
+                "ErrorCode_AdminPermissionTypeInvalid",
+                "ErrorCode_AdminMenuNotExist",
+                "ErrorCode_AdminRoleNotExist"
+            ]
+        }
+    }
+}

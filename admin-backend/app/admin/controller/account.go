@@ -27,14 +27,15 @@ func (AccountController) Register(ctx *gin.Context) {
 }
 
 // Login 登录
-// @Summary 登录后台
-// @Description 登录后台
-// @Tags 账号相关接口
-// @Accept application/json
-// @Produce application/json
-// @Param object query admin_proto.LoginReq true "请求参数"
-// @Success 200 {object}
-// @Router /admin_proto/login [post]
+//
+//	@Summary		登录后台
+//	@Description	登录后台
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqLogin							true	"请求参数"
+//	@Success		200		{object}	code.Message{data=admin_proto.RespLoginData}	"desc"
+//	@Router			/admin/account/login [post]
 func (AccountController) Login(ctx *gin.Context) {
 	msg := "AccountController.Login"
 	params := &admin_proto.ReqLogin{}
@@ -58,6 +59,14 @@ func (AccountController) Login(ctx *gin.Context) {
 }
 
 // Info 管理员账号详情
+//
+//	@Summary		账号详情
+//	@Description	账号详情
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{object}	code.Message{data=admin_proto.RespAccountInfoData}	"desc"
+//	@Router			/admin/account/info [post]
 func (AccountController) Info(ctx *gin.Context) {
 	msg := "AccountController.Info"
 	refreshToken := ctx.GetBool("refreshToken")
@@ -75,6 +84,15 @@ func (AccountController) Info(ctx *gin.Context) {
 }
 
 // Edit 编辑账号
+//
+//	@Summary		编辑账号
+//	@Description	编辑账号
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAccountEdit	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}		"desc"
+//	@Router			/admin/account/edit [post]
 func (AccountController) Edit(ctx *gin.Context) {
 	msg := "AccountController.Edit"
 	params := &admin_proto.ReqAccountEdit{}
@@ -96,6 +114,15 @@ func (AccountController) Edit(ctx *gin.Context) {
 }
 
 // Password 修改密码
+//
+//	@Summary		修改密码
+//	@Description	修改密码
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAccountPasswordEdit	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}				"desc"
+//	@Router			/admin/account/password [post]
 func (AccountController) Password(ctx *gin.Context) {
 	msg := "AccountController.Password"
 	params := &admin_proto.ReqAccountPasswordEdit{}
@@ -117,6 +144,14 @@ func (AccountController) Password(ctx *gin.Context) {
 }
 
 // Menu 登录用户可访问的菜单
+//
+//	@Summary		登录用户可访问的菜单
+//	@Description	登录用户可访问的菜单
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{object}	code.Message{data=[]admin_proto.MenuItem}	"desc"
+//	@Router			/admin/account/menu [post]
 func (AccountController) Menu(ctx *gin.Context) {
 	msg := "AccountController.Menu"
 	result := code.NewCode(code_proto.ErrorCode_Success)
@@ -131,6 +166,15 @@ func (AccountController) Menu(ctx *gin.Context) {
 	return
 }
 
+// Permission 我的权限
+//
+//	@Summary		我的权限
+//	@Description	我的权限
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{object}	code.Message{data=map[string]string}	"desc"
+//	@Router			/admin/account/permission [post]
 func (AccountController) Permission(ctx *gin.Context) {
 	msg := "AccountController.Permission"
 	result := code.NewCode(code_proto.ErrorCode_Success)

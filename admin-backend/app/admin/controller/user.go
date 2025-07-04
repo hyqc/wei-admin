@@ -19,6 +19,15 @@ type UserController struct {
 }
 
 // List 管理员列表
+//
+//	@Summary		管理员列表
+//	@Description	管理员列表
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserList							true	"请求参数"
+//	@Success		200		{object}	code.Message{data=admin_proto.RespAdminUserListData}	"desc"
+//	@Router			/admin/user/list [post]
 func (UserController) List(ctx *gin.Context) {
 	msg := "UserController.List"
 	params := &admin_proto.ReqAdminUserList{Base: common.NewListBaseReq()}
@@ -41,6 +50,15 @@ func (UserController) List(ctx *gin.Context) {
 }
 
 // Add 添加管理员
+//
+//	@Summary		添加管理员
+//	@Description	添加管理员
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserAdd	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}		"desc"
+//	@Router			/admin/user/add [post]
 func (UserController) Add(ctx *gin.Context) {
 	msg := "UserController.Add"
 	params := &admin_proto.ReqAdminUserAdd{}
@@ -59,7 +77,16 @@ func (UserController) Add(ctx *gin.Context) {
 	code.JSON(ctx, result)
 }
 
-// Info 详情
+// Info 管理员详情
+//
+//	@Summary		管理员详情
+//	@Description	管理员详情
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserInfo						true	"请求参数"
+//	@Success		200		{object}	code.Message{data=admin_proto.RespAccountInfoData}	"desc"
+//	@Router			/admin/user/info [post]
 func (UserController) Info(ctx *gin.Context) {
 	msg := "UserController.Info"
 	params := &admin_proto.ReqAdminUserInfo{}
@@ -81,6 +108,15 @@ func (UserController) Info(ctx *gin.Context) {
 }
 
 // Edit 编辑管理员
+//
+//	@Summary		编辑管理员
+//	@Description	编辑管理员
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserEdit	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}			"desc"
+//	@Router			/admin/user/edit [post]
 func (UserController) Edit(ctx *gin.Context) {
 	msg := "UserController.Edit"
 	params := &admin_proto.ReqAdminUserEdit{}
@@ -100,6 +136,15 @@ func (UserController) Edit(ctx *gin.Context) {
 }
 
 // EditPassword 编辑管理员密码
+//
+//	@Summary		编辑管理员密码
+//	@Description	编辑管理员密码
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserEditPassword	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}					"desc"
+//	@Router			/admin/user/edit_pwd [post]
 func (UserController) EditPassword(ctx *gin.Context) {
 	msg := "UserController.EditPassword"
 	params := &admin_proto.ReqAdminUserEditPassword{}
@@ -118,7 +163,16 @@ func (UserController) EditPassword(ctx *gin.Context) {
 	code.JSON(ctx, result)
 }
 
-// Enable 启用禁用
+// Enable 启用|禁用管理员账号
+//
+//	@Summary		启用|禁用管理员账号
+//	@Description	启用|禁用管理员账号
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserEnabled	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}			"desc"
+//	@Router			/admin/user/enable [post]
 func (UserController) Enable(ctx *gin.Context) {
 	msg := "UserController.Enable"
 	params := &admin_proto.ReqAdminUserEnabled{}
@@ -138,6 +192,15 @@ func (UserController) Enable(ctx *gin.Context) {
 }
 
 // Delete 删除管理员
+//
+//	@Summary		删除管理员
+//	@Description	删除管理员
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserDelete	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}			"desc"
+//	@Router			/admin/user/delete [post]
 func (UserController) Delete(ctx *gin.Context) {
 	msg := "UserController.Delete"
 	params := &admin_proto.ReqAdminUserDelete{}
@@ -157,6 +220,15 @@ func (UserController) Delete(ctx *gin.Context) {
 }
 
 // BindRoles 管理员绑定角色
+//
+//	@Summary		管理员绑定角色
+//	@Description	管理员绑定角色
+//	@Tags			管理员账号接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			object	query		admin_proto.ReqAdminUserBindRoles	true	"请求参数"
+//	@Success		200		{object}	code.Message{data=nil}				"desc"
+//	@Router			/admin/user/bind_roles [post]
 func (UserController) BindRoles(ctx *gin.Context) {
 	msg := "UserController.BindRoles"
 	params := &admin_proto.ReqAdminUserBindRoles{}

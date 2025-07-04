@@ -18,5 +18,18 @@ func initJwt() error {
 	}
 	AppAuth = auth
 
+	//转ignore
+	if AppConfig.JWT.IgnoresMap == nil {
+		AppConfig.JWT.IgnoresMap = map[string]map[string]struct{}{}
+	}
+	for _, val := range AppConfig.JWT.Ignores {
+		for _, v := range val.Paths {
+			if _, ok := AppConfig.JWT.IgnoresMap[val.Method]; !ok {
+				AppConfig.JWT.IgnoresMap[val.Method] = map[string]struct{}{}
+			}
+			AppConfig.JWT.IgnoresMap[val.Method][v] = struct{}{}
+		}
+	}
+
 	return nil
 }

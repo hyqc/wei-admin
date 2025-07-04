@@ -19,12 +19,17 @@ import (
 	"time"
 )
 
-var Global = []gin.HandlerFunc{
-	logger(),
-	cors(),
-	recovery(),
-	auth(),
-}
+var (
+	Global = []gin.HandlerFunc{
+		logger(),
+		cors(),
+		recovery(),
+	}
+
+	Auth = []gin.HandlerFunc{
+		auth(),
+	}
+)
 
 func cors() gin.HandlerFunc {
 	return func(ctx *gin.Context) {

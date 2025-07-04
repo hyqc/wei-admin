@@ -61,7 +61,6 @@ func runServe() {
 	if global.AppConfig.Server.Pprof {
 		pprof.Register(e)
 	}
-
 	e.Use(middleware.Global...)
 	router.Routes(e)
 

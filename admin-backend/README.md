@@ -18,5 +18,5 @@ openssl rsa -pubout -in private.pem -out public.pem
 
 ```
 ### 配置秘钥字符串生成
-1. 读取private.pem文件内容，并base64编码
+1. 读取private.pem文件内容，并base64编码，配置到jwt配置项的private
 2. 读取public.pem文件内容，并base64编码，配置到jwt配置项的public

@@ -21,7 +21,7 @@ jwt:
   #生命周期时间，单位秒
   expire: 3600
   #不进行鉴权的路由列表
-  ignore:
+  ignores:
     - /admin/account/login
 store:
   wei:
