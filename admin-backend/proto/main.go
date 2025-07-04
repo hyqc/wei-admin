@@ -11,6 +11,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+//将模型转成proto文件
+
 type Proto struct {
 	FileName string
 	Dir      string
