@@ -60,13 +60,15 @@ func TestDropN(t *testing.T) {
 	assert.NotNil(t, err, "参数错误", err)
 
 	for i := 0; i < 100; i++ {
+		weights = []int{5, 10, 2, 3}
+		values = Make(weights)
 		seed := 1 + rand.Intn(len(weights))
 		indexes, err := DropN(values, seed)
 		if err != nil {
 			t.Error(err)
 			return
 		}
-		fmt.Println(fmt.Sprintf("values: %+v, rest: %+v", values, indexes))
+		fmt.Println(fmt.Sprintf("seed:%d, rest: %+v, values: %+v", seed, indexes, values))
 	}
 }
 
