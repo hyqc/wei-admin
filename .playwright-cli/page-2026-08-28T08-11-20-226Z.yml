@@ -1,0 +1,269 @@
+- generic [ref=f1e3]:
+  - complementary [ref=f1e4]:
+    - generic [ref=f1e6]:
+      - generic [ref=f1e7] [cursor=pointer]:
+        - img "logo" [ref=f1e8]
+        - generic [ref=f1e9]: Admin Vue3x
+      - menu [ref=f1e10]:
+        - menuitem [ref=f1e11] [cursor=pointer]:
+          - link [ref=f1e13]:
+            - /url: /home
+            - img "home" [ref=f1e14]
+            - text: 首页
+  - generic [ref=f1e17]:
+    - generic [ref=f1e18]:
+      - img "menu-fold" [ref=f1e20] [cursor=pointer]
+      - generic [ref=f1e23]: "?"
+    - main [ref=f1e28]:
+      - generic [ref=f1e30]:
+        - generic [ref=f1e31]: 排班日历
+        - generic [ref=f1e35]:
+          - generic [ref=f1e36]:
+            - generic [ref=f1e38] [cursor=pointer]:
+              - combobox [ref=f1e40]
+              - generic "2026年" [ref=f1e41]
+            - generic [ref=f1e43] [cursor=pointer]:
+              - combobox [ref=f1e45]
+              - generic "8月" [ref=f1e46]
+            - generic [ref=f1e47]:
+              - generic [ref=f1e48] [cursor=pointer]:
+                - generic [ref=f1e49]:
+                  - radio "月" [checked]
+                - generic [ref=f1e50]: 月
+              - generic [ref=f1e51] [cursor=pointer]:
+                - generic [ref=f1e52]:
+                  - radio "年"
+                - generic [ref=f1e53]: 年
+          - table [ref=f1e57]:
+            - rowgroup [ref=f1e58]:
+              - row [ref=f1e59]:
+                - columnheader "一" [ref=f1e60]
+                - columnheader "二" [ref=f1e61]
+                - columnheader "三" [ref=f1e62]
+                - columnheader "四" [ref=f1e63]
+                - columnheader "五" [ref=f1e64]
+                - columnheader "六" [ref=f1e65]
+                - columnheader "日" [ref=f1e66]
+            - rowgroup [ref=f1e67]:
+              - row [ref=f1e68]:
+                - cell "27" [ref=f1e69] [cursor=pointer]:
+                  - generic [ref=f1e70]:
+                    - generic [ref=f1e71]: "27"
+                    - generic [ref=f1e72]:
+                      - list
+                - cell "28 今日无排班计划" [ref=f1e73] [cursor=pointer]:
+                  - generic [ref=f1e74]:
+                    - generic [ref=f1e75]: "28"
+                    - list [ref=f1e77]:
+                      - listitem [ref=f1e78]:
+                        - generic [ref=f1e79]: 今日无排班计划
+                - cell "29" [ref=f1e80] [cursor=pointer]:
+                  - generic [ref=f1e81]:
+                    - generic [ref=f1e82]: "29"
+                    - generic [ref=f1e83]:
+                      - list
+                - cell "30" [ref=f1e84] [cursor=pointer]:
+                  - generic [ref=f1e85]:
+                    - generic [ref=f1e86]: "30"
+                    - generic [ref=f1e87]:
+                      - list
+                - cell "31" [ref=f1e88] [cursor=pointer]:
+                  - generic [ref=f1e89]:
+                    - generic [ref=f1e90]: "31"
+                    - generic [ref=f1e91]:
+                      - list
+                - cell "01" [ref=f1e92] [cursor=pointer]:
+                  - generic [ref=f1e93]:
+                    - generic [ref=f1e94]: "01"
+                    - generic [ref=f1e95]:
+                      - list
+                - cell "02" [ref=f1e96] [cursor=pointer]:
+                  - generic [ref=f1e97]:
+                    - generic [ref=f1e98]: "02"
+                    - generic [ref=f1e99]:
+                      - list
+              - row [ref=f1e100]:
+                - cell "03" [ref=f1e101] [cursor=pointer]:
+                  - generic [ref=f1e102]:
+                    - generic [ref=f1e103]: "03"
+                    - generic [ref=f1e104]:
+                      - list
+                - cell "04" [ref=f1e105] [cursor=pointer]:
+                  - generic [ref=f1e106]:
+                    - generic [ref=f1e107]: "04"
+                    - generic [ref=f1e108]:
+                      - list
+                - cell "05" [ref=f1e109] [cursor=pointer]:
+                  - generic [ref=f1e110]:
+                    - generic [ref=f1e111]: "05"
+                    - generic [ref=f1e112]:
+                      - list
+                - cell "06" [ref=f1e113] [cursor=pointer]:
+                  - generic [ref=f1e114]:
+                    - generic [ref=f1e115]: "06"
+                    - generic [ref=f1e116]:
+                      - list
+                - cell "07" [ref=f1e117] [cursor=pointer]:
+                  - generic [ref=f1e118]:
+                    - generic [ref=f1e119]: "07"
+                    - generic [ref=f1e120]:
+                      - list
+                - cell "08" [ref=f1e121] [cursor=pointer]:
+                  - generic [ref=f1e122]:
+                    - generic [ref=f1e123]: "08"
+                    - generic [ref=f1e124]:
+                      - list
+                - cell "09" [ref=f1e125] [cursor=pointer]:
+                  - generic [ref=f1e126]:
+                    - generic [ref=f1e127]: "09"
+                    - generic [ref=f1e128]:
+                      - list
+              - row [ref=f1e129]:
+                - cell "10" [ref=f1e130] [cursor=pointer]:
+                  - generic [ref=f1e131]:
+                    - generic [ref=f1e132]: "10"
+                    - generic [ref=f1e133]:
+                      - list
+                - cell "11" [ref=f1e134] [cursor=pointer]:
+                  - generic [ref=f1e135]:
+                    - generic [ref=f1e136]: "11"
+                    - generic [ref=f1e137]:
+                      - list
+                - cell "12" [ref=f1e138] [cursor=pointer]:
+                  - generic [ref=f1e139]:
+                    - generic [ref=f1e140]: "12"
+                    - generic [ref=f1e141]:
+                      - list
+                - cell "13" [ref=f1e142] [cursor=pointer]:
+                  - generic [ref=f1e143]:
+                    - generic [ref=f1e144]: "13"
+                    - generic [ref=f1e145]:
+                      - list
+                - cell "14" [ref=f1e146] [cursor=pointer]:
+                  - generic [ref=f1e147]:
+                    - generic [ref=f1e148]: "14"
+                    - generic [ref=f1e149]:
+                      - list
+                - cell "15" [ref=f1e150] [cursor=pointer]:
+                  - generic [ref=f1e151]:
+                    - generic [ref=f1e152]: "15"
+                    - generic [ref=f1e153]:
+                      - list
+                - cell "16" [ref=f1e154] [cursor=pointer]:
+                  - generic [ref=f1e155]:
+                    - generic [ref=f1e156]: "16"
+                    - generic [ref=f1e157]:
+                      - list
+              - row [ref=f1e158]:
+                - cell "17" [ref=f1e159] [cursor=pointer]:
+                  - generic [ref=f1e160]:
+                    - generic [ref=f1e161]: "17"
+                    - generic [ref=f1e162]:
+                      - list
+                - cell "18" [ref=f1e163] [cursor=pointer]:
+                  - generic [ref=f1e164]:
+                    - generic [ref=f1e165]: "18"
+                    - generic [ref=f1e166]:
+                      - list
+                - cell "19" [ref=f1e167] [cursor=pointer]:
+                  - generic [ref=f1e168]:
+                    - generic [ref=f1e169]: "19"
+                    - generic [ref=f1e170]:
+                      - list
+                - cell "20" [ref=f1e171] [cursor=pointer]:
+                  - generic [ref=f1e172]:
+                    - generic [ref=f1e173]: "20"
+                    - generic [ref=f1e174]:
+                      - list
+                - cell "21" [ref=f1e175] [cursor=pointer]:
+                  - generic [ref=f1e176]:
+                    - generic [ref=f1e177]: "21"
+                    - generic [ref=f1e178]:
+                      - list
+                - cell "22" [ref=f1e179] [cursor=pointer]:
+                  - generic [ref=f1e180]:
+                    - generic [ref=f1e181]: "22"
+                    - generic [ref=f1e182]:
+                      - list
+                - cell "23" [ref=f1e183] [cursor=pointer]:
+                  - generic [ref=f1e184]:
+                    - generic [ref=f1e185]: "23"
+                    - generic [ref=f1e186]:
+                      - list
+              - row [ref=f1e187]:
+                - cell "24" [ref=f1e188] [cursor=pointer]:
+                  - generic [ref=f1e189]:
+                    - generic [ref=f1e190]: "24"
+                    - generic [ref=f1e191]:
+                      - list
+                - cell "25" [ref=f1e192] [cursor=pointer]:
+                  - generic [ref=f1e193]:
+                    - generic [ref=f1e194]: "25"
+                    - generic [ref=f1e195]:
+                      - list
+                - cell "26" [ref=f1e196] [cursor=pointer]:
+                  - generic [ref=f1e197]:
+                    - generic [ref=f1e198]: "26"
+                    - generic [ref=f1e199]:
+                      - list
+                - cell "27" [ref=f1e200] [cursor=pointer]:
+                  - generic [ref=f1e201]:
+                    - generic [ref=f1e202]: "27"
+                    - generic [ref=f1e203]:
+                      - list
+                - cell "28 今日无排班计划" [ref=f1e204] [cursor=pointer]:
+                  - generic [ref=f1e205]:
+                    - generic [ref=f1e206]: "28"
+                    - list [ref=f1e208]:
+                      - listitem [ref=f1e209]:
+                        - generic [ref=f1e210]: 今日无排班计划
+                - cell "29" [ref=f1e211] [cursor=pointer]:
+                  - generic [ref=f1e212]:
+                    - generic [ref=f1e213]: "29"
+                    - generic [ref=f1e214]:
+                      - list
+                - cell "30" [ref=f1e215] [cursor=pointer]:
+                  - generic [ref=f1e216]:
+                    - generic [ref=f1e217]: "30"
+                    - generic [ref=f1e218]:
+                      - list
+              - row [ref=f1e219]:
+                - cell "31" [ref=f1e220] [cursor=pointer]:
+                  - generic [ref=f1e221]:
+                    - generic [ref=f1e222]: "31"
+                    - generic [ref=f1e223]:
+                      - list
+                - cell "01" [ref=f1e224] [cursor=pointer]:
+                  - generic [ref=f1e225]:
+                    - generic [ref=f1e226]: "01"
+                    - generic [ref=f1e227]:
+                      - list
+                - cell "02" [ref=f1e228] [cursor=pointer]:
+                  - generic [ref=f1e229]:
+                    - generic [ref=f1e230]: "02"
+                    - generic [ref=f1e231]:
+                      - list
+                - cell "03" [ref=f1e232] [cursor=pointer]:
+                  - generic [ref=f1e233]:
+                    - generic [ref=f1e234]: "03"
+                    - generic [ref=f1e235]:
+                      - list
+                - cell "04" [ref=f1e236] [cursor=pointer]:
+                  - generic [ref=f1e237]:
+                    - generic [ref=f1e238]: "04"
+                    - generic [ref=f1e239]:
+                      - list
+                - cell "05" [ref=f1e240] [cursor=pointer]:
+                  - generic [ref=f1e241]:
+                    - generic [ref=f1e242]: "05"
+                    - generic [ref=f1e243]:
+                      - list
+                - cell "06" [ref=f1e244] [cursor=pointer]:
+                  - generic [ref=f1e245]:
+                    - generic [ref=f1e246]: "06"
+                    - generic [ref=f1e247]:
+                      - list
+    - generic [ref=f1e249]:
+      - text: Copyright
+      - img "copyright" [ref=f1e250]
+      - text: 2022 由 Admin Vue3x 提供

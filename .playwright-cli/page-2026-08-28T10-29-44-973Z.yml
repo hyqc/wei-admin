@@ -1,0 +1,257 @@
+- generic [ref=e60]:
+  - complementary [ref=e61]:
+    - generic [ref=e63]:
+      - generic [ref=e64] [cursor=pointer]:
+        - img "logo" [ref=e65]
+        - generic [ref=e66]: Admin Vue3x
+      - menu [ref=e67]:
+        - menuitem [ref=e68] [cursor=pointer]:
+          - link [ref=e70]:
+            - /url: /home
+            - img "home" [ref=e71]
+            - text: 首页
+        - generic [ref=e75] [cursor=pointer]:
+          - img "setting" [ref=e76]
+          - text: 系统管理
+        - list [ref=e79]:
+          - menuitem [ref=e80] [cursor=pointer]:
+            - link "账号管理" [ref=e82]:
+              - /url: /admin/user
+          - menuitem [ref=e83] [cursor=pointer]:
+            - link "角色管理" [ref=e85]:
+              - /url: /admin/role
+          - menuitem [ref=e86] [cursor=pointer]:
+            - link "菜单管理" [ref=e88]:
+              - /url: /admin/menu
+          - menuitem [ref=e89] [cursor=pointer]:
+            - link "权限管理" [ref=e91]:
+              - /url: /admin/permission
+          - menuitem [ref=e92] [cursor=pointer]:
+            - link "接口管理" [ref=e94]:
+              - /url: /admin/api
+  - generic [ref=e95]:
+    - generic [ref=e96]:
+      - img "menu-fold" [ref=e98] [cursor=pointer]
+      - generic [ref=e101]: 超管
+    - main [ref=e107]:
+      - generic [ref=e108]:
+        - generic [ref=e109]:
+          - generic [ref=e110]: 接口管理
+          - generic [ref=e112]:
+            - generic [ref=e114]:
+              - generic "唯一键" [ref=e116]: "唯一键 :"
+              - textbox "唯一键 :" [ref=e121]:
+                - /placeholder: 请输入唯一键
+            - generic [ref=e124]:
+              - generic "名称" [ref=e126]: "名称 :"
+              - textbox "名称 :" [ref=e131]:
+                - /placeholder: 请输入接口名称
+            - generic [ref=e134]:
+              - generic "路径" [ref=e136]: "路径 :"
+              - textbox "路径 :" [ref=e141]:
+                - /placeholder: 请输入接口路径
+            - generic [ref=e148]:
+              - button "search 查询" [ref=e150] [cursor=pointer]:
+                - img "search" [ref=e151]
+                - generic [ref=e154]: 查询
+              - button "reload 重置" [ref=e156] [cursor=pointer]:
+                - img "reload" [ref=e157]
+                - generic [ref=e160]: 重置
+          - button "plus 新建接口" [ref=e162] [cursor=pointer]:
+            - img "plus" [ref=e163]
+            - generic [ref=e167]: 新建接口
+        - table [ref=e175]:
+          - rowgroup [ref=e185]:
+            - row [ref=e186]:
+              - columnheader "ID" [ref=e187]
+              - columnheader "接口名称" [ref=e188]
+              - columnheader "唯一键" [ref=e189]
+              - columnheader "接口路径" [ref=e190]
+              - columnheader "状态" [ref=e191]
+              - columnheader "创建时间" [ref=e192]
+              - columnheader "更新时间" [ref=e193]
+              - columnheader "操作" [ref=e194]
+          - rowgroup [ref=e195]:
+            - row [ref=e196]:
+              - cell "1" [ref=e197]
+              - cell "账号列表" [ref=e198]
+              - cell "admin:user:list" [ref=e199]
+              - cell "/api/admin/user/list" [ref=e200]
+              - cell [ref=e201]:
+                - switch "启用 禁用" [checked] [ref=e202] [cursor=pointer]:
+                  - generic [ref=e204]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e205]
+              - cell [ref=e206]
+              - cell [ref=e207]:
+                - generic [ref=e208]:
+                  - button "详情" [ref=e210] [cursor=pointer]
+                  - button "编辑" [ref=e213] [cursor=pointer]
+            - row [ref=e215]:
+              - cell "2" [ref=e216]
+              - cell "添加账号" [ref=e217]
+              - cell "admin:user:add" [ref=e218]
+              - cell "/api/admin/user/add" [ref=e219]
+              - cell [ref=e220]:
+                - switch "启用 禁用" [checked] [ref=e221] [cursor=pointer]:
+                  - generic [ref=e223]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e224]
+              - cell [ref=e225]
+              - cell [ref=e226]:
+                - generic [ref=e227]:
+                  - button "详情" [ref=e229] [cursor=pointer]
+                  - button "编辑" [ref=e232] [cursor=pointer]
+            - row [ref=e234]:
+              - cell "3" [ref=e235]
+              - cell "编辑账号" [ref=e236]
+              - cell "admin:user:edit" [ref=e237]
+              - cell "/api/admin/user/edit" [ref=e238]
+              - cell [ref=e239]:
+                - switch "启用 禁用" [checked] [ref=e240] [cursor=pointer]:
+                  - generic [ref=e242]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e243]
+              - cell [ref=e244]
+              - cell [ref=e245]:
+                - generic [ref=e246]:
+                  - button "详情" [ref=e248] [cursor=pointer]
+                  - button "编辑" [ref=e251] [cursor=pointer]
+            - row [ref=e253]:
+              - cell "4" [ref=e254]
+              - cell "删除账号" [ref=e255]
+              - cell "admin:user:delete" [ref=e256]
+              - cell "/api/admin/user/delete" [ref=e257]
+              - cell [ref=e258]:
+                - switch "启用 禁用" [checked] [ref=e259] [cursor=pointer]:
+                  - generic [ref=e261]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e262]
+              - cell [ref=e263]
+              - cell [ref=e264]:
+                - generic [ref=e265]:
+                  - button "详情" [ref=e267] [cursor=pointer]
+                  - button "编辑" [ref=e270] [cursor=pointer]
+            - row [ref=e272]:
+              - cell "5" [ref=e273]
+              - cell "角色列表" [ref=e274]
+              - cell "admin:role:list" [ref=e275]
+              - cell "/api/admin/role/list" [ref=e276]
+              - cell [ref=e277]:
+                - switch "启用 禁用" [checked] [ref=e278] [cursor=pointer]:
+                  - generic [ref=e280]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e281]
+              - cell [ref=e282]
+              - cell [ref=e283]:
+                - generic [ref=e284]:
+                  - button "详情" [ref=e286] [cursor=pointer]
+                  - button "编辑" [ref=e289] [cursor=pointer]
+            - row [ref=e291]:
+              - cell "6" [ref=e292]
+              - cell "添加角色" [ref=e293]
+              - cell "admin:role:add" [ref=e294]
+              - cell "/api/admin/role/add" [ref=e295]
+              - cell [ref=e296]:
+                - switch "启用 禁用" [checked] [ref=e297] [cursor=pointer]:
+                  - generic [ref=e299]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e300]
+              - cell [ref=e301]
+              - cell [ref=e302]:
+                - generic [ref=e303]:
+                  - button "详情" [ref=e305] [cursor=pointer]
+                  - button "编辑" [ref=e308] [cursor=pointer]
+            - row [ref=e310]:
+              - cell "7" [ref=e311]
+              - cell "删除角色" [ref=e312]
+              - cell "admin:role:delete" [ref=e313]
+              - cell "/api/admin/role/delete" [ref=e314]
+              - cell [ref=e315]:
+                - switch "启用 禁用" [checked] [ref=e316] [cursor=pointer]:
+                  - generic [ref=e318]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e319]
+              - cell [ref=e320]
+              - cell [ref=e321]:
+                - generic [ref=e322]:
+                  - button "详情" [ref=e324] [cursor=pointer]
+                  - button "编辑" [ref=e327] [cursor=pointer]
+            - row [ref=e329]:
+              - cell "15" [ref=e330]
+              - cell "编辑角色" [ref=e331]
+              - cell "admin:role:edit" [ref=e332]
+              - cell "/api/admin/role/edit" [ref=e333]
+              - cell [ref=e334]:
+                - switch "启用 禁用" [checked] [ref=e335] [cursor=pointer]:
+                  - generic [ref=e337]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e338]
+              - cell [ref=e339]
+              - cell [ref=e340]:
+                - generic [ref=e341]:
+                  - button "详情" [ref=e343] [cursor=pointer]
+                  - button "编辑" [ref=e346] [cursor=pointer]
+            - row [ref=e348]:
+              - cell "8" [ref=e349]
+              - cell "菜单列表" [ref=e350]
+              - cell "admin:menu:list" [ref=e351]
+              - cell "/api/admin/menu/list" [ref=e352]
+              - cell [ref=e353]:
+                - switch "启用 禁用" [checked] [ref=e354] [cursor=pointer]:
+                  - generic [ref=e356]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e357]
+              - cell [ref=e358]
+              - cell [ref=e359]:
+                - generic [ref=e360]:
+                  - button "详情" [ref=e362] [cursor=pointer]
+                  - button "编辑" [ref=e365] [cursor=pointer]
+            - row [ref=e367]:
+              - cell "9" [ref=e368]
+              - cell "添加菜单" [ref=e369]
+              - cell "admin:menu:add" [ref=e370]
+              - cell "/api/admin/menu/add" [ref=e371]
+              - cell [ref=e372]:
+                - switch "启用 禁用" [checked] [ref=e373] [cursor=pointer]:
+                  - generic [ref=e375]:
+                    - generic: 启用
+                    - generic: 禁用
+              - cell [ref=e376]
+              - cell [ref=e377]
+              - cell [ref=e378]:
+                - generic [ref=e379]:
+                  - button "详情" [ref=e381] [cursor=pointer]
+                  - button "编辑" [ref=e384] [cursor=pointer]
+        - generic [ref=e386]:
+          - generic [ref=e387]: 共 20 条 第 1/2 页
+          - list [ref=e390]:
+            - listitem "上一页" [ref=e391]:
+              - button [disabled] [ref=e392]:
+                - img "left" [ref=e393]
+            - listitem "1" [ref=e396] [cursor=pointer]
+            - listitem "2" [ref=e398] [cursor=pointer]
+            - listitem "下一页" [ref=e400] [cursor=pointer]:
+              - button [ref=e401]:
+                - img "right" [ref=e402]
+            - listitem [ref=e405]:
+              - generic [ref=e407] [cursor=pointer]:
+                - combobox [ref=e409]
+                - generic [ref=e410]: 10 条/页
+              - generic [ref=e411]:
+                - text: 跳至
+                - textbox [ref=e412]
+                - text: 页
+    - generic [ref=e414]:
+      - text: Copyright
+      - img "copyright" [ref=e415]
+      - text: 2022 由 Admin Vue3x 提供

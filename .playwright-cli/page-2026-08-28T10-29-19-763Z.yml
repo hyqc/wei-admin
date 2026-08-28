@@ -1,0 +1,19 @@
+- generic [ref=e5]:
+  - generic [ref=e6]:
+    - img "logo" [ref=e7]
+    - generic [ref=e8]: Admin Vue3x
+  - generic [ref=e9]: ant design vue 后台管理系统
+  - generic [ref=e10]:
+    - generic [ref=e16]:
+      - img "user" [ref=e18]
+      - textbox "用户名：admin" [ref=e21]: admin
+      - button [ref=e23] [cursor=pointer]:
+        - img "close-circle" [ref=e24]
+    - generic [ref=e32]:
+      - img "lock" [ref=e34]
+      - textbox "密码：123456" [ref=e37]: "123456"
+      - img "eye-invisible" [ref=e39] [cursor=pointer]
+    - generic [ref=e48] [cursor=pointer]:
+      - checkbox "自动登录" [checked] [ref=e50]
+      - generic [ref=e52]: 自动登录
+    - button "登 录" [ref=e58] [cursor=pointer]
