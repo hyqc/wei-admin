@@ -45,10 +45,19 @@
       :loading="loading"
       :pagination="false"
       row-key="adminId"
-      :scroll="{ x: 1200 }"
+      :scroll="{ x: 1940 }"
     >
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'roles'">
+        <template v-if="column.key === 'nickname'">
+          <a-tooltip v-if="record.nickname && record.nickname.length > 10" :title="record.nickname">
+            <span class="nickname-cell">{{ displayNickname(record.nickname) }}</span>
+          </a-tooltip>
+          <span v-else>{{ displayNickname(record.nickname) }}</span>
+        </template>
+        <template v-else-if="column.key === 'lastLoginIp' || column.key === 'currentLoginIp'">
+          {{ getLoginIp(record.lastLoginIp, column.key === 'currentLoginIp' ? 'current' : 'last') }}
+        </template>
+        <template v-else-if="column.key === 'roles'">
           <a-tag v-for="role in record.roles" :key="role.roleId" color="blue">
             {{ role.roleName }}
           </a-tag>
@@ -66,16 +75,28 @@
         <template v-else-if="column.key === 'action'">
           <a-space>
             <Authorization permission="AdminUserView">
-              <a-button type="link" size="small" @click="openDetailModal(record)">详情</a-button>
+              <a-button type="link" size="small" @click="openDetailModal(record)">
+                <template #icon><EyeOutlined /></template>
+                详情
+              </a-button>
             </Authorization>
             <Authorization permission="AdminUserEdit">
-              <a-button type="link" size="small" @click="openEditModal(record)">编辑</a-button>
+              <a-button type="link" size="small" @click="openEditModal(record)">
+                <template #icon><EditOutlined /></template>
+                编辑
+              </a-button>
             </Authorization>
             <Authorization permission="AdminUserEdit">
-              <a-button type="link" size="small" @click="openResetPwdModal(record)">重置密码</a-button>
+              <a-button type="link" size="small" @click="openResetPwdModal(record)">
+                <template #icon><KeyOutlined /></template>
+                重置密码
+              </a-button>
             </Authorization>
             <Authorization permission="AdminUserEdit">
-              <a-button type="link" size="small" @click="openBindRolesModal(record)">绑定角色</a-button>
+              <a-button type="link" size="small" @click="openBindRolesModal(record)">
+                <template #icon><UserSwitchOutlined /></template>
+                绑定角色
+              </a-button>
             </Authorization>
             <Authorization permission="AdminUserDelete">
               <!-- 超管不可删除，仅被禁用的账号可删除 -->
@@ -86,7 +107,10 @@
                 cancel-text="取消"
                 @confirm="onDelete(record)"
               >
-                <a-button type="link" size="small" danger>删除</a-button>
+                <a-button type="link" size="small" danger>
+                  <template #icon><DeleteOutlined /></template>
+                  删除
+                </a-button>
               </a-popconfirm>
             </Authorization>
           </a-space>
@@ -116,7 +140,16 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import {
+  SearchOutlined,
+  ReloadOutlined,
+  PlusOutlined,
+  EyeOutlined,
+  EditOutlined,
+  KeyOutlined,
+  UserSwitchOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons-vue';
 import PageContainer from '@/components/PageContainer.vue';
 import Authorization from '@/components/Authorization.vue';
 import RowEnabledButton from '@/components/RowEnabledButton.vue';
@@ -163,16 +196,33 @@ const detailData = ref<AdminUserListItem>();
 const columns = [
   { title: 'ID', dataIndex: 'adminId', key: 'adminId', fixed: 'left', width: 80 },
   { title: '账号', dataIndex: 'username', key: 'username', fixed: 'left', width: 120 },
-  { title: '昵称', dataIndex: 'nickname', key: 'nickname', width: 120 },
+  { title: '昵称', dataIndex: 'nickname', key: 'nickname', width: 160 },
   { title: '邮箱', dataIndex: 'email', key: 'email', width: 180 },
   { title: '角色', dataIndex: 'roles', key: 'roles', width: 180 },
   { title: '状态', dataIndex: 'isEnabled', key: 'isEnabled', width: 100 },
   { title: '登录次数', dataIndex: 'loginTotal', key: 'loginTotal', width: 100 },
   { title: '上次登录IP', dataIndex: 'lastLoginIp', key: 'lastLoginIp', width: 140 },
+  { title: '当前登录IP', dataIndex: 'lastLoginIp', key: 'currentLoginIp', width: 140 },
   { title: '上次登录时间', dataIndex: 'lastLoginTime', key: 'lastLoginTime', width: 180 },
   { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt', width: 180 },
-  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 360 },
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 420 },
 ];
+
+/** 昵称超 10 字符截断显示，超出部分用省略号 */
+function displayNickname(nickname?: string): string {
+  if (!nickname) return '';
+  return nickname.length > 10 ? `${nickname.slice(0, 10)}...` : nickname;
+}
+
+/** 拆分登录IP：last 取倒数第 2 个（上次登录），current 取最后一个（当前登录） */
+function getLoginIp(ipStr?: string, type: 'last' | 'current' = 'last'): string {
+  const list = (ipStr || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const ip = type === 'current' ? list[list.length - 1] : list[list.length - 2];
+  return ip || '-';
+}
 
 function getRows() {
   loading.value = true;
@@ -273,5 +323,14 @@ onMounted(() => {
   .ant-form-item {
     margin-bottom: 8px;
   }
+}
+
+.nickname-cell {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 </style>

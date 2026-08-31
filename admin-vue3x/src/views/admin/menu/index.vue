@@ -12,9 +12,10 @@
       :data-source="rows"
       :loading="loading"
       :pagination="false"
-      :default-expand-all-rows="true"
+      :expanded-row-keys="expandedRowKeys"
+      @update:expanded-row-keys="(keys: number[]) => (expandedRowKeys = keys)"
       row-key="id"
-      :scroll="{ x: 1100 }"
+      :scroll="{ x: 1160 }"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'name'">
@@ -43,16 +44,28 @@
         <template v-else-if="column.key === 'action'">
           <a-space>
             <Authorization permission="AdminMenuEdit">
-              <a-button type="link" size="small" @click="openAddModal(record)">新增子菜单</a-button>
+              <a-button type="link" size="small" @click="openAddModal(record)">
+                <template #icon><PlusOutlined /></template>
+                新增子菜单
+              </a-button>
             </Authorization>
             <Authorization permission="AdminMenuEdit">
-              <a-button type="link" size="small" @click="openEditModal(record)">编辑</a-button>
+              <a-button type="link" size="small" @click="openEditModal(record)">
+                <template #icon><EditOutlined /></template>
+                编辑
+              </a-button>
             </Authorization>
             <Authorization permission="AdminMenuView">
-              <a-button type="link" size="small" @click="openDetailModal(record)">详情</a-button>
+              <a-button type="link" size="small" @click="openDetailModal(record)">
+                <template #icon><EyeOutlined /></template>
+                详情
+              </a-button>
             </Authorization>
             <Authorization permission="AdminMenuEdit">
-              <a-button type="link" size="small" @click="openPermissionsModal(record)">权限配置</a-button>
+              <a-button type="link" size="small" @click="openPermissionsModal(record)">
+                <template #icon><SafetyCertificateOutlined /></template>
+                权限配置
+              </a-button>
             </Authorization>
             <Authorization permission="AdminMenuDelete">
               <a-popconfirm
@@ -62,7 +75,10 @@
                 cancel-text="取消"
                 @confirm="onDelete(record)"
               >
-                <a-button type="link" size="small" danger>删除</a-button>
+                <a-button type="link" size="small" danger>
+                  <template #icon><DeleteOutlined /></template>
+                  删除
+                </a-button>
               </a-popconfirm>
             </Authorization>
           </a-space>
@@ -84,7 +100,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import { PlusOutlined } from '@ant-design/icons-vue';
+import {
+  PlusOutlined,
+  EyeOutlined,
+  EditOutlined,
+  SafetyCertificateOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons-vue';
 import PageContainer from '@/components/PageContainer.vue';
 import Authorization from '@/components/Authorization.vue';
 import SaveMenuModal from './components/SaveMenuModal.vue';
@@ -95,6 +117,8 @@ import type { MenuTreeItem } from '@/types/admin_menu';
 
 const loading = ref(false);
 const rows = ref<MenuTreeItem[]>([]);
+/** 树形表格展开的行 key，加载后默认全部展开 */
+const expandedRowKeys = ref<number[]>([]);
 
 const saveModalStatus = ref(false);
 const detailModalStatus = ref(false);
@@ -110,7 +134,7 @@ const columns = [
   { title: '状态', dataIndex: 'enabled', key: 'isEnabled', width: 100 },
   { title: '是否显示', dataIndex: 'hideInMenu', key: 'hideInMenu', width: 100 },
   { title: '创建时间', dataIndex: 'createTime', key: 'createTime', width: 180, customRender: ({ text }: { text: number }) => formatTime(text) },
-  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 320 },
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 380 },
 ];
 
 function formatTime(time?: number) {
@@ -120,11 +144,24 @@ function formatTime(time?: number) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
+/** 递归收集所有含子节点的菜单 id */
+function collectParentKeys(list: MenuTreeItem[]): number[] {
+  const keys: number[] = [];
+  for (const item of list) {
+    if (item.children?.length) {
+      keys.push(item.id as number);
+      keys.push(...collectParentKeys(item.children));
+    }
+  }
+  return keys;
+}
+
 function getRows() {
   loading.value = true;
   getAdminMenuTree()
     .then((res) => {
       rows.value = res.data.list || [];
+      expandedRowKeys.value = collectParentKeys(rows.value);
     })
     .finally(() => {
       loading.value = false;

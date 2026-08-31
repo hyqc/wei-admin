@@ -18,6 +18,10 @@ export interface ReqAdminPermissionAdd {
   id?: number;
   /** 权限对应的菜单ID */
   menuId?: number;
+  /** 菜单名称 */
+  menuName?: string;
+  /** 菜单路由 */
+  menuPath?: string;
   /** 权限唯一标识符 */
   key?: string;
   /** 权限名称 */

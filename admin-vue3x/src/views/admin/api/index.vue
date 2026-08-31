@@ -38,7 +38,7 @@
       :loading="loading"
       :pagination="false"
       row-key="id"
-      :scroll="{ x: 1000 }"
+      :scroll="{ x: 1060 }"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'isEnabled'">
@@ -54,10 +54,16 @@
         <template v-else-if="column.key === 'action'">
           <a-space>
             <Authorization permission="AdminApiView">
-              <a-button type="link" size="small" @click="openDetailModal(record)">详情</a-button>
+              <a-button type="link" size="small" @click="openDetailModal(record)">
+                <template #icon><EyeOutlined /></template>
+                详情
+              </a-button>
             </Authorization>
             <Authorization permission="AdminApiEdit">
-              <a-button type="link" size="small" @click="openEditModal(record)">编辑</a-button>
+              <a-button type="link" size="small" @click="openEditModal(record)">
+                <template #icon><EditOutlined /></template>
+                编辑
+              </a-button>
             </Authorization>
             <Authorization permission="AdminApiDelete">
               <a-popconfirm
@@ -67,7 +73,10 @@
                 cancel-text="取消"
                 @confirm="onDelete(record)"
               >
-                <a-button type="link" size="small" danger>删除</a-button>
+                <a-button type="link" size="small" danger>
+                  <template #icon><DeleteOutlined /></template>
+                  删除
+                </a-button>
               </a-popconfirm>
             </Authorization>
           </a-space>
@@ -84,7 +93,14 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import {
+  SearchOutlined,
+  ReloadOutlined,
+  PlusOutlined,
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons-vue';
 import PageContainer from '@/components/PageContainer.vue';
 import Authorization from '@/components/Authorization.vue';
 import RowEnabledButton from '@/components/RowEnabledButton.vue';
@@ -120,7 +136,7 @@ const columns = [
   { title: '状态', dataIndex: 'isEnabled', key: 'isEnabled', width: 100 },
   { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt', width: 180 },
   { title: '更新时间', dataIndex: 'updatedAt', key: 'updatedAt', width: 180 },
-  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 200 },
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 260 },
 ];
 
 function getRows() {

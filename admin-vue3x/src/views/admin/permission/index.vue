@@ -56,10 +56,13 @@
       :loading="loading"
       :pagination="false"
       row-key="id"
-      :scroll="{ x: 1000 }"
+      :scroll="{ x: 1160 }"
     >
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'type'">
+        <template v-if="column.key === 'menuName'">
+          {{ record.menuName || '-' }}
+        </template>
+        <template v-else-if="column.key === 'type'">
           <a-tag color="blue">{{ record.typeText }}</a-tag>
         </template>
         <template v-else-if="column.key === 'apis'">
@@ -79,13 +82,22 @@
         <template v-else-if="column.key === 'action'">
           <a-space>
             <Authorization permission="AdminPermissionView">
-              <a-button type="link" size="small" @click="openDetailModal(record)">详情</a-button>
+              <a-button type="link" size="small" @click="openDetailModal(record)">
+                <template #icon><EyeOutlined /></template>
+                详情
+              </a-button>
             </Authorization>
             <Authorization permission="AdminPermissionEdit">
-              <a-button type="link" size="small" @click="openEditModal(record)">编辑</a-button>
+              <a-button type="link" size="small" @click="openEditModal(record)">
+                <template #icon><EditOutlined /></template>
+                编辑
+              </a-button>
             </Authorization>
             <Authorization permission="AdminPermissionEdit">
-              <a-button type="link" size="small" @click="openBindApisModal(record)">绑定接口</a-button>
+              <a-button type="link" size="small" @click="openBindApisModal(record)">
+                <template #icon><ApiOutlined /></template>
+                绑定接口
+              </a-button>
             </Authorization>
             <Authorization permission="AdminPermissionDelete">
               <a-popconfirm
@@ -95,7 +107,10 @@
                 cancel-text="取消"
                 @confirm="onDelete(record)"
               >
-                <a-button type="link" size="small" danger>删除</a-button>
+                <a-button type="link" size="small" danger>
+                  <template #icon><DeleteOutlined /></template>
+                  删除
+                </a-button>
               </a-popconfirm>
             </Authorization>
           </a-space>
@@ -113,7 +128,15 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import {
+  SearchOutlined,
+  ReloadOutlined,
+  PlusOutlined,
+  EyeOutlined,
+  EditOutlined,
+  ApiOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons-vue';
 import PageContainer from '@/components/PageContainer.vue';
 import Authorization from '@/components/Authorization.vue';
 import RowEnabledButton from '@/components/RowEnabledButton.vue';
@@ -156,11 +179,12 @@ const detailData = ref<PermissionListItem>();
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', fixed: 'left', width: 80 },
   { title: '权限名称', dataIndex: 'name', key: 'name', width: 140 },
+  { title: '所属菜单', dataIndex: 'menuName', key: 'menuName', width: 140 },
   { title: '唯一键', dataIndex: 'key', key: 'key', width: 180 },
   { title: '类型', dataIndex: 'type', key: 'type', width: 100 },
   { title: '接口数', dataIndex: 'apis', key: 'apis', width: 100 },
   { title: '状态', dataIndex: 'enabled', key: 'enabled', width: 100 },
-  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 260 },
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 320 },
 ];
 
 function loadMenuTree() {

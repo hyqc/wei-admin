@@ -63,6 +63,7 @@ const emit = defineEmits<{ (e: 'update:open', value: boolean): void; (e: 'notice
 const formRef = ref<FormInstance>();
 const pageMenusRef = ref();
 const confirmLoading = ref(false);
+const menuName = ref('');
 const menuPath = ref('');
 
 const formState = reactive<{
@@ -90,9 +91,15 @@ const rules = {
 };
 
 function onMenuChange(node?: MenuTreeItem) {
+  formState.menuId = node?.id;
   if (node) {
+    menuName.value = node.name || '';
     menuPath.value = node.path || '';
     formState.key = handleKey(menuPath.value, formState.type);
+  } else {
+    menuName.value = '';
+    menuPath.value = '';
+    formState.key = '';
   }
 }
 
@@ -120,6 +127,7 @@ watch(
       formState.key = '';
       formState.describe = '';
       formState.enabled = true;
+      menuName.value = '';
       menuPath.value = '';
       pageMenusRef.value?.load();
     }
@@ -133,6 +141,8 @@ function handleOk() {
       confirmLoading.value = true;
       addAdminPermission({
         menuId: formState.menuId,
+        menuName: menuName.value,
+        menuPath: menuPath.value,
         name: formState.name,
         type: formState.type,
         key: formState.key,

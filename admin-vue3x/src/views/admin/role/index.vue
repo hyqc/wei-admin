@@ -39,7 +39,7 @@
       :loading="loading"
       :pagination="false"
       row-key="id"
-      :scroll="{ x: 1260 }"
+      :scroll="{ x: 1320 }"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'isEnabled'">
@@ -55,15 +55,24 @@
         <template v-else-if="column.key === 'action'">
           <a-space>
             <Authorization permission="AdminRoleView">
-              <a-button type="link" size="small" @click="openDetailModal(record)">详情</a-button>
+              <a-button type="link" size="small" @click="openDetailModal(record)">
+                <template #icon><EyeOutlined /></template>
+                详情
+              </a-button>
             </Authorization>
             <Authorization permission="AdminRoleEdit">
               <!-- 超级管理员角色不允许编辑 -->
-              <a-button v-if="record.id !== 1" type="link" size="small" @click="openEditModal(record)">编辑</a-button>
+              <a-button v-if="record.id !== 1" type="link" size="small" @click="openEditModal(record)">
+                <template #icon><EditOutlined /></template>
+                编辑
+              </a-button>
             </Authorization>
             <Authorization permission="AdminRoleEdit">
               <!-- 超级管理员角色不允许绑定权限 -->
-              <a-button v-if="record.id !== 1" type="link" size="small" @click="openBindModal(record)">绑定权限</a-button>
+              <a-button v-if="record.id !== 1" type="link" size="small" @click="openBindModal(record)">
+                <template #icon><SafetyCertificateOutlined /></template>
+                绑定权限
+              </a-button>
             </Authorization>
             <Authorization permission="AdminRoleDelete">
               <a-popconfirm
@@ -73,7 +82,10 @@
                 cancel-text="取消"
                 @confirm="onDelete(record)"
               >
-                <a-button type="link" size="small" danger>删除</a-button>
+                <a-button type="link" size="small" danger>
+                  <template #icon><DeleteOutlined /></template>
+                  删除
+                </a-button>
               </a-popconfirm>
             </Authorization>
           </a-space>
@@ -95,7 +107,15 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import {
+  SearchOutlined,
+  ReloadOutlined,
+  PlusOutlined,
+  EyeOutlined,
+  EditOutlined,
+  SafetyCertificateOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons-vue';
 import PageContainer from '@/components/PageContainer.vue';
 import Authorization from '@/components/Authorization.vue';
 import RowEnabledButton from '@/components/RowEnabledButton.vue';
@@ -132,7 +152,7 @@ const columns = [
   { title: '状态', dataIndex: 'isEnabled', key: 'isEnabled', width: 100 },
   { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt', width: 180 },
   { title: '更新时间', dataIndex: 'updatedAt', key: 'updatedAt', width: 180 },
-  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 260 },
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 320 },
 ];
 
 function getRows() {
