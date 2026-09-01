@@ -26,6 +26,7 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminAccountInvalid:         "账号无效",
 	code_proto.ErrorCode_AdminAccountNameExist:       "账号已存在",
 	code_proto.ErrorCode_AdminSuperAccountNotAllow:   "超管账号不允许该操作",
+	code_proto.ErrorCode_AdminCaptchaInvalid:         "验证码错误或已失效",
 
 	code_proto.ErrorCode_AdminApiNameExist: "接口名称已存在",
 	code_proto.ErrorCode_AdminApiPathExist: "接口路径已存在",

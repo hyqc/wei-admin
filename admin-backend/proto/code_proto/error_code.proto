@@ -24,6 +24,7 @@ enum ErrorCode{
   AdminAccountInvalid = 400003;// 账号已被封禁
   AdminAccountNameExist = 400004;// 账号已存在
   AdminSuperAccountNotAllow = 400005;// 超管账号不允许该操作
+  AdminCaptchaInvalid = 400006;// 验证码错误或已失效
 
   AdminApiNameExist = 500001; // 接口名称已存在
   AdminApiPathExist = 500002; // 接口路径已存在

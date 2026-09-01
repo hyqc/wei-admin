@@ -59,7 +59,7 @@ func (a *AdminMenu) Show(ctx *gin.Context, menuId int32, f string, show bool) er
 }
 
 func (a *AdminMenu) Delete(ctx *gin.Context, id int32) error {
-	t := global.AppDB.Wei
+	t := global.AppDB.DefaultMysql()
 	err := t.Transaction(func(tx *gorm.DB) error {
 		menu := query.AdminMenu
 		_, err := menu.WithContext(ctx).Where(menu.ID.Eq(id)).Delete()

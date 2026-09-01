@@ -1,6 +1,10 @@
 package config
 
-import "time"
+import (
+	"admin/pkg/config/store/mongodb"
+	"admin/pkg/config/store/mysql"
+	"time"
+)
 
 // NacosConfig Nacos配置
 type NacosConfig struct {
@@ -41,6 +45,7 @@ type Logger struct {
 	Level      string `yaml:"level"`       //日志等级
 	Compress   bool   `yaml:"compress"`    //是否压缩日志
 	Json       bool   `yaml:"json"`        //是否json日志
+	Stdout     bool   `yaml:"stdout"`      //是否同时输出到标准输出（容器部署建议开启）
 }
 
 // Broker 消息中间件配置
@@ -59,4 +64,54 @@ type Jwt struct {
 type IgnoreUrlRule struct {
 	Method string   `json:"method"`
 	Paths  []string `json:"paths"`
+}
+
+// Captcha 图片验证码配置
+type Captcha struct {
+	// Store 存储方式：memory（单机部署，默认）| redis（集群部署）
+	Store string `json:"store"`
+	// Length/Expire/Width/Height 为全局默认值，未单独配置的场景使用默认值
+	Length int   `json:"length"` // 验证码位数
+	Expire int64 `json:"expire"` // 有效期（秒）
+	Width  int   `json:"width"`  // 图片宽度
+	Height int   `json:"height"` // 图片高度
+	// Scenes 各场景自定义配置（key 为场景名，如 login），未配置的项继承全局默认值
+	Scenes map[string]CaptchaScene `json:"scenes"`
+}
+
+// CaptchaScene 单个验证码场景配置
+type CaptchaScene struct {
+	Length int   `json:"length"` // 验证码位数
+	Expire int64 `json:"expire"` // 有效期（秒）
+	Width  int   `json:"width"`  // 图片宽度
+	Height int   `json:"height"` // 图片高度
+}
+
+// Redis 配置（集群部署时用于验证码等共享存储）
+type Redis struct {
+	Addr     string `json:"addr"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
+}
+
+// Store 数据源配置：按数据库类型分组，未配置的类型不会初始化
+type Store struct {
+	Mysql   MysqlStore `json:"mysql"`
+	Mongodb MongoStore `json:"mongodb"`
+}
+
+// MysqlStore MySQL 数据源集合
+type MysqlStore struct {
+	// Default 默认数据源名（对应 Sources 的 key），为空时取唯一的数据源
+	Default string `json:"default"`
+	// Sources 数据源配置，key 为数据源名
+	Sources map[string]mysql.Config `json:"sources"`
+}
+
+// MongoStore MongoDB 数据源集合
+type MongoStore struct {
+	// Default 默认数据源名（对应 Sources 的 key），为空时取唯一的数据源
+	Default string `json:"default"`
+	// Sources 数据源配置，key 为数据源名；为空表示不启用 MongoDB
+	Sources map[string]mongodb.Config `json:"sources"`
 }

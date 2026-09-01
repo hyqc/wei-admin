@@ -23,6 +23,19 @@ const entries: MockEntry[] = [
     },
   },
   {
+    url: '/api/admin/account/captcha',
+    method: 'POST',
+    response: () => {
+      const code = '8888';
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="44">` +
+        `<rect width="120" height="44" fill="#eef2f7"/>` +
+        `<text x="60" y="31" font-size="24" font-family="monospace" text-anchor="middle" fill="#3b5bdb">${code}</text>` +
+        `</svg>`;
+      return ok({ captchaId: 'mock-captcha-id', image: `data:image/svg+xml;base64,${btoa(svg)}` });
+    },
+  },
+  {
     url: '/api/admin/account/logout',
     method: 'POST',
     response: () => ok(null, '退出成功'),

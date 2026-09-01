@@ -5,11 +5,16 @@ import type {
   AdminInfo,
   ReqAccountEdit,
   ReqAccountPasswordEdit,
+  CaptchaRespData,
 } from '@/types/admin_account';
 
 /** 登录 */
 export const login = (body: ReqLogin) =>
   post<AdminInfo>('/admin/account/login', body) as Promise<ResponseBodyType<AdminInfo>>;
+
+/** 登录图片验证码（位数与尺寸由后端配置决定） */
+export const getCaptcha = () =>
+  post<CaptchaRespData>('/admin/account/captcha') as Promise<ResponseBodyType<CaptchaRespData>>;
 
 /** 退出登录 */
 export const logout = (params?: unknown) => post<null>('/admin/account/logout', params);

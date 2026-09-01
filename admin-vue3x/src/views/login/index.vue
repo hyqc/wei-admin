@@ -16,6 +16,7 @@
         name="login"
         size="large"
         @finish="onFinish"
+        @finish-failed="onFinishFailed"
       >
         <a-form-item name="username">
           <a-input v-model:value="formState.username" placeholder="用户名：admin" allow-clear>
@@ -26,6 +27,31 @@
           <a-input-password v-model:value="formState.password" placeholder="密码：123456">
             <template #prefix><LockOutlined /></template>
           </a-input-password>
+        </a-form-item>
+        <a-form-item name="captchaCode">
+          <a-row :gutter="8">
+            <a-col :span="15">
+              <a-input
+                v-model:value="formState.captchaCode"
+                placeholder="请输入验证码"
+                allow-clear
+                :maxlength="8"
+              >
+                <template #prefix><SafetyOutlined /></template>
+              </a-input>
+            </a-col>
+            <a-col :span="9">
+              <img
+                v-if="captcha.image"
+                :src="captcha.image"
+                class="captcha-img"
+                alt="验证码"
+                title="看不清？点击刷新"
+                @click="refreshCaptcha"
+              />
+              <a-button v-else block @click="refreshCaptcha">获取验证码</a-button>
+            </a-col>
+          </a-row>
         </a-form-item>
         <a-form-item>
           <a-checkbox v-model:checked="formState.remember">自动登录</a-checkbox>
@@ -41,10 +67,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
+import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons-vue';
 import { useUserStore } from '@/store/user';
+import { getCaptcha } from '@/api/admin/account';
 import { AdminUsername, AdminUserPassword } from '@/api/pattern';
 import { HomePath } from '@/api/config';
 import type { ReqLogin } from '@/types/admin_account';
@@ -58,6 +85,13 @@ const formState = reactive<ReqLogin>({
   username: 'admin',
   password: '123456',
   remember: true,
+  captchaCode: '',
+});
+
+/** 当前验证码：ID 随登录提交，图片点击可刷新 */
+const captcha = reactive<{ captchaId: string; image: string }>({
+  captchaId: '',
+  image: '',
 });
 
 const rules = {
@@ -69,17 +103,35 @@ const rules = {
     { required: true, message: '请输入密码' },
     { pattern: AdminUserPassword, message: '密码格式不正确' },
   ],
+  captchaCode: [{ required: true, message: '请输入验证码' }],
 };
+
+async function refreshCaptcha() {
+  const res = await getCaptcha();
+  captcha.captchaId = res.data.captchaId;
+  captcha.image = res.data.image;
+  formState.captchaCode = '';
+}
+
+onMounted(refreshCaptcha);
 
 async function onFinish() {
   loading.value = true;
   try {
-    await store.loginAsync(formState);
+    await store.loginAsync({ ...formState, captchaId: captcha.captchaId });
     const redirect = (route.query.redirect as string) || HomePath;
     router.replace(redirect);
+  } catch {
+    // 登录失败（账号密码错误或验证码失效）后刷新验证码
+    await refreshCaptcha();
   } finally {
     loading.value = false;
   }
+}
+
+/** 登录失败（验证码错误/失效）时自动刷新验证码 */
+function onFinishFailed() {
+  refreshCaptcha();
 }
 </script>
 
@@ -109,5 +161,14 @@ async function onFinish() {
 
 .login-subtitle {
   margin-bottom: 32px;
+}
+
+.captcha-img {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
 }
 </style>

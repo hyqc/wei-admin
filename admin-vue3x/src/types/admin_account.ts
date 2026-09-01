@@ -5,6 +5,18 @@ export interface ReqLogin {
   username: string;
   password: string;
   remember?: boolean;
+  /** 验证码ID */
+  captchaId?: string;
+  /** 验证码内容 */
+  captchaCode?: string;
+}
+
+/** 图片验证码返回 */
+export interface CaptchaRespData {
+  /** 验证码ID */
+  captchaId: string;
+  /** 验证码图片（data:image/png;base64,...） */
+  image: string;
 }
 
 /** 登录返回数据 */

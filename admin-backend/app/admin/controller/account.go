@@ -7,6 +7,7 @@ import (
 	"admin/code"
 	"admin/constant"
 	"admin/global"
+	"admin/pkg/captcha"
 	"admin/pkg/core"
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
@@ -38,6 +39,36 @@ func (AccountController) Logout(ctx *gin.Context) {
 func (AccountController) Register(ctx *gin.Context) {
 	msg := "AccountController.Register"
 	result := code.NewCode(code_proto.ErrorCode_Success)
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
+}
+
+// Captcha 登录图片验证码
+//
+//	@Summary		登录图片验证码
+//	@Description	获取登录用的图片验证码（免鉴权），验证码位数与尺寸由配置 captcha 控制
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{object}	code.Message{data=admin_proto.RespAdminAccountCaptchaData}	"desc"
+//	@Router			/admin/account/captcha [post]
+func (AccountController) Captcha(ctx *gin.Context) {
+	msg := "AccountController.Captcha"
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	id, image, answer, err := global.AppCaptcha.GenerateWithAnswer(captcha.SceneLogin)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	if global.AppConfig.Server.Debug {
+		// 仅在 debug 环境记录验证码明文，便于本地联调；生产（debug=false）不会输出
+		global.LogSugar.Debugw(msg, zap.String("captchaId", id), zap.String("captchaAnswer", answer))
+	}
+	result.SetData(&admin_proto.RespAdminAccountCaptchaData{
+		CaptchaId: id,
+		Image:     image,
+	})
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return

@@ -11,6 +11,7 @@ func admins(g *gin.RouterGroup) {
 	{
 		accountApi := adminCtl.AccountController{}
 		account.POST("/login", accountApi.Login)
+		account.POST("/captcha", accountApi.Captcha)
 		account.POST("/logout", accountApi.Logout)
 		account.POST("/info", accountApi.Info)
 		account.POST("/edit", accountApi.Edit)

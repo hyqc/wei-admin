@@ -24,6 +24,7 @@ var enMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminAccountInvalid:         "account invalid",
 	code_proto.ErrorCode_AdminAccountNameExist:       "account name exist",
 	code_proto.ErrorCode_AdminSuperAccountNotAllow:   "super admin account not allowed",
+	code_proto.ErrorCode_AdminCaptchaInvalid:         "captcha invalid or expired",
 
 	code_proto.ErrorCode_AdminApiNameExist: "api name exist",
 	code_proto.ErrorCode_AdminApiPathExist: "api path exist",

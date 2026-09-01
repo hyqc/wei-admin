@@ -20,6 +20,25 @@
 ## proto 修改流程（admin-backend）
 - 改 `.proto` 后用 `F:\go\bin\protoc.exe --proto_path=proto/admin_proto --go_out=proto/admin_proto --go_opt=paths=source_relative <file>.proto` 重新生成；本机 protoc-gen-go v1.36.11 与现有 pb.go 一致，可安全覆盖
 
+## K8s / 多副本部署（2026-09-01 已改造 1-4 点）
+- 验证码：改用 `mojocn/base64Captcha`，存储可切换 `captcha.store: memory`（单机默认）/`redis`（集群，需配 `redis.addr`）；**store=redis 但 Redis 不可用时启动失败**；按场景扩展在 `captcha.scenes` 加配置 + 定义 `captcha.Scene`
+- 探针：`GET /healthz`（存活）、`GET /readyz`（就绪，含 MySQL、Redis 检查），免鉴权
+- 日志：`logger.stdout: true` 时同时写文件与 stdout
+- 服务：Shutdown 超时 15s、监听失败 os.Exit(1)、退出关 Redis、`pprof` 默认关闭
+- 配置源：命令行 `-cfs=nacos` > 配置 `configSource`（默认 file）
+- **未处理（用户暂缓）**：Nacos 热更反射替换 AppConfig 的数据竞争、登录 login_total 读-改-写、密钥硬编码、启动探测 8.8.8.8 取 IP
+- P1：登录 `login_total`/`last_login_ip` 是读-改-写无锁（`app/admin/logic/admin_user.go`）；Nacos 热更用反射整体替换 `AppConfig` 有数据竞争
+- P2 运维：无 healthz/readyz 探针；日志仅写本地文件不写 stdout；Shutdown 无超时、启动失败不退出；pprof 无鉴权暴露；密钥硬编码在 config.yaml；启动依赖探测 8.8.8.8 取 IP，失败即 os.Exit(1)
+- 无状态可水平扩展：JWT 无状态、无本地缓存、无定时任务；redsync / go-micro 注册发现 / gRPC 均未实际使用；go-redis 已引入但未初始化
+- 另：前端调用 `/admin/common/upload`，后端本仓库**无实现**
+
+## 登录与验证码
+- 登录必须带图片验证码：`POST /admin/account/captcha`（免鉴权）取 `captchaId` + 图片，登录时提交 `captchaId`/`captchaCode`；验证码一次性、忽略大小写、默认 4 位/5 分钟，配置在 `config.yaml` 的 `captcha`
+- 验证码存储为**进程内存**（无 Redis），重启后失效；多实例部署需改为 Redis
+- **2026-09-01 改用 `mojocn/base64Captcha`**，为易辨识已主动降低干扰：`noiseCount=1`、`showLineOptions=0`（不画干扰线），仅保留少量噪点；后续如需提升安全可开启 `OptionShowHollowLine`
+- token：登录签发用 `config.yaml` 的 `jwt.expire`（已设 604800 = 7 天），刷新 token 用 `constant.AdminTokenExpireSeconds`（7 天）
+- 前端 token 存 localStorage，key 为 `token`（结构 `{token, expire(毫秒), remember}`）
+
 ## protobuf 响应字段恒返回技巧
 - protoc-gen-go 给所有字段加 `json:",omitempty"`，后端用 `encoding/json`（`code.JSON`）序列化时空字符串字段会整个消失
 - 若要求某字段无值也返回（如菜单 icon），把字段声明为 `optional string` → Go 类型变 `*string`，需显式赋值（BeanCopy 无法转换 string→*string，须手动 `data.Icon = &item.Icon`），空值用 `new(string)`

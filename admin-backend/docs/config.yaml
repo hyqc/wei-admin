@@ -1,40 +1,101 @@
-server:
-  debug: true
-  port: 3000
-  pprof: true
+# =====================================================================
+# Admin 后端配置示例（部署模板）
+# ---------------------------------------------------------------------
+# 分节顺序：1 配置引导 → 2 服务与日志 → 3 安全认证 → 4 依赖存储 → 5 业务配置
+# 说明：本文件仅为部署参考，密钥等敏感项请用 Secret / 环境变量注入，不要提交真实值。
+# 实际运行时默认读取启动目录下的 config.yaml（-cfp 指定目录，-env dev 时读取 config-dev.yaml）。
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# 1. 配置引导
+# ---------------------------------------------------------------------
+
+# 配置来源：file = 本地配置文件（默认），nacos = Nacos 配置中心
+configSource: file
+
+# Nacos 配置中心（configSource=nacos 或命令行 -cfs=nacos 时生效）
 nacos:
-  host: '192.168.9.212'
+  host: '127.0.0.1'
   port: 8848
-  namespace: 'c0e86a48-6cf9-4ebb-bd69-1a74e8ba2416'
+  namespace: 'public'
   user: 'nacos'
   password: 'nacos'
   dataId: 'admin.yaml'
-  group: 'hope_city2'
+  group: 'DEFAULT_GROUP'
   cluster: "hope_city_admin"
-jwt:
-  public: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FDN1U4bkhja2VXcmg1UXNPYmJsUGxUNGpScQo3dzVpUDdUK0x3QU1hTHZWUUQvZ2VnMWlJeDVjQlhIOEF1dXFxNVVrSkNyZnRJRTNBa0x0dTBZT1F6UmZ6ejFvCnpZbVJHNGp3UmducWt1c1BCdHMxYXZ4NUpDeUhkTTczS2tJbmF1b2Vad3RYOXc1QllFc0RZaE1zUVVpeDB3REoKcFZ0RjhsQWpCMUdjcW93czR3SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ=="
-  private: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUNkd0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQW1Fd2dnSmRBZ0VBQW9HQkFMdFR5Y2R5UjVhdUhsQ3cKNXR1VStWUGlOR3J2RG1JL3RQNHZBQXhvdTlWQVArQjZEV0lqSGx3RmNmd0M2NnFybFNRa0t0KzBnVGNDUXUyNwpSZzVETkYvUFBXak5pWkViaVBCR0NlcVM2dzhHMnpWcS9Ia2tMSWQwenZjcVFpZHE2aDVuQzFmM0RrRmdTd05pCkV5eEJTTEhUQU1tbFcwWHlVQ01IVVp5cWpDempBZ01CQUFFQ2dZRUF0YVJkZUNQNy9zUC9hVWJmMC9QMGY3NU0KRFpTWVlmUmNVRXpLd3oyYlJRRHo3M3JxRjBydVdWUitYbHVHb1F1WHBsL2JvdWVvaytxQmMzdXdSb3dyN3o5WgpYS2ptSEFQNEJldTg0M0F2VGhFc3ZGY09Ld2RkREZPNmNBRU92WTU3dm96R0M0aUpoZ1MxYTNITHppdVk4V05oClgrazhEY2FWa0xSRG9lRjdNT0VDUVFEM3lLd05INU11UVBFS2ZURVhrd0Iyckd6VmUyUzNKU0JtLzg3TzZDVUQKRitlMjlLZ1dneENjeDBVZzFpdTF6c3o3UWx2UGY3TllKZW80eUhLdFVNRmRBa0VBd1ludFN4eEpsc1FkTUd0OApManAyZnN6L3RjMWk2UG5hSXJhNjdoYkZwczRGRm1TTU5QV3RJeDY5d2lyNGpnYVVYbjRTeUNrK3hIK2d2K01TCkJnS0RQd0pCQVBHZzhnNjJITXU5THBGZzlnK2NIWmFjbkdFdVBFL1ExNkU1a2MzNVdhYURtRVcwblhtZWhBT3UKMnYyamZPcUZhU1VZVi9tbitSZGJtZVdYcXlUU0hFMENRQ1lvUkdHUHBTNlZZYy9mRVMrb0ZSNncyaVdFNWVCYgpDbGZYd1FrWjhrUU4wRkQyNS9HMUVqcWZYL2c5TXA0RnpCREpPSGpBTVFEYXpOMm9MakNESkU4Q1FHbDRQa2l2CjJhZWtFRldmaFBmZHFJL1QxZlkvUjBWeis5NHlpbWFCdExqaEFXb3ZHdk1ncnlDT2dycHdBSkgyZjU4SjhvdUwKdXVSQ2RVN2liQnYxKzI0PQotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0t"
-  expire: "300h"
-  ignore:
-    - /admin/account/login
-database:
-  wei:
-    user: root
-    pwd: 123456
-    host: 127.0.0.1
-    port: 3306
-    dbname: wei
-    charset: utf8mb4
-    parse_time: True
-    location: Local
-    max_idle_cons: 2
-    max_open_cons: 20
-    conn_max_lifetime_minutes: 200
+
+# ---------------------------------------------------------------------
+# 2. 服务与日志
+# ---------------------------------------------------------------------
+
+server:
+  name: admin
+  version: 1.0.3
+  port: 3000
+  # 调试模式：输出调试日志、记录验证码明文等，生产环境建议关闭
+  debug: false
+  # pprof 会无鉴权暴露 /debug/pprof，生产环境请关闭
+  pprof: false
+
 logger:
   filename: "./logs/admin.log"
-  max_size: 5
-  max_backups: 7
-  max_age: 14
-  compress: true
-  level: debug # debug, info, warn,error
-  json: true
+  max_size: 5 # 单个日志文件最大 MB
+  max_backups: 7 # 保留的归档文件数量
+  max_age: 14 # 归档保留天数
+  compress: true # 是否压缩归档
+  level: info # debug | info | warn | error
+  json: true # 是否输出 JSON 格式
+  # 同时输出到标准输出（容器/K8s 部署建议开启，便于 kubectl logs 采集）
+  stdout: true
+
+# ---------------------------------------------------------------------
+# 3. 安全认证（JWT）
+# ---------------------------------------------------------------------
+
+jwt:
+  # token 生命周期（秒）：604800 = 7 天
+  expire: 604800
+  # 免鉴权路由；method 取 post | get，paths 支持 /xxx/* 前缀匹配
+  # 注：/healthz、/readyz 注册在免鉴权路由组，无需在此配置
+  ignores:
+    - method: post
+      paths:
+        - /admin/account/login
+        - /admin/account/captcha
+        - /healthz
+        - /readyz
+    - method: get
+      paths:
+        - /swagger/*
+  # RSA 公私钥（base64 编码的 PEM），请通过 Secret 注入
+  public: "<BASE64_RSA_PUBLIC_KEY>"
+  private: "<BASE64_RSA_PRIVATE_KEY>"
+
+# ---------------------------------------------------------------------
+# 4. 依赖存储
+# ---------------------------------------------------------------------
+
+# MySQL 数据源
+# 数据源：按数据库类型分组，未配置的类型不会初始化（当前支持 mysql、mongodb）
+store:
+  mysql:
+    # 默认数据源名（对应 sources 的 key）；sources 为空时启动报错
+    default: wei
+    # 可配置多个数据源，key 为数据源名
+    sources:
+      wei:
+        user: root
+        pwd: "<DB_PASSWORD>"
+        host: 127.0.0.1
+        port: 3306
+        dbname: wei
+        charset: utf8mb4
+        parse_time: true
+        location: Local
+        max_idle_cons: 2
+        max_open_cons: 20
+        conn_max_lifetime_minutes: 200
+  mongodb:
+    # 默认数据源名；sources 为空表示不启用 MongoDB
+    default: ""
+    sources: {}

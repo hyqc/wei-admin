@@ -1,9 +1,19 @@
-server:
-  name: admin
-  version: 1.0.3
-  port: 3000
-  debug: true
-  pprof: true
+# =====================================================================
+# Admin 后端配置
+# ---------------------------------------------------------------------
+# 分节顺序：1 配置引导 → 2 服务与日志 → 3 安全认证 → 4 依赖存储 → 5 业务配置
+# 本文件始终最先加载（Nacos 的连接信息也来源于此），再按 configSource 决定是否覆盖
+# 命令行 -cfs=nacos 优先级高于本文件的 configSource
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# 1. 配置引导
+# ---------------------------------------------------------------------
+
+# 配置来源：file = 本地配置文件（默认），nacos = Nacos 配置中心
+configSource: file
+
+# Nacos 配置中心（configSource=nacos 或命令行 -cfs=nacos 时生效）
 nacos:
   host: '192.168.9.212'
   port: 8848
@@ -13,39 +23,87 @@ nacos:
   dataId: 'admin.yaml'
   group: 'hope_city2'
   cluster: "hope_city_admin"
+
+# ---------------------------------------------------------------------
+# 2. 服务与日志
+# ---------------------------------------------------------------------
+
+server:
+  name: admin
+  version: 1.0.3
+  port: 3000
+  # 调试模式：输出调试日志、记录验证码明文等，生产环境建议关闭
+  debug: true
+  # pprof 会无鉴权暴露 /debug/pprof，生产环境请关闭
+  pprof: false
+
+logger:
+  filename: "./logs/admin.log"
+  max_size: 5 # 单个日志文件最大 MB
+  max_backups: 7 # 保留的归档文件数量
+  max_age: 14 # 归档保留天数
+  compress: true # 是否压缩归档
+  level: debug # debug | info | warn | error
+  json: true # 是否输出 JSON 格式
+  # 同时输出到标准输出（容器/K8s 部署建议开启，便于 kubectl logs 采集）
+  stdout: true
+
+# ---------------------------------------------------------------------
+# 3. 安全认证（JWT）
+# ---------------------------------------------------------------------
+# 生产环境建议通过 Secret / 环境变量注入密钥，不要提交到代码仓库
 jwt:
-  #RSA公钥
-  public: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0NCk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBcnpBU0MxTlhKbUxoT3hnOEtWR3ENCmZxUVZ0ZmZQYjhkRldYK05ZRU14cE5xQTFma1BOZlQ2SGZjTnNyM3V2RjlCWEM5YTBQVFhzSldqRWhEaFNrMFMNCmw3VFJCbUdsRjBkbVBlSUlEcEhEVGI3UkZLRnB0b2w0VjdWRGhvd296dEhvaHFONmRGMGZ5aytVMDNTbkZzSloNCk9pb21UbWMzRnRpTFhtb3hxcThxdURpT2VudWNmSFllaHJMc1lVUTY1S2p0V1RFVE5RaWZBUVhiMUhQTk5QaVENClNub1FMM3RPL3Rnd05vWHBPSGsyWThZdEN6SmM0TVEyb0JDRVRpNThDRVQ5dnZYTnk2RnlqdUluNHRtcEtaK3INCjBCamtMekpjV2NVZkJtcXlOL0J2YkNQSENIR25zcTEybmpTWU05Z0p3akFWc1Z0OXdYSk1CaTJ5aEpHZkQ5elcNCnB3SURBUUFCDQotLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0NCg=="
-  #RSA私钥
-  private: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tDQpNSUlFdmdJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLZ3dnZ1NrQWdFQUFvSUJBUUN2TUJJTFUxY21ZdUU3DQpHRHdwVWFwK3BCVzE5ODl2eDBWWmY0MWdRekdrMm9EVitRODE5UG9kOXcyeXZlNjhYMEZjTDFyUTlOZXdsYU1TDQpFT0ZLVFJLWHRORUdZYVVYUjJZOTRnZ09rY05OdnRFVW9XbTJpWGhYdFVPR2pDak8wZWlHbzNwMFhSL0tUNVRUDQpkS2NXd2xrNktpWk9aemNXMkl0ZWFqR3FyeXE0T0k1NmU1eDhkaDZHc3V4aFJEcmtxTzFaTVJNMUNKOEJCZHZVDQpjODAwK0pCS2VoQXZlMDcrMkRBMmhlazRlVFpqeGkwTE1semd4RGFnRUlST0xud0lSUDIrOWMzTG9YS080aWZpDQoyYWtwbjZ2UUdPUXZNbHhaeFI4R2FySTM4RzlzSThjSWNhZXlyWGFlTkpnejJBbkNNQld4VzMzQmNrd0dMYktFDQprWjhQM05hbkFnTUJBQUVDZ2dFQUQwODRIaEIwMFVCYTRCVElnRmNWRk0yMjRaamlZa01ielN3S3o1ckMyWGVpDQpEM2RRZGNkMU4xUmJ1SDhTUUV2OFY5ZWJrb1dURUp4RERMdUU1OWlNYWMyS21mQXB3dFNodFJ1SG8rc2FxODQ5DQpIMGs0bjhjU0ZnVG9aQ3A5RUE5OHlDZFY5cG9jd3JJYzQyZGZJcmh1QlZtaG5jQm85ejFXM1diNHdjUXJjZktUDQpxNnB0MVRaaERISDlXQ2pySjRRUFQ5WHhRQXlSeCtaZGI5clBleVhvQ3F1ckQrNVBoendZVkFyOEt6QTlNMUJHDQpHVm1OdHZsZWZ3VVhUWTVVL0RCYjlKUjl0ZHJkQUpNRjBlOXUyS1JMOVcxTE1UUUlMdzBLVDdXTmgzYzlOa2d3DQpmb1dIMW9wOTlFdldOTDdyYkhKK2ROenBtelFWc294Q1hNM21MOWxuUVFLQmdRRHRpZC9qcGdnN3VKazNsdzF0DQoyRWE0cTVFMFR4cXlEbFc5UXJrZFV1dTAzMDQ0d1VNN2FMcXdrK2tYbEdpZmhZZXFaTEZlTXhoc1JnejZ4QVJMDQpFajZCWm5FY3pFV1JNOTJHVXpyZCtWekxvMDBKa29lTmtSNUFEUlJTZk5waHdvUE8ybUdNZU1mZi9Ic0pHcGNXDQo1aGovZVJDQ1lNR1lSdHhHTTFZa250OUhDUUtCZ1FDOHphWTBPUXNwTzFEeUY2T0tINThWcE5mYlZ5cytCMkxSDQozN1YrOHN1R2lVc2Y5OVNlWHNiZnBIZU1ZcTNFOGlyc05lRERsS1VTMFc2anRGTEZpUGlqOWZJdzMrL0xyTU14DQpLYSsxYUdmY0RxR1BGWkZrZWhzUUxrMkZsd3JVbUM3cStJeFY1MTRsYjhLK21MaDc2czhMbDZlejBZR2pkMjBZDQpoWkowTm05c0x3S0JnUURKc0UyMzM1d1NDVldmQzlUTk5kd21wUlp2a2RNYTZHMElmQVR0enlCdnZVT1BrUmxpDQo4alBDQm5UZUhwY1BDN1A3aSsvR0NpQnNucllhbmlEL0ZRaVptci9rTWRYSHlvQUhzOWZCN2g5S2tPZXlmd1kxDQp2OGd0bm0xbzlMWUFWOGJPOWtIcG9nd2tOUjdLeGhjUHpHUGhWNHdiQjhpWllXRmJBZS9jdkVEYzhRS0JnSHlVDQpoaEwzZ1BIWC9mV0F1NXlzZU9CalFUdXVMUTVrK1VQYkJYdWE0Y2tJVnRYbFJocXFGemdDNGc5MEhZMVM3aGVuDQpCWVNJVk5ReDlYdDN4UllxNTBYcFI4SVFRYjUzWk9UUHlPMCsweWxWVGkySDRjUVcvanlURVB3UlNrZzFrdC9nDQoyVmpscmkydHJTYnV4dXlkWjdrU2ZNb2VlQmhRK1YrdzQ0NWpUT3BwQW9HQkFNUlM1U0toMFhMTkhFQWZhV2hYDQpwUTFXbEc5UVFUd2Nubi9SNlhlNW15bmdNM3kyNTA2SENsSmF4T1VDaHZ0RWoxZnk3R0dRR2FSUGZmSE5jelUwDQorZzI5N3ROaFZ2VmJnZXRJMjR1aW9BS0Y5UkhrOERBZy96bmpqUVErdlRXVnFZbXNQei8vKyt4V251OEtLb0wzDQozdUFvMzF5UGlIMllWbTdyTDg0TmFvby8NCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0NCg=="
-  #生命周期时间，单位秒
-  expire: 3600
-  #不进行鉴权的路由列表
+  # token 生命周期（秒）：604800 = 7 天
+  expire: 604800
+  # 免鉴权路由；method 取 post | get，paths 支持 /xxx/* 前缀匹配
+  # 注：/healthz、/readyz 注册在免鉴权路由组，无需在此配置
   ignores:
     - method: post
       paths:
         - /admin/account/login
+        - /admin/account/captcha
+        - /healthz
+        - /readyz
     - method: get
       paths:
         - /swagger/*
+  # RSA 公钥
+  public: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0NCk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBcnpBU0MxTlhKbUxoT3hnOEtWR3ENCmZxUVZ0ZmZQYjhkRldYK05ZRU14cE5xQTFma1BOZlQ2SGZjTnNyM3V2RjlCWEM5YTBQVFhzSldqRWhEaFNrMFMNCmw3VFJCbUdsRjBkbVBlSUlEcEhEVGI3UkZLRnB0b2w0VjdWRGhvd296dEhvaHFONmRGMGZ5aytVMDNTbkZzSloNCk9pb21UbWMzRnRpTFhtb3hxcThxdURpT2VudWNmSFllaHJMc1lVUTY1S2p0V1RFVE5RaWZBUVhiMUhQTk5QaVENClNub1FMM3RPL3Rnd05vWHBPSGsyWThZdEN6SmM0TVEyb0JDRVRpNThDRVQ5dnZYTnk2RnlqdUluNHRtcEtaK3INCjBCamtMekpjV2NVZkJtcXlOL0J2YkNQSENIR25zcTEybmpTWU05Z0p3akFWc1Z0OXdYSk1CaTJ5aEpHZkQ5elcNCnB3SURBUUFCDQotLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0NCg=="
+  # RSA 私钥
+  private: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tDQpNSUlFdmdJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLZ3dnZ1NrQWdFQUFvSUJBUUN2TUJJTFUxY21ZdUU3DQpHRHdwVWFwK3BCVzE5ODl2eDBWWmY0MWdRekdrMm9EVitRODE5UG9kOXcyeXZlNjhYMEZjTDFyUTlOZXdsYU1TDQpFT0ZLVFJLWHRORUdZYVVYUjJZOTRnZ09rY05OdnRFVW9XbTJpWGhYdFVPR2pDak8wZWlHbzNwMFhSL0tUNVRUDQpkS2NXd2xrNktpWk9aemNXMkl0ZWFqR3FyeXE0T0k1NmU1eDhkaDZHc3V4aFJEcmtxTzFaTVJNMUNKOEJCZHZVDQpjODAwK0pCS2VoQXZlMDcrMkRBMmhlazRlVFpqeGkwTE1semd4RGFnRUlST0xud0lSUDIrOWMzTG9YS080aWZpDQoyYWtwbjZ2UUdPUXZNbHhaeFI4R2FySTM4RzlzSThjSWNhZXlyWGFlTkpnejJBbkNNQld4VzMzQmNrd0dMYktFDQprWjhQM05hbkFnTUJBQUVDZ2dFQUQwODRIaEIwMFVCYTRCVElnRmNWRk0yMjRaamlZa01ielN3S3o1ckMyWGVpDQpEM2RRZGNkMU4xUmJ1SDhTUUV2OFY5ZWJrb1dURUp4RERMdUU1OWlNYWMyS21mQXB3dFNodFJ1SG8rc2FxODQ5DQpIMGs0bjhjU0ZnVG9aQ3A5RUE5OHlDZFY5cG9jd3JJYzQyZGZJcmh1QlZtaG5jQm85ejFXM1diNHdjUXJjZktUDQpxNnB0MVRaaERISDlXQ2pySjRRUFQ5WHhRQXlSeCtaZGI5clBleVhvQ3F1ckQrNVBoendZVkFyOEt6QTlNMUJHDQpHVm1OdHZsZWZ3VVhUWTVVL0RCYjlKUjl0ZHJkQUpNRjBlOXUyS1JMOVcxTE1UUUlMdzBLVDdXTmgzYzlOa2d3DQpmb1dIMW9wOTlFdldOTDdyYkhKK2ROenBtelFWc294Q1hNM21MOWxuUVFLQmdRRHRpZC9qcGdnN3VKazNsdzF0DQoyRWE0cTVFMFR4cXlEbFc5UXJrZFV1dTAzMDQ0d1VNN2FMcXdrK2tYbEdpZmhZZXFaTEZlTXhoc1JnejZ4QVJMDQpFajZCWm5FY3pFV1JNOTJHVXpyZCtWekxvMDBKa29lTmtSNUFEUlJTZk5waHdvUE8ybUdNZU1mZi9Ic0pHcGNXDQo1aGovZVJDQ1lNR1lSdHhHTTFZa250OUhDUUtCZ1FDOHphWTBPUXNwTzFEeUY2T0tINThWcE5mYlZ5cytCMkxSDQozN1YrOHN1R2lVc2Y5OVNlWHNiZnBIZU1ZcTNFOGlyc05lRERsS1VTMFc2anRGTEZpUGlqOWZJdzMrL0xyTU14DQpLYSsxYUdmY0RxR1BGWkZrZWhzUUxrMkZsd3JVbUM3cStJeFY1MTRsYjhLK21MaDc2czhMbDZlejBZR2pkMjBZDQpoWkowTm05c0x3S0JnUURKc0UyMzM1d1NDVldmQzlUTk5kd21wUlp2a2RNYTZHMElmQVR0enlCdnZVT1BrUmxpDQo4alBDQm5UZUhwY1BDN1A3aSsvR0NpQnNucllhbmlEL0ZRaVptci9rTWRYSHlvQUhzOWZCN2g5S2tPZXlmd1kxDQp2OGd0bm0xbzlMWUFWOGJPOWtIcG9nd2tOUjdLeGhjUHpHUGhWNHdiQjhpWllXRmJBZS9jdkVEYzhRS0JnSHlVDQpoaEwzZ1BIWC9mV0F1NXlzZU9CalFUdXVMUTVrK1VQYkJYdWE0Y2tJVnRYbFJocXFGemdDNGc5MEhZMVM3aGVuDQpCWVNJVk5ReDlYdDN4UllxNTBYcFI4SVFRYjUzWk9UUHlPMCsweWxWVGkySDRjUVcvanlURVB3UlNrZzFrdC9nDQoyVmpscmkydHJTYnV4dXlkWjdrU2ZNb2VlQmhRK1YrdzQ0NWpUT3BwQW9HQkFNUlM1U0toMFhMTkhFQWZhV2hYDQpwUTFXbEc5UVFUd2Nubi9SNlhlNW15bmdNM3kyNTA2SENsSmF4T1VDaHZ0RWoxZnk3R0dRR2FSUGZmSE5jelUwDQorZzI5N3ROaFZ2VmJnZXRJMjR1aW9BS0Y5UkhrOERBZy96bmpqUVErdlRXVnFZbXNQei8vKyt4V251OEtLb0wzDQozdUFvMzF5UGlIMllWbTdyTDg0TmFvby8NCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0NCg=="
+
+# ---------------------------------------------------------------------
+# 4. 依赖存储
+# ---------------------------------------------------------------------
+
+# MySQL 数据源
+# 数据源：按数据库类型分组，未配置的类型不会初始化（当前支持 mysql、mongodb）
 store:
-  wei:
-    user: root
-    pwd: "123456"
-    host: 127.0.0.1
-    port: 3306
-    dbname: wei
-    charset: utf8mb4
-    parse_time: true
-    location: Local
-    max_idle_cons: 2
-    max_open_cons: 20
-    conn_max_lifetime_minutes: 200
-logger:
-  filename: "./logs/admin.log"
-  max_size: 5
-  max_backups: 7
-  max_age: 14
-  compress: true
-  level: debug # debug, info, warn,error
-  json: true
+  mysql:
+    # 默认数据源名（对应 sources 的 key）；sources 为空时启动报错
+    default: wei
+    # 可配置多个数据源，key 为数据源名
+    sources:
+      wei:
+        user: root
+        pwd: "123456"
+        host: 127.0.0.1
+        port: 3306
+        dbname: wei
+        charset: utf8mb4
+        parse_time: true
+        location: Local
+        max_idle_cons: 2
+        max_open_cons: 20
+        conn_max_lifetime_minutes: 200
+  mongodb:
+    # 默认数据源名；sources 为空表示不启用 MongoDB
+    default: ""
+    sources: {}
+    # 示例：
+    # sources:
+    #   logs:
+    #     uri: "mongodb://user:password@127.0.0.1:27017/?authSource=admin"
+    #     database: logs
+    #     max_pool_size: 100
+    #     min_pool_size: 5

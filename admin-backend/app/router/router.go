@@ -14,6 +14,9 @@ func noAuth(e *gin.Engine) {
 	notCheck := e.Group("/")
 	{
 		swagger(notCheck)
+		// 健康检查探针（liveness / readiness），供 K8s 等编排系统使用
+		notCheck.GET("/healthz", Healthz)
+		notCheck.GET("/readyz", Readyz)
 	}
 }
 

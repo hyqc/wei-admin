@@ -23,6 +23,12 @@ type IConfig interface {
 	Original() interface{}
 }
 
+// IConfigSource 可选接口：由配置对象声明配置来源（file / nacos），
+// 使配置源既可通过命令行 -cfs 指定，也可通过配置文件中的 configSource 指定（默认 file）。
+type IConfigSource interface {
+	GetConfigSource() string
+}
+
 const (
 	cfsValueLocalFile = "local"
 	cfsValueNacosFile = "nacos"
@@ -45,14 +51,17 @@ func Env() string {
 	return *env
 }
 
-// Init 初始化解析Nacos
+// Init 初始化配置
+//
+// 配置源选择优先级：命令行 -cfs=nacos > 配置文件 configSource=nacos > 默认本地配置文件。
+// 本地配置文件始终先加载（Nacos 的连接信息也来源于此），再按需用 Nacos 配置覆盖。
 func Init(cf IConfig) error {
 	logger.Infof("Server Run Env=%s", Env())
 	//解析config.yaml配置文件的nacos配置
 	if err := loadFile(cf); err != nil {
 		return err
 	}
-	if *cfs != cfsValueNacosFile {
+	if !useNacos(cf) {
 		//解析本地的配置
 		return nil
 	}
@@ -61,6 +70,15 @@ func Init(cf IConfig) error {
 		return err
 	}
 	return loadNacos(Nacos, cf)
+}
+
+// useNacos 判断是否使用 Nacos 配置源
+func useNacos(cf IConfig) bool {
+	if strings.EqualFold(*cfs, cfsValueNacosFile) {
+		return true
+	}
+	src, ok := cf.(IConfigSource)
+	return ok && strings.EqualFold(strings.TrimSpace(src.GetConfigSource()), cfsValueNacosFile)
 }
 
 // LoadByNacosDataId 解析Nacos中的DataID配置项

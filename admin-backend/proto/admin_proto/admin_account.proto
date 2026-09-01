@@ -8,6 +8,15 @@ import "admin_menu.proto";
 message ReqLogin{
   string username = 1; // 用户名 @gotags: binding:"required,adminname" label:"用户名"
   string password = 2; // 密码  @gotags: binding:"required,adminpwd" label:"密码"
+  string captchaId = 3; // 验证码ID @gotags: binding:"required" label:"验证码ID"
+  string captchaCode = 4; // 验证码内容 @gotags: binding:"required" label:"验证码"
+}
+// 图片验证码
+message ReqAdminAccountCaptcha{
+}
+message RespAdminAccountCaptchaData{
+  string captchaId = 1; // 验证码ID
+  string image = 2; // 验证码图片（data:image/png;base64,...）
 }
 message RespLoginData{
   AdminInfo data = 2;

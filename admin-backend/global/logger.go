@@ -15,8 +15,9 @@ func initLogger() error {
 			MaxAge:     cf.MaxAge,
 			Compress:   cf.Compress,
 		},
-		Level: logger.LevelMap[cf.Level],
-		Json:  cf.Json,
+		Level:  logger.LevelMap[cf.Level],
+		Json:   cf.Json,
+		Stdout: cf.Stdout,
 	})
 	if err != nil {
 		return err

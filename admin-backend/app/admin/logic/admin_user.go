@@ -6,6 +6,7 @@ import (
 	"admin/code"
 	"admin/constant"
 	"admin/global"
+	"admin/pkg/captcha"
 	"admin/pkg/utils"
 	"admin/pkg/utils/array"
 	"admin/pkg/utils/pwd"
@@ -43,6 +44,10 @@ func newAdminUserLogic() IAdminUserLogic {
 }
 
 func (a *AdminUserLogic) AccountLogin(ctx context.Context, params *admin_proto.ReqLogin, clientIp string) (*admin_proto.RespLoginData, error) {
+	// 先校验图片验证码（一次性，通过后即失效），避免暴力尝试密码
+	if !global.AppCaptcha.Verify(captcha.SceneLogin, params.CaptchaId, params.CaptchaCode) {
+		return nil, code.NewCodeError(code_proto.ErrorCode_AdminCaptchaInvalid, nil)
+	}
 	data, err := dao.H.AdminUser.FindAdminUserByUsername(ctx, params.Username)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
