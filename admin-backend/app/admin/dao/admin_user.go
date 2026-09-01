@@ -5,10 +5,12 @@ import (
 	model2 "admin/app/admin/gen/model"
 	query2 "admin/app/admin/gen/query"
 	"admin/app/common"
+	"admin/global"
 	"admin/proto/admin_proto"
 	"context"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"time"
 )
@@ -23,6 +25,7 @@ type IAdminUser interface {
 	Enable(ctx *gin.Context, id int32, enabled bool) error
 	Delete(ctx *gin.Context, id int32) error
 	AddRoles(ctx *gin.Context, roles []*model2.AdminUserRole) error
+	ReplaceRoles(ctx context.Context, adminId int32, roles []*model2.AdminUserRole) error
 	FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) ([]*types.AdminUserRole, error)
 }
 
@@ -145,11 +148,30 @@ func (a *AdminUser) Delete(ctx *gin.Context, id int32) error {
 	return err
 }
 
+// AddRoles 追加账号角色（仅新增，不会清理旧关联）
 func (a *AdminUser) AddRoles(ctx *gin.Context, roles []*model2.AdminUserRole) error {
 	db := query2.AdminUserRole
 	return db.WithContext(ctx).Clauses(clause.Insert{
 		Modifier: "IGNORE",
 	}).Create(roles...)
+}
+
+// ReplaceRoles 全量替换账号角色绑定：先删除该账号的旧关联再写入新关联，事务保证原子性。
+// roles 为空时表示清空该账号的全部角色。
+func (a *AdminUser) ReplaceRoles(ctx context.Context, adminId int32, roles []*model2.AdminUserRole) error {
+	return global.AppDB.DefaultMysql().Transaction(func(tx *gorm.DB) error {
+		// 使用事务内的查询对象，保证 delete 与 create 在同一事务中
+		q := query2.Use(tx)
+		if _, err := q.AdminUserRole.WithContext(ctx).Where(q.AdminUserRole.AdminID.Eq(adminId)).Delete(); err != nil {
+			return err
+		}
+		if len(roles) == 0 {
+			return nil
+		}
+		return q.AdminUserRole.WithContext(ctx).Clauses(clause.Insert{
+			Modifier: "IGNORE",
+		}).Create(roles...)
+	})
 }
 
 func (a *AdminUser) FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) (list []*types.AdminUserRole, err error) {

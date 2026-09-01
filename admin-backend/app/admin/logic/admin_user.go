@@ -333,5 +333,6 @@ func (a *AdminUserLogic) BindRoles(ctx *gin.Context, params *admin_proto.ReqAdmi
 			RoleID:  roleId,
 		})
 	}
-	return dao.H.AdminUser.AddRoles(ctx, adminUserRoles)
+	// 全量替换：取消勾选的角色需要一并删除，仅追加会导致旧角色仍生效
+	return dao.H.AdminUser.ReplaceRoles(ctx, params.AdminId, adminUserRoles)
 }

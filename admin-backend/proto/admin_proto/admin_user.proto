@@ -123,7 +123,7 @@ message RespAdminUserDeleteData{
 // 账号绑定角色
 message ReqAdminUserBindRoles{
   int32 adminId = 1;//管理员ID @gotags: label:"管理员ID" binding:"required,min=1"
-  repeated int32 roleIds = 2;//角色ID列表 @gotags: label:"角色ID列表" binding:"required,min=1"
+  repeated int32 roleIds = 2;//角色ID列表（为空表示清空该账号的全部角色） @gotags: label:"角色ID列表" binding:"omitempty"
 }
 message RespAdminUserBindRolesData{
 }

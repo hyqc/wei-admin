@@ -1135,7 +1135,7 @@ func (*RespAdminUserDeleteData) Descriptor() ([]byte, []int) {
 type ReqAdminUserBindRoles struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AdminId       int32                  `protobuf:"varint,1,opt,name=adminId,proto3" json:"adminId,omitempty"`        //管理员ID @gotags: label:"管理员ID" binding:"required,min=1"
-	RoleIds       []int32                `protobuf:"varint,2,rep,packed,name=roleIds,proto3" json:"roleIds,omitempty"` //角色ID列表 @gotags: label:"角色ID列表" binding:"required,min=1"
+	RoleIds       []int32                `protobuf:"varint,2,rep,packed,name=roleIds,proto3" json:"roleIds,omitempty"` //角色ID列表（为空表示清空该账号的全部角色） @gotags: label:"角色ID列表" binding:"omitempty"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
