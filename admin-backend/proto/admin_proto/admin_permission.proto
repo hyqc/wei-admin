@@ -16,16 +16,58 @@ message RespAdminPermissionListData{
   repeated PermissionListItem list = 2;
 }
 
+// 权限列表请求参数（与前端保持一致：分页参数平铺传递）
+message ReqFrontAdminPermissionList{
+  int32 pageSize = 1; // 每页条数
+  int32 pageNum = 2; // 页码
+  string sortField = 3; // 排序字段
+  string sortType = 4; // 排序值
+  int32 enabled = 5; // 0：全部 1：启用 2：禁用
+  int64 createStartTime = 6; // 查询开始时间戳秒
+  int64 createEndTime = 7; // 查询结束时间戳秒
+  int32 menuId = 8; // 菜单ID
+  string key = 9; // 权限唯一标识符
+  string name = 10; // 权限名称
+  string type = 11; // 权限类型
+}
+
+// 权限列表返回（与前端保持一致：list + pageInfo）
+message RespFrontAdminPermissionListData{
+  repeated PermissionListItem list = 1;
+  PageInfo pageInfo = 2;
+}
+
+// 权限详情返回（与前端保持一致：权限信息 + 接口ID列表）
+message RespFrontAdminPermissionInfoData{
+  int32 id = 1;//权限ID
+  int32 menuId = 2;//权限对应的菜单ID
+  string menuName = 3;//菜单名称
+  string menuPath = 4;//菜单路由
+  repeated AdminApiItem apis = 5; //接口列表
+  string key = 6;//权限唯一标识符
+  string name = 7;//权限名称
+  string describe = 8;//权限描述
+  string type = 9;//权限类型
+  string typeText = 10;//权限类型名称
+  string redirect = 11;//重定向地址
+  bool isEnabled = 12;//是否启用
+  string createdAt = 13;
+  string updatedAt = 14;
+  repeated int32 apiIds = 15;//已绑定的接口ID列表
+}
+
 // 创建权限
 message ReqAdminPermissionAdd{
-  int32 id = 1;   // @gotags:  label:"权限ID" binding:"required,min=1"
+  int32 id = 1;   // 权限ID（新增时前端不传）
   int32 menuId = 2;  // @gotags:  label:"权限对应的菜单ID" binding:"required,min=1"
-  string key = 3;  // @gotags:  label:"权限唯一标识符" binding:"required,trimBlank"
-  string name = 4;  // @gotags:  label:"权限名称" binding:"required,trimBlank"
-  string describe = 5;  // @gotags:  label:"权限描述" binding:"required,trimBlank"
-  string type = 6;  // @gotags:  label:"权限类型" binding:"required,trimBlank"
-  string redirect = 7; // @gotags:  label:"重定向地址"
-  bool enabled = 8;  // @gotags:  label:"是否启用"
+  string menuName = 3;  // 菜单名称（前端提交，用于列表展示）
+  string menuPath = 4;  // 菜单路由（前端提交）
+  string key = 5;  // @gotags:  label:"权限唯一标识符" binding:"required,trimBlank"
+  string name = 6;  // @gotags:  label:"权限名称" binding:"required,trimBlank"
+  string describe = 7;  // @gotags:  label:"权限描述" binding:"omitempty,trimBlank"
+  string type = 8;  // @gotags:  label:"权限类型" binding:"required,trimBlank"
+  string redirect = 9; // @gotags:  label:"重定向地址"
+  bool enabled = 10;  // @gotags:  label:"是否启用"
 }
 message RespAdminPermissionAddData{
 }
@@ -46,7 +88,7 @@ message ReqAdminPermissionEdit{
   int32 menuId = 2;  // @gotags:  label:"权限对应的菜单ID" binding:"required,min=1"
   string key = 3;  // @gotags:  label:"权限唯一标识符" binding:"required,trimBlank"
   string name = 4;  // @gotags:  label:"权限名称" binding:"required,trimBlank"
-  string describe = 5;  // @gotags:  label:"权限描述" binding:"required,trimBlank"
+  string describe = 5;  // @gotags:  label:"权限描述" binding:"omitempty,trimBlank"
   string type = 6;  // @gotags:  label:"权限类型" binding:"required,trimBlank"
   string redirect = 7;  // @gotags:  label:"重定向地址"
   bool enabled = 8; // @gotags:  label:"启用状态"
@@ -58,7 +100,7 @@ message RespAdminPermissionEditData{
 // 启用禁用权限
 message ReqAdminPermissionEnable{
   int32 id = 1; // @gotags:  label:"权限ID" binding:"required,min=1"
-  bool isEnabled = 2; // @gotags:  label:"启用状态"
+  bool enabled = 2; // @gotags:  label:"启用状态"
 }
 message RespAdminPermissionEnableData{
 }

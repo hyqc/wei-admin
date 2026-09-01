@@ -20,6 +20,45 @@ message RespAdminUserListData{
   repeated AdminUserListItem list = 4;
 }
 
+// 账号列表请求参数（与前端保持一致：分页参数平铺传递）
+message ReqFrontAdminUserList{
+  int32 pageSize = 1; // 每页条数
+  int32 pageNum = 2; // 页码
+  string sortField = 3; // 排序字段
+  string sortType = 4; // 排序值
+  int32 enabled = 5; // 0：全部 1：启用 2：禁用
+  int64 createStartTime = 6; // 查询开始时间戳秒
+  int64 createEndTime = 7; // 查询结束时间戳秒
+  string username = 8; // 账号
+  string nickname = 9; // 昵称
+  string email = 10; // 邮箱
+}
+
+// 账号列表返回（与前端保持一致：list + pageInfo）
+message RespFrontAdminUserListData{
+  repeated AdminUserListItem list = 1;
+  PageInfo pageInfo = 2;
+}
+
+// 账号详情返回（与前端保持一致：账号信息 + 角色ID列表）
+message RespFrontAdminUserInfoData{
+  int32 adminId = 1; // 管理员ID
+  string username = 2; // 账号名称
+  string nickname = 3; // 昵称
+  string email = 4; // 邮箱
+  string avatar = 5; // 头像
+  int32 loginTotal = 6; // 登录次数
+  string lastLoginIp = 7; // 上次登录IP
+  string lastLoginTime = 8; // 上次登录时间
+  bool isEnabled = 9; // 是否启用
+  string createdAt = 10; // 创建时间
+  string updatedAt = 11; // 更新时间
+  repeated AdminUserRoleItem roles = 12; // 角色列表
+  bool isEnabledButtonDisabled = 13; // 是否禁用启停按钮
+  repeated int32 roleIds = 14; // 角色ID列表
+  bool isSuperAdmin = 15; // 是否超级管理员（ID 恒为 1，自动拥有全部权限）
+}
+
 // 账号详情
 message ReqAdminUserInfo{
   int32 adminId = 1; // @gotags: label:"管理员ID" binding:"required,min=1"`
@@ -31,13 +70,14 @@ message RespAdminUserInfoData{
 
 // 添加账号
 message ReqAdminUserAdd{
-  string username = 1;// @gotags: label:"账号" binding:"required,adminname"`
-  string nickname = 2; // @gotags: label:"昵称" binding:"required,trimBlank"`
-  string password = 3;// @gotags: label:"密码" binding:"required,adminpwd"`
-  string confirmPassword = 4; // @gotags: label:"确认密码" binding:"required,eqfield=Password,adminpwd"
-  bool enabled = 5;  // @gotags: label:"账号启用状态"
+  string username = 1;// @gotags: label:"账号" binding:"required,adminname"
+  string nickname = 2; // @gotags: label:"昵称" binding:"omitempty,trimBlank"
+  string password = 3;// @gotags: label:"密码" binding:"required,adminpwd"
+  string confirmPassword = 4; // 确认密码（前端不传）
+  bool enabled = 5;  // 账号启用状态（前端不传，默认启用）
   string email = 6; // @gotags: label:"邮箱" binding:"omitempty,email"
-  string avatar = 7; // @gotags: label:"头像地址" binding:"omitempty,url"
+  string avatar = 7; // 头像地址（前端不传）
+  repeated int32 roleIds = 8;// 角色ID列表（创建后绑定角色）
 }
 message RespAdminUserAddData{
 }
@@ -45,11 +85,11 @@ message RespAdminUserAddData{
 // 账号编辑
 message ReqAdminUserEdit{
   int32 adminId = 1;//管理员ID @gotags: label:"管理员ID" binding:"required,min=1"
-  string username = 2;//账号 @gotags: label:"账号" binding:"required,adminname"
-  string nickname = 3;//昵称 @gotags: label:"昵称" binding:"required,trimBlank"
-  bool enabled = 4;//账号启用状态 @gotags: label:"账号启用状态"
+  string username = 2;//账号（前端不传，不更新）
+  string nickname = 3;//昵称 @gotags: label:"昵称" binding:"omitempty,trimBlank"
+  bool enabled = 4;//账号启用状态（前端不传，不更新）
   string email = 5;//邮箱 @gotags: label:"邮箱" binding:"omitempty,email"
-  string avatar = 6;//头像地址 @gotags: label:"头像地址" binding:"omitempty,url"
+  string avatar = 6;//头像地址（前端不传，不更新）
 }
 message RespAdminUserEditData{
 }
@@ -58,7 +98,7 @@ message RespAdminUserEditData{
 message ReqAdminUserEditPassword{
   int32 adminId = 1;//管理员ID @gotags: label:"管理员ID" binding:"required,min=1"
   string password = 2;//密码 @gotags: label:"密码" binding:"required,adminpwd"
-  string confirmPassword = 3;//确认密码 @gotags: label:"确认密码" binding:"required,eqfield=Password,adminpwd"
+  string confirmPassword = 3;//确认密码（前端不传）
 }
 message RespAdminUserEditPasswordData{
 }

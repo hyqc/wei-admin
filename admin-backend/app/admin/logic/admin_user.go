@@ -4,6 +4,7 @@ import (
 	"admin/app/admin/dao"
 	model2 "admin/app/admin/gen/model"
 	"admin/code"
+	"admin/constant"
 	"admin/global"
 	"admin/pkg/utils"
 	"admin/pkg/utils/array"
@@ -11,7 +12,9 @@ import (
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"context"
+	"encoding/json"
 	"errors"
+	"strings"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"time"
@@ -105,7 +108,7 @@ func (a *AdminUserLogic) AccountEditPassword(ctx *gin.Context, adminId int32, pa
 	if !pwd.Matches(params.OldPassword, data.Password) {
 		return code.NewCodeError(code_proto.ErrorCode_AdminAccountPasswordInvalid, nil)
 	}
-	data.Password, err = pwd.Encode(params.Password)
+	data.Password, err = pwd.Encode(params.NewPassword)
 	if err != nil {
 		return err
 	}
@@ -194,7 +197,20 @@ func (a *AdminUserLogic) HandleItemData(item *model2.AdminUser) (data *admin_pro
 	data.AdminId = item.ID
 	data.CreatedAt = utils.HandleTime2String(item.CreatedAt)
 	data.UpdatedAt = utils.HandleTime2String(item.UpdatedAt)
+	// 登录IP：数据库存 JSON 数组（最多保留最近两次登录 IP），解析为逗号分隔字符串返回前端
+	data.LastLoginIp = handleListLoginIp(item.LastLoginIP)
+	// 超管标识：ID 为 1 的账号自动拥有全部权限
+	data.IsSuperAdmin = constant.IsAdministrator(item.ID)
 	return data, nil
+}
+
+// handleListLoginIp 将 last_login_ip（JSON 数组字符串，如 ["ip1","ip2"]）解析为逗号分隔字符串
+func handleListLoginIp(ips string) string {
+	arr := make([]string, 0)
+	if err := json.Unmarshal([]byte(ips), &arr); err != nil {
+		return ""
+	}
+	return strings.Join(arr, ", ")
 }
 
 func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminUserAdd) error {
@@ -208,10 +224,30 @@ func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminUserA
 		Nickname:    params.Nickname,
 		Email:       params.Email,
 		Avatar:      params.Avatar,
-		IsEnabled:   params.Enabled,
+		IsEnabled:   true, // 前端不传启用状态，新增账号默认启用
 		LastLoginIP: "[]",
 	}
-	return dao.H.AdminUser.Create(ctx, data)
+	if err = dao.H.AdminUser.Create(ctx, data); err != nil {
+		// 账号唯一键冲突，返回“账号已存在”
+		if strings.Contains(err.Error(), "uk_username") {
+			return code.NewCodeError(code_proto.ErrorCode_AdminAccountNameExist, err)
+		}
+		return err
+	}
+	// 前端在创建时即绑定角色
+	if len(params.RoleIds) > 0 {
+		adminUserRoles := make([]*model2.AdminUserRole, 0, len(params.RoleIds))
+		for _, roleId := range params.RoleIds {
+			adminUserRoles = append(adminUserRoles, &model2.AdminUserRole{
+				AdminID: data.ID,
+				RoleID:  roleId,
+			})
+		}
+		if err = dao.H.AdminUser.AddRoles(ctx, adminUserRoles); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminUserEdit) error {
@@ -219,11 +255,9 @@ func (a *AdminUserLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminUser
 	if err != nil {
 		return err
 	}
-	data.Username = params.Username
+	// 前端仅提交昵称与邮箱，账号/启用状态/头像保持不变
 	data.Nickname = params.Nickname
 	data.Email = params.Email
-	data.IsEnabled = params.Enabled
-	data.Avatar = params.Avatar
 	return dao.H.AdminUser.UpdateAdminUser(ctx, data)
 }
 
@@ -235,7 +269,8 @@ func (a *AdminUserLogic) EditPassword(ctx *gin.Context, params *admin_proto.ReqA
 	if err == gorm.ErrRecordNotFound {
 		return code.NewCodeError(code_proto.ErrorCode_RecordNotExist, err)
 	}
-	if len(params.Password) != 0 && params.Password != params.ConfirmPassword {
+	// 前端不传确认密码，仅在确认密码有值时才比对
+	if len(params.ConfirmPassword) != 0 && params.Password != params.ConfirmPassword {
 		return code.NewCode(code_proto.ErrorCode_RequestParamsInvalid)
 	}
 	data.Password, err = pwd.Encode(params.Password)
@@ -274,6 +309,10 @@ func (a *AdminUserLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminUs
 }
 
 func (a *AdminUserLogic) BindRoles(ctx *gin.Context, params *admin_proto.ReqAdminUserBindRoles) error {
+	// 超管账号自动拥有全部权限，不允许绑定角色
+	if constant.IsAdministrator(params.AdminId) {
+		return code.NewCodeError(code_proto.ErrorCode_AdminSuperAccountNotAllow, nil)
+	}
 	_, err := dao.H.AdminUser.FindAdminUserByAdminId(ctx, params.AdminId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

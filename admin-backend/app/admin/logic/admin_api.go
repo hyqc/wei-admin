@@ -79,7 +79,7 @@ func (a *AdminAPILogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminApiAdd
 		Key:       params.Key,
 		Name:      params.Name,
 		Describe:  params.Describe,
-		IsEnabled: params.Enabled,
+		IsEnabled: true, // 前端不传启用状态，新增接口默认启用
 	}
 	if err := dao.H.AdminAPI.Create(ctx, data); err != nil {
 		msg := err.Error()
@@ -116,11 +116,11 @@ func (a *AdminAPILogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminApiEd
 		}
 		return err
 	}
+	// 前端不传启用状态，保持原值不变
 	info.Key = params.Key
 	info.Path = params.Path
 	info.Name = params.Name
 	info.Describe = params.Describe
-	info.IsEnabled = params.Enabled
 	return dao.H.AdminAPI.Update(ctx, info)
 }
 

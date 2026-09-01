@@ -10,6 +10,7 @@ import (
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"errors"
+	"strings"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"sort"
@@ -84,11 +85,25 @@ func (a *AdminMenuLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminMenuA
 		Sort:                 params.Sort,
 		Redirect:             params.Redirect,
 		Component:            params.Component,
-		IsHideInMenu:         params.HideInMenu,
-		IsHideChildrenInMenu: params.HideChildrenInMenu,
-		IsEnabled:            params.Enabled,
+		IsHideInMenu:         params.IsHideInMenu,
+		IsHideChildrenInMenu: params.IsHideChildrenInMenu,
+		IsEnabled:            params.IsEnabled,
 	}
-	return dao.H.AdminMenu.Create(ctx, data)
+	// 菜单唯一键冲突，返回对应的“已存在”错误码
+	if err := dao.H.AdminMenu.Create(ctx, data); err != nil {
+		msg := err.Error()
+		if strings.Contains(msg, "uk_name") {
+			return code.NewCodeError(code_proto.ErrorCode_AdminMenuNameExist, err)
+		}
+		if strings.Contains(msg, "uk_key") {
+			return code.NewCodeError(code_proto.ErrorCode_AdminMenuKeyExist, err)
+		}
+		if strings.Contains(msg, "uk_path") {
+			return code.NewCodeError(code_proto.ErrorCode_AdminMenuPathExist, err)
+		}
+		return err
+	}
+	return nil
 }
 
 func (a *AdminMenuLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminMenuInfo) (*admin_proto.RespAdminMenuInfoData, error) {
@@ -192,11 +207,11 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAd
 		return nil, err
 	}
 	data := &admin_proto.RespAdminMenuPermissionsData{
-		MenuInfo:    &admin_proto.AdminMenuModel{},
+		Menu:        &admin_proto.AdminMenuModel{},
 		Permissions: make([]*admin_proto.MenuPermissionItem, 0),
 	}
-	_ = utils.BeanCopy(data.MenuInfo, info)
-	data.MenuInfo.Id = info.ID
+	_ = utils.BeanCopy(data.Menu, info)
+	data.Menu.Id = info.ID
 
 	permissions, err := dao.H.AdminPermission.FindPermissionsByMenuId(ctx, info.ID)
 	if err != nil {

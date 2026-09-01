@@ -18,6 +18,23 @@ type AccountController struct {
 	core.Controller
 }
 
+// Logout 退出登录
+//
+//	@Summary		退出登录
+//	@Description	退出登录（前端清除本地 token，后端无需处理）
+//	@Tags			账号相关接口
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{object}	code.Message{data=nil}	"desc"
+//	@Router			/admin/account/logout [post]
+func (AccountController) Logout(ctx *gin.Context) {
+	msg := "AccountController.Logout"
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
+}
+
 func (AccountController) Register(ctx *gin.Context) {
 	msg := "AccountController.Register"
 	result := code.NewCode(code_proto.ErrorCode_Success)
@@ -51,7 +68,10 @@ func (AccountController) Login(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(data)
+	// 转换为前端结构：直接返回账号信息（含 token/expire/menus/permissions）
+	if data != nil {
+		result.SetData(data.Data)
+	}
 
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
@@ -77,7 +97,10 @@ func (AccountController) Info(ctx *gin.Context) {
 		return
 	}
 
-	result.SetData(data)
+	// 转换为前端结构：直接返回账号信息
+	if data != nil {
+		result.SetData(data.Data)
+	}
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return

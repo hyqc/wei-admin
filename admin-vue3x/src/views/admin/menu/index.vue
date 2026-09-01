@@ -1,5 +1,5 @@
 <template>
-  <PageContainer title="菜单管理">
+  <PageContainer>
     <template #extra>
       <a-button type="primary" @click="openAddModal()">
         <template #icon><PlusOutlined /></template>
@@ -190,7 +190,8 @@ function onDelete(record: MenuTreeItem) {
 }
 
 function openAddModal(parent?: MenuTreeItem) {
-  saveData.value = parent ? { ...parent } : undefined;
+  // 新增子菜单时只传父级ID：若直接传父菜单对象，会被弹窗识别为“编辑父菜单”
+  saveData.value = parent ? ({ parentId: parent.id } as MenuTreeItem) : undefined;
   saveModalStatus.value = true;
 }
 

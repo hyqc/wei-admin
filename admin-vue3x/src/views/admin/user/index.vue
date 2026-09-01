@@ -1,5 +1,5 @@
 <template>
-  <PageContainer title="账号管理" :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
+  <PageContainer :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
     <template #searchArea>
       <a-form layout="inline" :model="searchForm" class="search-form" @finish="onSearch">
         <a-form-item label="账号" name="username">
@@ -58,9 +58,13 @@
           {{ getLoginIp(record.lastLoginIp, column.key === 'currentLoginIp' ? 'current' : 'last') }}
         </template>
         <template v-else-if="column.key === 'roles'">
-          <a-tag v-for="role in record.roles" :key="role.roleId" color="blue">
-            {{ role.roleName }}
-          </a-tag>
+          <!-- 超管无需角色，自动拥有系统全部权限 -->
+          <a-tag v-if="record.isSuperAdmin" color="gold">超级管理员</a-tag>
+          <template v-else>
+            <a-tag v-for="role in record.roles" :key="role.roleId" color="blue">
+              {{ role.roleName }}
+            </a-tag>
+          </template>
         </template>
         <template v-else-if="column.key === 'isEnabled'">
           <a-popconfirm
@@ -93,7 +97,8 @@
               </a-button>
             </Authorization>
             <Authorization permission="AdminUserEdit">
-              <a-button type="link" size="small" @click="openBindRolesModal(record)">
+              <!-- 超管账号自动拥有全部权限，不允许绑定角色 -->
+              <a-button v-if="!record.isSuperAdmin" type="link" size="small" @click="openBindRolesModal(record)">
                 <template #icon><UserSwitchOutlined /></template>
                 绑定角色
               </a-button>
@@ -216,10 +221,21 @@ function displayNickname(nickname?: string): string {
 
 /** 拆分登录IP：last 取倒数第 2 个（上次登录），current 取最后一个（当前登录） */
 function getLoginIp(ipStr?: string, type: 'last' | 'current' = 'last'): string {
-  const list = (ipStr || '')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
+  // 兼容 JSON 数组字符串（后端原始存储，如 ["ip1","ip2"]）与逗号分隔字符串（解析后/ mock，如 ip1, ip2）
+  const s = ipStr || '';
+  let list: string[] = [];
+  try {
+    const parsed = JSON.parse(s);
+    if (Array.isArray(parsed)) list = parsed.map(String);
+  } catch {
+    list = [];
+  }
+  if (list.length === 0) {
+    list = s
+      .split(',')
+      .map((x) => x.trim())
+      .filter(Boolean);
+  }
   const ip = type === 'current' ? list[list.length - 1] : list[list.length - 2];
   return ip || '-';
 }

@@ -4,6 +4,9 @@ export const BaseAPI = '/api';
 /** 登录 token 存储键 */
 export const LocalStorageTokenKey = 'token';
 
+/** 已打开页签存储键（刷新页面后保留） */
+export const LocalStorageTabsKey = 'admin_tabs';
+
 /** 登录页路径 */
 export const LoginPath = '/login';
 

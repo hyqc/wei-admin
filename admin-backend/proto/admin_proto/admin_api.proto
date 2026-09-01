@@ -15,6 +15,26 @@ message RespAdminApiListData{
   repeated AdminApiItem list=2;
 }
 
+// 接口列表请求参数（与前端保持一致：分页参数平铺传递）
+message ReqFrontAdminApiList{
+  int32 pageSize = 1; // 每页条数
+  int32 pageNum = 2; // 页码
+  string sortField = 3; // 排序字段
+  string sortType = 4; // 排序值
+  int32 enabled = 5; // 0：全部 1：启用 2：禁用
+  int64 createStartTime = 6; // 查询开始时间戳秒
+  int64 createEndTime = 7; // 查询结束时间戳秒
+  string key = 8; // 接口键名
+  string name = 9; // 接口名称
+  string path = 10; // 接口路由
+}
+
+// 接口列表返回（与前端保持一致：list + pageInfo）
+message RespFrontAdminApiListData{
+  repeated AdminApiItem list = 1;
+  PageInfo pageInfo = 2;
+}
+
 // 全部接口列表
 message ReqAdminApiAll{}
 message RespAdminApiAllData{
@@ -26,8 +46,8 @@ message ReqAdminApiAdd{
   string path = 1;//接口路由 @gotags:  label:"接口路由" binding:"required,adminApiPath"
   string key = 2;//接口键名 @gotags:  label:"接口键名" binding:"required,adminApiKey"
   string name = 3;//接口名称 @gotags:  label:"接口名称" binding:"required,trimBlank"
-  string describe = 4;//接口描述 @gotags:  label:"接口描述" binding:"required,trimBlank"
-  bool enabled = 5;//启用状态
+  string describe = 4;//接口描述 @gotags:  label:"接口描述" binding:"omitempty,trimBlank"
+  bool enabled = 5;//启用状态（前端不传，默认启用）
 }
 message RespAdminApiAddData{}
 
@@ -45,8 +65,8 @@ message ReqAdminApiEdit{
   string path = 2;//接口路由 @gotags:  label:"接口路由" binding:"required,adminApiPath"
   string key = 3;//接口键名 @gotags:  label:"接口键名" binding:"required,adminApiKey"
   string name = 4;//接口名称 @gotags:  label:"接口名称" binding:"required,trimBlank"
-  string describe = 5;//接口描述 @gotags:  label:"接口描述" binding:"required,trimBlank"
-  bool enabled = 6;//接口状态
+  string describe = 5;//接口描述 @gotags:  label:"接口描述" binding:"omitempty,trimBlank"
+  bool enabled = 6;//接口状态（前端不传，不更新）
 }
 message RespAdminApiEditData{}
 

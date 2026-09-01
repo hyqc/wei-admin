@@ -24,6 +24,8 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminAccountPasswordInvalid: "账号或密码错误",
 	code_proto.ErrorCode_AdminAccountNotExist:        "账号不存在或已被删除",
 	code_proto.ErrorCode_AdminAccountInvalid:         "账号无效",
+	code_proto.ErrorCode_AdminAccountNameExist:       "账号已存在",
+	code_proto.ErrorCode_AdminSuperAccountNotAllow:   "超管账号不允许该操作",
 
 	code_proto.ErrorCode_AdminApiNameExist: "接口名称已存在",
 	code_proto.ErrorCode_AdminApiPathExist: "接口路径已存在",
@@ -37,6 +39,10 @@ var zhMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminPermissionTypeInvalid: "权限类型无效",
 
 	code_proto.ErrorCode_AdminMenuNotExist: "菜单不存在",
+	code_proto.ErrorCode_AdminMenuNameExist: "菜单名称已存在",
+	code_proto.ErrorCode_AdminMenuKeyExist:  "菜单键名已存在",
+	code_proto.ErrorCode_AdminMenuPathExist: "菜单路径已存在",
 
-	code_proto.ErrorCode_AdminRoleNotExist: "角色不存在",
+	code_proto.ErrorCode_AdminRoleNotExist:   "角色不存在",
+	code_proto.ErrorCode_AdminRoleNameExist:  "角色名称已存在",
 }

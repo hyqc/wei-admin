@@ -122,7 +122,7 @@ function path2UpperCamelCase(path: string) {
     .join('');
 }
 
-/** 构建树选择数据 */
+/** 构建树选择数据：首项为虚拟顶级菜单（parentId=0，与系统设置平级） */
 const treeSelectData = computed(() => {
   const build = (list: MenuTreeItem[]): any[] =>
     list.map((item) => ({
@@ -131,7 +131,7 @@ const treeSelectData = computed(() => {
       title: item.name,
       children: item.children?.length ? build(item.children) : undefined,
     }));
-  return build(props.tree);
+  return [{ key: 0, value: 0, title: '顶级菜单' }, ...build(props.tree)];
 });
 
 function onPathChange() {
@@ -156,9 +156,9 @@ watch(
         formState.isHideChildrenInMenu = !!props.detailData.hideChildrenInMenu;
         formState.isEnabled = !!props.detailData.enabled;
       } else {
-        // 新增：指定父级
+        // 新增：父级取传入的父菜单ID，未指定时默认挂在顶级菜单下
         formRef.value?.resetFields();
-        formState.parentId = props.detailData?.id;
+        formState.parentId = props.detailData?.parentId ?? 0;
         formState.isEnabled = true;
         formState.isHideInMenu = false;
         formState.isHideChildrenInMenu = false;

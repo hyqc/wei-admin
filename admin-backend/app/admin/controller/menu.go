@@ -66,7 +66,19 @@ func (MenuController) Tree(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(data)
+	// 转换为前端结构：{list: 菜单树}；后端返回的是带虚拟“顶级菜单”节点的树，取其下一级
+	list := make([]*admin_proto.MenuTreeItem, 0)
+	for _, item := range data {
+		if item == nil {
+			continue
+		}
+		if len(item.Children) > 0 {
+			list = append(list, item.Children...)
+			continue
+		}
+		list = append(list, item)
+	}
+	result.SetData(&admin_proto.RespFrontMenuTreeData{List: list})
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
@@ -126,7 +138,10 @@ func (MenuController) Info(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(info)
+	// 转换为前端结构：直接返回菜单信息
+	if info != nil {
+		result.SetData(info.Data)
+	}
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
@@ -304,7 +319,45 @@ func (MenuController) Pages(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(data)
+	// 转换为前端结构：直接返回菜单数组
+	if data != nil {
+		result.SetData(data.List)
+	}
+	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
+	code.JSON(ctx, result)
+	return
+}
+
+// All 全部菜单
+//
+//	@Summary		全部菜单
+//	@Description	全部菜单
+//	@Tags			菜单接口相关
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{object}	code.Message{data=[]admin_proto.MenuTreeItem}	"desc"
+//	@Router			/admin/menu/all [post]
+func (MenuController) All(ctx *gin.Context) {
+	msg := "MenuController.All"
+	result := code.NewCode(code_proto.ErrorCode_Success)
+	data, err := logic.H.AdminMenu.Tree(ctx)
+	if err != nil {
+		common.HandleLogicError(ctx, err, msg, result)
+		return
+	}
+	// 转换为前端结构：菜单树数组（去掉虚拟顶级节点）
+	list := make([]*admin_proto.MenuTreeItem, 0)
+	for _, item := range data {
+		if item == nil {
+			continue
+		}
+		if len(item.Children) > 0 {
+			list = append(list, item.Children...)
+			continue
+		}
+		list = append(list, item)
+	}
+	result.SetData(list)
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return

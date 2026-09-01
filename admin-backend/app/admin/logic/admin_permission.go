@@ -199,6 +199,7 @@ func (a *AdminPermissionLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdm
 		Name:      data.Name,
 		Describe:  data.Describe,
 		Type:      data.Type,
+		TypeText:  dao.GetAdminPermissionTypeText(dao.AdminPermissionType(data.Type)),
 		IsEnabled: data.Enabled,
 		Apis:      apiList,
 		CreatedAt: utils.HandleTimePointer2String(data.CreatedAt),
@@ -214,10 +215,10 @@ func (a *AdminPermissionLogic) Enable(ctx *gin.Context, params *admin_proto.ReqA
 		}
 		return err
 	}
-	if info.IsEnabled == params.IsEnabled {
+	if info.IsEnabled == params.Enabled {
 		return nil
 	}
-	return dao.H.AdminPermission.Enable(ctx, params.Id, params.IsEnabled)
+	return dao.H.AdminPermission.Enable(ctx, params.Id, params.Enabled)
 }
 
 func (a *AdminPermissionLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminPermissionDelete) error {

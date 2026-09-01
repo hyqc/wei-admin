@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
     <div class="page-header">
-      <div class="header-title">
-        <span v-if="title">{{ title }}</span>
-        <slot name="title" />
-      </div>
       <div class="header-search">
         <slot name="searchArea" />
       </div>
@@ -42,7 +38,6 @@ import type { PageInfoType } from '@/api/types';
 import PageInfo from './PageInfo.vue';
 
 const props = defineProps<{
-  title?: string;
   pageInfo?: PageInfoType;
   pageSizeOptions?: string[];
 }>();
@@ -75,11 +70,8 @@ const onSizeChange = (_current: number, size: number) => {
     justify-content: space-between;
     margin-bottom: 16px;
 
-    .header-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: rgba(0, 0, 0, 0.85);
-      white-space: nowrap;
+    .header-search {
+      flex: 1;
     }
   }
 

@@ -57,6 +57,8 @@ export interface AdminUserListItem {
   roles?: AdminUserRoleItem[];
   /** 是否禁用启停按钮 */
   isEnabledButtonDisabled?: boolean;
+  /** 是否超级管理员（ID 恒为 1，自动拥有全部权限，不可绑定角色） */
+  isSuperAdmin?: boolean;
 }
 
 /** 账号角色列表 */

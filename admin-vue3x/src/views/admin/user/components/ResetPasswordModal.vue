@@ -10,15 +10,31 @@
     @ok="handleOk"
     @cancel="emit('update:open', false)"
   >
-    <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+    <a-form
+      ref="formRef"
+      :model="formState"
+      :rules="rules"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 12 }"
+      autocomplete="off"
+    >
       <a-form-item label="账号">
-        <a-input :value="detailData?.username" disabled />
+        <a-input :value="detailData?.username" disabled autocomplete="off" />
       </a-form-item>
       <a-form-item label="新密码" name="password">
-        <a-input-password v-model:value="formState.password" placeholder="请输入新密码" />
+        <!-- 禁用浏览器自动填充，避免带入已保存的登录密码 -->
+        <a-input-password
+          v-model:value="formState.password"
+          placeholder="请输入新密码"
+          autocomplete="new-password"
+        />
       </a-form-item>
       <a-form-item label="确认密码" name="confirmPassword">
-        <a-input-password v-model:value="formState.confirmPassword" placeholder="请再次输入新密码" />
+        <a-input-password
+          v-model:value="formState.confirmPassword"
+          placeholder="请再次输入新密码"
+          autocomplete="new-password"
+        />
       </a-form-item>
     </a-form>
   </a-modal>

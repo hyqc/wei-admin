@@ -13,6 +13,11 @@ message ReqAdminMenuList{
   string name = 4;//菜单名称
   int32 parentId = 5; // 父级菜单
 }
+
+// 菜单树返回（与前端保持一致：list）
+message RespFrontMenuTreeData{
+  repeated MenuTreeItem list = 1;
+}
 message RespAdminMenuListData{
   int64 total = 1;
   repeated MenuItem list = 2;
@@ -28,9 +33,9 @@ message ReqAdminMenuAdd{
   string describe = 5;  // @gotags:  label:"描述"
   string redirect = 6;  // @gotags:  label:"重定向路由"
   string icon = 7; // @gotags:  label:"图标"
-  bool hideChildrenInMenu = 8;  // @gotags:  label:"隐藏子菜单状态"
-  bool hideInMenu = 9;  // @gotags:  label:"隐藏状态"
-  bool enabled = 10;  // @gotags:  label:"启用状态"
+  bool isHideChildrenInMenu = 8;  // @gotags:  label:"隐藏子菜单状态"
+  bool isHideInMenu = 9;  // @gotags:  label:"隐藏状态"
+  bool isEnabled = 10;  // @gotags:  label:"启用状态"
   int32 sort = 11;  // @gotags:  label:"排序值"
   string component = 12;  // @gotags:  label:"组件"
 }
@@ -51,7 +56,7 @@ message ReqAdminMenuEdit{
   string path = 3; // @gotags:  label:"菜单路由" binding:"required,adminApiPath"
   string name = 4; // @gotags:  label:"菜单名称" binding:"required,trimBlank"
   string key = 5; // @gotags:  label:"菜单键名" binding:"required,adminApiKey"
-  string describe = 6; // @gotags:  label:"描述" binding:"required,trimBlank"
+  string describe = 6; // @gotags:  label:"描述" binding:"omitempty,trimBlank"
   string icon = 7; // @gotags:  label:"菜单图标"
   int32 sort = 8; // @gotags:  label:"排序值"
   string redirect = 9; // @gotags:  label:"重定向路由"
@@ -72,7 +77,7 @@ message RespAdminMenuEnableData{}
 // 启用禁用菜单
 message ReqAdminMenuShow{
   int32 menuId = 1; // @gotags:  label:"菜单ID" binding:"required,min=1"
-  string field = 2;  // @gotags:  label:"要编辑的字段" binding:"required,trimBlank"
+  string field = 2;  // 要编辑的字段（前端不传）
   bool show = 3;  // @gotags:  label:"是否显示菜单"
 }
 message RespAdminMenuShow{}
@@ -88,7 +93,7 @@ message ReqAdminMenuPermissions{
   int32 menuId = 1;//菜单ID @gotags:  label:"菜单ID" binding:"required,min=1"
 }
 message RespAdminMenuPermissionsData{
-  AdminMenuModel menuInfo = 1;
+  AdminMenuModel menu = 1;// 菜单信息（与前端保持一致）
   repeated MenuPermissionItem permissions = 2;
 }
 

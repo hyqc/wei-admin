@@ -1,5 +1,5 @@
 <template>
-  <PageContainer title="权限管理" :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
+  <PageContainer :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
     <template #searchArea>
       <a-form layout="inline" :model="searchForm" class="search-form" @finish="onSearch">
         <a-form-item label="菜单" name="menuId">
@@ -56,7 +56,7 @@
       :loading="loading"
       :pagination="false"
       row-key="id"
-      :scroll="{ x: 1160 }"
+      :scroll="{ x: 1250 }"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'menuName'">
@@ -71,12 +71,12 @@
         </template>
         <template v-else-if="column.key === 'enabled'">
           <a-popconfirm
-            :title="`确定要${record.enabled ? '禁用' : '启用'}该权限吗？`"
+            :title="`确定要${record.isEnabled ? '禁用' : '启用'}该权限吗？`"
             ok-text="确定"
             cancel-text="取消"
             @confirm="updateEnabled(record)"
           >
-            <RowEnabledButton :is-enabled="record.enabled" />
+            <RowEnabledButton :is-enabled="record.isEnabled" />
           </a-popconfirm>
         </template>
         <template v-else-if="column.key === 'action'">
@@ -101,7 +101,7 @@
             </Authorization>
             <Authorization permission="AdminPermissionDelete">
               <a-popconfirm
-                v-if="!record.enabled"
+                v-if="!record.isEnabled"
                 title="确定要删除该权限吗？"
                 ok-text="确定"
                 cancel-text="取消"
@@ -179,6 +179,7 @@ const detailData = ref<PermissionListItem>();
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', fixed: 'left', width: 80 },
   { title: '权限名称', dataIndex: 'name', key: 'name', width: 140 },
+  { title: '菜单ID', dataIndex: 'menuId', key: 'menuId', width: 80 },
   { title: '所属菜单', dataIndex: 'menuName', key: 'menuName', width: 140 },
   { title: '唯一键', dataIndex: 'key', key: 'key', width: 180 },
   { title: '类型', dataIndex: 'type', key: 'type', width: 100 },
@@ -248,7 +249,7 @@ function onPageSizeChange(pageSize: number) {
 }
 
 function updateEnabled(record: PermissionListItem) {
-  enableAdminPermission({ id: record.id, enabled: !record.enabled }).then((res) => {
+  enableAdminPermission({ id: record.id, enabled: !record.isEnabled }).then((res) => {
     message.success(res.msg, 2);
     getRows();
   });

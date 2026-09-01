@@ -10,12 +10,29 @@
     @ok="handleOk"
     @cancel="handleCancel"
   >
-    <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+    <a-form
+      ref="formRef"
+      :model="formState"
+      :rules="rules"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 12 }"
+      autocomplete="off"
+    >
       <a-form-item label="账号" name="username">
-        <a-input v-model:value="formState.username" placeholder="请输入账号" allow-clear />
+        <!-- 禁用浏览器自动填充，避免带入已保存的登录账号密码 -->
+        <a-input
+          v-model:value="formState.username"
+          placeholder="请输入账号"
+          allow-clear
+          autocomplete="off"
+        />
       </a-form-item>
       <a-form-item label="密码" name="password">
-        <a-input-password v-model:value="formState.password" placeholder="请输入密码" />
+        <a-input-password
+          v-model:value="formState.password"
+          placeholder="请输入密码"
+          autocomplete="new-password"
+        />
       </a-form-item>
       <a-form-item label="昵称" name="nickname">
         <a-input v-model:value="formState.nickname" placeholder="请输入昵称" allow-clear />

@@ -24,6 +24,7 @@
         </div>
       </a-layout-header>
       <a-layout-content class="layout-content">
+        <TabsView />
         <router-view />
       </a-layout-content>
       <a-layout-footer class="layout-footer">
@@ -39,6 +40,7 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import SiderMenu from '@/components/SiderMenu.vue';
 import HeaderRight from '@/components/HeaderRight.vue';
 import FooterBar from '@/components/FooterBar.vue';
+import TabsView from '@/components/TabsView.vue';
 
 const collapsed = ref(false);
 </script>

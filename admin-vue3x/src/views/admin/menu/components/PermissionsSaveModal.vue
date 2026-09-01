@@ -19,17 +19,9 @@
           <div v-for="(item, index) in permissions" :key="index" class="permission-row">
             <span class="permission-type">{{ item.typeName }}</span>
             <a-space>
-              <a-input
-                v-model:value="item.name"
-                placeholder="权限名称"
-                style="width: 160px"
-              />
-              <a-input
-                v-model:value="item.key"
-                placeholder="唯一键"
-                style="width: 200px"
-                :disabled="item.id !== undefined && item.id > 0"
-              />
+              <!-- 权限名称与唯一键由系统根据菜单自动生成，不允许手动修改 -->
+              <a-input v-model:value="item.name" style="width: 160px" disabled />
+              <a-input v-model:value="item.key" style="width: 200px" disabled />
               <a-switch
                 v-model:checked="item.enabled"
                 checked-children="启用"
@@ -37,6 +29,7 @@
               />
             </a-space>
           </div>
+          <div class="permission-tip">权限名称与唯一键由系统根据菜单自动生成，不允许手动修改</div>
           <a-empty v-if="permissions.length === 0" description="暂无权限配置" />
         </a-form-item>
       </a-form>
@@ -49,6 +42,7 @@ import { ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { getAdminMenuPermissions } from '@/api/admin/menu';
 import { addAdminMenuPermissions } from '@/api/admin/permission';
+import { DEFAULT_PERMISSION_TYPES, handleKey } from '@/views/admin/permission/components/common';
 import type { MenuTreeItem, MenuPermissionItem } from '@/types/admin_menu';
 
 const props = defineProps<{
@@ -67,10 +61,29 @@ watch(
     if (val && props.detailData) {
       permissions.value = [];
       loading.value = true;
-      getAdminMenuPermissions({ menuId: props.detailData.id })
+      // 先取出菜单信息，避免异步回调中 props 变化导致取值异常
+      const menuId = props.detailData.id;
+      const menuName = props.detailData.name || '';
+      const menuPath = props.detailData.path || '';
+      getAdminMenuPermissions({ menuId })
         .then((res) => {
-          permissions.value = (res.data.permissions || []).map((item) => ({
-            ...item,
+          const existing = res.data.permissions || [];
+          if (existing.length > 0) {
+            // 后端未返回类型名称，按类型补充展示
+            permissions.value = existing.map((item) => ({
+              ...item,
+              typeName: DEFAULT_PERMISSION_TYPES.find((t) => t.key === item.type)?.name || item.type || '',
+            }));
+            return;
+          }
+          // 菜单尚未配置权限时，按菜单信息自动生成查看/编辑/删除三类
+          permissions.value = DEFAULT_PERMISSION_TYPES.map((type) => ({
+            type: type.key,
+            typeName: type.name,
+            name: `${menuName}${type.name}`,
+            key: handleKey(menuPath, type.key),
+            enabled: true,
+            describe: '',
           }));
         })
         .finally(() => {
@@ -120,5 +133,11 @@ function handleCancel() {
     flex: 0 0 48px;
     font-weight: 600;
   }
+}
+
+.permission-tip {
+  margin: 4px 0 12px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 12px;
 }
 </style>

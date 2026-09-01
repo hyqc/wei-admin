@@ -1,4 +1,4 @@
-import { LocalStorageTokenKey, LoginPath } from '@/api/config';
+import { LocalStorageTokenKey, LocalStorageTabsKey, LoginPath } from '@/api/config';
 
 /** 登录 token 存储结构 */
 export type TokenType = {
@@ -63,6 +63,8 @@ export const IsLoginPage = (): boolean => window.location.pathname === LoginPath
  */
 export const Logout = (): void => {
   localStorage.removeItem(LocalStorageTokenKey);
+  // 退出登录时清空已打开页签
+  localStorage.removeItem(LocalStorageTabsKey);
   const query = new URLSearchParams(window.location.search);
   const { pathname, search } = window.location;
   const redirect = query.get('redirect');

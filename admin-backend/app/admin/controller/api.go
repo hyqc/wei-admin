@@ -30,20 +30,45 @@ type APIController struct {
 //	@Router			/admin/api/list [post]
 func (APIController) List(ctx *gin.Context) {
 	msg := "APIController.List"
-	params := &admin_proto.ReqAdminApiList{Base: common.NewListBaseReq()}
+	// 前端分页参数为平铺结构，先按前端契约接收，再转换为内部参数
+	front := &admin_proto.ReqFrontAdminApiList{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.WithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, front); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
+	}
+	params := &admin_proto.ReqAdminApiList{
+		Base: &admin_proto.ReqListBase{
+			PageSize:        front.PageSize,
+			PageNum:         front.PageNum,
+			SortField:       front.SortField,
+			SortType:        front.SortType,
+			Enabled:         front.Enabled,
+			CreateStartTime: front.CreateStartTime,
+			CreateEndTime:   front.CreateEndTime,
+		},
+		Key:  front.Key,
+		Name: front.Name,
+		Path: front.Path,
 	}
 	data, err := logic.H.AdminAPI.List(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(data)
+	// 转换为前端结构：list + pageInfo
+	frontData := &admin_proto.RespFrontAdminApiListData{}
+	if data != nil {
+		frontData.List = data.List
+		frontData.PageInfo = &admin_proto.PageInfo{
+			Total:    data.Total,
+			PageNum:  front.PageNum,
+			PageSize: front.PageSize,
+		}
+	}
+	result.SetData(frontData)
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return

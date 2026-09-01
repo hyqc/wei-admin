@@ -39,6 +39,7 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 			return nil, err
 		}
 		resp.Token = token.Token
+		// 前端以 expire(秒) * 1000 作为过期时间戳，这里返回过期时间的秒级时间戳
 		resp.Expire = token.ExpiryAt.Unix()
 		resp.ExpireDataTime = utils.HandleTime2String(token.ExpiryAt)
 	}

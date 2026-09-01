@@ -5,6 +5,7 @@
   "description": "admin 后台管理系统（Vue 3 + TypeScript + Vite + Ant Design Vue），复刻 admin-frontend 全部功能",
   "scripts": {
     "dev": "vite",
+    "dev:mock": "vite --mode mock",
     "build": "vue-tsc --noEmit && vite build",
     "build-only": "vite build",
     "preview": "vite preview"

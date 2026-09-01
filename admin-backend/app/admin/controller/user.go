@@ -30,20 +30,45 @@ type UserController struct {
 //	@Router			/admin/user/list [post]
 func (UserController) List(ctx *gin.Context) {
 	msg := "UserController.List"
-	params := &admin_proto.ReqAdminUserList{Base: common.NewListBaseReq()}
+	// 前端分页参数为平铺结构，先按前端契约接收，再转换为内部参数
+	front := &admin_proto.ReqFrontAdminUserList{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.WithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, front); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
+	}
+	params := &admin_proto.ReqAdminUserList{
+		Base: &admin_proto.ReqListBase{
+			PageSize:        front.PageSize,
+			PageNum:         front.PageNum,
+			SortField:       front.SortField,
+			SortType:        front.SortType,
+			Enabled:         front.Enabled,
+			CreateStartTime: front.CreateStartTime,
+			CreateEndTime:   front.CreateEndTime,
+		},
+		Username: front.Username,
+		Nickname: front.Nickname,
+		Email:    front.Email,
 	}
 	data, err := logic.H.AdminUser.List(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(data)
+	// 转换为前端结构：list + pageInfo
+	frontData := &admin_proto.RespFrontAdminUserListData{}
+	if data != nil {
+		frontData.List = data.List
+		frontData.PageInfo = &admin_proto.PageInfo{
+			Total:    data.Total,
+			PageNum:  data.PageNum,
+			PageSize: data.PageSize,
+		}
+	}
+	result.SetData(frontData)
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
@@ -102,7 +127,28 @@ func (UserController) Info(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(info)
+	// 转换为前端结构：账号信息 + 角色ID列表
+	frontData := &admin_proto.RespFrontAdminUserInfoData{}
+	if info != nil && info.Data != nil {
+		admin := info.Data
+		frontData.AdminId = admin.AdminId
+		frontData.Username = admin.Username
+		frontData.Nickname = admin.Nickname
+		frontData.Email = admin.Email
+		frontData.Avatar = admin.Avatar
+		frontData.LoginTotal = admin.LoginTotal
+		frontData.LastLoginIp = admin.LastLoginIp
+		frontData.LastLoginTime = admin.LastLoginTime
+		frontData.IsEnabled = admin.Enabled
+		frontData.CreatedAt = admin.CreatedAt
+		frontData.UpdatedAt = admin.UpdatedAt
+		frontData.Roles = admin.Roles
+		frontData.IsSuperAdmin = constant.IsAdministrator(admin.AdminId)
+		for _, role := range admin.Roles {
+			frontData.RoleIds = append(frontData.RoleIds, role.RoleId)
+		}
+	}
+	result.SetData(frontData)
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 }

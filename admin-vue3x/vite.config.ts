@@ -20,10 +20,11 @@ export default defineConfig(({ mode }) => {
       port: 8000,
       open: false,
       proxy: {
-        // 未启用 mock 时，将 /api 代理到真实后端
+        // 未启用 mock 时，将 /api 代理到真实后端（后端路由无 /api 前缀，转发时需移除）
         '/api': {
           target: 'http://127.0.0.1:3000',
           changeOrigin: true,
+          rewrite: (path: string) => path.replace(/^\/api/, ''),
         },
       },
     },

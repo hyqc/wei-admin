@@ -18,7 +18,7 @@
         <a-input v-model:value="formState.name" placeholder="请输入权限名称" allow-clear />
       </a-form-item>
       <a-form-item label="权限类型" name="type">
-        <a-radio-group v-model:value="formState.type">
+        <a-radio-group v-model:value="formState.type" @change="onTypeChange">
           <a-radio-button
             v-for="item in DEFAULT_PERMISSION_TYPES"
             :key="item.key"
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
-import { DEFAULT_PERMISSION_TYPES } from './common';
+import { DEFAULT_PERMISSION_TYPES, handleKey } from './common';
 import { editAdminPermission } from '@/api/admin/permission';
 import { AdminPerssionKey } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
@@ -90,10 +90,18 @@ watch(
       formState.type = props.detailData.type || 'view';
       formState.key = props.detailData.key || '';
       formState.describe = props.detailData.describe || '';
-      formState.enabled = props.detailData.enabled ?? true;
+      formState.enabled = props.detailData.isEnabled ?? true;
     }
   },
 );
+
+/** 切换权限类型时，唯一键跟随菜单路径 + 类型重新生成 */
+function onTypeChange() {
+  const menuPath = props.detailData?.menuPath || '';
+  if (menuPath) {
+    formState.key = handleKey(menuPath, formState.type);
+  }
+}
 
 function handleOk() {
   formRef.value

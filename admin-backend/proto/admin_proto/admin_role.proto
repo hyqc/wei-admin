@@ -16,6 +16,24 @@ message RespAdminRoleListData{
   repeated RoleItem list = 2;
 }
 
+// 角色列表请求参数（与前端保持一致：分页参数平铺传递）
+message ReqFrontAdminRoleList{
+  int32 pageSize = 1; // 每页条数
+  int32 pageNum = 2; // 页码
+  string sortField = 3; // 排序字段
+  string sortType = 4; // 排序值
+  int32 enabled = 5; // 0：全部 1：启用 2：禁用
+  int64 createStartTime = 6; // 查询开始时间戳秒
+  int64 createEndTime = 7; // 查询结束时间戳秒
+  string name = 8; // 角色名称
+}
+
+// 角色列表返回（与前端保持一致：list + pageInfo）
+message RespFrontAdminRoleListData{
+  repeated RoleItem list = 1;
+  PageInfo pageInfo = 2;
+}
+
 //有效角色列表
 message ReqAdminRoleAll{
   int32 id=1;//角色ID
@@ -49,6 +67,7 @@ message RespAdminRoleInfoData{
   string updatedAt=10;//更新时间
   repeated RolePermissionItem permissions=11;
   repeated int32 permissionIds=12;
+  bool isSuperAdmin=13;//是否超级管理员角色
 }
 
 //编辑角色
@@ -70,7 +89,7 @@ message RespAdminRoleEnableData{}
 //删除角色
 message ReqAdminRoleDelete{
   int32 id=1; // @gotags: label:"角色ID" binding:"required,min=1"
-  repeated int32 permissionIds=2; // @gotags: label:"权限ID集合" binding:"required,min=1"
+  repeated int32 permissionIds=2; // 权限ID集合（前端不传）
 }
 message RespAdminRoleDeleteData{}
 
@@ -101,6 +120,7 @@ message RoleItem{
   bool isEnabled = 6;//是否启用
   string createdAt = 7;
   string updatedAt = 8;
+  bool isSuperAdmin = 9;//是否超级管理员角色（ID 恒为 1，自动拥有全部权限）
 }
 
 //角色权限

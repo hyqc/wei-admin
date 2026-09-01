@@ -33,8 +33,8 @@ message RespAccountEditData{
 // 修改密码
 message ReqAccountPasswordEdit{
   string oldPassword=1;//旧密码 @gotags:  binding:"required,adminpwd" label:"旧密码"
-  string password=2;//新密码 @gotags:  binding:"required,adminpwd" label:"新密码"
-  string confirmPassword=3;//确认密码  @gotags: binding:"required,adminpwd,eqfield=Password" label:"确认密码"
+  string newPassword=2;//新密码（与前端保持一致） @gotags:  binding:"required,adminpwd" label:"新密码"
+  string confirmPassword=3;//确认密码  @gotags: binding:"required,adminpwd,eqfield=NewPassword" label:"确认密码"
 }
 message RespAccountPasswordEditData{
 }

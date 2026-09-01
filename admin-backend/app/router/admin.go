@@ -11,6 +11,7 @@ func admins(g *gin.RouterGroup) {
 	{
 		accountApi := adminCtl.AccountController{}
 		account.POST("/login", accountApi.Login)
+		account.POST("/logout", accountApi.Logout)
 		account.POST("/info", accountApi.Info)
 		account.POST("/edit", accountApi.Edit)
 		account.POST("/password", accountApi.Password)
@@ -57,6 +58,7 @@ func admins(g *gin.RouterGroup) {
 		menu.POST("/show", menuAPI.Show)
 		menu.POST("/delete", menuAPI.Delete)
 		menu.POST("/permissions", menuAPI.Permissions)
+		menu.POST("/all", menuAPI.All)
 	}
 
 	permission := admin.Group("/permission")
@@ -84,5 +86,6 @@ func admins(g *gin.RouterGroup) {
 		role.POST("/enable", roleAPI.Enable)
 		role.POST("/delete", roleAPI.Delete)
 		role.POST("/bind_permissions", roleAPI.BindPermissions)
+		role.POST("/permissions", roleAPI.Permissions)
 	}
 }

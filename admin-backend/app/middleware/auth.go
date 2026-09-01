@@ -23,8 +23,11 @@ func auth() gin.HandlerFunc {
 				return
 			}
 
+			// 支持 /xxx/* 前缀匹配
 			for v := range m {
 				if len(v) != 0 && strings.HasSuffix(v, "*") && strings.HasPrefix(ctx.Request.URL.Path, v[:len(v)-1]) {
+					ctx.Next()
+					return
 				}
 			}
 		}

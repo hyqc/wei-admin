@@ -30,20 +30,46 @@ type PermissionController struct {
 //	@Router			/admin/permission/list [post]
 func (PermissionController) List(ctx *gin.Context) {
 	msg := "PermissionController.List"
-	params := &admin_proto.ReqAdminPermissionList{}
+	// 前端分页参数为平铺结构，先按前端契约接收，再转换为内部参数
+	front := &admin_proto.ReqFrontAdminPermissionList{}
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.WithCtx(ctx, params); err != nil {
+	if err := validate.WithCtx(ctx, front); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
+	}
+	params := &admin_proto.ReqAdminPermissionList{
+		Base: &admin_proto.ReqListBase{
+			PageSize:        front.PageSize,
+			PageNum:         front.PageNum,
+			SortField:       front.SortField,
+			SortType:        front.SortType,
+			Enabled:         front.Enabled,
+			CreateStartTime: front.CreateStartTime,
+			CreateEndTime:   front.CreateEndTime,
+		},
+		MenuId: front.MenuId,
+		Key:    front.Key,
+		Name:   front.Name,
+		Type:   front.Type,
 	}
 	data, err := logic.H.AdminPermission.List(ctx, params)
 	if err != nil {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(data)
+	// 转换为前端结构：list + pageInfo
+	frontData := &admin_proto.RespFrontAdminPermissionListData{}
+	if data != nil {
+		frontData.List = data.List
+		frontData.PageInfo = &admin_proto.PageInfo{
+			Total:    data.Total,
+			PageNum:  front.PageNum,
+			PageSize: front.PageSize,
+		}
+	}
+	result.SetData(frontData)
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
@@ -102,7 +128,28 @@ func (PermissionController) Info(ctx *gin.Context) {
 		common.HandleLogicError(ctx, err, msg, result)
 		return
 	}
-	result.SetData(info)
+	// 转换为前端结构：权限信息 + 已绑定的接口ID列表
+	frontData := &admin_proto.RespFrontAdminPermissionInfoData{}
+	if info != nil {
+		frontData.Id = info.Id
+		frontData.MenuId = info.MenuId
+		frontData.MenuName = info.MenuName
+		frontData.MenuPath = info.MenuPath
+		frontData.Apis = info.Apis
+		frontData.Key = info.Key
+		frontData.Name = info.Name
+		frontData.Describe = info.Describe
+		frontData.Type = info.Type
+		frontData.TypeText = info.TypeText
+		frontData.Redirect = info.Redirect
+		frontData.IsEnabled = info.IsEnabled
+		frontData.CreatedAt = info.CreatedAt
+		frontData.UpdatedAt = info.UpdatedAt
+		for _, api := range info.Apis {
+			frontData.ApiIds = append(frontData.ApiIds, api.Id)
+		}
+	}
+	result.SetData(frontData)
 	global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result))
 	code.JSON(ctx, result)
 	return
@@ -265,13 +312,18 @@ func (PermissionController) UnBindAPI(ctx *gin.Context) {
 //	@Router			/admin/permission/add_menu_permissions [post]
 func (PermissionController) AddMenuPermissions(ctx *gin.Context) {
 	msg := "PermissionController.AddMenuPermissions"
-	params := &admin_proto.ReqAdminPermissionBindMenu{}
+	// 前端直接提交权限数组，这里组装成内部参数
+	permissions := make([]*admin_proto.ReqAdminPermissionAdd, 0)
 	result := code.NewCode(code_proto.ErrorCode_Success)
-	if err := validate.WithCtx(ctx, params); err != nil {
+	if err := ctx.ShouldBindJSON(&permissions); err != nil {
 		result.SetCodeMsg(code_proto.ErrorCode_RequestParamsInvalid, err)
 		global.LogSugar.Debugw(msg, zap.Any(constant.LogResponseMsgField, result), zap.Any("error", err))
 		code.JSON(ctx, result)
 		return
+	}
+	params := &admin_proto.ReqAdminPermissionBindMenu{Permissions: permissions}
+	if len(permissions) > 0 {
+		params.MenuId = permissions[0].MenuId
 	}
 	if err := logic.H.AdminPermission.AddMenuPermissions(ctx, params); err != nil {
 		common.HandleLogicError(ctx, err, msg, result)

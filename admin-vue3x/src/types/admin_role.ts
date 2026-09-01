@@ -61,6 +61,8 @@ export interface RoleItem {
   isEnabled?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  /** 是否超级管理员角色（ID 恒为 1，自动拥有全部权限，仅可修改描述） */
+  isSuperAdmin?: boolean;
 }
 
 /** 角色权限 */

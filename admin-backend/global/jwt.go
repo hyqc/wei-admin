@@ -2,6 +2,7 @@ package global
 
 import (
 	"admin/pkg/utils/jwt"
+	"strings"
 	"time"
 )
 
@@ -23,11 +24,13 @@ func initJwt() error {
 		AppConfig.JWT.IgnoresMap = map[string]map[string]struct{}{}
 	}
 	for _, val := range AppConfig.JWT.Ignores {
+		// 请求方法统一大写，与 ctx.Request.Method（POST/GET）保持一致
+		method := strings.ToUpper(strings.TrimSpace(val.Method))
 		for _, v := range val.Paths {
-			if _, ok := AppConfig.JWT.IgnoresMap[val.Method]; !ok {
-				AppConfig.JWT.IgnoresMap[val.Method] = map[string]struct{}{}
+			if _, ok := AppConfig.JWT.IgnoresMap[method]; !ok {
+				AppConfig.JWT.IgnoresMap[method] = map[string]struct{}{}
 			}
-			AppConfig.JWT.IgnoresMap[val.Method][v] = struct{}{}
+			AppConfig.JWT.IgnoresMap[method][v] = struct{}{}
 		}
 	}
 

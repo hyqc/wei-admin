@@ -1,5 +1,5 @@
 <template>
-  <PageContainer title="接口管理" :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
+  <PageContainer :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
     <template #searchArea>
       <a-form layout="inline" :model="searchForm" class="search-form" @finish="onSearch">
         <a-form-item label="唯一键" name="key">

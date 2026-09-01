@@ -90,7 +90,7 @@ export interface PermissionListItem {
   /** 权限类型名称 */
   typeText?: string;
   /** 是否启用 */
-  enabled?: boolean;
+  isEnabled?: boolean;
 }
 
 /** 权限接口列表 */

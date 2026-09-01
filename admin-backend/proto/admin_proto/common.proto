@@ -18,6 +18,13 @@ message ReqListBase{
   int64 createEndTime = 7; //查询结束时间戳秒
 }
 
+// 分页信息（与前端 PageInfoType 保持一致）
+message PageInfo{
+  int32 pageSize = 1; // 每页条数
+  int32 pageNum = 2; // 当前页码
+  int64 total = 3; // 总条数
+}
+
 // 接口列表返回结构
 message AdminApiItem{
   int32  id = 1;
@@ -46,6 +53,7 @@ message AdminUserListItem{
   string updatedAt = 11; // 更新时间
   repeated AdminUserRoleItem roles = 12;
   bool isEnabledButtonDisabled = 13;
+  bool isSuperAdmin = 14; // 是否超级管理员（ID 恒为 1，自动拥有全部权限）
 }
 // 账号角色列表
 message AdminUserRoleItem{

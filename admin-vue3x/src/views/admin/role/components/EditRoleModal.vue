@@ -12,7 +12,13 @@
   >
     <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
       <a-form-item label="角色名称" name="name">
-        <a-input v-model:value="formState.name" placeholder="请输入角色名称" allow-clear />
+        <a-input
+          v-model:value="formState.name"
+          placeholder="请输入角色名称"
+          allow-clear
+          :disabled="isSuperAdmin"
+        />
+        <div v-if="isSuperAdmin" class="form-tip">超级管理员角色名称不可修改，仅可修改描述</div>
       </a-form-item>
       <a-form-item label="描述" name="describe">
         <a-textarea v-model:value="formState.describe" placeholder="请输入角色描述" :rows="4" />
@@ -22,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { editAdminRole } from '@/api/admin/role';
 import { DefaultModalWidth } from '@/api/config';
@@ -41,6 +47,9 @@ const formState = reactive<{ name: string; describe: string }>({
   name: '',
   describe: '',
 });
+
+/** 超管角色仅允许修改描述 */
+const isSuperAdmin = computed(() => !!props.detailData?.isSuperAdmin);
 
 const rules = {
   name: [
@@ -82,3 +91,11 @@ function handleOk() {
     .catch(() => {});
 }
 </script>
+
+<style scoped lang="less">
+.form-tip {
+  margin-top: 4px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 12px;
+}
+</style>

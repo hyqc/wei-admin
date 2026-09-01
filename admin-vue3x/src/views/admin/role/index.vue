@@ -1,5 +1,5 @@
 <template>
-  <PageContainer title="角色管理" :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
+  <PageContainer :page-info="pageInfo" @page-change="onPageChange" @page-size-change="onPageSizeChange">
     <template #searchArea>
       <a-form layout="inline" :model="searchForm" class="search-form" @finish="onSearch">
         <a-form-item label="角色名称" name="name">
@@ -42,7 +42,13 @@
       :scroll="{ x: 1320 }"
     >
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'isEnabled'">
+        <template v-if="column.key === 'name'">
+          <a-space>
+            <span>{{ record.name }}</span>
+            <a-tag v-if="record.isSuperAdmin" color="gold">超级管理员</a-tag>
+          </a-space>
+        </template>
+        <template v-else-if="column.key === 'isEnabled'">
           <a-popconfirm
             :title="`确定要${record.isEnabled ? '禁用' : '启用'}该角色吗？`"
             ok-text="确定"
@@ -61,8 +67,8 @@
               </a-button>
             </Authorization>
             <Authorization permission="AdminRoleEdit">
-              <!-- 超级管理员角色不允许编辑 -->
-              <a-button v-if="record.id !== 1" type="link" size="small" @click="openEditModal(record)">
+              <!-- 超管角色允许编辑，但仅可修改描述 -->
+              <a-button type="link" size="small" @click="openEditModal(record)">
                 <template #icon><EditOutlined /></template>
                 编辑
               </a-button>
