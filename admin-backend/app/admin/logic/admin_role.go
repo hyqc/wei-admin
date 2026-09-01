@@ -210,6 +210,24 @@ func (a *AdminRoleLogic) Delete(ctx *gin.Context, params *admin_proto.ReqAdminRo
 }
 
 func (a *AdminRoleLogic) RolePermissions(ctx *gin.Context, params *admin_proto.ReqAdminRolePermissions) (list []*admin_proto.RolePermissionItem, err error) {
+	// 超管角色自动拥有全部权限，不能只返回角色-权限绑定关系（绑定表通常并未全量绑定）
+	if constant.IsAdministratorRole(params.Id) {
+		permissions, err := dao.H.AdminPermission.FindAdministerPermissions(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, item := range permissions {
+			list = append(list, &admin_proto.RolePermissionItem{
+				RoleId:             params.Id,
+				PermissionId:       item.ID,
+				PermissionName:     item.Name,
+				PermissionKey:      item.Key,
+				PermissionType:     item.Type,
+				PermissionTypeText: dao.AdminPermissionTypeTextMap[dao.AdminPermissionType(item.Type)],
+			})
+		}
+		return list, nil
+	}
 	data, err := dao.H.AdminRole.FindAdminRolePermissionByRoleId(ctx, params.Id)
 	if err != nil {
 		return nil, err

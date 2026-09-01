@@ -30,6 +30,11 @@
 - 图标选择用公共组件 `@/components/IconSelect.vue`（`v-model:value`，支持搜索）
 - 注意：`import * as AntIcons from '@ant-design/icons-vue'` 为全量引入，图标名列表按 `/Outlined$/` 过滤即可，不要用 `typeof === 'object'` 判断图标组件
 
+## 超管语义约定
+- 超管账号（adminId=1）与超管角色（roleId=1）自动拥有全部权限，判断用 `constant.IsAdministrator` / `constant.IsAdministratorRole`
+- 但 `admin_role_permission` 绑定表**并未给超管角色全量绑定**（实际只有 6 条），因此涉及"超管拥有的权限"的查询（如 `/admin/role/permissions`）必须走 `dao.H.AdminPermission.FindAdministerPermissions` 返回全部启用权限，不能只查绑定表
+- 超管角色不允许绑定权限（前端隐藏按钮），仅可修改描述
+
 ## 用户偏好（交互形态）
 - 角色详情"绑定权限"、权限"绑定接口"弹窗**保持树形展示**，接口节点用 `名称（唯一键）` 纯文本，不要改成表格/标签+下划线
 - 接口"唯一键"输入框只读，只能由接口路径自动生成
