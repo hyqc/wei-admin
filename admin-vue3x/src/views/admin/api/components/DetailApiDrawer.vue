@@ -6,6 +6,7 @@
     @close="emit('update:open', false)"
   >
     <a-descriptions :column="1" bordered>
+      <a-descriptions-item label="接口ID">{{ detailData?.id }}</a-descriptions-item>
       <a-descriptions-item label="接口名称">{{ detailData?.name }}</a-descriptions-item>
       <a-descriptions-item label="唯一键">{{ detailData?.key }}</a-descriptions-item>
       <a-descriptions-item label="接口路径">{{ detailData?.path }}</a-descriptions-item>

@@ -28,11 +28,15 @@ func getAccountInfo(ctx context.Context, data *model.AdminUser, refreshToken boo
 		Menus:         make(map[string]*admin_proto.MenuItem),
 		Permissions:   make(map[string]string),
 	}
-	lastLoginIp, err := getLastLoginIp(data.LastLoginIP)
+	// 登录IP：last_login_ip 为 JSON 数组，最多保留最近两次登录IP（第一个为上次，最后一个为本次）
+	lastLoginIp, currentLoginIp, err := getLoginIps(data.LastLoginIP)
 	if err != nil {
 		return nil, err
 	}
 	resp.LastLoginIp = lastLoginIp
+	resp.CurrentLoginIp = currentLoginIp
+	// 数据库只保存最近一次登录时间，即本次登录时间
+	resp.CurrentLoginTime = resp.LastLoginTime
 	if refreshToken {
 		token, err := createToken(data.ID, data.Username, int64(seconds))
 		if err != nil {
@@ -96,14 +100,14 @@ func getMyMenusAndPermissions(ctx context.Context, adminId int32) (menus []*admi
 	return menus, permissionKeys, err
 }
 
-func getLastLoginIp(ips string) (string, error) {
+// getLoginIps 解析 last_login_ip（JSON 数组，最多保留最近两次登录IP），返回上次登录IP与本次登录IP
+func getLoginIps(ips string) (lastIp, currentIp string, err error) {
 	res := make([]string, 0)
-	err := json.Unmarshal([]byte(ips), &res)
-	if err != nil {
-		return "", err
+	if err = json.Unmarshal([]byte(ips), &res); err != nil {
+		return "", "", err
 	}
 	if len(res) == 0 {
-		return "", nil
+		return "", "", nil
 	}
-	return res[len(res)-1], nil
+	return res[0], res[len(res)-1], nil
 }

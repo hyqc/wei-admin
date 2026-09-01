@@ -42,6 +42,11 @@ export function HandleRemoteMenuIntoLocal(
     const tmpItem: MenuConfigItem = { ...item };
     if (tmpItem.key && remoteMenus[tmpItem.key]) {
       tmpItem.hideInMenu = !!remoteMenus[tmpItem.key].hideInMenu;
+      // 图标以后端配置为准，后端未配置时沿用本地默认图标
+      const remoteIcon = remoteMenus[tmpItem.key].icon;
+      if (remoteIcon !== undefined && remoteIcon !== null) {
+        tmpItem.icon = remoteIcon;
+      }
       result.push(tmpItem);
       if ((item as any)[childrenKey]?.length > 0) {
         (tmpItem as any)[childrenKey] = [];

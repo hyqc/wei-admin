@@ -47,6 +47,10 @@ export interface AdminUserListItem {
   lastLoginIp?: string;
   /** 上次登录时间 */
   lastLoginTime?: string;
+  /** 本次登录IP */
+  currentLoginIp?: string;
+  /** 本次登录时间 */
+  currentLoginTime?: string;
   /** 是否启用 */
   isEnabled?: boolean;
   /** 创建时间 */

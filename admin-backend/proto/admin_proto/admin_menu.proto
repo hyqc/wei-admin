@@ -117,7 +117,8 @@ message MenuItem{
   string key = 1; // 菜单唯一键
   string path = 2; // 菜单路由
   string name = 3; // 菜单名称
-  string icon = 4; // 菜单图标
+  // 菜单图标（使用 optional 保证无图标时也返回空字符串字段，而非被序列化省略）
+  optional string icon = 4;
   string component = 5;
   string authority = 6;
   bool hideInMenu = 7;
@@ -149,8 +150,8 @@ message MenuTreeItem{
   //菜单排序
   int32 sort = 10;
 
-  //菜单图标
-  string icon = 11;
+  //菜单图标（使用 optional 保证无图标时也返回空字符串字段，而非被序列化省略）
+  optional string icon = 11;
   //是否在菜单中隐藏子菜单
   bool hideChildrenInMenu = 12;
   //是否隐藏菜单

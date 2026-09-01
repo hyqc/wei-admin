@@ -18,17 +18,21 @@
       <template v-for="item in menuItems" :key="item.key">
         <a-menu-item v-if="!item.children || item.children.length === 0" :key="item.key">
           <router-link :to="item.path">
-            <component :is="iconMap[item.icon || '']" v-if="item.icon && iconMap[item.icon]" />
+            <component :is="menuIcon(item.icon)" v-if="menuIcon(item.icon)" />
+            <span v-else class="menu-icon-placeholder" aria-hidden="true"></span>
             <span>{{ item.name }}</span>
           </router-link>
         </a-menu-item>
         <a-sub-menu v-else :key="item.key">
           <template #title>
-            <component :is="iconMap[item.icon || '']" v-if="item.icon && iconMap[item.icon]" />
+            <component :is="menuIcon(item.icon)" v-if="menuIcon(item.icon)" />
+            <span v-else class="menu-icon-placeholder" aria-hidden="true"></span>
             <span>{{ item.name }}</span>
           </template>
           <a-menu-item v-for="child in item.children" :key="child.key">
             <router-link :to="child.path">
+              <component :is="menuIcon(child.icon)" v-if="menuIcon(child.icon)" />
+              <span v-else class="menu-icon-placeholder" aria-hidden="true"></span>
               <span>{{ child.name }}</span>
             </router-link>
           </a-menu-item>
@@ -41,15 +45,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import {
-  HomeOutlined,
-  SettingOutlined,
-  UserOutlined,
-  TeamOutlined,
-  MenuOutlined,
-  ApiOutlined,
-} from '@ant-design/icons-vue';
 import { useUserStore } from '@/store/user';
+import { getAntIcon } from '@/utils/icon';
 import { HandleRemoteMenuIntoLocal, localMenuData, type MenuConfigItem } from '@/router/menu';
 import { HomePath } from '@/api/config';
 
@@ -59,14 +56,10 @@ const route = useRoute();
 const router = useRouter();
 const store = useUserStore();
 
-const iconMap: Record<string, any> = {
-  HomeOutlined,
-  SettingOutlined,
-  UserOutlined,
-  TeamOutlined,
-  MenuOutlined,
-  ApiOutlined,
-};
+/** 按名称取图标组件，支持菜单管理中配置的任意 ant 图标 */
+function menuIcon(name?: string) {
+  return getAntIcon(name);
+}
 
 /** 根据远程菜单过滤本地菜单 */
 const menuItems = computed<MenuConfigItem[]>(() => {
@@ -112,6 +105,14 @@ const onOpenChange = (keys: string[]) => {
 <style scoped lang="less">
 .sider-menu {
   height: 100%;
+
+  // 无图标时占位，保持与有图标菜单的文本对齐
+  .menu-icon-placeholder {
+    display: inline-block;
+    flex: none;
+    width: 16px;
+    margin-right: 10px;
+  }
 
   .logo {
     display: flex;

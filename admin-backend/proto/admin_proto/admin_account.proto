@@ -68,4 +68,6 @@ message AdminInfo{
   map<string, MenuItem> menus = 15;
   map<string, string> permissions = 16;
   repeated AdminUserRoleItem roles = 17;
+  string currentLoginIp = 18; // 本次登录IP
+  string currentLoginTime = 19; // 本次登录时间
 }

@@ -67,6 +67,8 @@ func (a *AdminMenuLogic) Tree(ctx *gin.Context) ([]*admin_proto.MenuTreeItem, er
 		tmp.HideChildrenInMenu = item.IsHideChildrenInMenu
 		tmp.CreateTime = item.CreatedAt.Unix()
 		tmp.ModifyTime = item.UpdatedAt.Unix()
+		// 图标为 optional 指针，BeanCopy 无法转换，需单独赋值以保证字段恒返回
+		tmp.Icon = &item.Icon
 		tmp.Children = make([]*admin_proto.MenuTreeItem, 0)
 		menusMap[item.ParentID] = append(menusMap[item.ParentID], tmp)
 	}
@@ -283,6 +285,8 @@ func (a *AdminMenuLogic) handleItemData(item *model.AdminMenu) (data *admin_prot
 	if err != nil {
 		return nil, err
 	}
+	// 图标为 optional 指针，BeanCopy 不会自动转换，需单独赋值以保证字段恒返回
+	data.Icon = &item.Icon
 	return data, nil
 }
 

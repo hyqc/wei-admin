@@ -57,6 +57,8 @@ message RespFrontAdminUserInfoData{
   bool isEnabledButtonDisabled = 13; // 是否禁用启停按钮
   repeated int32 roleIds = 14; // 角色ID列表
   bool isSuperAdmin = 15; // 是否超级管理员（ID 恒为 1，自动拥有全部权限）
+  string currentLoginIp = 16; // 本次登录IP
+  string currentLoginTime = 17; // 本次登录时间
 }
 
 // 账号详情

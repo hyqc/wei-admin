@@ -56,7 +56,8 @@ func getAllFatherMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentId 
 			Key:                menu.Key,
 			Path:               menu.Path,
 			Name:               menu.Name,
-			Icon:               menu.Icon,
+			// 取指针，保证无图标时也返回空字符串字段
+			Icon:               &menu.Icon,
 			Component:          menu.Component,
 			HideInMenu:         menu.IsHideInMenu,
 			HideChildrenInMenu: menu.IsHideChildrenInMenu,
@@ -76,7 +77,8 @@ func getAllChildrenMenuByChildrenId(menusMap map[int32]*model.AdminMenu, parentI
 				Key:                menu.Key,
 				Path:               menu.Path,
 				Name:               menu.Name,
-				Icon:               menu.Icon,
+				// 取指针，保证无图标时也返回空字符串字段
+				Icon:               &menu.Icon,
 				Component:          menu.Component,
 				HideInMenu:         menu.IsHideInMenu,
 				HideChildrenInMenu: menu.IsHideChildrenInMenu,

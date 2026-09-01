@@ -72,17 +72,23 @@ func (a *AdminRoleLogic) HandleItemData(item *model.AdminRole) (data *admin_prot
 	return data, nil
 }
 
+// checkNameExist 角色名唯一性预检，excludeId 为需要排除的角色 ID（编辑时传自身 ID，新增时传 0）
+func (a *AdminRoleLogic) checkNameExist(ctx *gin.Context, name string, excludeId int32) error {
+	exist, err := dao.H.AdminRole.FindByName(ctx, name)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return err
+	}
+	if exist != nil && exist.ID != excludeId {
+		return code.NewCodeError(code_proto.ErrorCode_AdminRoleNameExist, nil)
+	}
+	return nil
+}
+
 func (a *AdminRoleLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminRoleAdd) error {
 	adminId := constant.GetCustomClaims(ctx).AccountId
 	// 角色名唯一性预检（部分库未建 uk_name 索引，需在此拦截）
-	roles, err := dao.H.AdminRole.FindAllValid(ctx)
-	if err != nil {
+	if err := a.checkNameExist(ctx, params.Name, 0); err != nil {
 		return err
-	}
-	for _, item := range roles {
-		if item.Name == params.Name {
-			return code.NewCodeError(code_proto.ErrorCode_AdminRoleNameExist, nil)
-		}
 	}
 	data := &model.AdminRole{
 		Name:          params.Name,
@@ -158,10 +164,21 @@ func (a *AdminRoleLogic) Edit(ctx *gin.Context, params *admin_proto.ReqAdminRole
 	// 前端仅提交名称与描述，启用状态保持不变
 	// 超管角色（ID=1）仅允许修改描述，名称保持不变
 	if !constant.IsAdministratorRole(params.Id) {
+		// 角色名唯一性预检（排除自身，未改名时不会误报）
+		if err := a.checkNameExist(ctx, params.Name, params.Id); err != nil {
+			return err
+		}
 		adminInfo.Name = params.Name
 	}
 	adminInfo.Describe = params.Describe
-	return dao.H.AdminRole.Update(ctx, adminInfo)
+	// 角色名唯一键冲突，返回“角色名称已存在”
+	if err := dao.H.AdminRole.Update(ctx, adminInfo); err != nil {
+		if strings.Contains(err.Error(), "uk_name") {
+			return code.NewCodeError(code_proto.ErrorCode_AdminRoleNameExist, err)
+		}
+		return err
+	}
+	return nil
 }
 
 func (a *AdminRoleLogic) Enable(ctx *gin.Context, params *admin_proto.ReqAdminRoleEnable) error {

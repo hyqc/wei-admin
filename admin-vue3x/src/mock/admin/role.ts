@@ -34,6 +34,7 @@ const entries: MockEntry[] = [
     url: '/api/admin/role/add',
     method: 'POST',
     response: ({ body }) => {
+      if (rows.some((i) => i.name === body.name)) return fail('角色名称已存在', null, 800002);
       rows.push({
         id: rows.length + 1,
         name: body.name,
@@ -54,6 +55,9 @@ const entries: MockEntry[] = [
       const role = findRole(body.id);
       if (!role) return fail('角色不存在');
       if (role.id === 1) return fail('管理员角色不允许编辑');
+      if (body.name !== undefined && rows.some((i) => i.name === body.name && i.id !== body.id)) {
+        return fail('角色名称已存在', null, 800002);
+      }
       if (body.name !== undefined) role.name = body.name;
       if (body.describe !== undefined) role.describe = body.describe;
       role.updatedAt = now();

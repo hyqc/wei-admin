@@ -46,7 +46,8 @@ func GetMenuTreeWithTop(children []*admin_proto.MenuTreeItem) []*admin_proto.Men
 		Redirect:           "",
 		Component:          "",
 		Sort:               0,
-		Icon:               "",
+		// 图标为 optional 指针，空值也需显式赋值以保证字段恒返回
+		Icon:               new(string),
 		HideChildrenInMenu: false,
 		HideInMenu:         false,
 		Enabled:            true,

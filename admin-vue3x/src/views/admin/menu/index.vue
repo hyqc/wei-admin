@@ -15,13 +15,20 @@
       :expanded-row-keys="expandedRowKeys"
       @update:expanded-row-keys="(keys: number[]) => (expandedRowKeys = keys)"
       row-key="id"
-      :scroll="{ x: 1160 }"
+      :scroll="{ x: 1320 }"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'name'">
           <a-space>
             <span>{{ record.name }}</span>
           </a-space>
+        </template>
+        <template v-else-if="column.key === 'icon'">
+          <span v-if="menuIcon(record.icon)" class="icon-cell">
+            <component :is="menuIcon(record.icon)" />
+            <span>{{ record.icon }}</span>
+          </span>
+          <span v-else>-</span>
         </template>
         <template v-else-if="column.key === 'isEnabled'">
           <a-popconfirm
@@ -43,6 +50,12 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space>
+            <Authorization permission="AdminMenuView">
+              <a-button type="link" size="small" @click="openDetailModal(record)">
+                <template #icon><EyeOutlined /></template>
+                详情
+              </a-button>
+            </Authorization>
             <Authorization permission="AdminMenuEdit">
               <a-button type="link" size="small" @click="openAddModal(record)">
                 <template #icon><PlusOutlined /></template>
@@ -53,12 +66,6 @@
               <a-button type="link" size="small" @click="openEditModal(record)">
                 <template #icon><EditOutlined /></template>
                 编辑
-              </a-button>
-            </Authorization>
-            <Authorization permission="AdminMenuView">
-              <a-button type="link" size="small" @click="openDetailModal(record)">
-                <template #icon><EyeOutlined /></template>
-                详情
               </a-button>
             </Authorization>
             <Authorization permission="AdminMenuEdit">
@@ -113,7 +120,13 @@ import SaveMenuModal from './components/SaveMenuModal.vue';
 import DetailMenuDrawer from './components/DetailMenuDrawer.vue';
 import PermissionsSaveModal from './components/PermissionsSaveModal.vue';
 import { getAdminMenuTree, deleteAdminMenu, enableAdminMenu, showAdminMenu } from '@/api/admin/menu';
+import { getAntIcon } from '@/utils/icon';
 import type { MenuTreeItem } from '@/types/admin_menu';
+
+/** 按名称取图标组件，未配置时返回 undefined */
+function menuIcon(name?: string) {
+  return getAntIcon(name);
+}
 
 const loading = ref(false);
 const rows = ref<MenuTreeItem[]>([]);
@@ -128,6 +141,7 @@ const detailData = ref<MenuTreeItem>();
 
 const columns = [
   { title: '菜单名称', dataIndex: 'name', key: 'name', width: 220 },
+  { title: '图标', dataIndex: 'icon', key: 'icon', width: 160 },
   { title: '键名', dataIndex: 'key', key: 'key', width: 160 },
   { title: '菜单路径', dataIndex: 'path', key: 'path', width: 180 },
   { title: '排序', dataIndex: 'sort', key: 'sort', width: 80 },
@@ -218,3 +232,11 @@ onMounted(() => {
   getRows();
 });
 </script>
+
+<style scoped lang="less">
+.icon-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+</style>

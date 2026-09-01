@@ -33,7 +33,7 @@
         <a-input-number v-model:value="formState.sort" :min="0" style="width: 100%" />
       </a-form-item>
       <a-form-item label="图标" name="icon">
-        <a-input v-model:value="formState.icon" placeholder="请输入图标名称" allow-clear />
+        <IconSelect v-model:value="formState.icon" placeholder="请选择图标" />
       </a-form-item>
       <a-form-item label="重定向地址" name="redirect">
         <a-input v-model:value="formState.redirect" placeholder="请输入重定向地址" allow-clear />
@@ -60,6 +60,7 @@ import { message } from 'ant-design-vue';
 import { addAdminMenu, editAdminMenu } from '@/api/admin/menu';
 import { AdminMenuKey, AdminRouterPath } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
+import IconSelect from '@/components/IconSelect.vue';
 import type { MenuTreeItem, ReqAdminMenuAdd } from '@/types/admin_menu';
 import type { FormInstance } from 'ant-design-vue';
 

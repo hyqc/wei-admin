@@ -8,9 +8,9 @@ export const ok = (data: unknown = null, msg = '操作成功') => ({
   data,
 });
 
-/** 失败响应 */
-export const fail = (msg = '操作失败', data: unknown = null) => ({
-  code: 500,
+/** 失败响应（code 可指定业务错误码，如 800002 角色名称已存在） */
+export const fail = (msg = '操作失败', data: unknown = null, code = 500) => ({
+  code,
   msg,
   type: 'Error',
   data,

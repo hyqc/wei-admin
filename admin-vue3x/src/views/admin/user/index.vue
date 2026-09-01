@@ -54,8 +54,11 @@
           </a-tooltip>
           <span v-else>{{ displayNickname(record.nickname) }}</span>
         </template>
-        <template v-else-if="column.key === 'lastLoginIp' || column.key === 'currentLoginIp'">
-          {{ getLoginIp(record.lastLoginIp, column.key === 'currentLoginIp' ? 'current' : 'last') }}
+        <template v-else-if="column.key === 'lastLoginIp'">
+          {{ record.lastLoginIp || '-' }}
+        </template>
+        <template v-else-if="column.key === 'currentLoginIp'">
+          {{ record.currentLoginIp || getLoginIp(record.lastLoginIp, 'current') }}
         </template>
         <template v-else-if="column.key === 'roles'">
           <!-- 超管无需角色，自动拥有系统全部权限 -->
@@ -207,7 +210,7 @@ const columns = [
   { title: '状态', dataIndex: 'isEnabled', key: 'isEnabled', width: 100 },
   { title: '登录次数', dataIndex: 'loginTotal', key: 'loginTotal', width: 100 },
   { title: '上次登录IP', dataIndex: 'lastLoginIp', key: 'lastLoginIp', width: 140 },
-  { title: '当前登录IP', dataIndex: 'lastLoginIp', key: 'currentLoginIp', width: 140 },
+  { title: '当前登录IP', dataIndex: 'currentLoginIp', key: 'currentLoginIp', width: 140 },
   { title: '上次登录时间', dataIndex: 'lastLoginTime', key: 'lastLoginTime', width: 180 },
   { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt', width: 180 },
   { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 420 },

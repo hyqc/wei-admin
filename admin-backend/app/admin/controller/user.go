@@ -139,6 +139,8 @@ func (UserController) Info(ctx *gin.Context) {
 		frontData.LoginTotal = admin.LoginTotal
 		frontData.LastLoginIp = admin.LastLoginIp
 		frontData.LastLoginTime = admin.LastLoginTime
+		frontData.CurrentLoginIp = admin.CurrentLoginIp
+		frontData.CurrentLoginTime = admin.CurrentLoginTime
 		frontData.IsEnabled = admin.Enabled
 		frontData.CreatedAt = admin.CreatedAt
 		frontData.UpdatedAt = admin.UpdatedAt

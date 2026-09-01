@@ -54,6 +54,8 @@ message AdminUserListItem{
   repeated AdminUserRoleItem roles = 12;
   bool isEnabledButtonDisabled = 13;
   bool isSuperAdmin = 14; // 是否超级管理员（ID 恒为 1，自动拥有全部权限）
+  string currentLoginIp = 15; // 本次登录IP
+  string currentLoginTime = 16; // 本次登录时间
 }
 // 账号角色列表
 message AdminUserRoleItem{

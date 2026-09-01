@@ -12,7 +12,6 @@ import (
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"context"
-	"encoding/json"
 	"errors"
 	"strings"
 	"github.com/gin-gonic/gin"
@@ -197,20 +196,19 @@ func (a *AdminUserLogic) HandleItemData(item *model2.AdminUser) (data *admin_pro
 	data.AdminId = item.ID
 	data.CreatedAt = utils.HandleTime2String(item.CreatedAt)
 	data.UpdatedAt = utils.HandleTime2String(item.UpdatedAt)
-	// 登录IP：数据库存 JSON 数组（最多保留最近两次登录 IP），解析为逗号分隔字符串返回前端
-	data.LastLoginIp = handleListLoginIp(item.LastLoginIP)
+	// 登录IP：数据库存 JSON 数组（最多保留最近两次登录 IP），第一个为上次登录IP，最后一个为本次登录IP
+	lastIp, currentIp, err := getLoginIps(item.LastLoginIP)
+	if err != nil {
+		return nil, err
+	}
+	data.LastLoginIp = lastIp
+	data.CurrentLoginIp = currentIp
+	// 登录时间：数据库仅保存最近一次登录时间，即本次登录时间
+	data.LastLoginTime = utils.HandleTimePointer2String(item.LastLoginTime)
+	data.CurrentLoginTime = data.LastLoginTime
 	// 超管标识：ID 为 1 的账号自动拥有全部权限
 	data.IsSuperAdmin = constant.IsAdministrator(item.ID)
 	return data, nil
-}
-
-// handleListLoginIp 将 last_login_ip（JSON 数组字符串，如 ["ip1","ip2"]）解析为逗号分隔字符串
-func handleListLoginIp(ips string) string {
-	arr := make([]string, 0)
-	if err := json.Unmarshal([]byte(ips), &arr); err != nil {
-		return ""
-	}
-	return strings.Join(arr, ", ")
 }
 
 func (a *AdminUserLogic) Add(ctx *gin.Context, params *admin_proto.ReqAdminUserAdd) error {

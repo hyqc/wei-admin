@@ -15,7 +15,7 @@
         <a-input v-model:value="formState.name" placeholder="请输入接口名称" allow-clear />
       </a-form-item>
       <a-form-item label="唯一键" name="key">
-        <a-input v-model:value="formState.key" placeholder="示例：adminUser::list" allow-clear />
+        <a-input v-model:value="formState.key" placeholder="根据接口路径自动生成" disabled />
       </a-form-item>
       <a-form-item label="接口路径" name="path">
         <a-input v-model:value="formState.path" placeholder="示例：/admin/user/list" allow-clear />
@@ -28,11 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
+import { nextTick, reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { editAdminApi } from '@/api/admin/api';
 import { AdminAPIKey } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
+import { generateApiKeyByPath } from '@/utils/apiKey';
 import type { AdminApiItem } from '@/types/common';
 import type { FormInstance } from 'ant-design-vue';
 
@@ -58,22 +59,38 @@ const rules = {
     { max: 50, message: '名称长度不能超过50个字符' },
   ],
   key: [
-    { required: true, message: '请输入唯一键' },
+    { required: true, message: '唯一键由接口路径自动生成，请先输入接口路径' },
     { pattern: AdminAPIKey, message: '唯一键格式不正确（示例：adminUser::list）' },
   ],
   path: [{ required: true, message: '请输入接口路径' }],
   describe: [{ max: 200, message: '描述长度不能超过200个字符' }],
 };
 
+/** 回填数据期间暂停唯一键自动生成，避免打开弹窗即覆盖原唯一键 */
+let syncing = false;
+
 watch(
   () => props.open,
   (val) => {
     if (val && props.detailData) {
+      syncing = true;
       formState.name = props.detailData.name || '';
       formState.key = props.detailData.key || '';
       formState.path = props.detailData.path || '';
       formState.describe = props.detailData.describe || '';
+      nextTick(() => {
+        syncing = false;
+      });
     }
+  },
+);
+
+// 路径变化后按路径规则自动生成唯一键
+watch(
+  () => formState.path,
+  (val) => {
+    if (syncing) return;
+    formState.key = generateApiKeyByPath(val);
   },
 );
 

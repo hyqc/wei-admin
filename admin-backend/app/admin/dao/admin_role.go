@@ -27,6 +27,7 @@ type IAdminRole interface {
 	BindPermissions(ctx context.Context, id int32, data []*model2.AdminRolePermission) error
 	FindRolesById(ctx context.Context, id int32) ([]*model2.AdminRole, error)
 	FindAllValid(ctx *gin.Context) ([]*model2.AdminRole, error)
+	FindByName(ctx context.Context, name string) (*model2.AdminRole, error)
 }
 
 type AdminRole struct {
@@ -168,4 +169,9 @@ func (a *AdminRole) FindRolesById(ctx context.Context, id int32) ([]*model2.Admi
 
 func (a *AdminRole) FindAllValid(ctx *gin.Context) ([]*model2.AdminRole, error) {
 	return query2.AdminRole.WithContext(ctx).Where(query2.AdminRole.IsEnabled.Is(true)).Find()
+}
+
+// FindByName 按角色名精确查询（含已禁用角色），用于角色名唯一性校验；不存在时返回 gorm.ErrRecordNotFound
+func (a *AdminRole) FindByName(ctx context.Context, name string) (*model2.AdminRole, error) {
+	return query2.AdminRole.WithContext(ctx).Where(query2.AdminRole.Name.Eq(name)).First()
 }

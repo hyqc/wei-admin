@@ -15,7 +15,7 @@
         <a-input v-model:value="formState.name" placeholder="请输入接口名称" allow-clear />
       </a-form-item>
       <a-form-item label="唯一键" name="key">
-        <a-input v-model:value="formState.key" placeholder="示例：adminUser::list" allow-clear />
+        <a-input v-model:value="formState.key" placeholder="根据接口路径自动生成" disabled />
       </a-form-item>
       <a-form-item label="接口路径" name="path">
         <a-input v-model:value="formState.path" placeholder="示例：/admin/user/list" allow-clear />
@@ -33,6 +33,7 @@ import { message } from 'ant-design-vue';
 import { addAdminApi } from '@/api/admin/api';
 import { AdminAPIKey } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
+import { generateApiKeyByPath } from '@/utils/apiKey';
 import type { FormInstance } from 'ant-design-vue';
 
 const props = defineProps<{ open: boolean }>();
@@ -54,7 +55,7 @@ const rules = {
     { max: 50, message: '名称长度不能超过50个字符' },
   ],
   key: [
-    { required: true, message: '请输入唯一键' },
+    { required: true, message: '唯一键由接口路径自动生成，请先输入接口路径' },
     { pattern: AdminAPIKey, message: '唯一键格式不正确（示例：adminUser::list）' },
   ],
   path: [{ required: true, message: '请输入接口路径' }],
@@ -67,6 +68,14 @@ watch(
     if (val) {
       formRef.value?.resetFields();
     }
+  },
+);
+
+// 路径变化后自动生成唯一键
+watch(
+  () => formState.path,
+  (val) => {
+    formState.key = generateApiKeyByPath(val);
   },
 );
 
