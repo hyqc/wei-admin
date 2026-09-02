@@ -7,14 +7,14 @@
   >
     <a-spin :spinning="loading">
       <a-descriptions :column="1" bordered>
-        <a-descriptions-item label="角色名称">{{ detailData?.name }}</a-descriptions-item>
-        <a-descriptions-item label="描述">{{ detailData?.describe }}</a-descriptions-item>
-        <a-descriptions-item label="创建人">{{ detailData?.createAdminName }}</a-descriptions-item>
+        <a-descriptions-item label="角色名称">{{ detail?.name }}</a-descriptions-item>
+        <a-descriptions-item label="描述">{{ detail?.describe }}</a-descriptions-item>
+        <a-descriptions-item label="创建人">{{ detail?.createAdminName }}</a-descriptions-item>
         <a-descriptions-item label="状态">
-          <a-badge :status="detailData?.isEnabled ? 'success' : 'error'" :text="detailData?.isEnabled ? '启用' : '禁用'" />
+          <a-badge :status="detail?.isEnabled ? 'success' : 'error'" :text="detail?.isEnabled ? '启用' : '禁用'" />
         </a-descriptions-item>
-        <a-descriptions-item label="创建时间">{{ detailData?.createdAt }}</a-descriptions-item>
-        <a-descriptions-item label="更新时间">{{ detailData?.updatedAt }}</a-descriptions-item>
+        <a-descriptions-item label="创建时间">{{ detail?.createdAt }}</a-descriptions-item>
+        <a-descriptions-item label="更新时间">{{ detail?.updatedAt }}</a-descriptions-item>
       </a-descriptions>
       <a-divider orientation="left">绑定权限</a-divider>
       <a-empty v-if="!loading && treeData.length === 0" description="该角色未绑定任何权限" />
@@ -35,7 +35,7 @@
 import { ref, watch } from 'vue';
 import { DefaultDrawerWidth } from '@/api/config';
 import { getAdminMenuMode } from '@/api/admin/menu';
-import { getAdminRolePermissions } from '@/api/admin/role';
+import { getAdminRoleInfo, getAdminRolePermissions } from '@/api/admin/role';
 import type { RoleItem } from '@/types/admin_role';
 import type { MenuModeItem } from '@/types/admin_menu';
 
@@ -46,6 +46,8 @@ const props = defineProps<{
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>();
 
 const loading = ref(false);
+/** 角色详情（实时拉取，避免展示列表中的过期数据） */
+const detail = ref<RoleItem>();
 const treeKey = ref(0);
 const treeData = ref<any[]>([]);
 const checkedKeys = ref<number[]>([]);
@@ -89,10 +91,12 @@ watch(
       treeData.value = [];
       checkedKeys.value = [];
       Promise.all([
+        getAdminRoleInfo({ id: props.detailData.id }),
         getAdminMenuMode({}),
         getAdminRolePermissions({ id: props.detailData.id }),
       ])
-        .then(([modeRes, permRes]) => {
+        .then(([infoRes, modeRes, permRes]) => {
+          detail.value = infoRes.data;
           const rolePerms = permRes.data.list || [];
           const boundIds = new Set(rolePerms.map((item) => item.permissionId).filter((id): id is number => !!id));
           checkedKeys.value = Array.from(boundIds);

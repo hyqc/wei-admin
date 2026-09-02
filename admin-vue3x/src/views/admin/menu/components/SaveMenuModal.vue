@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
-import { addAdminMenu, editAdminMenu } from '@/api/admin/menu';
+import { addAdminMenu, editAdminMenu, getAdminMenuInfo } from '@/api/admin/menu';
 import { AdminMenuKey, AdminRouterPath } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
 import IconSelect from '@/components/IconSelect.vue';
@@ -141,21 +141,23 @@ function onPathChange() {
 
 watch(
   () => props.open,
-  (val) => {
+  async (val) => {
     if (val) {
       if (props.detailData?.id) {
-        // 编辑
-        formState.parentId = props.detailData.parentId || 0;
-        formState.name = props.detailData.name || '';
-        formState.path = props.detailData.path || '';
-        formState.key = props.detailData.key || '';
-        formState.sort = props.detailData.sort ?? 0;
-        formState.icon = props.detailData.icon || '';
-        formState.redirect = props.detailData.redirect || '/';
-        formState.describe = props.detailData.describe || '';
-        formState.isHideInMenu = !!props.detailData.hideInMenu;
-        formState.isHideChildrenInMenu = !!props.detailData.hideChildrenInMenu;
-        formState.isEnabled = !!props.detailData.enabled;
+        // 编辑：实时拉取详情回填，避免编辑列表中的过期数据
+        const res = await getAdminMenuInfo({ menuId: props.detailData.id });
+        const info = res.data as MenuTreeItem;
+        formState.parentId = info.parentId || 0;
+        formState.name = info.name || '';
+        formState.path = info.path || '';
+        formState.key = info.key || '';
+        formState.sort = info.sort ?? 0;
+        formState.icon = info.icon || '';
+        formState.redirect = info.redirect || '/';
+        formState.describe = info.describe || '';
+        formState.isHideInMenu = !!info.hideInMenu;
+        formState.isHideChildrenInMenu = !!info.hideChildrenInMenu;
+        formState.isEnabled = !!info.enabled;
       } else {
         // 新增：父级取传入的父菜单ID，未指定时默认挂在顶级菜单下
         formRef.value?.resetFields();

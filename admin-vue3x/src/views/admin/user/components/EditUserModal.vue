@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
-import { editAdminUser } from '@/api/admin/user';
+import { editAdminUser, getAdminUserInfo } from '@/api/admin/user';
 import { AdminEmail } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
 import type { AdminUserListItem } from '@/types/common';
@@ -58,12 +58,18 @@ const rules = {
   ],
 };
 
+// 打开时实时拉取详情回填，避免编辑列表中的过期数据
 watch(
   () => props.open,
-  (val) => {
-    if (val && props.detailData) {
-      formState.nickname = props.detailData.nickname || '';
-      formState.email = props.detailData.email || '';
+  async (val) => {
+    if (val && props.detailData?.adminId) {
+      try {
+        const res = await getAdminUserInfo({ adminId: props.detailData.adminId });
+        formState.nickname = res.data.nickname || '';
+        formState.email = res.data.email || '';
+      } finally {
+        formRef.value?.clearValidate();
+      }
     }
   },
 );

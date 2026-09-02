@@ -14,7 +14,7 @@
           <a-dropdown :trigger="['contextmenu']">
             <span class="tab-title">{{ tab.title }}</span>
             <template #overlay>
-              <a-menu @click="({ key }) => onMenuClick(String(key), tab.path)">
+              <a-menu @click="handleMenuClick($event, tab.path)">
                 <a-menu-item key="current" :disabled="!tab.closable">
                   <template #icon><CloseOutlined /></template>
                   关闭当前
@@ -40,6 +40,7 @@
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { CloseOutlined, ColumnWidthOutlined, MinusOutlined } from '@ant-design/icons-vue';
+import type { MenuProps } from 'ant-design-vue';
 import { HomePath } from '@/api/config';
 import { useTabsStore } from '@/store/tabs';
 
@@ -63,6 +64,11 @@ watch(
   },
   { immediate: true },
 );
+
+/** 右键菜单点击：转发为 key + 页签路径 */
+function handleMenuClick(info: Parameters<NonNullable<MenuProps['onClick']>>[0], path: string) {
+  onMenuClick(String(info.key), path);
+}
 
 function onChange(key: string | number) {
   const path = String(key);

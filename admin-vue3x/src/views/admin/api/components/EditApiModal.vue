@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { nextTick, reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
-import { editAdminApi } from '@/api/admin/api';
+import { editAdminApi, getAdminApiInfo } from '@/api/admin/api';
 import { AdminAPIKey } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
 import { generateApiKeyByPath } from '@/utils/apiKey';
@@ -71,13 +71,15 @@ let syncing = false;
 
 watch(
   () => props.open,
-  (val) => {
-    if (val && props.detailData) {
+  async (val) => {
+    if (val && props.detailData?.id) {
+      // 打开时实时拉取详情回填，避免编辑列表中的过期数据
       syncing = true;
-      formState.name = props.detailData.name || '';
-      formState.key = props.detailData.key || '';
-      formState.path = props.detailData.path || '';
-      formState.describe = props.detailData.describe || '';
+      const res = await getAdminApiInfo({ id: props.detailData.id });
+      formState.name = res.data.name || '';
+      formState.key = res.data.key || '';
+      formState.path = res.data.path || '';
+      formState.describe = res.data.describe || '';
       nextTick(() => {
         syncing = false;
       });

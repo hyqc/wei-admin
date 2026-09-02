@@ -28,9 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
-import { editAdminRole } from '@/api/admin/role';
+import { editAdminRole, getAdminRoleInfo } from '@/api/admin/role';
 import { DefaultModalWidth } from '@/api/config';
 import type { RoleItem } from '@/types/admin_role';
 import type { FormInstance } from 'ant-design-vue';
@@ -48,8 +48,8 @@ const formState = reactive<{ name: string; describe: string }>({
   describe: '',
 });
 
-/** 超管角色仅允许修改描述 */
-const isSuperAdmin = computed(() => !!props.detailData?.isSuperAdmin);
+/** 超管角色仅允许修改描述（以服务端最新数据为准） */
+const isSuperAdmin = ref(false);
 
 const rules = {
   name: [
@@ -59,12 +59,15 @@ const rules = {
   describe: [{ max: 200, message: '描述长度不能超过200个字符' }],
 };
 
+// 打开时实时拉取详情回填，避免编辑列表中的过期数据
 watch(
   () => props.open,
-  (val) => {
-    if (val && props.detailData) {
-      formState.name = props.detailData.name || '';
-      formState.describe = props.detailData.describe || '';
+  async (val) => {
+    if (val && props.detailData?.id) {
+      const res = await getAdminRoleInfo({ id: props.detailData.id });
+      formState.name = res.data.name || '';
+      formState.describe = res.data.describe || '';
+      isSuperAdmin.value = !!res.data.isSuperAdmin;
     }
   },
 );

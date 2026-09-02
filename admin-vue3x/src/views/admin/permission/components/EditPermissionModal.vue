@@ -12,7 +12,7 @@
   >
     <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
       <a-form-item label="菜单名称">
-        <a-input :value="detailData?.menuName" disabled />
+        <a-input :value="detailMenuName" disabled />
       </a-form-item>
       <a-form-item label="权限名称" name="name">
         <a-input v-model:value="formState.name" placeholder="请输入权限名称" allow-clear />
@@ -45,7 +45,7 @@
 import { reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { DEFAULT_PERMISSION_TYPES, handleKey } from './common';
-import { editAdminPermission } from '@/api/admin/permission';
+import { editAdminPermission, getAdminPermissionInfo } from '@/api/admin/permission';
 import { AdminPerssionKey } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
 import type { PermissionListItem } from '@/types/admin_permission';
@@ -82,22 +82,31 @@ const rules = {
   key: [{ required: true, pattern: AdminPerssionKey, message: '请按照驼峰法命名' }],
 };
 
+// 打开时实时拉取详情回填，避免编辑列表中的过期数据
 watch(
   () => props.open,
-  (val) => {
-    if (val && props.detailData) {
-      formState.name = props.detailData.name || '';
-      formState.type = props.detailData.type || 'view';
-      formState.key = props.detailData.key || '';
-      formState.describe = props.detailData.describe || '';
-      formState.enabled = props.detailData.isEnabled ?? true;
+  async (val) => {
+    if (val && props.detailData?.id) {
+      const res = await getAdminPermissionInfo({ id: props.detailData.id });
+      detailPath.value = res.data.menuPath || '';
+      detailMenuName.value = res.data.menuName || '';
+      formState.name = res.data.name || '';
+      formState.type = res.data.type || 'view';
+      formState.key = res.data.key || '';
+      formState.describe = res.data.describe || '';
+      formState.enabled = res.data.isEnabled ?? true;
     }
   },
 );
 
+/** 服务端返回的菜单路径（用于切换类型时重新生成唯一键） */
+const detailPath = ref('');
+/** 服务端返回的菜单名称 */
+const detailMenuName = ref('');
+
 /** 切换权限类型时，唯一键跟随菜单路径 + 类型重新生成 */
 function onTypeChange() {
-  const menuPath = props.detailData?.menuPath || '';
+  const menuPath = detailPath.value || props.detailData?.menuPath || '';
   if (menuPath) {
     formState.key = handleKey(menuPath, formState.type);
   }

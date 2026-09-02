@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Badge, Descriptions, Divider, Drawer, Empty, Spin, Tree } from 'antd';
 import { DefaultDrawerWidth } from '@/api/config';
 import { getAdminMenuMode } from '@/api/admin/menu';
-import { getAdminRolePermissions } from '@/api/admin/role';
+import { getAdminRoleInfo, getAdminRolePermissions } from '@/api/admin/role';
 import type { RoleItem } from '@/types/admin_role';
 import type { MenuModeItem } from '@/types/admin_menu';
 
@@ -50,6 +50,8 @@ function collectExpandKeys(nodes: TreeNode[]): (string | number)[] {
 /** 角色详情：基础信息 + 绑定权限树 */
 export default function DetailRoleDrawer({ open, detailData, onClose }: DetailRoleDrawerProps) {
   const [loading, setLoading] = useState(false);
+  /** 角色详情（实时拉取，避免展示列表中的过期数据） */
+  const [detail, setDetail] = useState<RoleItem>();
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
   const [checkedKeys, setCheckedKeys] = useState<number[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<(string | number)[]>([]);
@@ -60,8 +62,13 @@ export default function DetailRoleDrawer({ open, detailData, onClose }: DetailRo
       setLoading(true);
       setTreeData([]);
       setCheckedKeys([]);
-      Promise.all([getAdminMenuMode({}), getAdminRolePermissions({ id: detailData.id })])
-        .then(([modeRes, permRes]) => {
+      Promise.all([
+        getAdminRoleInfo({ id: detailData.id }),
+        getAdminMenuMode({}),
+        getAdminRolePermissions({ id: detailData.id }),
+      ])
+        .then(([infoRes, modeRes, permRes]) => {
+          setDetail(infoRes.data);
           const rolePerms = permRes.data.list || [];
           const boundIds = new Set(rolePerms.map((item) => item.permissionId).filter((id): id is number => !!id));
           setCheckedKeys(Array.from(boundIds));
@@ -78,14 +85,14 @@ export default function DetailRoleDrawer({ open, detailData, onClose }: DetailRo
     <Drawer open={open} title="角色详情" width={DefaultDrawerWidth} onClose={onClose}>
       <Spin spinning={loading}>
         <Descriptions column={1} bordered>
-          <Descriptions.Item label="角色名称">{detailData?.name}</Descriptions.Item>
-          <Descriptions.Item label="描述">{detailData?.describe}</Descriptions.Item>
-          <Descriptions.Item label="创建人">{detailData?.createAdminName}</Descriptions.Item>
+          <Descriptions.Item label="角色名称">{detail?.name}</Descriptions.Item>
+          <Descriptions.Item label="描述">{detail?.describe}</Descriptions.Item>
+          <Descriptions.Item label="创建人">{detail?.createAdminName}</Descriptions.Item>
           <Descriptions.Item label="状态">
-            <Badge status={detailData?.isEnabled ? 'success' : 'error'} text={detailData?.isEnabled ? '启用' : '禁用'} />
+            <Badge status={detail?.isEnabled ? 'success' : 'error'} text={detail?.isEnabled ? '启用' : '禁用'} />
           </Descriptions.Item>
-          <Descriptions.Item label="创建时间">{detailData?.createdAt}</Descriptions.Item>
-          <Descriptions.Item label="更新时间">{detailData?.updatedAt}</Descriptions.Item>
+          <Descriptions.Item label="创建时间">{detail?.createdAt}</Descriptions.Item>
+          <Descriptions.Item label="更新时间">{detail?.updatedAt}</Descriptions.Item>
         </Descriptions>
         <Divider orientation="left">绑定权限</Divider>
         {!loading && treeData.length === 0 && <Empty description="该角色未绑定任何权限" />}

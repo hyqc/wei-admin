@@ -137,4 +137,6 @@ export interface AdminPermissionInfo {
   type?: string;
   /** 权限类型名称 */
   typeText?: string;
+  /** 是否启用 */
+  isEnabled?: boolean;
 }

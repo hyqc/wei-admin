@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { Form, Input, Modal, message } from 'antd';
-import { editAdminApi } from '@/api/admin/api';
+import { editAdminApi, getAdminApiInfo } from '@/api/admin/api';
 import { AdminAPIKey } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
 import { generateApiKeyByPath } from '@/utils/apiKey';
@@ -18,13 +18,16 @@ export default function EditApiModal({ open, detailData, onClose, onNotice }: Ed
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  // 打开时实时拉取详情回填，避免编辑列表中的过期数据
   useEffect(() => {
-    if (open && detailData) {
-      form.setFieldsValue({
-        name: detailData.name || '',
-        key: detailData.key || '',
-        path: detailData.path || '',
-        describe: detailData.describe || '',
+    if (open && detailData?.id) {
+      getAdminApiInfo({ id: detailData.id }).then((res) => {
+        form.setFieldsValue({
+          name: res.data.name || '',
+          key: res.data.key || '',
+          path: res.data.path || '',
+          describe: res.data.describe || '',
+        });
       });
     }
   }, [open, detailData, form]);

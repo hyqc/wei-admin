@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Form, Input, InputNumber, Modal, Switch, TreeSelect, message } from 'antd';
-import { addAdminMenu, editAdminMenu } from '@/api/admin/menu';
+import { addAdminMenu, editAdminMenu, getAdminMenuInfo } from '@/api/admin/menu';
 import { AdminMenuKey, AdminRouterPath } from '@/api/pattern';
 import { DefaultModalWidth } from '@/api/config';
 import IconSelect from '@/components/IconSelect';
@@ -47,18 +47,22 @@ export default function SaveMenuModal(props: SaveMenuModalProps) {
   }, [tree]);  useEffect(() => {
     if (open) {
       if (detailData?.id) {
-        form.setFieldsValue({
-          parentId: detailData.parentId || 0,
-          name: detailData.name || '',
-          path: detailData.path || '',
-          key: detailData.key || '',
-          sort: detailData.sort ?? 0,
-          icon: detailData.icon || '',
-          redirect: detailData.redirect || '/',
-          describe: detailData.describe || '',
-          isHideInMenu: !!detailData.hideInMenu,
-          isHideChildrenInMenu: !!detailData.hideChildrenInMenu,
-          isEnabled: !!detailData.enabled,
+        // 编辑：实时拉取详情回填，避免编辑列表中的过期数据
+        getAdminMenuInfo({ menuId: detailData.id }).then((res) => {
+          const info = res.data as MenuTreeItem;
+          form.setFieldsValue({
+            parentId: info.parentId || 0,
+            name: info.name || '',
+            path: info.path || '',
+            key: info.key || '',
+            sort: info.sort ?? 0,
+            icon: info.icon || '',
+            redirect: info.redirect || '/',
+            describe: info.describe || '',
+            isHideInMenu: !!info.hideInMenu,
+            isHideChildrenInMenu: !!info.hideChildrenInMenu,
+            isEnabled: !!info.enabled,
+          });
         });
       } else {
         form.resetFields();

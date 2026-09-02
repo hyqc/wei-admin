@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Form, Input, Modal, message } from 'antd';
-import { editAdminRole } from '@/api/admin/role';
+import { editAdminRole, getAdminRoleInfo } from '@/api/admin/role';
 import { DefaultModalWidth } from '@/api/config';
 import type { RoleItem } from '@/types/admin_role';
 
@@ -15,11 +15,16 @@ interface EditRoleModalProps {
 export default function EditRoleModal({ open, detailData, onClose, onNotice }: EditRoleModalProps) {
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const isSuperAdmin = !!detailData?.isSuperAdmin;
+  /** 超管角色仅允许修改描述（以服务端最新数据为准） */
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
+  // 打开时实时拉取详情回填，避免编辑列表中的过期数据
   useEffect(() => {
-    if (open && detailData) {
-      form.setFieldsValue({ name: detailData.name || '', describe: detailData.describe || '' });
+    if (open && detailData?.id) {
+      getAdminRoleInfo({ id: detailData.id }).then((res) => {
+        form.setFieldsValue({ name: res.data.name || '', describe: res.data.describe || '' });
+        setIsSuperAdmin(!!res.data.isSuperAdmin);
+      });
     }
   }, [open, detailData, form]);
 
