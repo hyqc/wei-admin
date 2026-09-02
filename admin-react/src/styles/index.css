@@ -1,0 +1,207 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------------- 布局 ---------------- */
+.basic-layout {
+  height: 100vh;
+}
+
+.basic-layout .layout-sider {
+  background: #001529;
+}
+
+.basic-layout .basic-layout-inner {
+  height: 100vh;
+}
+
+.basic-layout .layout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+}
+
+.basic-layout .layout-header .trigger {
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.basic-layout .layout-header .trigger:hover {
+  color: #1890ff;
+}
+
+.basic-layout .layout-content {
+  margin: 16px;
+  overflow: auto;
+}
+
+.basic-layout .layout-footer {
+  padding: 12px 16px;
+  text-align: center;
+}
+
+/* ---------------- 侧边菜单 ---------------- */
+.sider-menu {
+  height: 100%;
+}
+
+.sider-menu .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sider-menu .logo img {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+/* 无图标菜单占位，保持与有图标菜单的文本对齐 */
+.menu-icon-placeholder {
+  display: inline-block;
+  flex: none;
+  width: 16px;
+  margin-right: 10px;
+}
+
+/* ---------------- 页签 ---------------- */
+.tabs-view {
+  padding: 6px 8px 0;
+  margin-bottom: 8px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.tabs-view .tab-title {
+  user-select: none;
+}
+
+.tabs-view .ant-tabs-nav {
+  margin-bottom: 0;
+}
+
+/* ---------------- 页面容器 ---------------- */
+.page-container {
+  padding: 16px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.page-container .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.page-container .page-header .header-search {
+  flex: 1;
+}
+
+.page-container .page-content {
+  margin-bottom: 16px;
+}
+
+.page-container .page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------------- 其他 ---------------- */
+.page-info {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+}
+
+.header-right .account {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header-right .account .avatar {
+  background: #1677ff;
+}
+
+.header-right .account .name {
+  margin-left: 8px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.icon-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-tip {
+  margin-top: 4px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 12px;
+}
+
+/* ---------------- 登录页 ---------------- */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 420px;
+  padding: 24px 32px;
+}
+
+.login-logo {
+  width: 36px;
+  height: 36px;
+  margin-right: 12px;
+}
+
+.login-title {
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+}
+
+.login-subtitle {
+  margin-bottom: 32px;
+}
+
+.captcha-img {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+}

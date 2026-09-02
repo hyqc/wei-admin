@@ -2,7 +2,9 @@
 
 ## 项目
 - `admin-vue3x/`：admin-frontend（React+antd）的 Vue 3.5 复刻版，技术栈 Vue3 + Vite6 + Pinia + ant-design-vue 4 + axios，dev 端口 8000，Mock 插件 `src/mock/`
+- `admin-react/`（2026-09-02 新建）：admin-vue3x 的 React 19 复刻版（用户要求 React 最新版重写，功能与 vue3x 完全对齐），技术栈 React 19 + Vite 6 + TS strict + antd 5 + zustand + react-router 7 + axios，dev 端口 8001，直接复用 `src/mock/` 自研 mock 插件；`tsc --noEmit` 0 错误、build 通过（manualChunks 分 react/antd 包）
 - 目录 `admin-backend/docs/wei.sql` 是后端权威数据源；`admin-frontend/` 是 React 原版参考
+
 
 ## Mock 数据权威约定（2026-08-28 起）
 - `src/mock/data.ts` 数据以 `admin-backend/docs/wei.sql` 为准：
