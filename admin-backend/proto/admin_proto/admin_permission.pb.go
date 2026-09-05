@@ -29,6 +29,7 @@ type ReqAdminPermissionList struct {
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`        //权限唯一标识符
 	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`      //权限名称
 	Type          string                 `protobuf:"bytes,5,opt,name=type,proto3" json:"type,omitempty"`      //权限类型
+	ApiId         int32                  `protobuf:"varint,6,opt,name=apiId,proto3" json:"apiId,omitempty"`   //接口ID（反查绑定了该接口的权限点）
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -164,6 +165,7 @@ type ReqFrontAdminPermissionList struct {
 	Key             string                 `protobuf:"bytes,9,opt,name=key,proto3" json:"key,omitempty"`                          // 权限唯一标识符
 	Name            string                 `protobuf:"bytes,10,opt,name=name,proto3" json:"name,omitempty"`                       // 权限名称
 	Type            string                 `protobuf:"bytes,11,opt,name=type,proto3" json:"type,omitempty"`                       // 权限类型
+	ApiId           int32                  `protobuf:"varint,12,opt,name=apiId,proto3" json:"apiId,omitempty"`                   // 接口ID（反查绑定了该接口的权限点）
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -498,6 +500,7 @@ type ReqAdminPermissionAdd struct {
 	Type          string                 `protobuf:"bytes,8,opt,name=type,proto3" json:"type,omitempty" label:"权限类型" binding:"required,trimBlank"`         // @gotags:  label:"权限类型" binding:"required,trimBlank"
 	Redirect      string                 `protobuf:"bytes,9,opt,name=redirect,proto3" json:"redirect,omitempty" label:"重定向地址"` // @gotags:  label:"重定向地址"
 	Enabled       bool                   `protobuf:"varint,10,opt,name=enabled,proto3" json:"enabled,omitempty" label:"是否启用"` // @gotags:  label:"是否启用"
+	ApiIds        []int32                `protobuf:"varint,11,rep,packed,name=apiIds,proto3" json:"apiIds,omitempty"`           // 绑定的接口ID列表（菜单权限配置提交；不传表示不改绑定，传空数组表示清空）
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

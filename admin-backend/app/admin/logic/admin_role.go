@@ -11,7 +11,6 @@ import (
 	"admin/proto/admin_proto"
 	"admin/proto/code_proto"
 	"errors"
-	"fmt"
 	"strings"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -135,9 +134,10 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminRole
 		PermissionIds:   make([]int32, 0),
 	}
 	for _, item := range permissionsList {
-		enumItem, ok := common.AdminPermissionEnumMap[item.PermissionType]
-		if !ok {
-			return nil, fmt.Errorf("配置错误")
+		// 类型文本回退到原值，避免未知动作型类型导致角色详情整体报错
+		typeText := item.PermissionType
+		if enumItem, ok := common.AdminPermissionEnumMap[item.PermissionType]; ok {
+			typeText = enumItem.Name
 		}
 		rest.PermissionIds = append(rest.PermissionIds, item.PermissionID)
 		rest.Permissions = append(rest.Permissions, &admin_proto.RolePermissionItem{
@@ -146,7 +146,7 @@ func (a *AdminRoleLogic) Info(ctx *gin.Context, params *admin_proto.ReqAdminRole
 			PermissionName:     item.PermissionName,
 			PermissionKey:      item.PermissionKey,
 			PermissionType:     item.PermissionType,
-			PermissionTypeText: enumItem.Name,
+			PermissionTypeText: typeText,
 		})
 	}
 	rest.PermissionIds = array.Deduplicate(rest.PermissionIds, true, true)

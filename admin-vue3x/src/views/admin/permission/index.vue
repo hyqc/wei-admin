@@ -19,15 +19,24 @@
           <a-input v-model:value="searchForm.name" placeholder="请输入权限名称" allow-clear />
         </a-form-item>
         <a-form-item label="类型" name="type">
-          <a-select v-model:value="searchForm.type" placeholder="全部" allow-clear style="width: 120px">
-            <a-select-option
-              v-for="item in DEFAULT_PERMISSION_TYPES"
-              :key="item.key"
-              :value="item.key"
-            >
-              {{ item.name }}
-            </a-select-option>
-          </a-select>
+          <a-select
+            v-model:value="searchForm.type"
+            :options="PERMISSION_TYPE_OPTIONS"
+            placeholder="全部"
+            allow-clear
+            style="width: 120px"
+          />
+        </a-form-item>
+        <a-form-item label="接口" name="apiId">
+          <a-select
+            v-model:value="searchForm.apiId"
+            placeholder="全部"
+            allow-clear
+            show-search
+            option-filter-prop="label"
+            :options="apiOptions"
+            style="width: 240px"
+          />
         </a-form-item>
         <a-form-item>
           <a-space>
@@ -44,10 +53,7 @@
       </a-form>
     </template>
     <template #extra>
-      <a-button type="primary" @click="openAddModal">
-        <template #icon><PlusOutlined /></template>
-        新建权限
-      </a-button>
+      <span class="muted">权限点及其接口绑定由各菜单的“权限配置”统一维护，此页仅用于查询与审计</span>
     </template>
 
     <a-table
@@ -70,14 +76,7 @@
           <span v-else class="muted">未绑定</span>
         </template>
         <template v-else-if="column.key === 'enabled'">
-          <a-popconfirm
-            :title="`确定要${record.isEnabled ? '禁用' : '启用'}该权限吗？`"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="updateEnabled(record)"
-          >
-            <RowEnabledButton :is-enabled="record.isEnabled" />
-          </a-popconfirm>
+          <RowEnabledButton :is-enabled="record.isEnabled" />
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space>
@@ -87,66 +86,33 @@
                 详情
               </a-button>
             </Authorization>
-            <Authorization permission="AdminPermissionEdit">
-              <a-button type="link" size="small" @click="openEditModal(record)">
-                <template #icon><EditOutlined /></template>
-                编辑
+            <Authorization permission="AdminMenuEdit">
+              <a-button type="link" size="small" @click="goMenuPermission">
+                <template #icon><SettingOutlined /></template>
+                去配置
               </a-button>
-            </Authorization>
-            <Authorization permission="AdminPermissionEdit">
-              <a-button type="link" size="small" @click="openBindApisModal(record)">
-                <template #icon><ApiOutlined /></template>
-                绑定接口
-              </a-button>
-            </Authorization>
-            <Authorization permission="AdminPermissionDelete">
-              <a-popconfirm
-                v-if="!record.isEnabled"
-                title="确定要删除该权限吗？"
-                ok-text="确定"
-                cancel-text="取消"
-                @confirm="onDelete(record)"
-              >
-                <a-button type="link" size="small" danger>
-                  <template #icon><DeleteOutlined /></template>
-                  删除
-                </a-button>
-              </a-popconfirm>
             </Authorization>
           </a-space>
         </template>
       </template>
     </a-table>
 
-    <AddPermissionModal v-model:open="addModalStatus" @notice="onModalNotice" />
-    <EditPermissionModal v-model:open="editModalStatus" :detail-data="editData" @notice="onModalNotice" />
-    <DetailPermissionDrawer v-model:open="detailModalStatus" :detail-data="detailData" @notice="onModalNotice" />
-    <BindApisModal v-model:open="bindApisModalStatus" :detail-data="detailData" @notice="onModalNotice" />
+    <DetailPermissionDrawer v-model:open="detailModalStatus" :detail-data="detailData" />
   </PageContainer>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import { message } from 'ant-design-vue';
-import {
-  SearchOutlined,
-  ReloadOutlined,
-  PlusOutlined,
-  EyeOutlined,
-  EditOutlined,
-  ApiOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons-vue';
+import { useRouter } from 'vue-router';
+import { SearchOutlined, ReloadOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons-vue';
 import PageContainer from '@/components/PageContainer.vue';
 import Authorization from '@/components/Authorization.vue';
 import RowEnabledButton from '@/components/RowEnabledButton.vue';
-import AddPermissionModal from './components/AddPermissionModal.vue';
-import EditPermissionModal from './components/EditPermissionModal.vue';
 import DetailPermissionDrawer from './components/DetailPermissionDrawer.vue';
-import BindApisModal from './components/BindApisModal.vue';
-import { DEFAULT_PERMISSION_TYPES } from './components/common';
-import { getAdminPermissionList, deleteAdminPermission, enableAdminPermission } from '@/api/admin/permission';
+import { PERMISSION_TYPE_OPTIONS } from './components/common';
+import { getAdminPermissionList } from '@/api/admin/permission';
 import { getAdminMenuTree } from '@/api/admin/menu';
+import { getAdminApiAll } from '@/api/admin/api';
 import type { PermissionListItem } from '@/types/admin_permission';
 import type { MenuTreeItem } from '@/types/admin_menu';
 import { DEFAULT_PAGE_INFO } from '@/api/config';
@@ -156,24 +122,24 @@ const loading = ref(false);
 const rows = ref<PermissionListItem[]>([]);
 const pageInfo = reactive<PageInfoType>({ ...DEFAULT_PAGE_INFO });
 const menuTreeOptions = ref<any[]>([]);
+const apiOptions = ref<{ label: string; value: number }[]>([]);
+const router = useRouter();
 
 const searchForm = reactive<{
   menuId?: number;
   key?: string;
   name?: string;
   type?: string;
+  apiId?: number;
 }>({
   menuId: undefined,
   key: undefined,
   name: undefined,
   type: undefined,
+  apiId: undefined,
 });
 
-const addModalStatus = ref(false);
-const editModalStatus = ref(false);
 const detailModalStatus = ref(false);
-const bindApisModalStatus = ref(false);
-const editData = ref<PermissionListItem>();
 const detailData = ref<PermissionListItem>();
 
 const columns = [
@@ -185,7 +151,7 @@ const columns = [
   { title: '类型', dataIndex: 'type', key: 'type', width: 100 },
   { title: '接口数', dataIndex: 'apis', key: 'apis', width: 100 },
   { title: '状态', dataIndex: 'enabled', key: 'enabled', width: 100 },
-  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 320 },
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 180 },
 ];
 
 function loadMenuTree() {
@@ -201,6 +167,19 @@ function loadMenuTree() {
   });
 }
 
+/** 接口下拉：用于反查“绑定了某接口的权限点” */
+function loadApiOptions() {
+  getAdminApiAll().then((res) => {
+    apiOptions.value = (res.data || [])
+      .slice()
+      .sort((a, b) => (a.path || '').localeCompare(b.path || ''))
+      .map((item) => ({
+        label: `${item.name} (${item.path})`,
+        value: item.id as number,
+      }));
+  });
+}
+
 function getRows() {
   loading.value = true;
   getAdminPermissionList({
@@ -210,6 +189,7 @@ function getRows() {
     key: searchForm.key,
     name: searchForm.name,
     type: searchForm.type,
+    apiId: searchForm.apiId,
   })
     .then((res) => {
       rows.value = res.data.list || [];
@@ -234,6 +214,7 @@ function onReset() {
   searchForm.key = undefined;
   searchForm.name = undefined;
   searchForm.type = undefined;
+  searchForm.apiId = undefined;
   onSearch();
 }
 
@@ -248,45 +229,19 @@ function onPageSizeChange(pageSize: number) {
   getRows();
 }
 
-function updateEnabled(record: PermissionListItem) {
-  enableAdminPermission({ id: record.id, enabled: !record.isEnabled }).then((res) => {
-    message.success(res.msg, 2);
-    getRows();
-  });
-}
-
-function onDelete(record: PermissionListItem) {
-  deleteAdminPermission({ id: record.id }).then((res) => {
-    message.success(res.msg, 2);
-    getRows();
-  });
-}
-
-function openAddModal() {
-  addModalStatus.value = true;
-}
-
-function openEditModal(record: PermissionListItem) {
-  editData.value = record;
-  editModalStatus.value = true;
-}
-
 function openDetailModal(record: PermissionListItem) {
   detailData.value = record;
   detailModalStatus.value = true;
 }
 
-function openBindApisModal(record: PermissionListItem) {
-  detailData.value = record;
-  bindApisModalStatus.value = true;
-}
-
-function onModalNotice() {
-  getRows();
+/** 跳转到菜单管理，在对应菜单的“权限配置”中维护权限点与接口绑定 */
+function goMenuPermission() {
+  router.push('/admin/menu');
 }
 
 onMounted(() => {
   loadMenuTree();
+  loadApiOptions();
   getRows();
 });
 </script>

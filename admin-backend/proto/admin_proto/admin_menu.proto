@@ -196,4 +196,5 @@ message MenuPermissionItem{
   string Describe = 6;
   bool enabled = 7;
   int32 menuId = 8;
+  repeated int32 apiIds = 9;//已绑定的接口ID列表
 }

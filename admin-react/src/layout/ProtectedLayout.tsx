@@ -4,6 +4,7 @@ import { Spin } from 'antd';
 import BasicLayout from './BasicLayout';
 import { useUserStore } from '@/store/user';
 import { LoginPath } from '@/api/config';
+import { IsAuthForbiddenCode } from '@/api/code';
 import { IsLogin, Logout } from '@/utils/common';
 
 /**
@@ -29,7 +30,13 @@ export default function ProtectedLayout() {
       if (Object.keys(menus).length === 0) {
         try {
           await fetchUserInfo();
-        } catch {
+        } catch (e) {
+          // 没有访问权限时仅提示并跳 403，不退出登录
+          const code = (e as { code?: number })?.code;
+          if (IsAuthForbiddenCode(code)) {
+            navigate('/403', { replace: true });
+            return;
+          }
           Logout();
           return;
         }

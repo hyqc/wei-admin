@@ -1,0 +1,14 @@
+SELECT '--permission--';
+SELECT id, menu_id, `key`, type FROM admin_permission ORDER BY id;
+SELECT '--api--';
+SELECT id, `key`, path FROM admin_api ORDER BY id;
+SELECT '--permission_api--';
+SELECT permission_id, api_id FROM admin_permission_api ORDER BY permission_id, api_id;
+SELECT '--role_permission--';
+SELECT * FROM admin_role_permission;
+SELECT '--user_role--';
+SELECT * FROM admin_user_role;
+SELECT '--user--';
+SELECT id, username, is_enabled FROM admin_user;
+SELECT '--role--';
+SELECT id, name FROM admin_role;

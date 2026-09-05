@@ -37,11 +37,12 @@ var enMsg = map[code_proto.ErrorCode]string{
 	code_proto.ErrorCode_AdminPermissionNameNeed:    "permission name need",
 	code_proto.ErrorCode_AdminPermissionTypeInvalid: "permission type invalid",
 
-	code_proto.ErrorCode_AdminMenuNotExist: "menu not exist",
-	code_proto.ErrorCode_AdminMenuNameExist: "menu name exist",
-	code_proto.ErrorCode_AdminMenuKeyExist:  "menu key exist",
-	code_proto.ErrorCode_AdminMenuPathExist: "menu path exist",
+	code_proto.ErrorCode_AdminMenuNotExist:    "menu not exist",
+	code_proto.ErrorCode_AdminMenuNameExist:   "menu name exist",
+	code_proto.ErrorCode_AdminMenuKeyExist:    "menu key exist",
+	code_proto.ErrorCode_AdminMenuPathExist:   "menu path exist",
+	code_proto.ErrorCode_AdminMenuHasChildren: "directory menu has children, permission config not supported",
 
-	code_proto.ErrorCode_AdminRoleNotExist:   "role not exist",
-	code_proto.ErrorCode_AdminRoleNameExist:  "role name exist",
+	code_proto.ErrorCode_AdminRoleNotExist:  "role not exist",
+	code_proto.ErrorCode_AdminRoleNameExist: "role name exist",
 }

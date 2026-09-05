@@ -19,30 +19,23 @@
         <a-descriptions-item label="接口数量">{{ detail?.apis?.length || 0 }}</a-descriptions-item>
         <a-descriptions-item label="接口列表">
           <div v-if="detail?.apis?.length">
-            <a-tag v-for="api in detail?.apis" :key="api.id" color="green">
+            <a-tag v-for="api in detail?.apis" :key="api.id" color="green" :title="api.path">
               {{ api.name }}
             </a-tag>
           </div>
-          <span v-else>暂无接口</span>
+          <span v-else class="muted">暂无接口</span>
         </a-descriptions-item>
       </a-descriptions>
+      <div class="muted drawer-tip">
+        权限点与接口的绑定在“菜单管理 → 对应菜单 → 权限配置”中维护
+      </div>
     </a-spin>
-    <div class="drawer-footer">
-      <Authorization permission="AdminPermissionEdit">
-        <a-button type="primary" @click="bindApisStatus = true">
-          绑定接口
-        </a-button>
-      </Authorization>
-    </div>
-    <BindApisModal v-model:open="bindApisStatus" :detail-data="detail" @notice="onNotice" />
   </a-drawer>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { DefaultDrawerWidth } from '@/api/config';
-import Authorization from '@/components/Authorization.vue';
-import BindApisModal from './BindApisModal.vue';
 import { getAdminPermissionInfo } from '@/api/admin/permission';
 import type { ResponseAdminPermissionInfoType } from '@/api/admin/permission';
 import type { PermissionListItem } from '@/types/admin_permission';
@@ -52,9 +45,8 @@ const props = defineProps<{
   detailData?: PermissionListItem;
 }>();
 
-const emit = defineEmits<{ (e: 'update:open', value: boolean): void; (e: 'notice'): void }>();
+const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>();
 
-const bindApisStatus = ref(false);
 const loading = ref(false);
 const detail = ref<ResponseAdminPermissionInfoType>();
 
@@ -74,15 +66,16 @@ watch(
     }
   },
 );
-
-function onNotice() {
-  emit('notice');
-}
 </script>
 
 <style scoped lang="less">
-.drawer-footer {
+.muted {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.drawer-tip {
   margin-top: 16px;
-  text-align: right;
+  font-size: 12px;
+  line-height: 1.5;
 }
 </style>

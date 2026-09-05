@@ -34,7 +34,7 @@ message RespAccountInfoData{
 message ReqAccountEdit{
   string nickname=1;//名称 @gotags:  binding:"required,min=1,max=32" label:"用户名"
   string avatar=2;//头像 @gotags:  binding:"url" label:"头像地址"
-  string email=3;//邮箱 @gotags:  binding:"email" label:"邮箱"
+  string email=3;//邮箱（非必填） @gotags:  binding:"omitempty,email" label:"邮箱"
 }
 message RespAccountEditData{
 }

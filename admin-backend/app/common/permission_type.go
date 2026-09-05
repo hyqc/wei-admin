@@ -2,7 +2,6 @@ package common
 
 import (
 	"admin/proto/admin_proto"
-	"fmt"
 )
 
 // AdminPermissionEnum 管理后台权限枚举
@@ -12,19 +11,11 @@ type AdminPermissionEnum struct {
 	Name string `json:"name"`
 }
 
+// 权限动作类型固定为三类，不允许新增：
+//   - view：查看（读操作）
+//   - edit：编辑（写操作，新增、重置、绑定等一切写操作统一归入此类）
+//   - delete：删除
 var (
-	AdminPermissionEnumItems = []*AdminPermissionEnum{
-		AdminPermissionEnumView,
-		AdminPermissionEnumEdit,
-		AdminPermissionEnumDelete,
-	}
-
-	AdminPermissionEnumMap = map[string]*AdminPermissionEnum{
-		AdminPermissionEnumView.Type:   AdminPermissionEnumView,
-		AdminPermissionEnumEdit.Type:   AdminPermissionEnumEdit,
-		AdminPermissionEnumDelete.Type: AdminPermissionEnumDelete,
-	}
-
 	AdminPermissionEnumView = &AdminPermissionEnum{
 		Type: "view",
 		Key:  "View",
@@ -40,10 +31,30 @@ var (
 		Key:  "Delete",
 		Name: "删除",
 	}
+
+	// AdminPermissionEnumItems 全部权限类型，供下拉选项等 UI 场景使用
+	AdminPermissionEnumItems = []*AdminPermissionEnum{
+		AdminPermissionEnumView,
+		AdminPermissionEnumEdit,
+		AdminPermissionEnumDelete,
+	}
+
+	// AdminPermissionEnumDefaultItems 菜单权限配置首次打开时的默认模板
+	AdminPermissionEnumDefaultItems = []*AdminPermissionEnum{
+		AdminPermissionEnumView,
+		AdminPermissionEnumEdit,
+		AdminPermissionEnumDelete,
+	}
+
+	AdminPermissionEnumMap = map[string]*AdminPermissionEnum{
+		AdminPermissionEnumView.Type:   AdminPermissionEnumView,
+		AdminPermissionEnumEdit.Type:   AdminPermissionEnumEdit,
+		AdminPermissionEnumDelete.Type: AdminPermissionEnumDelete,
+	}
 )
 
 func AdminPermissionEnumList(menuId int32, key string) (list []*admin_proto.MenuPermissionItem) {
-	for _, item := range AdminPermissionEnumItems {
+	for _, item := range AdminPermissionEnumDefaultItems {
 		list = append(list, &admin_proto.MenuPermissionItem{
 			MenuId:   menuId,
 			Type:     item.Type,
@@ -56,9 +67,10 @@ func AdminPermissionEnumList(menuId int32, key string) (list []*admin_proto.Menu
 	return list
 }
 
+// GetPermissionTypeName 获取权限类型展示名；未知类型直接返回原值，保证链路不断
 func GetPermissionTypeName(t string) (string, error) {
 	if val, ok := AdminPermissionEnumMap[t]; ok {
 		return val.Name, nil
 	}
-	return "", fmt.Errorf("未知权限类型:%v", t)
+	return t, nil
 }

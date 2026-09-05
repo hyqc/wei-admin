@@ -60,8 +60,8 @@ jwt:
   ignores:
     - method: post
       paths:
-        - /admin/account/login
-        - /admin/account/captcha
+        # 账号相关接口全部免鉴权（登录、验证码，以及登录后携带 token 主动请求的个人资料类接口）
+        - /admin/account/*
         - /healthz
         - /readyz
     - method: get

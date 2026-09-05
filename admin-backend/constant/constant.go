@@ -23,10 +23,14 @@ func IsAdministratorRole(roleId int32) bool {
 	return roleId == AdministerRoleId
 }
 
+// GetCustomClaims 取当前登录用户 claims
+// 免鉴权接口可能没有 claims，此时返回空对象，避免调用方 nil 指针解引用
 func GetCustomClaims(ctx *gin.Context) *jwt.CustomClaims {
 	val, ok := ctx.Get(ContextClaims)
 	if ok {
-		return val.(*jwt.CustomClaims)
+		if claims, ok := val.(*jwt.CustomClaims); ok && claims != nil {
+			return claims
+		}
 	}
-	return nil
+	return &jwt.CustomClaims{}
 }

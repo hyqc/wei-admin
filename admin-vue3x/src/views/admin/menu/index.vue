@@ -1,10 +1,12 @@
 <template>
   <PageContainer>
     <template #extra>
-      <a-button type="primary" @click="openAddModal()">
-        <template #icon><PlusOutlined /></template>
-        新建菜单
-      </a-button>
+      <Authorization permission="AdminMenuAdd">
+        <a-button type="primary" @click="openAddModal()">
+          <template #icon><PlusOutlined /></template>
+          新建菜单
+        </a-button>
+      </Authorization>
     </template>
 
     <a-table
@@ -31,22 +33,26 @@
           <span v-else>-</span>
         </template>
         <template v-else-if="column.key === 'isEnabled'">
-          <a-popconfirm
-            :title="`确定要${record.enabled ? '禁用' : '启用'}该菜单吗？`"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="updateEnabled(record)"
-          >
-            <a-switch :checked="record.enabled" checked-children="启用" un-checked-children="禁用" />
-          </a-popconfirm>
+          <Authorization permission="AdminMenuEdit">
+            <a-popconfirm
+              :title="`确定要${record.enabled ? '禁用' : '启用'}该菜单吗？`"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="updateEnabled(record)"
+            >
+              <a-switch :checked="record.enabled" checked-children="启用" un-checked-children="禁用" />
+            </a-popconfirm>
+          </Authorization>
         </template>
         <template v-else-if="column.key === 'hideInMenu'">
-          <a-switch
-            :checked="!record.hideInMenu"
-            checked-children="显示"
-            un-checked-children="隐藏"
-            @change="updateShow(record)"
-          />
+          <Authorization permission="AdminMenuEdit">
+            <a-switch
+              :checked="!record.hideInMenu"
+              checked-children="显示"
+              un-checked-children="隐藏"
+              @change="updateShow(record)"
+            />
+          </Authorization>
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space>
@@ -56,7 +62,7 @@
                 详情
               </a-button>
             </Authorization>
-            <Authorization permission="AdminMenuEdit">
+            <Authorization permission="AdminMenuAdd">
               <a-button type="link" size="small" @click="openAddModal(record)">
                 <template #icon><PlusOutlined /></template>
                 新增子菜单
@@ -69,7 +75,13 @@
               </a-button>
             </Authorization>
             <Authorization permission="AdminMenuEdit">
-              <a-button type="link" size="small" @click="openPermissionsModal(record)">
+              <!-- 目录型菜单（含子菜单）不是页面，没有可授权的操作，不提供权限配置 -->
+              <a-button
+                v-if="!record.children?.length"
+                type="link"
+                size="small"
+                @click="openPermissionsModal(record)"
+              >
                 <template #icon><SafetyCertificateOutlined /></template>
                 权限配置
               </a-button>

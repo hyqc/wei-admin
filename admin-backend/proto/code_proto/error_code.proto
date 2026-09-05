@@ -41,6 +41,7 @@ enum ErrorCode{
   AdminMenuNameExist = 700002; // 菜单名称已存在
   AdminMenuKeyExist = 700003; // 菜单键名已存在
   AdminMenuPathExist = 700004; // 菜单路径已存在
+  AdminMenuHasChildren = 700005; // 目录菜单（含子菜单）不是页面，不支持配置权限
 
   AdminRoleNotExist = 800001; // 角色不存在
   AdminRoleNameExist = 800002; // 角色名称已存在

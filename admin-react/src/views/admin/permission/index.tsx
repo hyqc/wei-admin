@@ -1,42 +1,35 @@
 ﻿import { useEffect, useState } from 'react';
-import { Button, Form, Input, Popconfirm, Select, Space, Table, Tag, TreeSelect, message } from 'antd';
+import { Button, Form, Input, Select, Space, Table, Tag, TreeSelect } from 'antd';
+import { EyeOutlined, ReloadOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
-import {
-  ApiOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  ReloadOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
 import PageContainer from '@/components/PageContainer';
 import Authorization from '@/components/Authorization';
 import RowEnabledButton from '@/components/RowEnabledButton';
-import AddPermissionModal from './components/AddPermissionModal';
-import EditPermissionModal from './components/EditPermissionModal';
 import DetailPermissionDrawer from './components/DetailPermissionDrawer';
-import BindApisModal from './components/BindApisModal';
-import { DEFAULT_PERMISSION_TYPES } from './components/common';
-import { getAdminPermissionList, deleteAdminPermission, enableAdminPermission } from '@/api/admin/permission';
+import { PERMISSION_TYPE_OPTIONS } from './components/common';
+import { getAdminPermissionList } from '@/api/admin/permission';
 import { getAdminMenuTree } from '@/api/admin/menu';
+import { getAdminApiAll } from '@/api/admin/api';
 import type { PermissionListItem } from '@/types/admin_permission';
 import type { MenuTreeItem } from '@/types/admin_menu';
 import { DEFAULT_PAGE_INFO } from '@/api/config';
 import type { PageInfoType } from '@/api/types';
 
-/** 权限管理 */
+/**
+ * 权限管理（只读检索/审计）
+ * 权限点及其接口绑定统一在「菜单管理 → 权限配置」中维护，此页只提供查询、详情与按接口反查
+ */
 export default function AdminPermission() {
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<PermissionListItem[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfoType>({ ...DEFAULT_PAGE_INFO });
-  const [menuTreeOptions, setMenuTreeOptions] = useState<unknown[]>([]);  const [searchForm] = Form.useForm<{ menuId?: number; key?: string; name?: string; type?: string }>();
-  const [addOpen, setAddOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
+  const [menuTreeOptions, setMenuTreeOptions] = useState<unknown[]>([]);
+  const [apiOptions, setApiOptions] = useState<{ label: string; value: number }[]>([]);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [bindApisOpen, setBindApisOpen] = useState(false);
-  const [editData, setEditData] = useState<PermissionListItem>();
   const [detailData, setDetailData] = useState<PermissionListItem>();
+  const [searchForm] = Form.useForm<{ menuId?: number; key?: string; name?: string; type?: string; apiId?: number }>();
+  const navigate = useNavigate();
 
   function loadMenuTree() {
     getAdminMenuTree().then((res) => {
@@ -51,6 +44,18 @@ export default function AdminPermission() {
     });
   }
 
+  /** 接口下拉：用于反查“绑定了某接口的权限点” */
+  function loadApiOptions() {
+    getAdminApiAll().then((res) => {
+      setApiOptions(
+        (res.data || [])
+          .slice()
+          .sort((a, b) => (a.path || '').localeCompare(b.path || ''))
+          .map((item) => ({ label: `${item.name} (${item.path})`, value: item.id as number })),
+      );
+    });
+  }
+
   function getRows(page = pageInfo, search = searchForm.getFieldsValue()) {
     setLoading(true);
     getAdminPermissionList({
@@ -60,6 +65,7 @@ export default function AdminPermission() {
       key: search.key,
       name: search.name,
       type: search.type,
+      apiId: search.apiId,
     })
       .then((res) => {
         setRows(res.data.list || []);
@@ -70,6 +76,7 @@ export default function AdminPermission() {
 
   useEffect(() => {
     loadMenuTree();
+    loadApiOptions();
     getRows();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -81,7 +88,7 @@ export default function AdminPermission() {
   }
 
   function onReset() {
-    searchForm.setFieldsValue({ menuId: undefined, key: undefined, name: undefined, type: undefined });
+    searchForm.setFieldsValue({ menuId: undefined, key: undefined, name: undefined, type: undefined, apiId: undefined });
     onSearch();
   }
 
@@ -95,24 +102,6 @@ export default function AdminPermission() {
     const next = { ...pageInfo, pageSize, pageNum: 1 };
     setPageInfo(next);
     getRows(next);
-  }
-
-  function updateEnabled(record: PermissionListItem) {
-    enableAdminPermission({ id: record.id, enabled: !record.isEnabled }).then((res) => {
-      message.success(res.msg, 2);
-      getRows();
-    });
-  }
-
-  function onDelete(record: PermissionListItem) {
-    deleteAdminPermission({ id: record.id }).then((res) => {
-      message.success(res.msg, 2);
-      getRows();
-    });
-  }
-
-  function onModalNotice() {
-    getRows();
   }
 
   const columns: ColumnsType<PermissionListItem> = [
@@ -145,48 +134,33 @@ export default function AdminPermission() {
       dataIndex: 'enabled',
       key: 'enabled',
       width: 100,
-      render: (_v, record) => (
-        <Popconfirm
-          title={`确定要${record.isEnabled ? '禁用' : '启用'}该权限吗？`}
-          okText="确定"
-          cancelText="取消"
-          onConfirm={() => updateEnabled(record)}
-        >
-          <RowEnabledButton isEnabled={record.isEnabled} />
-        </Popconfirm>
-      ),
+      render: (_v, record) => <RowEnabledButton isEnabled={record.isEnabled} />,
     },
     {
       title: '操作',
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
-      width: 320,
+      width: 180,
       render: (_v, record) => (
         <Space>
           <Authorization permission="AdminPermissionView">
-            <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => { setDetailData(record); setDetailOpen(true); }}>
+            <Button
+              type="link"
+              size="small"
+              icon={<EyeOutlined />}
+              onClick={() => {
+                setDetailData(record);
+                setDetailOpen(true);
+              }}
+            >
               详情
             </Button>
           </Authorization>
-          <Authorization permission="AdminPermissionEdit">
-            <Button type="link" size="small" icon={<EditOutlined />} onClick={() => { setEditData(record); setEditOpen(true); }}>
-              编辑
+          <Authorization permission="AdminMenuEdit">
+            <Button type="link" size="small" icon={<SettingOutlined />} onClick={() => navigate('/admin/menu')}>
+              去配置
             </Button>
-          </Authorization>
-          <Authorization permission="AdminPermissionEdit">
-            <Button type="link" size="small" icon={<ApiOutlined />} onClick={() => { setDetailData(record); setBindApisOpen(true); }}>
-              绑定接口
-            </Button>
-          </Authorization>
-          <Authorization permission="AdminPermissionDelete">
-            {!record.isEnabled && (
-              <Popconfirm title="确定要删除该权限吗？" okText="确定" cancelText="取消" onConfirm={() => onDelete(record)}>
-                <Button type="link" size="small" danger icon={<DeleteOutlined />}>
-                  删除
-                </Button>
-              </Popconfirm>
-            )}
           </Authorization>
         </Space>
       ),
@@ -210,30 +184,38 @@ export default function AdminPermission() {
             <Input placeholder="请输入权限名称" allowClear />
           </Form.Item>
           <Form.Item label="类型" name="type">
+            <Select placeholder="全部" allowClear style={{ width: 120 }} options={PERMISSION_TYPE_OPTIONS} />
+          </Form.Item>
+          <Form.Item label="接口" name="apiId">
             <Select
               placeholder="全部"
               allowClear
-              style={{ width: 120 }}
-              options={DEFAULT_PERMISSION_TYPES.map((item) => ({ value: item.key, label: item.name }))}
+              showSearch
+              optionFilterProp="label"
+              options={apiOptions}
+              style={{ width: 240 }}
             />
           </Form.Item>
           <Form.Item>
             <Space>
-              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>查询</Button>
-              <Button icon={<ReloadOutlined />} onClick={onReset}>重置</Button>
+              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
+                查询
+              </Button>
+              <Button icon={<ReloadOutlined />} onClick={onReset}>
+                重置
+              </Button>
             </Space>
           </Form.Item>
         </Form>
       }
       extra={
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddOpen(true)}>新建权限</Button>
+        <span style={{ color: 'rgba(0,0,0,0.45)' }}>
+          权限点及其接口绑定由各菜单的“权限配置”统一维护，此页仅用于查询与审计
+        </span>
       }
     >
       <Table columns={columns} dataSource={rows} loading={loading} pagination={false} rowKey="id" scroll={{ x: 1250 }} />
-      <AddPermissionModal open={addOpen} onClose={() => setAddOpen(false)} onNotice={onModalNotice} />
-      <EditPermissionModal open={editOpen} detailData={editData} onClose={() => setEditOpen(false)} onNotice={onModalNotice} />
-      <DetailPermissionDrawer open={detailOpen} detailData={detailData} onClose={() => setDetailOpen(false)} onNotice={onModalNotice} />
-      <BindApisModal open={bindApisOpen} detailData={detailData} onClose={() => setBindApisOpen(false)} onNotice={onModalNotice} />
+      <DetailPermissionDrawer open={detailOpen} detailData={detailData} onClose={() => setDetailOpen(false)} />
     </PageContainer>
   );
 }

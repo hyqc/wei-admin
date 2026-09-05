@@ -56,6 +56,7 @@ const (
 	ErrorCode_AdminMenuNameExist           ErrorCode = 700002 // 菜单名称已存在
 	ErrorCode_AdminMenuKeyExist            ErrorCode = 700003 // 菜单键名已存在
 	ErrorCode_AdminMenuPathExist           ErrorCode = 700004 // 菜单路径已存在
+	ErrorCode_AdminMenuHasChildren         ErrorCode = 700005 // 目录菜单（含子菜单）不是页面，不支持配置权限
 	ErrorCode_AdminRoleNotExist            ErrorCode = 800001 // 角色不存在
 	ErrorCode_AdminRoleNameExist           ErrorCode = 800002 // 角色名称已存在
 )
@@ -95,6 +96,7 @@ var (
 		700002: "AdminMenuNameExist",
 		700003: "AdminMenuKeyExist",
 		700004: "AdminMenuPathExist",
+		700005: "AdminMenuHasChildren",
 		800001: "AdminRoleNotExist",
 		800002: "AdminRoleNameExist",
 	}
@@ -131,6 +133,7 @@ var (
 		"AdminMenuNameExist":           700002,
 		"AdminMenuKeyExist":            700003,
 		"AdminMenuPathExist":           700004,
+		"AdminMenuHasChildren":         700005,
 		"AdminRoleNotExist":            800001,
 		"AdminRoleNameExist":           800002,
 	}

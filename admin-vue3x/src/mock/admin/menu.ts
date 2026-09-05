@@ -157,6 +157,7 @@ const entries: MockEntry[] = [
           describe: p.describe,
           enabled: p.enabled,
           menuId: p.menuId,
+          apiIds: p.apiIds,
         }));
       return ok({ menu, permissions });
     },

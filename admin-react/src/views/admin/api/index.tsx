@@ -105,14 +105,16 @@ export default function AdminApi() {
       key: 'isEnabled',
       width: 100,
       render: (_v, record) => (
-        <Popconfirm
-          title={`确定要${record.isEnabled ? '禁用' : '启用'}该接口吗？`}
-          okText="确定"
-          cancelText="取消"
-          onConfirm={() => updateEnabled(record)}
-        >
-          <RowEnabledButton isEnabled={record.isEnabled} />
-        </Popconfirm>
+        <Authorization permission="AdminApiEdit">
+          <Popconfirm
+            title={`确定要${record.isEnabled ? '禁用' : '启用'}该接口吗？`}
+            okText="确定"
+            cancelText="取消"
+            onConfirm={() => updateEnabled(record)}
+          >
+            <RowEnabledButton isEnabled={record.isEnabled} />
+          </Popconfirm>
+        </Authorization>
       ),
     },
     { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt', width: 180 },
@@ -174,7 +176,9 @@ export default function AdminApi() {
         </Form>
       }
       extra={
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddOpen(true)}>新建接口</Button>
+        <Authorization permission="AdminApiAdd">
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddOpen(true)}>新建接口</Button>
+        </Authorization>
       }
     >
       <Table columns={columns} dataSource={rows} loading={loading} pagination={false} rowKey="id" scroll={{ x: 1060 }} />

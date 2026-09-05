@@ -1,0 +1,10 @@
+SELECT '--permission--';
+SELECT id, menu_id, `key`, type, name FROM admin_permission ORDER BY id;
+SELECT '--counts--';
+SELECT (SELECT COUNT(*) FROM admin_permission) AS perms, (SELECT COUNT(*) FROM admin_permission_api) AS pa, (SELECT COUNT(*) FROM admin_role_permission) AS rp;
+SELECT '--role perm--';
+SELECT role_id, COUNT(*) FROM admin_role_permission GROUP BY role_id;
+SELECT '--unbound apis--';
+SELECT id, `key` FROM admin_api WHERE is_enabled=1 AND id NOT IN (SELECT api_id FROM admin_permission_api);
+SELECT '--indexes--';
+SHOW INDEX FROM admin_permission;

@@ -25,6 +25,7 @@ type IAdminMenu interface {
 	FindAll(ctx *gin.Context) ([]*model.AdminMenu, error)         // 全部的菜单，包括禁用的
 	FindAllValid(ctx context.Context) ([]*model.AdminMenu, error) // 获取全部有效菜单
 	FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error)
+	CountByParentId(ctx *gin.Context, parentId int32) (int64, error) // 子菜单数量，用于判断是否为目录型菜单
 	FindPages(ctx *gin.Context) ([]*model.AdminMenu, error)
 	FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminMenu, error)
 	Show(ctx *gin.Context, menuId int32, field string, show bool) error
@@ -58,17 +59,38 @@ func (a *AdminMenu) Show(ctx *gin.Context, menuId int32, f string, show bool) er
 	return err
 }
 
+// Delete 删除菜单，并级联清理该菜单下的权限点及其接口绑定、角色绑定，避免产生孤儿权限点
 func (a *AdminMenu) Delete(ctx *gin.Context, id int32) error {
 	t := global.AppDB.DefaultMysql()
 	err := t.Transaction(func(tx *gorm.DB) error {
-		menu := query.AdminMenu
-		_, err := menu.WithContext(ctx).Where(menu.ID.Eq(id)).Delete()
-		if err != nil {
-			return err
+		// 事务内必须使用绑定了 tx 的 query，否则操作不走事务
+		q := query.Use(tx)
+		menu := q.AdminMenu
+		per := q.AdminPermission
+		pa := q.AdminPermissionAPI
+		rp := q.AdminRolePermission
+
+		permissions, terr := per.WithContext(ctx).Where(per.MenuID.Eq(id)).Select(per.ID).Find()
+		if terr != nil {
+			return terr
 		}
-		per := query.AdminPermission
-		_, err = per.WithContext(ctx).Where(per.MenuID.Eq(id)).Delete()
-		return err
+		if len(permissions) > 0 {
+			permissionIds := make([]int32, 0, len(permissions))
+			for _, item := range permissions {
+				permissionIds = append(permissionIds, item.ID)
+			}
+			if _, terr = pa.WithContext(ctx).Where(pa.PermissionID.In(permissionIds...)).Delete(); terr != nil {
+				return terr
+			}
+			if _, terr = rp.WithContext(ctx).Where(rp.PermissionID.In(permissionIds...)).Delete(); terr != nil {
+				return terr
+			}
+		}
+		if _, terr = per.WithContext(ctx).Where(per.MenuID.Eq(id)).Delete(); terr != nil {
+			return terr
+		}
+		_, terr = menu.WithContext(ctx).Where(menu.ID.Eq(id)).Delete()
+		return terr
 	})
 
 	return err
@@ -105,6 +127,11 @@ func (a *AdminMenu) FindList(ctx *gin.Context, params *admin_proto.ReqAdminMenuL
 
 func (a *AdminMenu) FindById(ctx *gin.Context, id int32) (*model.AdminMenu, error) {
 	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ID.Eq(id)).First()
+}
+
+// CountByParentId 统计某菜单的直接子菜单数量（>0 表示它是目录型菜单，不是页面）
+func (a *AdminMenu) CountByParentId(ctx *gin.Context, parentId int32) (int64, error) {
+	return query.AdminMenu.WithContext(ctx).Where(query.AdminMenu.ParentID.Eq(parentId)).Count()
 }
 
 func (a *AdminMenu) FindPages(ctx *gin.Context) ([]*model.AdminMenu, error) {

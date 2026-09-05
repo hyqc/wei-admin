@@ -1,8 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
-import { Badge, Button, Descriptions, Drawer, Spin, Tag } from 'antd';
+import { Badge, Descriptions, Drawer, Spin, Tag } from 'antd';
 import { DefaultDrawerWidth } from '@/api/config';
-import Authorization from '@/components/Authorization';
-import BindApisModal from './BindApisModal';
 import { getAdminPermissionInfo } from '@/api/admin/permission';
 import type { ResponseAdminPermissionInfoType } from '@/api/admin/permission';
 import type { PermissionListItem } from '@/types/admin_permission';
@@ -11,12 +9,10 @@ interface DetailPermissionDrawerProps {
   open: boolean;
   detailData?: PermissionListItem;
   onClose: () => void;
-  onNotice: () => void;
 }
 
-/** 权限详情（含绑定接口按钮） */
-export default function DetailPermissionDrawer({ open, detailData, onClose, onNotice }: DetailPermissionDrawerProps) {
-  const [bindApisOpen, setBindApisOpen] = useState(false);
+/** 权限详情（只读；权限点与接口的绑定在菜单权限配置中维护） */
+export default function DetailPermissionDrawer({ open, detailData, onClose }: DetailPermissionDrawerProps) {
   const [loading, setLoading] = useState(false);
   const [detail, setDetail] = useState<ResponseAdminPermissionInfoType>();
 
@@ -48,25 +44,20 @@ export default function DetailPermissionDrawer({ open, detailData, onClose, onNo
             {detail?.apis?.length ? (
               <div>
                 {detail.apis.map((api) => (
-                  <Tag key={api.id} color="green">
+                  <Tag key={api.id} color="green" title={api.path}>
                     {api.name}
                   </Tag>
                 ))}
               </div>
             ) : (
-              '暂无接口'
+              <span style={{ color: 'rgba(0,0,0,0.45)' }}>暂无接口</span>
             )}
           </Descriptions.Item>
         </Descriptions>
+        <div style={{ marginTop: 16, fontSize: 12, lineHeight: 1.5, color: 'rgba(0,0,0,0.45)' }}>
+          权限点与接口的绑定在“菜单管理 → 对应菜单 → 权限配置”中维护
+        </div>
       </Spin>
-      <div style={{ marginTop: 16, textAlign: 'right' }}>
-        <Authorization permission="AdminPermissionEdit">
-          <Button type="primary" onClick={() => setBindApisOpen(true)}>
-            绑定接口
-          </Button>
-        </Authorization>
-      </div>
-      <BindApisModal open={bindApisOpen} detailData={detail} onClose={() => setBindApisOpen(false)} onNotice={onNotice} />
     </Drawer>
   );
 }

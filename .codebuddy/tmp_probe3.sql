@@ -1,0 +1,12 @@
+SELECT '--api full--';
+SELECT id, `key`, path, name, is_enabled FROM admin_api ORDER BY id;
+SELECT '--permission_api current--';
+SELECT permission_id, api_id FROM admin_permission_api ORDER BY permission_id, api_id;
+SELECT '--permission current--';
+SELECT id, menu_id, `key`, type, name FROM admin_permission ORDER BY id;
+SELECT '--user--';
+SELECT id, username, is_enabled FROM admin_user;
+SELECT '--user_role--';
+SELECT admin_id, role_id FROM admin_user_role;
+SELECT '--role_permission--';
+SELECT role_id, permission_id FROM admin_role_permission;

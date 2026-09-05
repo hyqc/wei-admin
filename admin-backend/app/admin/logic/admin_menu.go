@@ -223,6 +223,21 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAd
 		data.Permissions = common.AdminPermissionEnumList(info.ID, info.Key)
 		return data, nil
 	} else {
+		// 权限点已绑定的接口：用于菜单权限配置回显
+		permissionIds := make([]int32, 0, len(permissions))
+		for _, item := range permissions {
+			permissionIds = append(permissionIds, item.ID)
+		}
+		apiIdsMap := make(map[int32][]int32, len(permissions))
+		if len(permissionIds) > 0 {
+			apiList, err := dao.H.AdminAPI.FindByPermissionIds(ctx, permissionIds)
+			if err != nil {
+				return nil, err
+			}
+			for _, api := range apiList {
+				apiIdsMap[api.PermissionId] = append(apiIdsMap[api.PermissionId], api.ID)
+			}
+		}
 		for _, item := range permissions {
 			data.Permissions = append(data.Permissions, &admin_proto.MenuPermissionItem{
 				MenuId:   item.MenuID,
@@ -232,6 +247,7 @@ func (a *AdminMenuLogic) Permissions(ctx *gin.Context, params *admin_proto.ReqAd
 				Name:     item.Name,
 				Describe: item.Describe,
 				Enabled:  item.IsEnabled,
+				ApiIds:   apiIdsMap[item.ID],
 			})
 		}
 	}

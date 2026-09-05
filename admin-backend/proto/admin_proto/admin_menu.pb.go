@@ -1664,6 +1664,7 @@ type MenuPermissionItem struct {
 	Describe      string                 `protobuf:"bytes,6,opt,name=Describe,proto3" json:"Describe,omitempty"`
 	Enabled       bool                   `protobuf:"varint,7,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	MenuId        int32                  `protobuf:"varint,8,opt,name=menuId,proto3" json:"menuId,omitempty"`
+	ApiIds        []int32                `protobuf:"varint,9,rep,packed,name=apiIds,proto3" json:"apiIds,omitempty"` // 已绑定的接口ID列表
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

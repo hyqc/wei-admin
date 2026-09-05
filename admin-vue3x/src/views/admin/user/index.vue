@@ -33,10 +33,12 @@
       </a-form>
     </template>
     <template #extra>
-      <a-button type="primary" @click="openAddModal">
-        <template #icon><PlusOutlined /></template>
-        新建账号
-      </a-button>
+      <Authorization permission="AdminUserAdd">
+        <a-button type="primary" @click="openAddModal">
+          <template #icon><PlusOutlined /></template>
+          新建账号
+        </a-button>
+      </Authorization>
     </template>
 
     <a-table
@@ -70,14 +72,16 @@
           </template>
         </template>
         <template v-else-if="column.key === 'isEnabled'">
-          <a-popconfirm
-            :title="`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="updateEnabled(record)"
-          >
-            <RowEnabledButton :is-enabled="record.isEnabled" :is-enabled-button-disabled="record.adminId === AdminId" />
-          </a-popconfirm>
+          <Authorization permission="AdminUserEdit">
+            <a-popconfirm
+              :title="`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="updateEnabled(record)"
+            >
+              <RowEnabledButton :is-enabled="record.isEnabled" :is-enabled-button-disabled="record.adminId === AdminId" />
+            </a-popconfirm>
+          </Authorization>
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space>
@@ -93,13 +97,13 @@
                 编辑
               </a-button>
             </Authorization>
-            <Authorization permission="AdminUserEdit">
+            <Authorization permission="AdminUserResetPwd">
               <a-button type="link" size="small" @click="openResetPwdModal(record)">
                 <template #icon><KeyOutlined /></template>
                 重置密码
               </a-button>
             </Authorization>
-            <Authorization permission="AdminUserEdit">
+            <Authorization permission="AdminUserBindRoles">
               <!-- 超管账号自动拥有全部权限，不允许绑定角色 -->
               <a-button v-if="!record.isSuperAdmin" type="link" size="small" @click="openBindRolesModal(record)">
                 <template #icon><UserSwitchOutlined /></template>

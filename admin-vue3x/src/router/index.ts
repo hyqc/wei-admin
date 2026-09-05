@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { IsLogin, Logout } from '@/utils/common';
 import { HomePath, LoginPath } from '@/api/config';
+import { IsAuthForbiddenCode } from '@/api/code';
 import { useUserStore } from '@/store/user';
 
 const routes = [
@@ -94,7 +95,13 @@ router.beforeEach(async (to, _from, next) => {
     if (Object.keys(store.menus).length === 0) {
       try {
         await store.fetchUserInfo();
-      } catch {
+      } catch (e) {
+        // 没有访问权限时仅提示并跳 403，不退出登录
+        const code = (e as { code?: number })?.code;
+        if (IsAuthForbiddenCode(code)) {
+          next({ path: '/403' });
+          return;
+        }
         Logout();
         next({ path: LoginPath, query: { redirect: to.fullPath } });
         return;

@@ -5,14 +5,15 @@ import (
 	"admin/app/admin/gen/model"
 	"admin/app/admin/gen/query"
 	"admin/app/common"
+	"admin/code"
 	"admin/constant"
 	"admin/global"
 	"admin/proto/admin_proto"
+	"admin/proto/code_proto"
 	"context"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gen/field"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"time"
 )
 
@@ -29,12 +30,19 @@ type IAdminPermission interface {
 	Delete(ctx *gin.Context, id int32) error
 	BindApis(ctx *gin.Context, permissionId int32, permissionApes []*model.AdminPermissionAPI) error
 	UnBindApi(ctx *gin.Context, permissionId, apiId int32) error
-	BatchAddPermissions(ctx *gin.Context, data []*model.AdminPermission) error
+	BatchAddPermissions(ctx *gin.Context, menuId int32, data []PermissionSyncItem) error
 	FindByIds(ctx *gin.Context, ids []int32) ([]*model.AdminPermission, error)
 	IsAdminCanAccessPath(ctx context.Context, adminId int32, path string) (bool, error)
 }
 
 type AdminPermission struct {
+}
+
+// PermissionSyncItem 菜单权限配置的同步项：权限点 + 该操作需要访问的接口
+// ApiIds 为 nil 表示本次不改动接口绑定，非 nil（含空切片）表示全量覆盖为该集合
+type PermissionSyncItem struct {
+	Permission *model.AdminPermission
+	ApiIds     []int32
 }
 
 func newAdminPermission() *AdminPermission {
@@ -43,6 +51,8 @@ func newAdminPermission() *AdminPermission {
 
 type AdminPermissionType string
 
+// 权限动作类型固定三类：view 查看（读）/ edit 编辑（写，含新增、重置、绑定等一切写操作）/ delete 删除
+// AdminPermissionTypeAll 仅用于列表筛选时表示"全部类型"
 const (
 	AdminPermissionTypeAll    AdminPermissionType = "all"
 	AdminPermissionTypeView   AdminPermissionType = "view"
@@ -52,17 +62,21 @@ const (
 
 var (
 	AdminPermissionTypeTextMap = map[AdminPermissionType]string{
+		AdminPermissionTypeAll:    "全部",
 		AdminPermissionTypeView:   "查看",
 		AdminPermissionTypeEdit:   "编辑",
 		AdminPermissionTypeDelete: "删除",
 	}
 )
 
+// GetAdminPermissionTypeText 获取权限类型展示名
+// 权限类型是"软枚举"：内置类型返回中文名，自定义类型（如 export/audit）直接返回原值，
+// 保证列表/详情里不会出现空白类型（与 common.GetPermissionTypeName 行为保持一致）
 func GetAdminPermissionTypeText(t AdminPermissionType) string {
-	if _, ok := AdminPermissionTypeTextMap[t]; ok {
-		return AdminPermissionTypeTextMap[t]
+	if val, ok := AdminPermissionTypeTextMap[t]; ok {
+		return val
 	}
-	return ""
+	return string(t)
 }
 
 // FindAdministerPermissions 获取超管对应的权限
@@ -145,6 +159,11 @@ func (a *AdminPermission) handleListReq(ctx context.Context, params *admin_proto
 	if params.Type != "" && params.Type != string(AdminPermissionTypeAll) {
 		q = q.Where(DB.Type.Eq(params.Type))
 	}
+	// 反查：绑定了该接口的权限点
+	if params.ApiId > 0 {
+		PA := query.AdminPermissionAPI
+		q = q.Join(PA, PA.PermissionID.EqCol(DB.ID), PA.APIID.Eq(params.ApiId))
+	}
 
 	return q
 }
@@ -183,11 +202,119 @@ func (a *AdminPermission) Delete(ctx *gin.Context, id int32) error {
 	return err
 }
 
-func (a *AdminPermission) BatchAddPermissions(ctx *gin.Context, data []*model.AdminPermission) error {
-	return query.AdminPermission.WithContext(ctx).Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "id"}, {Name: "key"}},
-		DoUpdates: clause.AssignmentColumns([]string{"name", "describe", "is_enabled"}),
-	}).Create(data...)
+// BatchAddPermissions 同步"菜单权限配置"提交的权限点集合：
+//  1. 校验权限唯一键：本次提交内部不可重复，也不可与其它权限点冲突；
+//  2. 已存在的权限点按 id 全字段更新（含 key，解决改 key 不生效的问题），
+//     删除该菜单下已存在但本次未提交的权限点（级联清理接口绑定与角色绑定），
+//     保证 UI 中删除"操作权限"行后对应的权限点真正被移除；
+//  3. 逐项全量覆盖接口绑定：ApiIds 为 nil 表示本次不动绑定，非 nil（含空切片）表示覆盖为指定集合；
+//  4. 提交空集合表示清空该菜单全部权限点。
+func (a *AdminPermission) BatchAddPermissions(ctx *gin.Context, menuId int32, data []PermissionSyncItem) error {
+	return global.AppDB.DefaultMysql().Transaction(func(tx *gorm.DB) error {
+		// 事务内必须使用绑定了 tx 的 query，否则操作不走事务
+		q := query.Use(tx)
+		p := q.AdminPermission
+		pa := q.AdminPermissionAPI
+		rp := q.AdminRolePermission
+
+		// 1. 唯一键校验
+		submittedKeys := make(map[string]struct{}, len(data))
+		for _, item := range data {
+			key := item.Permission.Key
+			if _, ok := submittedKeys[key]; ok {
+				return code.NewCodeError(code_proto.ErrorCode_AdminPermissionKeyExist, nil)
+			}
+			submittedKeys[key] = struct{}{}
+			conflict := p.WithContext(ctx).Where(p.Key.Eq(key))
+			if item.Permission.ID > 0 {
+				conflict = conflict.Where(p.ID.Neq(item.Permission.ID))
+			}
+			if count, err := conflict.Count(); err != nil {
+				return err
+			} else if count > 0 {
+				return code.NewCodeError(code_proto.ErrorCode_AdminPermissionKeyExist, nil)
+			}
+		}
+
+		// 2. 该菜单现有权限点
+		existing, err := p.WithContext(ctx).Where(p.MenuID.Eq(menuId)).Find()
+		if err != nil {
+			return err
+		}
+		existingIds := make(map[int32]struct{}, len(existing))
+		for _, e := range existing {
+			existingIds[e.ID] = struct{}{}
+		}
+
+		submittedIds := make(map[int32]struct{}, len(data))
+		for _, item := range data {
+			perm := item.Permission
+			perm.MenuID = menuId
+			if perm.ID > 0 && !existingIdExists(existingIds, perm.ID) {
+				// 提交了一个不属于本菜单的权限点 id，按新增处理
+				perm.ID = 0
+			}
+			if perm.ID > 0 {
+				// 已存在：显式指定列更新（结构体 Updates 会忽略零值导致无法禁用）
+				if _, err := p.WithContext(ctx).Where(p.ID.Eq(perm.ID)).Updates(map[string]interface{}{
+					"menu_id":    perm.MenuID,
+					"key":        perm.Key,
+					"name":       perm.Name,
+					"type":       perm.Type,
+					"describe":   perm.Describe,
+					"is_enabled": perm.IsEnabled,
+				}); err != nil {
+					return err
+				}
+			} else {
+				if err := p.WithContext(ctx).Create(perm); err != nil {
+					return err
+				}
+			}
+			submittedIds[perm.ID] = struct{}{}
+
+			// 3. 接口绑定：ApiIds 为 nil 时保持原绑定不变
+			if item.ApiIds != nil {
+				if _, err := pa.WithContext(ctx).Where(pa.PermissionID.Eq(perm.ID)).Delete(); err != nil {
+					return err
+				}
+				if len(item.ApiIds) > 0 {
+					bindings := make([]*model.AdminPermissionAPI, 0, len(item.ApiIds))
+					for _, apiId := range item.ApiIds {
+						bindings = append(bindings, &model.AdminPermissionAPI{PermissionID: perm.ID, APIID: apiId})
+					}
+					if err := pa.WithContext(ctx).Create(bindings...); err != nil {
+						return err
+					}
+				}
+			}
+		}
+
+		// 4. 删除本次未提交的旧权限点
+		toBeDeleted := make([]int32, 0)
+		for id := range existingIds {
+			if _, ok := submittedIds[id]; !ok {
+				toBeDeleted = append(toBeDeleted, id)
+			}
+		}
+		if len(toBeDeleted) > 0 {
+			if _, err = pa.WithContext(ctx).Where(pa.PermissionID.In(toBeDeleted...)).Delete(); err != nil {
+				return err
+			}
+			if _, err = rp.WithContext(ctx).Where(rp.PermissionID.In(toBeDeleted...)).Delete(); err != nil {
+				return err
+			}
+			if _, err = p.WithContext(ctx).Where(p.ID.In(toBeDeleted...)).Delete(); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
+func existingIdExists(m map[int32]struct{}, id int32) bool {
+	_, ok := m[id]
+	return ok
 }
 
 func (a *AdminPermission) BindApis(ctx *gin.Context, permissionId int32, permissionApes []*model.AdminPermissionAPI) error {

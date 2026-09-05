@@ -10,6 +10,7 @@ message ReqAdminPermissionList{
   string key = 3;//权限唯一标识符
   string name = 4;//权限名称
   string type = 5;//权限类型
+  int32 apiId = 6;//接口ID（反查绑定了该接口的权限点）
 }
 message RespAdminPermissionListData{
   int64 total = 1;
@@ -29,6 +30,7 @@ message ReqFrontAdminPermissionList{
   string key = 9; // 权限唯一标识符
   string name = 10; // 权限名称
   string type = 11; // 权限类型
+  int32 apiId = 12; // 接口ID（反查绑定了该接口的权限点）
 }
 
 // 权限列表返回（与前端保持一致：list + pageInfo）
@@ -68,6 +70,7 @@ message ReqAdminPermissionAdd{
   string type = 8;  // @gotags:  label:"权限类型" binding:"required,trimBlank"
   string redirect = 9; // @gotags:  label:"重定向地址"
   bool enabled = 10;  // @gotags:  label:"是否启用"
+  repeated int32 apiIds = 11; // 绑定的接口ID列表（菜单权限配置提交；不传表示不改绑定，传空数组表示清空）
 }
 message RespAdminPermissionAddData{
 }

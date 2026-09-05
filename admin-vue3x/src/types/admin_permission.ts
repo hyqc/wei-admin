@@ -10,6 +10,8 @@ export interface ReqAdminPermissionList extends ReqListBase {
   name?: string;
   /** 权限类型 */
   type?: string;
+  /** 接口ID（反查绑定了该接口的权限点） */
+  apiId?: number;
 }
 
 /** 创建权限 */
@@ -34,6 +36,8 @@ export interface ReqAdminPermissionAdd {
   redirect?: string;
   /** 是否启用 */
   enabled?: boolean;
+  /** 绑定的接口ID列表（菜单权限配置提交） */
+  apiIds?: number[];
 }
 
 /** 修改权限 */

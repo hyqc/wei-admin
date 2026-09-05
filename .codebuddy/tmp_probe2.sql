@@ -1,0 +1,12 @@
+SELECT '--index admin_permission--';
+SHOW INDEX FROM admin_permission;
+SELECT '--create table admin_permission--';
+SHOW CREATE TABLE admin_permission;
+SELECT '--menu--';
+SELECT id, parent_id, name, `key` FROM admin_menu ORDER BY id;
+SELECT '--role--';
+SELECT id, name, is_enabled FROM admin_role;
+SELECT '--api id range--';
+SELECT MIN(id), MAX(id) FROM admin_api;
+SELECT '--auto_inc--';
+SELECT table_name, auto_increment FROM information_schema.tables WHERE table_schema='wei' AND table_name IN ('admin_permission','admin_api','admin_user');

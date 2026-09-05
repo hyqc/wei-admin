@@ -76,8 +76,15 @@ export default function CurrentAccount() {
               label="邮箱"
               name="email"
               rules={[
-                { required: true, message: '请输入邮箱' },
-                { pattern: AdminEmail, message: '邮箱格式不正确' },
+                {
+                  // 邮箱非必填：未填写时跳过校验，填写后才校验格式
+                  validator(_rule, value: string) {
+                    if (!value || AdminEmail.test(value)) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('邮箱格式不正确'));
+                  },
+                },
               ]}
             >
               <Input placeholder="请输入邮箱" allowClear />

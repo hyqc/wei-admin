@@ -40,3 +40,10 @@ export const IsSuperAdmin = (adminId?: number) => adminId === AdminId;
 
 /** 输入框样式 */
 export const INPUT_STYLE = { fontWeight: 400, color: 'black' };
+
+/** 免鉴权接口前缀（与后端 jwt.ignores 配置保持一致） */
+export const IgnoreAuthApiPrefixes = ['/admin/account/'];
+
+/** 请求地址是否命中免鉴权白名单 */
+export const IsIgnoreAuthApi = (url?: string) =>
+  !!url && IgnoreAuthApiPrefixes.some((prefix) => url.startsWith(prefix));

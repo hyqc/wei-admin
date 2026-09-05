@@ -179,4 +179,6 @@ export interface MenuPermissionItem {
   describe?: string;
   enabled?: boolean;
   menuId?: number;
+  /** 已绑定的接口ID列表 */
+  apiIds?: number[];
 }

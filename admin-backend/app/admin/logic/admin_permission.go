@@ -292,7 +292,15 @@ func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admi
 		}
 		return err
 	}
-	saveData := make([]*model2.AdminPermission, 0, len(params.Permissions))
+	// 目录型菜单（含子菜单）不是页面，没有可授权的操作，不参与权限配置
+	childCount, err := dao.H.AdminMenu.CountByParentId(ctx, params.MenuId)
+	if err != nil {
+		return err
+	}
+	if childCount > 0 {
+		return code.NewCodeError(code_proto.ErrorCode_AdminMenuHasChildren, nil)
+	}
+	saveData := make([]dao.PermissionSyncItem, 0, len(params.Permissions))
 	for _, item := range params.Permissions {
 		if item.Key == "" {
 			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionKeyNeed, nil)
@@ -300,18 +308,23 @@ func (a *AdminPermissionLogic) AddMenuPermissions(ctx *gin.Context, params *admi
 		if item.Name == "" {
 			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionNameNeed, nil)
 		}
-		if dao.GetAdminPermissionTypeText(dao.AdminPermissionType(item.Type)) == "" {
-			return code.NewCodeError(code_proto.ErrorCode_AdminPermissionTypeInvalid, nil)
+		// 权限类型为动作型分类（view/add/edit/enable/bind/reset/delete…），未传默认 view
+		if item.Type == "" {
+			item.Type = string(dao.AdminPermissionTypeView)
 		}
-		saveData = append(saveData, &model2.AdminPermission{
-			ID:        item.Id,
-			MenuID:    params.MenuId,
-			Key:       item.Key,
-			Name:      item.Name,
-			Type:      item.Type,
-			Describe:  item.Describe,
-			IsEnabled: item.Enabled,
+		saveData = append(saveData, dao.PermissionSyncItem{
+			Permission: &model2.AdminPermission{
+				ID:        item.Id,
+				MenuID:    params.MenuId,
+				Key:       item.Key,
+				Name:      item.Name,
+				Type:      item.Type,
+				Describe:  item.Describe,
+				IsEnabled: item.Enabled,
+			},
+			// ApiIds 为 nil 表示本次不改动该权限点的接口绑定
+			ApiIds: item.ApiIds,
 		})
 	}
-	return dao.H.AdminPermission.BatchAddPermissions(ctx, saveData)
+	return dao.H.AdminPermission.BatchAddPermissions(ctx, params.MenuId, saveData)
 }

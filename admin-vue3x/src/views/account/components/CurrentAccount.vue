@@ -59,8 +59,15 @@ const rules = {
     { max: 50, message: '昵称长度不能超过50个字符' },
   ],
   email: [
-    { required: true, message: '请输入邮箱' },
-    { pattern: AdminEmail, message: '邮箱格式不正确' },
+    {
+      // 邮箱非必填：未填写时跳过校验，填写后才校验格式
+      validator: (_rule: unknown, value: string) => {
+        if (!value || AdminEmail.test(value)) {
+          return Promise.resolve();
+        }
+        return Promise.reject(new Error('邮箱格式不正确'));
+      },
+    },
   ],
 };
 

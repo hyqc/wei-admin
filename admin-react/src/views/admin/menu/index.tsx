@@ -124,14 +124,16 @@ export default function AdminMenu() {
       key: 'isEnabled',
       width: 100,
       render: (_v, record) => (
-        <Popconfirm
-          title={`确定要${record.enabled ? '禁用' : '启用'}该菜单吗？`}
-          okText="确定"
-          cancelText="取消"
-          onConfirm={() => updateEnabled(record)}
-        >
-          <Switch checked={record.enabled} checkedChildren="启用" unCheckedChildren="禁用" />
-        </Popconfirm>
+        <Authorization permission="AdminMenuEdit">
+          <Popconfirm
+            title={`确定要${record.enabled ? '禁用' : '启用'}该菜单吗？`}
+            okText="确定"
+            cancelText="取消"
+            onConfirm={() => updateEnabled(record)}
+          >
+            <Switch checked={record.enabled} checkedChildren="启用" unCheckedChildren="禁用" />
+          </Popconfirm>
+        </Authorization>
       ),
     },
     {
@@ -140,12 +142,14 @@ export default function AdminMenu() {
       key: 'hideInMenu',
       width: 100,
       render: (_v, record) => (
-        <Switch
-          checked={!record.hideInMenu}
-          checkedChildren="显示"
-          unCheckedChildren="隐藏"
-          onChange={() => updateShow(record)}
-        />
+        <Authorization permission="AdminMenuEdit">
+          <Switch
+            checked={!record.hideInMenu}
+            checkedChildren="显示"
+            unCheckedChildren="隐藏"
+            onChange={() => updateShow(record)}
+          />
+        </Authorization>
       ),
     },
     { title: '创建时间', dataIndex: 'createTime', key: 'createTime', width: 180, render: (v: number) => formatTime(v) },
@@ -162,7 +166,7 @@ export default function AdminMenu() {
               详情
             </Button>
           </Authorization>
-          <Authorization permission="AdminMenuEdit">
+          <Authorization permission="AdminMenuAdd">
             <Button type="link" size="small" icon={<PlusOutlined />} onClick={() => openAddModal(record)}>
               新增子菜单
             </Button>
@@ -173,9 +177,12 @@ export default function AdminMenu() {
             </Button>
           </Authorization>
           <Authorization permission="AdminMenuEdit">
-            <Button type="link" size="small" icon={<SafetyCertificateOutlined />} onClick={() => { setDetailData(record); setPermissionsOpen(true); }}>
-              权限配置
-            </Button>
+            {/* 目录型菜单（含子菜单）不是页面，没有可授权的操作，不提供权限配置 */}
+            {!record.children?.length && (
+              <Button type="link" size="small" icon={<SafetyCertificateOutlined />} onClick={() => { setDetailData(record); setPermissionsOpen(true); }}>
+                权限配置
+              </Button>
+            )}
           </Authorization>
           <Authorization permission="AdminMenuDelete">
             {!record.enabled && (
@@ -194,9 +201,11 @@ export default function AdminMenu() {
   return (
     <PageContainer
       extra={
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => openAddModal()}>
-          新建菜单
-        </Button>
+        <Authorization permission="AdminMenuAdd">
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => openAddModal()}>
+            新建菜单
+          </Button>
+        </Authorization>
       }
     >
       <Table

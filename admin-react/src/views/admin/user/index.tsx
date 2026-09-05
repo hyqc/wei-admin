@@ -202,14 +202,16 @@ export default function AdminUser() {
       key: 'isEnabled',
       width: 100,
       render: (_v, record) => (
-        <Popconfirm
-          title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
-          okText="确定"
-          cancelText="取消"
-          onConfirm={() => updateEnabled(record)}
-        >
-          <RowEnabledButton isEnabled={record.isEnabled} isEnabledButtonDisabled={record.adminId === AdminId} />
-        </Popconfirm>
+        <Authorization permission="AdminUserEdit">
+          <Popconfirm
+            title={`确定要${record.isEnabled ? '禁用' : '启用'}该账号吗？`}
+            okText="确定"
+            cancelText="取消"
+            onConfirm={() => updateEnabled(record)}
+          >
+            <RowEnabledButton isEnabled={record.isEnabled} isEnabledButtonDisabled={record.adminId === AdminId} />
+          </Popconfirm>
+        </Authorization>
       ),
     },
     { title: '登录次数', dataIndex: 'loginTotal', key: 'loginTotal', width: 100 },
@@ -247,12 +249,12 @@ export default function AdminUser() {
               编辑
             </Button>
           </Authorization>
-          <Authorization permission="AdminUserEdit">
+          <Authorization permission="AdminUserResetPwd">
             <Button type="link" size="small" icon={<KeyOutlined />} onClick={() => openResetPwdModal(record)}>
               重置密码
             </Button>
           </Authorization>
-          <Authorization permission="AdminUserEdit">
+          <Authorization permission="AdminUserBindRoles">
             {/* 超管账号自动拥有全部权限，不允许绑定角色 */}
             {!record.isSuperAdmin && (
               <Button type="link" size="small" icon={<UserSwitchOutlined />} onClick={() => openBindRolesModal(record)}>
@@ -307,9 +309,11 @@ export default function AdminUser() {
         </Form>
       }
       extra={
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddOpen(true)}>
-          新建账号
-        </Button>
+        <Authorization permission="AdminUserAdd">
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddOpen(true)}>
+            新建账号
+          </Button>
+        </Authorization>
       }
     >
       <Table columns={columns} dataSource={rows} loading={loading} pagination={false} rowKey="adminId" scroll={{ x: 1940 }} />

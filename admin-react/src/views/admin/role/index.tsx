@@ -114,14 +114,16 @@ export default function AdminRole() {
       key: 'isEnabled',
       width: 100,
       render: (_v, record) => (
-        <Popconfirm
-          title={`确定要${record.isEnabled ? '禁用' : '启用'}该角色吗？`}
-          okText="确定"
-          cancelText="取消"
-          onConfirm={() => updateEnabled(record)}
-        >
-          <RowEnabledButton isEnabled={record.isEnabled} />
-        </Popconfirm>
+        <Authorization permission="AdminRoleEdit">
+          <Popconfirm
+            title={`确定要${record.isEnabled ? '禁用' : '启用'}该角色吗？`}
+            okText="确定"
+            cancelText="取消"
+            onConfirm={() => updateEnabled(record)}
+          >
+            <RowEnabledButton isEnabled={record.isEnabled} />
+          </Popconfirm>
+        </Authorization>
       ),
     },
     { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt', width: 180 },
@@ -145,7 +147,7 @@ export default function AdminRole() {
               编辑
             </Button>
           </Authorization>
-          <Authorization permission="AdminRoleEdit">
+          <Authorization permission="AdminRoleBindPermissions">
             {/* 超级管理员角色不允许绑定权限 */}
             {record.id !== 1 && (
               <Button type="link" size="small" icon={<SafetyCertificateOutlined />} onClick={() => { setDetailData(record); setBindOpen(true); }}>
@@ -189,7 +191,9 @@ export default function AdminRole() {
         </Form>
       }
       extra={
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddOpen(true)}>新建角色</Button>
+        <Authorization permission="AdminRoleAdd">
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddOpen(true)}>新建角色</Button>
+        </Authorization>
       }
     >
       <Table columns={columns} dataSource={rows} loading={loading} pagination={false} rowKey="id" scroll={{ x: 1320 }} />

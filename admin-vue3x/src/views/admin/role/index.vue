@@ -27,10 +27,12 @@
       </a-form>
     </template>
     <template #extra>
-      <a-button type="primary" @click="openAddModal">
-        <template #icon><PlusOutlined /></template>
-        新建角色
-      </a-button>
+      <Authorization permission="AdminRoleAdd">
+        <a-button type="primary" @click="openAddModal">
+          <template #icon><PlusOutlined /></template>
+          新建角色
+        </a-button>
+      </Authorization>
     </template>
 
     <a-table
@@ -49,14 +51,16 @@
           </a-space>
         </template>
         <template v-else-if="column.key === 'isEnabled'">
-          <a-popconfirm
-            :title="`确定要${record.isEnabled ? '禁用' : '启用'}该角色吗？`"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="updateEnabled(record)"
-          >
-            <RowEnabledButton :is-enabled="record.isEnabled" />
-          </a-popconfirm>
+          <Authorization permission="AdminRoleEdit">
+            <a-popconfirm
+              :title="`确定要${record.isEnabled ? '禁用' : '启用'}该角色吗？`"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="updateEnabled(record)"
+            >
+              <RowEnabledButton :is-enabled="record.isEnabled" />
+            </a-popconfirm>
+          </Authorization>
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space>
@@ -73,7 +77,7 @@
                 编辑
               </a-button>
             </Authorization>
-            <Authorization permission="AdminRoleEdit">
+            <Authorization permission="AdminRoleBindPermissions">
               <!-- 超级管理员角色不允许绑定权限 -->
               <a-button v-if="record.id !== 1" type="link" size="small" @click="openBindModal(record)">
                 <template #icon><SafetyCertificateOutlined /></template>

@@ -26,10 +26,12 @@
       </a-form>
     </template>
     <template #extra>
-      <a-button type="primary" @click="openAddModal">
-        <template #icon><PlusOutlined /></template>
-        新建接口
-      </a-button>
+      <Authorization permission="AdminApiAdd">
+        <a-button type="primary" @click="openAddModal">
+          <template #icon><PlusOutlined /></template>
+          新建接口
+        </a-button>
+      </Authorization>
     </template>
 
     <a-table
@@ -42,14 +44,16 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'isEnabled'">
-          <a-popconfirm
-            :title="`确定要${record.isEnabled ? '禁用' : '启用'}该接口吗？`"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="updateEnabled(record)"
-          >
-            <RowEnabledButton :is-enabled="record.isEnabled" />
-          </a-popconfirm>
+          <Authorization permission="AdminApiEdit">
+            <a-popconfirm
+              :title="`确定要${record.isEnabled ? '禁用' : '启用'}该接口吗？`"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="updateEnabled(record)"
+            >
+              <RowEnabledButton :is-enabled="record.isEnabled" />
+            </a-popconfirm>
+          </Authorization>
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space>

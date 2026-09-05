@@ -53,6 +53,7 @@ func (PermissionController) List(ctx *gin.Context) {
 		Key:    front.Key,
 		Name:   front.Name,
 		Type:   front.Type,
+		ApiId:  front.ApiId,
 	}
 	data, err := logic.H.AdminPermission.List(ctx, params)
 	if err != nil {
