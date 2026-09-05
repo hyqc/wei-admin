@@ -8,7 +8,7 @@
         <div class="account-nickname">{{ formState.nickname }}</div>
       </div>
       <div class="account-right">
-        <a-form :model="formState" :rules="rules" :label-col="{ span: 4 }">
+        <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 4 }">
           <a-form-item label="账号" name="username">
             <a-input v-model:value="formState.username" disabled />
           </a-form-item>
@@ -42,6 +42,7 @@ import { AdminEmail } from '@/api/pattern';
 const store = useUserStore();
 const loading = ref(false);
 const saving = ref(false);
+const formRef = ref();
 
 const formState = reactive({
   adminId: store.userInfo?.adminId,
@@ -72,6 +73,13 @@ const rules = {
 };
 
 async function onSave() {
+  // 提交前先校验，避免必填项为空直接打到后端
+  try {
+    await formRef.value?.validate();
+  } catch {
+    // 校验不通过：错误提示已由表单展示
+    return;
+  }
   saving.value = true;
   try {
     const res = await currentAdminEdit({

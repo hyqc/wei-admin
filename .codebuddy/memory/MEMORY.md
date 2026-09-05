@@ -79,6 +79,22 @@
 - 2026-09-04 起 `admin_role_permission` 已给角色 1 与 5 **各绑满 23 条**；但"超管拥有的权限"类查询（如 `/admin/role/permissions`）仍走 `dao.H.AdminPermission.FindAdministerPermissions` 返回全部启用权限（超管自动全量，不依赖绑定表完整性）
 - 超管角色不允许绑定权限（前端隐藏按钮），仅可修改描述
 
+## 菜单显示约定（2026-09-04 踩坑：新菜单不显示）
+- **侧边栏不是直接渲染后端菜单**：`HandleRemoteMenuIntoLocal` 以 `src/router/menu.ts` 的 `localMenuData` 为**骨架**遍历，只用后端返回的 `menus` map 覆盖 `hideInMenu` / `icon`。**`localMenuData` 里没有的 key，后端返回了也不会显示**
+- **新增菜单三件套**：① 后端建菜单记录 ② 前端 `localMenuData` 加一项（`key`/`path`/`name`/`icon`，双端各加）③ 前端路由表加路由 + 页面组件（vue3x `router/index.ts`，react `App.tsx`）
+- **后端菜单按权限过滤可见性**：`getMyMenusAndPermissions` → `getMenuIdsFromAdminPermissions` 从用户权限点取 `menu_id` 集合。新菜单**必须建权限点并绑给角色**，否则非超管看不到（超管走 `constant.IsAdministrator` 自动全量，与 `admin_role_permission` 无关）
+- **菜单顺序 = `localMenuData` 的数组顺序**；「首页」由 `SiderMenu` 硬编码置顶（`[homeItem, ...HandleRemoteMenuIntoLocal(...)]`），不占 `localMenuData` 位置。想让某菜单紧跟首页，就把它放在 `localMenuData` 第一位
+- 角色绑定约定：角色 1（超级管理员）绑满全部权限点（2026-09-04 为 25 条），新增权限点后要补绑；受限角色（如 roleId=5「查看」）按需要单独决定
+- **校验必填类问题先看后端 proto 的 `binding` tag**：go-playground/validator 的 `url`/`email` 等格式校验对**空字符串也会报错**，非必填字段必须写成 `omitempty,url`（如 `ReqAccountEdit.avatar`，2026-09-05 修复）。前端表单没写 rules 不等于后端放行
+- **ant-design-vue 表单校验的正确写法（缺一不可）**：`<a-form ref="formRef" :model :rules>` + 提交时 `await formRef.value?.validate()`。**只写 `:rules` 而不 validate，rules 完全不生效**（2026-09-05 个人中心两处就是这么漏的）。已有正确范例：`views/admin/{user,role,menu,api}/components/*Modal.vue`；登录页用 `@finish` 由 antd 自动校验
+- 排查同类问题的命令思路：搜 `:rules=`/`rules:` 列出所有表单 → 搜 `validate(` / `validateFields` 列出已校验的 → 两者差集即漏网之鱼
+- ✅ **UI 端到端验证可行方案（2026-09-05 跑通）**：playwright 浏览器**下载不了**（`cdn.playwright.dev` 被重置 ECONNRESET；`PLAYWRIGHT_DOWNLOAD_HOST=https://cdn.npmmirror.com/binaries/playwright` 镜像 404；开 VPN 也没用，因为 **Node 不走系统代理，代理环境变量为空**）。绕法：临时装包后用**本机已有的 Chrome** 启动 ——
+  ```js
+  chromium.launch({ executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' })
+  ```
+  步骤：`cd admin-vue3x; npm install --no-save playwright@1.63.0`（不污染 package.json/lock，用完 `npm uninstall --no-save`）→ 脚本必须放在**装了 playwright 的那个目录下**（ESM 从脚本目录向上解析 node_modules）→ `start /min cmd /c "cd /d <dir> && chcp 65001 >nul && node x.mjs > log 2>&1"` 后台跑（`chcp 65001` 避免中文日志乱码）
+- playwright 踩坑：① **中文选择器可用**，但 antd-vue 的 `.ant-tabs-tab-btn` 会有响应式隐藏克隆（count 实测 4 个而非 2 个），用 `page.getByText('修改密码', { exact: true }).first()` 定位 ② 脚本中途崩溃会丢失未输出的结论 → 每个断言 `console.log` 实时打印 ③ mock 服务固定端口用 `node node_modules/vite/bin/vite.js --mode mock --port 8010 --strictPort`（默认会顺延到 8004）
+
 ## 用户偏好（交互形态）
 - **接口树展示格式（2026-09-04 用户指定，替代旧的"名称（唯一键）"约定）**：保持树形（不要改成表格/标签+下划线）；接口节点 = `接口名 (路径)`，如 `接口列表 (/admin/api/list)`；分组 = `菜单名 (路径前缀)`，如 `接口管理 (/admin/api)`（分组按 path 前两段生成，菜单名由 `/admin/menu/all` 的 path→name 映射补全）。半角括号+空格，不用全角
 - 接口"唯一键"输入框只读，只能由接口路径自动生成

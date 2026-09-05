@@ -1,6 +1,7 @@
 <template>
   <div class="current-password">
     <a-form
+      ref="formRef"
       :model="formState"
       :rules="rules"
       :label-col="{ span: 4 }"
@@ -20,6 +21,7 @@
           v-model:value="formState.newPassword"
           placeholder="请输入新密码"
           autocomplete="new-password"
+          @change="onNewPasswordChange"
         />
       </a-form-item>
       <a-form-item label="确认密码" name="confirmPassword">
@@ -45,6 +47,7 @@ import { currentAdminEditPassword } from '@/api/admin/account';
 import { AdminUserPassword } from '@/api/pattern';
 
 const saving = ref(false);
+const formRef = ref();
 
 const formState = reactive({
   oldPassword: '',
@@ -71,7 +74,23 @@ const rules = {
   ],
 };
 
+/** 新密码变化后重新校验"确认密码"，避免两次密码不一致的提示残留 */
+function onNewPasswordChange() {
+  if (formState.confirmPassword) {
+    formRef.value?.validateFields(['confirmPassword']).catch(() => {
+      /* 校验失败由表单展示 */
+    });
+  }
+}
+
 async function onSave() {
+  // 提交前先校验，避免必填项为空直接打到后端
+  try {
+    await formRef.value?.validate();
+  } catch {
+    // 校验不通过：错误提示已由表单展示
+    return;
+  }
   saving.value = true;
   try {
     const res = await currentAdminEditPassword({

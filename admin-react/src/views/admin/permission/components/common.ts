@@ -1,5 +1,3 @@
-import { AdminPerssionKey } from '@/api/pattern';
-
 export type PermissionTypesItemType = {
   key: string;
   name: string;
@@ -21,26 +19,6 @@ export const DEFAULT_PERMISSION_TEMPLATE_TYPES: PermissionTypesItemType[] = [...
 
 /** 类型下拉选项：只允许从固定三类中选择，不支持自定义输入 */
 export const PERMISSION_TYPE_OPTIONS = DEFAULT_PERMISSION_TYPES.map((t) => ({ value: t.key, label: t.name }));
-
-/** 权限表单校验规则 */
-export const DEFAULT_RULES: Record<string, any> = {
-  key: [{ required: true, pattern: AdminPerssionKey, message: '请按照驼峰法命名' }],
-  name: [
-    { required: true, type: 'string', message: '请添加权限名称' },
-    {
-      type: 'string',
-      max: 50,
-      message: '名称长度不能超过50个字符',
-    },
-  ],
-  describe: [{ required: false, type: 'string', message: '请添加权限描述' }],
-};
-
-export const PERMIDDION_RULES = {
-  view: DEFAULT_RULES,
-  edit: DEFAULT_RULES,
-  delete: DEFAULT_RULES,
-};
 
 /**
  * 把路径转为键名

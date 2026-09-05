@@ -10,6 +10,13 @@ export interface MenuConfigItem {
 
 /** 本地菜单配置 */
 export const localMenuData: MenuConfigItem[] = [
+  // 顺序即侧边栏显示顺序：首页由 SiderMenu 固定置顶，其后为个人中心、系统设置
+  {
+    key: 'Account',
+    path: '/account',
+    name: '个人中心',
+    icon: 'UserOutlined',
+  },
   {
     key: 'Admin',
     path: '/admin',

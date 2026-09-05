@@ -24,10 +24,10 @@ const (
 // 登录
 type ReqLogin struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty" binding:"required,adminname" label:"用户名"`       // 用户名 @gotags: binding:"required,adminname" label:"用户名"
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty" binding:"required,adminpwd" label:"密码"`       // 密码  @gotags: binding:"required,adminpwd" label:"密码"
-	CaptchaId     string                 `protobuf:"bytes,3,opt,name=captchaId,proto3" json:"captchaId,omitempty" binding:"required" label:"验证码ID"`     // 验证码ID @gotags: binding:"required" label:"验证码ID"
-	CaptchaCode   string                 `protobuf:"bytes,4,opt,name=captchaCode,proto3" json:"captchaCode,omitempty" binding:"required" label:"验证码"` // 验证码内容 @gotags: binding:"required" label:"验证码"
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty" binding:"required,adminname" label:"用户名"` // 用户名 @gotags: binding:"required,adminname" label:"用户名"
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty" binding:"required,adminpwd" label:"密码"`   // 密码  @gotags: binding:"required,adminpwd" label:"密码"
+	CaptchaId     string                 `protobuf:"bytes,3,opt,name=captchaId,proto3" json:"captchaId,omitempty" binding:"required" label:"验证码ID"`       // 验证码ID @gotags: binding:"required" label:"验证码ID"
+	CaptchaCode   string                 `protobuf:"bytes,4,opt,name=captchaCode,proto3" json:"captchaCode,omitempty" binding:"required" label:"验证码"`     // 验证码内容 @gotags: binding:"required" label:"验证码"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -316,8 +316,8 @@ func (x *RespAccountInfoData) GetData() *AdminInfo {
 type ReqAccountEdit struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Nickname      string                 `protobuf:"bytes,1,opt,name=nickname,proto3" json:"nickname,omitempty" binding:"required,min=1,max=32" label:"用户名"` //名称 @gotags:  binding:"required,min=1,max=32" label:"用户名"
-	Avatar        string                 `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty" binding:"url" label:"头像地址"`     //头像 @gotags:  binding:"url" label:"头像地址"
-	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty" binding:"omitempty,email" label:"邮箱"`       //邮箱（非必填） @gotags:  binding:"omitempty,email" label:"邮箱"
+	Avatar        string                 `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty" binding:"omitempty,url" label:"头像地址"`            //头像（非必填） @gotags:  binding:"omitempty,url" label:"头像地址"
+	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty" binding:"omitempty,email" label:"邮箱"`              //邮箱（非必填） @gotags:  binding:"omitempty,email" label:"邮箱"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -412,8 +412,8 @@ func (*RespAccountEditData) Descriptor() ([]byte, []int) {
 // 修改密码
 type ReqAccountPasswordEdit struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	OldPassword     string                 `protobuf:"bytes,1,opt,name=oldPassword,proto3" json:"oldPassword,omitempty" binding:"required,adminpwd" label:"旧密码"`         //旧密码 @gotags:  binding:"required,adminpwd" label:"旧密码"
-	NewPassword     string                 `protobuf:"bytes,2,opt,name=newPassword,proto3" json:"newPassword,omitempty" binding:"required,adminpwd" label:"新密码"`         //新密码（与前端保持一致） @gotags:  binding:"required,adminpwd" label:"新密码"
+	OldPassword     string                 `protobuf:"bytes,1,opt,name=oldPassword,proto3" json:"oldPassword,omitempty" binding:"required,adminpwd" label:"旧密码"`                              //旧密码 @gotags:  binding:"required,adminpwd" label:"旧密码"
+	NewPassword     string                 `protobuf:"bytes,2,opt,name=newPassword,proto3" json:"newPassword,omitempty" binding:"required,adminpwd" label:"新密码"`                              //新密码（与前端保持一致） @gotags:  binding:"required,adminpwd" label:"新密码"
 	ConfirmPassword string                 `protobuf:"bytes,3,opt,name=confirmPassword,proto3" json:"confirmPassword,omitempty" binding:"required,adminpwd,eqfield=NewPassword" label:"确认密码"` //确认密码  @gotags: binding:"required,adminpwd,eqfield=NewPassword" label:"确认密码"
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache

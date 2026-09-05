@@ -154,6 +154,25 @@ export const menuTreeData: MenuTreeItem[] = [
       },
     ],
   },
+  {
+    id: 26,
+    level: 1,
+    key: 'Account',
+    name: '个人中心',
+    parentId: 0,
+    describe: '个人中心',
+    path: '/account',
+    redirect: '/',
+    component: './Account',
+    sort: 0,
+    icon: 'UserOutlined',
+    hideChildrenInMenu: false,
+    hideInMenu: false,
+    enabled: true,
+    createTime: 1648605804,
+    modifyTime: 1648605804,
+    children: [],
+  },
 ];
 
 /** 角色数据 */
@@ -332,6 +351,8 @@ export const permissionData: MockPermission[] = [
   { id: 21, menuId: 6, menuName: '接口管理', menuPath: '/admin/api', key: 'AdminApiAdd', name: '新建接口', type: 'edit', typeText: '编辑', describe: '创建接口', enabled: true, apiIds: [34] },
   { id: 22, menuId: 6, menuName: '接口管理', menuPath: '/admin/api', key: 'AdminApiEdit', name: '编辑接口', type: 'edit', typeText: '编辑', describe: '编辑接口与启用/禁用', enabled: true, apiIds: [36, 37] },
   { id: 23, menuId: 6, menuName: '接口管理', menuPath: '/admin/api', key: 'AdminApiDelete', name: '删除接口', type: 'delete', typeText: '删除', describe: '删除接口', enabled: true, apiIds: [38] },
+  { id: 33, menuId: 26, menuName: '个人中心', menuPath: '/account', key: 'AccountView', name: '查看', type: 'view', typeText: '查看', describe: '查看个人中心', enabled: true, apiIds: [] },
+  { id: 34, menuId: 26, menuName: '个人中心', menuPath: '/account', key: 'AccountEdit', name: '编辑', type: 'edit', typeText: '编辑', describe: '修改个人资料与密码', enabled: true, apiIds: [] },
 ];
 
 /** 由菜单树构建登录返回的菜单 map */
