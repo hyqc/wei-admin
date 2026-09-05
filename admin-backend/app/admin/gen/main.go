@@ -49,6 +49,10 @@ func main() {
 				gen.FieldType("is_hide_in_menu", "bool"),
 			),
 		},
+		{
+			Table: "admin_upload",
+			Type:  "AdminUpload",
+		},
 	}
 	gormgen.Init("root", "123456", "127.0.0.1:3306", "wei", gormgen.Utf8mb4, tables, "./app/admin/gen/query")
 }

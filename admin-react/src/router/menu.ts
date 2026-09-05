@@ -52,6 +52,7 @@ export const localMenuData: MenuConfigItem[] = [
       { key: 'AdminMenu', path: '/admin/menu', name: '菜单管理' },
       { key: 'AdminPermission', path: '/admin/permission', name: '权限管理' },
       { key: 'AdminApi', path: '/admin/api', name: '接口管理' },
+      { key: 'AdminUpload', path: '/admin/upload', name: '上传管理' },
     ],
   },
 ];

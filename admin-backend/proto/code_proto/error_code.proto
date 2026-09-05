@@ -45,4 +45,11 @@ enum ErrorCode{
 
   AdminRoleNotExist = 800001; // 角色不存在
   AdminRoleNameExist = 800002; // 角色名称已存在
+
+  AdminUploadGroupInvalid = 900001; // 上传分组不合法
+  AdminUploadFileEmpty = 900002; // 未选择上传文件
+  AdminUploadFileTooLarge = 900003; // 文件超过大小限制
+  AdminUploadExtNotAllowed = 900004; // 文件类型不允许上传
+  AdminUploadFailed = 900005; // 文件写入存储失败
+  AdminUploadDriverInvalid = 900006; // 存储驱动未配置或不支持
 }

@@ -59,6 +59,12 @@ const routes = [
         component: () => import('@/views/admin/api/index.vue'),
         meta: { title: '接口管理' },
       },
+      {
+        path: '/admin/upload',
+        name: 'AdminUpload',
+        component: () => import('@/views/admin/upload/index.vue'),
+        meta: { title: '上传管理' },
+      },
     ],
   },
   {

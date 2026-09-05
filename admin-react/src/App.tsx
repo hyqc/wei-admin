@@ -11,6 +11,7 @@ import AdminRole from '@/views/admin/role';
 import AdminMenu from '@/views/admin/menu';
 import AdminPermission from '@/views/admin/permission';
 import AdminApi from '@/views/admin/api';
+import AdminUpload from '@/views/admin/upload';
 import Forbidden from '@/views/error/403';
 import NotFound from '@/views/error/404';
 
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="admin/menu" element={<AdminMenu />} />
         <Route path="admin/permission" element={<AdminPermission />} />
         <Route path="admin/api" element={<AdminApi />} />
+        <Route path="admin/upload" element={<AdminUpload />} />
       </Route>
       <Route path="/403" element={<Forbidden />} />
       <Route path="/404" element={<NotFound />} />

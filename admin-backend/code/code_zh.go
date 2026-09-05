@@ -47,4 +47,11 @@ var zhMsg = map[code_proto.ErrorCode]string{
 
 	code_proto.ErrorCode_AdminRoleNotExist:  "角色不存在",
 	code_proto.ErrorCode_AdminRoleNameExist: "角色名称已存在",
+
+	code_proto.ErrorCode_AdminUploadGroupInvalid:  "上传分组不合法",
+	code_proto.ErrorCode_AdminUploadFileEmpty:     "请选择要上传的文件",
+	code_proto.ErrorCode_AdminUploadFileTooLarge:  "文件大小超过限制",
+	code_proto.ErrorCode_AdminUploadExtNotAllowed: "文件类型不允许上传",
+	code_proto.ErrorCode_AdminUploadFailed:        "文件写入存储失败",
+	code_proto.ErrorCode_AdminUploadDriverInvalid: "存储驱动未配置或不支持",
 }

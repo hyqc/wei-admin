@@ -26,6 +26,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path: string) => path.replace(/^\/api/, ''),
         },
+        // 本地存储返回 /upload 相对路径，代理到后端静态目录展示（后端路由无 /api 前缀，不重写）
+        '/upload': {
+          target: 'http://127.0.0.1:3000',
+          changeOrigin: true,
+        },
       },
     },
   };

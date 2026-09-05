@@ -107,3 +107,51 @@ store:
     #     database: logs
     #     max_pool_size: 100
     #     min_pool_size: 5
+
+# ---------------------------------------------------------------------
+# 5. 业务配置
+# ---------------------------------------------------------------------
+
+# 文件上传
+upload:
+  # 存储驱动：local（本地磁盘，单机部署默认）| aliyun（阿里云 OSS）| qcloud（腾讯云 COS）| s3（亚马逊 S3 及 MinIO 等兼容实现）
+  driver: local
+  # 访问域名前缀（结尾不带斜杠），用于拼接返回给前端的文件链接
+  # 本地单机部署请填 http://127.0.0.1:3000（与 server.port 一致），返回完整访问路径
+  # 留空时：本地存储返回站点相对路径（/upload/...），云存储回退到厂商默认公网地址
+  domain: "http://127.0.0.1:3000"
+  # 单文件大小上限（MB），0 表示不限制
+  max_size: 10
+  # 允许上传的扩展名（小写、不含点），默认不限制（留空即不限制）
+  # 如需限制请取消注释并按需填写，例如：jpg/jpeg/png/gif/webp/pdf/doc/docx/xls/xlsx/zip
+  allowed_exts: []
+  # 本地存储（driver=local 时生效）
+  local:
+    # 存储根目录，相对后端工作目录
+    root: "./upload"
+    # 静态访问前缀，需与注册到路由的静态目录一致
+    prefix: "/upload"
+  # 阿里云 OSS（driver=aliyun 时生效）
+  aliyun:
+    endpoint: ""
+    access_key_id: ""
+    access_key_secret: ""
+    bucket: ""
+    # 对象键统一前缀，可留空
+    base_path: ""
+  # 腾讯云 COS（driver=qcloud 时生效）
+  qcloud:
+    region: ""
+    secret_id: ""
+    secret_key: ""
+    bucket: ""
+    base_path: ""
+  # 亚马逊 S3 / S3 兼容存储（driver=s3 时生效）
+  s3:
+    region: ""
+    access_key_id: ""
+    secret_access_key: ""
+    bucket: ""
+    # 自定义端点，MinIO 等兼容实现填写，留空使用 AWS 默认端点
+    endpoint: ""
+    base_path: ""

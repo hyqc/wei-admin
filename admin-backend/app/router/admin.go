@@ -76,6 +76,14 @@ func admins(g *gin.RouterGroup) {
 		permission.POST("/add_menu_permissions", permissionAPI.AddMenuPermissions)
 	}
 
+	upload := admin.Group("/upload")
+	{
+		uploadAPI := adminCtl.UploadController{}
+		upload.POST("/list", uploadAPI.List)
+		upload.POST("/upload", uploadAPI.Upload)
+		upload.POST("/delete", uploadAPI.Delete)
+	}
+
 	role := admin.Group("/role")
 	{
 		roleAPI := adminCtl.RoleController{}

@@ -23,6 +23,7 @@ var (
 	AdminPermissionAPI  *adminPermissionAPI
 	AdminRole           *adminRole
 	AdminRolePermission *adminRolePermission
+	AdminUpload         *adminUpload
 	AdminUser           *adminUser
 	AdminUserRole       *adminUserRole
 )
@@ -35,6 +36,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	AdminPermissionAPI = &Q.AdminPermissionAPI
 	AdminRole = &Q.AdminRole
 	AdminRolePermission = &Q.AdminRolePermission
+	AdminUpload = &Q.AdminUpload
 	AdminUser = &Q.AdminUser
 	AdminUserRole = &Q.AdminUserRole
 }
@@ -48,6 +50,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		AdminPermissionAPI:  newAdminPermissionAPI(db, opts...),
 		AdminRole:           newAdminRole(db, opts...),
 		AdminRolePermission: newAdminRolePermission(db, opts...),
+		AdminUpload:         newAdminUpload(db, opts...),
 		AdminUser:           newAdminUser(db, opts...),
 		AdminUserRole:       newAdminUserRole(db, opts...),
 	}
@@ -62,6 +65,7 @@ type Query struct {
 	AdminPermissionAPI  adminPermissionAPI
 	AdminRole           adminRole
 	AdminRolePermission adminRolePermission
+	AdminUpload         adminUpload
 	AdminUser           adminUser
 	AdminUserRole       adminUserRole
 }
@@ -77,6 +81,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		AdminPermissionAPI:  q.AdminPermissionAPI.clone(db),
 		AdminRole:           q.AdminRole.clone(db),
 		AdminRolePermission: q.AdminRolePermission.clone(db),
+		AdminUpload:         q.AdminUpload.clone(db),
 		AdminUser:           q.AdminUser.clone(db),
 		AdminUserRole:       q.AdminUserRole.clone(db),
 	}
@@ -99,6 +104,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		AdminPermissionAPI:  q.AdminPermissionAPI.replaceDB(db),
 		AdminRole:           q.AdminRole.replaceDB(db),
 		AdminRolePermission: q.AdminRolePermission.replaceDB(db),
+		AdminUpload:         q.AdminUpload.replaceDB(db),
 		AdminUser:           q.AdminUser.replaceDB(db),
 		AdminUserRole:       q.AdminUserRole.replaceDB(db),
 	}
@@ -111,6 +117,7 @@ type queryCtx struct {
 	AdminPermissionAPI  IAdminPermissionAPIDo
 	AdminRole           IAdminRoleDo
 	AdminRolePermission IAdminRolePermissionDo
+	AdminUpload         IAdminUploadDo
 	AdminUser           IAdminUserDo
 	AdminUserRole       IAdminUserRoleDo
 }
@@ -123,6 +130,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		AdminPermissionAPI:  q.AdminPermissionAPI.WithContext(ctx),
 		AdminRole:           q.AdminRole.WithContext(ctx),
 		AdminRolePermission: q.AdminRolePermission.WithContext(ctx),
+		AdminUpload:         q.AdminUpload.WithContext(ctx),
 		AdminUser:           q.AdminUser.WithContext(ctx),
 		AdminUserRole:       q.AdminUserRole.WithContext(ctx),
 	}

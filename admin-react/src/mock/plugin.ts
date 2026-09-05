@@ -7,6 +7,8 @@ const LATENCY = 300;
 
 export interface MockRequest {
   body: Record<string, any>;
+  /** 原始请求体（multipart 等非 JSON 请求无法解析为 body，需自行处理） */
+  rawBody: string;
   query: URLSearchParams;
   headers: any;
 }
@@ -50,7 +52,7 @@ export function createMockPlugin(enabled: boolean): Plugin {
           }
           let data: any;
           try {
-            data = entry.response({ body, query, headers: req.headers });
+            data = entry.response({ body, rawBody, query, headers: req.headers });
           } catch (err) {
             data = { code: 500, msg: (err as Error).message || 'mock 处理出错', data: null };
           }

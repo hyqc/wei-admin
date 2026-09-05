@@ -45,4 +45,11 @@ var enMsg = map[code_proto.ErrorCode]string{
 
 	code_proto.ErrorCode_AdminRoleNotExist:  "role not exist",
 	code_proto.ErrorCode_AdminRoleNameExist: "role name exist",
+
+	code_proto.ErrorCode_AdminUploadGroupInvalid:  "upload group invalid",
+	code_proto.ErrorCode_AdminUploadFileEmpty:     "upload file is empty",
+	code_proto.ErrorCode_AdminUploadFileTooLarge:  "upload file too large",
+	code_proto.ErrorCode_AdminUploadExtNotAllowed: "upload file type not allowed",
+	code_proto.ErrorCode_AdminUploadFailed:        "upload file failed",
+	code_proto.ErrorCode_AdminUploadDriverInvalid: "storage driver not configured or unsupported",
 }

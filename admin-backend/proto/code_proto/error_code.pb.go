@@ -59,6 +59,12 @@ const (
 	ErrorCode_AdminMenuHasChildren         ErrorCode = 700005 // 目录菜单（含子菜单）不是页面，不支持配置权限
 	ErrorCode_AdminRoleNotExist            ErrorCode = 800001 // 角色不存在
 	ErrorCode_AdminRoleNameExist           ErrorCode = 800002 // 角色名称已存在
+	ErrorCode_AdminUploadGroupInvalid      ErrorCode = 900001 // 上传分组不合法
+	ErrorCode_AdminUploadFileEmpty         ErrorCode = 900002 // 未选择上传文件
+	ErrorCode_AdminUploadFileTooLarge      ErrorCode = 900003 // 文件超过大小限制
+	ErrorCode_AdminUploadExtNotAllowed     ErrorCode = 900004 // 文件类型不允许上传
+	ErrorCode_AdminUploadFailed            ErrorCode = 900005 // 文件写入存储失败
+	ErrorCode_AdminUploadDriverInvalid     ErrorCode = 900006 // 存储驱动未配置或不支持
 )
 
 // Enum value maps for ErrorCode.
@@ -99,6 +105,12 @@ var (
 		700005: "AdminMenuHasChildren",
 		800001: "AdminRoleNotExist",
 		800002: "AdminRoleNameExist",
+		900001: "AdminUploadGroupInvalid",
+		900002: "AdminUploadFileEmpty",
+		900003: "AdminUploadFileTooLarge",
+		900004: "AdminUploadExtNotAllowed",
+		900005: "AdminUploadFailed",
+		900006: "AdminUploadDriverInvalid",
 	}
 	ErrorCode_value = map[string]int32{
 		"Success":                      0,
@@ -136,6 +148,12 @@ var (
 		"AdminMenuHasChildren":         700005,
 		"AdminRoleNotExist":            800001,
 		"AdminRoleNameExist":           800002,
+		"AdminUploadGroupInvalid":      900001,
+		"AdminUploadFileEmpty":         900002,
+		"AdminUploadFileTooLarge":      900003,
+		"AdminUploadExtNotAllowed":     900004,
+		"AdminUploadFailed":            900005,
+		"AdminUploadDriverInvalid":     900006,
 	}
 )
 

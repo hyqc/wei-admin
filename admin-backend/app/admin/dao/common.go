@@ -11,6 +11,7 @@ type AdminDao struct {
 	AdminMenu       IAdminMenu
 	AdminAPI        IAdminAPI
 	AdminRole       IAdminRole
+	AdminUpload     IAdminUpload
 }
 
 var H = newAdminDao()
@@ -22,6 +23,7 @@ func newAdminDao() *AdminDao {
 		AdminMenu:       newAdminMenu(),
 		AdminAPI:        newAdminAPI(),
 		AdminRole:       newAdminRole(),
+		AdminUpload:     newAdminUpload(),
 	}
 }
 

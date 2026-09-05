@@ -1,0 +1,73 @@
+syntax = "proto3";
+package admin;
+option go_package = "./admin_proto;admin_proto";
+import "common.proto";
+
+// 上传记录列表
+message ReqAdminUploadList{
+  ReqListBase base = 1;
+  string uploadGroup = 2; //分组（上传路径前缀）
+  string originalName = 3; //原始文件名
+  string ext = 4; //扩展名
+  string driver = 5; //存储驱动
+}
+message RespAdminUploadListData{
+  int64 total = 1;
+  repeated AdminUploadItem list = 2;
+}
+
+// 上传记录列表请求参数（与前端保持一致：分页参数平铺传递）
+message ReqFrontAdminUploadList{
+  int32 pageSize = 1; // 每页条数
+  int32 pageNum = 2; // 页码
+  int64 createStartTime = 3; // 查询开始时间戳秒
+  int64 createEndTime = 4; // 查询结束时间戳秒
+  string uploadGroup = 5; // 分组（上传路径前缀）
+  string originalName = 6; // 原始文件名
+  string ext = 7; // 扩展名
+  string driver = 8; // 存储驱动
+}
+
+// 上传记录列表返回（与前端保持一致：list + pageInfo）
+message RespFrontAdminUploadListData{
+  repeated AdminUploadItem list = 1;
+  PageInfo pageInfo = 2;
+}
+
+// 上传文件（multipart/form-data：文件字段 file，分组字段 uploadGroup）
+message ReqAdminUploadFile{
+  // 分组即上传路径前缀，如 /admin/user/ ；必须以 / 开头与结尾
+  string uploadGroup = 1; // @gotags:  label:"分组" binding:"required,trimBlank"
+}
+message RespAdminUploadFileData{
+  AdminUploadItem data = 1;
+}
+
+// 删除上传记录（同时删除存储上的文件）
+message ReqAdminUploadDelete{
+  int32 id = 1; // @gotags:  label:"上传记录ID" binding:"required,min=1"
+}
+message RespAdminUploadDeleteData{
+}
+
+// 上传记录
+message AdminUploadItem{
+  int32 id = 1;//记录ID
+  int32 adminId = 2;//上传者账号ID
+  string adminName = 3;//上传者账号名
+  string driver = 4;//存储驱动
+  string driverText = 5;//存储驱动名称
+  string uploadGroup = 6;//分组（上传路径前缀）
+  string objectKey = 7;//存储对象键（相对路径）
+  string url = 8;//访问链接
+  string originalName = 9;//原始文件名
+  string newName = 10;//新文件名
+  string ext = 11;//扩展名
+  string mime = 12;//文件类型
+  int64 size = 13;//文件大小（字节）
+  string sizeText = 14;//文件大小（可读）
+  string md5 = 15;//文件MD5
+  string uploadDate = 16;//上传日期
+  string createdAt = 17;
+  string updatedAt = 18;
+}

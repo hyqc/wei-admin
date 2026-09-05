@@ -5,6 +5,7 @@ import roleEntries from './admin/role';
 import menuEntries from './admin/menu';
 import permissionEntries from './admin/permission';
 import apiEntries from './admin/api';
+import uploadEntries from './admin/upload';
 
 /** 全部 mock 路由 */
 export const mockEntries: MockEntry[] = [
@@ -14,4 +15,5 @@ export const mockEntries: MockEntry[] = [
   ...menuEntries,
   ...permissionEntries,
   ...apiEntries,
+  ...uploadEntries,
 ];

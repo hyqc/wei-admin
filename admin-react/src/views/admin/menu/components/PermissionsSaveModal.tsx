@@ -18,7 +18,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** 权限点行；auto 标记行由系统自动生成 key/name，未人工改动时随类型联动 */
+/** 权限点行；auto 标记行 key 未被人工改动时随类型联动；名称始终跟随动作类型自动生成、不可修改 */
 type PermissionRow = MenuPermissionItem & { auto?: boolean };
 
 const keyPattern = new RegExp('^([A-Z][a-zA-Z0-9]*)+$');
@@ -44,7 +44,7 @@ export default function PermissionsSaveModal({ open, detailData, onClose }: Prop
         .then((res) => {
           const existing = res.data.permissions || [];
           if (existing.length > 0) {
-            // 已有配置：名称/唯一键交由人工维护，不再随类型联动；接口绑定随行带回用于回显
+            // 已有配置：名称/唯一键原样回显（名称只读，保留历史语义；切换动作类型时名称按规则重算）；接口绑定随行带回用于回显
             setPermissions(
               existing.map((item) => ({
                 ...item,
@@ -119,10 +119,10 @@ export default function PermissionsSaveModal({ open, detailData, onClose }: Prop
         if (i !== index) return p;
         const typeName = DEFAULT_PERMISSION_TYPES.find((t) => t.key === value)?.name || value;
         const next: PermissionRow = { ...p, type: value, typeName };
-        // 自动生成的行跟随类型联动 key/name；人工维护过的行只更新类型
+        // 权限名称跟随动作类型自动生成、不可手工修改；key 未被人工改过时随类型联动
+        next.name = `${detailData?.name || ''}${typeName}`;
         if (p.auto) {
           next.key = handleKey(detailData?.path || '', value);
-          next.name = `${detailData?.name || ''}${typeName}`;
         }
         return next;
       }),
@@ -179,7 +179,7 @@ export default function PermissionsSaveModal({ open, detailData, onClose }: Prop
             <div style={{ color: 'rgba(0,0,0,0.45)', fontSize: 12, lineHeight: 1.5, marginTop: 4 }}>
               权限点代表该页面上的一个可授权操作：唯一键与前端按钮权限码一一对应，并绑定该操作需要访问的接口；授权后按钮可见且对应接口可访问。保存后权限点与接口绑定一次性生效
               <br />
-              动作类型固定为「查看 / 编辑 / 删除」三类（新增、绑定、重置等写操作统一归到“编辑”），唯一键按类型自动生成，可再手工修改
+              动作类型固定为「查看 / 编辑 / 删除」三类（新增、绑定、重置等写操作统一归到“编辑”），权限名称由「菜单名 + 动作类型」自动生成且不可修改，唯一键按类型自动生成、可再手工修改
             </div>
           </Form.Item>
           <Form.Item label="权限动作">
@@ -202,12 +202,9 @@ export default function PermissionsSaveModal({ open, detailData, onClose }: Prop
                 />
                 <Input
                   style={{ width: 170 }}
-                  placeholder="如 重置密码"
                   value={item.name}
-                  onChange={(e) => {
-                    markManual(index);
-                    updateRow(index, { name: e.target.value });
-                  }}
+                  readOnly
+                  placeholder="跟随动作类型自动生成"
                 />
                 <Input
                   style={{ flex: '1 1 auto', minWidth: 250 }}

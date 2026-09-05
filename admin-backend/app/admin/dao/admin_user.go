@@ -27,6 +27,7 @@ type IAdminUser interface {
 	AddRoles(ctx *gin.Context, roles []*model2.AdminUserRole) error
 	ReplaceRoles(ctx context.Context, adminId int32, roles []*model2.AdminUserRole) error
 	FindAdminUserRolesByAdminId(ctx context.Context, adminIds []int32) ([]*types.AdminUserRole, error)
+	FindByIds(ctx *gin.Context, ids []int32) ([]*model2.AdminUser, error) // 批量按ID查询，用于展示上传者等关联信息
 }
 
 type AdminUser struct {
@@ -39,6 +40,14 @@ func newAdminUser() *AdminUser {
 func (a *AdminUser) FindAdminUserByUsername(ctx context.Context, username string) (*model2.AdminUser, error) {
 	db := query2.AdminUser
 	return db.WithContext(ctx).Where(db.Username.Eq(username)).First()
+}
+
+func (a *AdminUser) FindByIds(ctx *gin.Context, ids []int32) ([]*model2.AdminUser, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
+	db := query2.AdminUser
+	return db.WithContext(ctx).Where(db.ID.In(ids...)).Find()
 }
 
 func (a *AdminUser) UpdateAdminUserLoginData(ctx context.Context, adminId int32, data *model2.AdminUser) error {

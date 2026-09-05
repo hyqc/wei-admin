@@ -20,6 +20,7 @@ type Config struct {
 	Redis        config.Redis   `json:"redis"`
 	Store        config.Store   `json:"store"`
 	Captcha      config.Captcha `json:"captcha"`
+	Upload       config.Upload  `json:"upload"`
 }
 
 func (c *Config) Handle() error {

@@ -6,6 +6,7 @@ type AdminLogic struct {
 	AdminMenu       IAdminMenuLogic
 	AdminPermission IAdminPermissionLogic
 	AdminRole       IAdminRoleLogic
+	AdminUpload     IAdminUploadLogic
 }
 
 func newAdminLogic() *AdminLogic {
@@ -15,6 +16,7 @@ func newAdminLogic() *AdminLogic {
 		AdminMenu:       newAdminMenuLogic(),
 		AdminPermission: newAdminPermissionLogic(),
 		AdminRole:       newAdminRoleLogic(),
+		AdminUpload:     newAdminUploadLogic(),
 	}
 }
 

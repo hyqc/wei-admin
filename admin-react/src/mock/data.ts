@@ -152,6 +152,24 @@ export const menuTreeData: MenuTreeItem[] = [
         createTime: 1648605804,
         modifyTime: 1648605804,
       },
+      {
+        id: 27,
+        level: 2,
+        key: 'AdminUpload',
+        name: '上传管理',
+        parentId: 1,
+        describe: '上传文件记录',
+        path: '/admin/upload',
+        redirect: '/',
+        component: './Admin/Upload',
+        sort: 0,
+        icon: 'CloudUploadOutlined',
+        hideChildrenInMenu: false,
+        hideInMenu: false,
+        enabled: true,
+        createTime: 1648605804,
+        modifyTime: 1648605804,
+      },
     ],
   },
   {
@@ -310,6 +328,9 @@ export const apiData: AdminApiItem[] = [
   { id: 41, key: 'adminMenu::mode', name: '菜单页面权限列表', path: '/admin/menu/modes', describe: '', isEnabled: true },
   { id: 43, key: 'adminUser::editPwd', name: '账号重置密码', path: '/admin/user/edit_pwd', describe: '账号重置密码', isEnabled: true },
   { id: 44, key: 'adminMenu::show', name: '菜单显示隐藏', path: '/admin/menu/show', describe: '菜单显示隐藏', isEnabled: true },
+  { id: 45, key: 'adminUpload::list', name: '上传记录列表', path: '/admin/upload/list', describe: '上传记录分页列表', isEnabled: true },
+  { id: 46, key: 'adminUpload::upload', name: '上传文件', path: '/admin/upload/upload', describe: '上传文件到本地或云存储', isEnabled: true },
+  { id: 47, key: 'adminUpload::delete', name: '删除上传', path: '/admin/upload/delete', describe: '删除上传记录与文件', isEnabled: true },
 ];
 
 /** 权限数据（与菜单关联） */
@@ -353,6 +374,9 @@ export const permissionData: MockPermission[] = [
   { id: 23, menuId: 6, menuName: '接口管理', menuPath: '/admin/api', key: 'AdminApiDelete', name: '删除接口', type: 'delete', typeText: '删除', describe: '删除接口', enabled: true, apiIds: [38] },
   { id: 33, menuId: 26, menuName: '个人中心', menuPath: '/account', key: 'AccountView', name: '查看', type: 'view', typeText: '查看', describe: '查看个人中心', enabled: true, apiIds: [] },
   { id: 34, menuId: 26, menuName: '个人中心', menuPath: '/account', key: 'AccountEdit', name: '编辑', type: 'edit', typeText: '编辑', describe: '修改个人资料与密码', enabled: true, apiIds: [] },
+  { id: 35, menuId: 27, menuName: '上传管理', menuPath: '/admin/upload', key: 'AdminUploadView', name: '查看上传', type: 'view', typeText: '查看', describe: '查看上传记录列表', enabled: true, apiIds: [45] },
+  { id: 36, menuId: 27, menuName: '上传管理', menuPath: '/admin/upload', key: 'AdminUploadEdit', name: '上传文件', type: 'edit', typeText: '编辑', describe: '上传文件', enabled: true, apiIds: [46] },
+  { id: 37, menuId: 27, menuName: '上传管理', menuPath: '/admin/upload', key: 'AdminUploadDelete', name: '删除上传', type: 'delete', typeText: '删除', describe: '删除上传记录与文件', enabled: true, apiIds: [47] },
 ];
 
 /** 由菜单树构建登录返回的菜单 map */
