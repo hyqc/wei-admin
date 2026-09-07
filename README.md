@@ -151,7 +151,7 @@ admin_user —— admin_user_role —— admin_role —— admin_role_permission
 - 本仓库附带运行日志（`*.log`）、截图等杂项文件在根目录，可忽略；`docs/wei.sql` 是唯一权威 schema/seed 来源。
 
 ## 功能截图
-![登录页](./img-summary/logic.png)
+![登录页](./img-summary/login.png)
 ![个人中心](./img-summary/userinfo.png)
 ![账号管理](./img-summary/account.png)
 ![角色管理](./img-summary/role.png)
