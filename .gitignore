@@ -21,3 +21,13 @@ cover.cov
 ../.idea
 *.exe
 *.log
+
+# Node 依赖与构建产物（各前端目录下的 node_modules / dist 一并忽略）
+node_modules/
+dist/
+dist-ssr/
+*.local
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
