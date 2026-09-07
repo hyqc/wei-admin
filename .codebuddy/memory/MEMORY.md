@@ -16,11 +16,22 @@
 - 后端验证方式（HTTP 登录需验证码不便自动化）：临时 `admin-backend/tmpcheck/main.go`（package main + `global.Init()` + 手工 `&gin.Context{}` 调 dao/logic），跑完删除
 
 ## 后端服务与环境
+> 本节是**当前本机**环境事实（供本机操作/排查用）。对外文档（README 等）不要写死安装路径与操作系统，写成通用条件（MySQL 8 任意安装方式、Docker 亦可）。
 - `admin_test.exe`（admin-backend 目录）监听 **127.0.0.1:3000**，路由无 /api 前缀；运行加载 `./config.yaml`（Env 空），`-env dev` 才读 config-dev.yaml
 - 重启：`Get-Process admin_test | Stop-Process -Force` → 在 admin-backend 目录启动 exe（日志 `> f:\work\wei-admin\be.log 2>&1`）
 - 启动前提 **MySQL 3306 可用**：由 phpStudy MySQL8.0.12 提供（`D:\phpstudy_pro\Extensions\MySQL8.0.12\bin\mysqld.exe`，非服务非 Docker）；`GET /healthz`、`/readyz`（含 DB/Redis）免鉴权
 - MySQL 直连：`& 'D:\phpstudy_pro\Extensions\MySQL8.0.12\bin\mysql.exe' -h 127.0.0.1 -u root -p123456 -D wei -e "..."`（**参数必须空格分隔**）；密码在 config-dev.yaml
 - 前端 vite proxy（双端，非 mock 时）：`/api` → 3000（**rewrite 去 /api 前缀**）、`/upload` → 3000（**不 rewrite**，后端本地存储相对路径展示用）
+
+## 根目录 Makefile（2026-09-07 新增，monorepo 统一入口）
+- 目标：help / init / init-frontend / proto(dir=admin_proto) / proto-all / proto-ts / dev-backend / dev-vue / dev-react / dev(-j2) / dev-mock / build-vue / build-react / build-frontend / build-backend-windows / build-backend-linux / build-backend / build
+- 后端目标用 `$(MAKE) -C admin-backend` 转发（admin-backend/Makefile 保留，后端可单独构建）；`env ?= dev`（config-dev.yaml），产物 `admin-backend/deploy/<os>/<env>/admin[.exe]`
+- proto-ts 用 ts-proto 生成双端 TS 契端到各前端 `src/proto/`，`snakeToCamel=false` 保持 snake_case；Windows 插件路径取 `.cmd`
+- help 用静态 echo（本机 make 在 cmd 下运行，无 grep/awk）；proto-ts 需在 Git Bash/WSL 下跑
+- **中文输出**：仅当 recipe shell 是 cmd 时才加 `chcp 65001 >nul &`；判断方式 `SHELL_IS_CMD := $(filter Windows_NT,$(shell echo %OS%))`（**不能用 `$(SHELL)`**：本机默认就是 sh.exe；也**不能只看 `OS=Windows_NT`**：Git Bash 里该变量同样存在，但 shell 是 /usr/bin/sh，没有 chcp）
+  - 中文仍乱码 = 终端按 GBK 渲染 UTF-8 字节（老 Git Bash/mintty 字符集），属终端侧问题；已加 `make help-en`（纯 ASCII）兜底
+  - **不要**切 SHELL 到 bash：PowerShell 会反把 UTF-8 按 936 解而更乱，且 cmd 无 test/mkdir -p
+- Makefile 里避免 `test -n` / `mkdir -p` 等 bash 命令（用 make 的 ifeq 判断）
 
 ## proto / .pb.go 契约（2026-09-05 修正，替换旧结论）
 - 机制：标签源写在 `.proto` 字段的 `// @gotags: label:"..." binding:"..."` 注释里；protoc 生成 `.pb.go` 后再跑 `protoc-go-inject-tag -input=xxx.pb.go` 注入 struct tag
