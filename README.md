@@ -149,3 +149,12 @@ admin_user —— admin_user_role —— admin_role —— admin_role_permission
 - 前端 antd-vue4 表单：只有 `:rules` 不生效，须 `ref="formRef"` 且提交前 `formRef.value?.validate()`（react 端用 `validateFields`/`onFinish`）。
 - 上传目录结构 `{分组}/{年}/{月}/{yyyyMMdd_HHmmss}_{随机8}{ext}`；分组校验必须先校验原始输入中的 `..`、`\`、`//` 再 `path.Clean`。
 - 本仓库附带运行日志（`*.log`）、截图等杂项文件在根目录，可忽略；`docs/wei.sql` 是唯一权威 schema/seed 来源。
+
+## 功能截图
+![登录页](./img-summary/logic.png)
+![个人中心](./img-summary/userinfo.png)
+![账号管理](./img-summary/account.png)
+![角色管理](./img-summary/role.png)
+![权限管理](./img-summary/permission.png)
+![接口管理](./img-summary/api.png)
+![上传管理](./img-summary/upload.png)
